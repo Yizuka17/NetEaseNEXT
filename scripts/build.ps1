@@ -22,6 +22,7 @@ try {
         if ($LASTEXITCODE) { throw 'Publish failed.' }
         & robocopy (Join-Path $taskRoot 'api\node_modules') (Join-Path $taskOutput 'api\node_modules') /E /NFL /NDL /NJH /NJS /NP | Out-Null
         if ($LASTEXITCODE -ge 8) { throw 'Copying API dependencies failed.' }
+        $global:LASTEXITCODE = 0 # Robocopy 1-7 are successful copy results.
         New-Item -ItemType Directory -Path (Join-Path $taskOutput 'runtime') -Force | Out-Null
         # Bundle the installed Node runtime only when its architecture matches.
         $taskNodeArch = & node -p 'process.arch'
@@ -30,6 +31,7 @@ try {
         Copy-Item -LiteralPath (Get-Command node).Source -Destination (Join-Path $taskOutput 'runtime\node.exe') -Force
         & robocopy (Join-Path $taskRoot 'third-party') (Join-Path $taskOutput 'third-party') /E /NFL /NDL /NJH /NJS /NP | Out-Null
         if ($LASTEXITCODE -ge 8) { throw 'Copying licenses failed.' }
+        $global:LASTEXITCODE = 0
         Copy-Item -LiteralPath (Join-Path $taskRoot 'README.md') -Destination $taskOutput -Force
         Write-Host "Portable app: $taskOutput\NetEaseNEXT.exe"
     }
