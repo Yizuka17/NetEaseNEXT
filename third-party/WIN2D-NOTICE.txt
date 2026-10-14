@@ -1,0 +1,4 @@
+Microsoft.Graphics.Win2D 1.4.0
+Copyright Microsoft Corporation. All rights reserved.
+Package license URL: https://www.microsoft.com/web/webpi/eula/eula_win2d_10012014.htm
+Project: https://github.com/microsoft/Win2D

@@ -1,0 +1,35 @@
+name: Windows build
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: api/package-lock.json
+      - name: Build portable app
+        shell: pwsh
+        run: ./scripts/build.ps1 -Publish
+      - name: Test API bridge
+        working-directory: api
+        run: npm test
+      - name: Build installer
+        shell: pwsh
+        run: ./scripts/build-installer.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NetEaseNEXT-windows-x64
+          path: |
+            artifacts/win-x64
+            artifacts/installer

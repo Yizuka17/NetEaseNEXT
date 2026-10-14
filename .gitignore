@@ -1,0 +1,10 @@
+**/bin/
+**/obj/
+**/node_modules/
+.vs/
+artifacts/
+tools/
+certificates/
+*.user
+*.pfx
+*.log
