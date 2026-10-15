@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace NetEaseNEXT.Models;
 
@@ -10,11 +11,11 @@ public sealed class Track(long id, string title, string artist, string album, st
     public string Album { get; } = album;
     public string Cover { get; } = cover;
     public long Duration { get; } = duration;
-    public string DurationText => TimeSpan.FromMilliseconds(Duration).ToString(@"m\:ss");
-    public string Subtitle => $"{Artist} - {Album}";
-    public string Thumbnail => Cover.Length == 0 ? "" : Cover + (Cover.Contains('?') ? "&" : "?") + "param=192y192";
-    public long ArtistId { get; private set; }
-    public long AlbumId { get; private set; }
+    [JsonIgnore] public string DurationText => TimeSpan.FromMilliseconds(Duration).ToString(@"m\:ss");
+    [JsonIgnore] public string Subtitle => $"{Artist} - {Album}";
+    [JsonIgnore] public string Thumbnail => Cover.Length == 0 ? "" : Cover + (Cover.Contains('?') ? "&" : "?") + "param=192y192";
+    [JsonInclude] public long ArtistId { get; private set; }
+    [JsonInclude] public long AlbumId { get; private set; }
     public override string ToString() => Title;
     public static Track FromJson(JsonElement song)
     {

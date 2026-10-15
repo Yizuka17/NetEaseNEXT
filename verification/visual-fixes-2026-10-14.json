@@ -1,0 +1,73 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Keyboard accelerator hints are hidden",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Social pagination is embedded in list footer",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "NetEase emoji tokens display as symbols",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Outgoing private conversation selects recipient",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Incoming private conversation selects sender",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comment notification preserves content and reply target",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event actions retain full thread identifier",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reply notification keeps original and new comments",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Mention notification resolves author and comment",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Translated lyrics align by timestamp",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Compact avatar stays centered with two-digit badge",
+    "passed": true,
+    "detail": {
+      "avatar": 36,
+      "expected": 36
+    }
+  },
+  {
+    "name": "Content font cannot replace playback glyph font",
+    "passed": true,
+    "detail": {
+      "icon": "Segoe Fluent Icons,Segoe MDL2 Assets",
+      "renderedGlyph": "Segoe Fluent Icons,Segoe MDL2 Assets"
+    }
+  }
+]

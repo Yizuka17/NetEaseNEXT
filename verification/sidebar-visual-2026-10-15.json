@@ -1,0 +1,184 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback cover button fits the entire square artwork",
+    "passed": true,
+    "detail": {
+      "buttonHeight": 54,
+      "height": "Auto",
+      "coverHeight": 0
+    }
+  },
+  {
+    "name": "Cached login identity is available without a request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Cached login identity cannot cross sessions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Metadata cache survives a new client instance",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Play URLs are never persisted as generic metadata",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restart restores current song, position and fixed shuffle order paused",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Leaving restored shuffle returns the original playlist order",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Windows Shell resolves SMTC application name",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Artwork sizes reuse one normalized thumbnail request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Rotating NetEase image hosts share one cache entry",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Non-NetEase signed image URL is preserved",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Trial audio cannot use the full-song disk cache",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Audio cache separates quality and ignores expiring URL tokens",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Keyboard accelerator hints are hidden",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Social pagination is embedded in list footer",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Track and catalog pagination use themed list footers",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "NetEase emoji tokens display as symbols",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Outgoing private conversation selects recipient",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Incoming private conversation selects sender",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comment notification preserves content and reply target",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event actions retain full thread identifier",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reply notification keeps original and new comments",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Mention notification resolves author and comment",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Translated lyrics align by timestamp",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Liked events use a solid vector icon",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unread private item has a dot and separate count",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Opening unread item clears dot and count",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Stale unread counter cannot resurrect read private messages",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A new private message counts only unread additions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Acknowledged server counters do not hide later private messages",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Server read-all acknowledgment clears all local reminders",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "New message after server read-all is still unread",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Compact avatar stays centered with two-digit badge",
+    "passed": true,
+    "detail": {
+      "avatar": 36,
+      "expected": 36
+    }
+  },
+  {
+    "name": "Content font cannot affect Windows playback icon",
+    "passed": true,
+    "detail": null
+  }
+]

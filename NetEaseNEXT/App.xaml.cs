@@ -15,12 +15,19 @@ public partial class App : Application
     }
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
+        ApplicationIdentity.Initialize();
         if (!Environment.GetCommandLineArgs().Contains("--smoke-test"))
         {
             _instance = new SingleInstance();
             if (!_instance.IsPrimary) { _instance.Dispose(); Exit(); return; }
         }
-        Diagnostics.StartupTrace.Mark("Create window"); _window = new MainWindow(); Diagnostics.StartupTrace.Mark("Window created");
+        StartupSession? startup = null;
+        if (!Environment.GetCommandLineArgs().Contains("--smoke-test") || Environment.GetCommandLineArgs().Contains("--startup-parallel-check"))
+        {
+            var settings = SettingsStore.Load(); startup = new(settings, new ApiClient(settings));
+            Diagnostics.StartupTrace.Mark("Startup requests scheduled before window construction");
+        }
+        Diagnostics.StartupTrace.Mark("Create window"); _window = new MainWindow(startup); Diagnostics.StartupTrace.Mark("Window created");
         _instance?.Listen(() => _window.DispatcherQueue.TryEnqueue(_window.RestoreWindow));
         _window.Closed += (_, _) => _instance?.Dispose();
         Diagnostics.StartupTrace.Mark("Activate window"); _window.Activate(); Diagnostics.StartupTrace.Mark("Window activated");

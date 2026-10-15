@@ -1,0 +1,16 @@
+✔ independent reads overlap; writes remain ordered barriers with bounded concurrency (134.4997ms)
+✔ protocol recovers from malformed input; arbitrary upstream methods are rejected (1193.6848ms)
+✔ closing the parent pipe terminates the bridge without an orphan process (92.6292ms)
+✔ social writes use the intended recipient, thread and operation without network access (8.8142ms)
+✔ rejected playlist saves and recipient restrictions cannot report success (0.3575ms)
+✔ my podcasts requests subscribed content with pagination (0.6336ms)
+✔ server read acknowledgement uses the fixed official count-clear route (12.8882ms)
+✔ own events paginate and publishing sends only the selected draft resource (1.3844ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1575.8557

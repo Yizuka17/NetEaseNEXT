@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Animation;
@@ -10,14 +10,17 @@ namespace NetEaseNEXT;
 public sealed partial class MainWindow
 {
     private bool _playlistSubscribed, _playlistSubscribeWriting;
-    private long _playlistOwner, _playlistSubscribers;
+    private long _playlistOwner, _playlistSubscribers, _playlistTrackCount;
+    private long[] _playlistTrackIds = [];
     private async Task LoadPlaylistDetailAsync(CancellationToken ct)
     {
         var id = _playlistId;
         PlaylistSubscribeButton.IsEnabled = false; PlaylistCommentsButton.IsEnabled = false;
-        var result = await _api.CallAsync("playlist_detail", new { id, s = 0 }, ct); ct.ThrowIfCancellationRequested();
+        var result = await _api.CallCachedAsync("playlist_detail", new { id, s = 0 }, ct); ct.ThrowIfCancellationRequested();
         if (_view != "playlist" || _playlistId != id) return;
         var playlist = result.GetProperty("playlist");
+        _playlistTrackIds = playlist.TryGetProperty("trackIds", out var ids) ? ids.EnumerateArray().Select(t => t.Number("id")).Where(id => id > 0).Take(10000).ToArray() : [];
+        _playlistTrackCount = playlist.Number("trackCount");
         PlaylistDetailTitle.Text = playlist.Text("name");
         PlaylistDescription.Text = playlist.Text("description"); PlaylistDescription.MaxLines = 3;
         ExpandDescriptionButton.Content = "展开简介"; ExpandDescriptionButton.Visibility = PlaylistDescription.Text.Length > 100 ? Visibility.Visible : Visibility.Collapsed;
@@ -25,13 +28,33 @@ public sealed partial class MainWindow
         PlaylistTags.Text = playlist.TryGetProperty("tags", out var tags) && tags.ValueKind == JsonValueKind.Array ? string.Join("  ", tags.EnumerateArray().Select(t => t.GetString())) : "";
         Artwork.SetUri(PlaylistDetailCover, playlist.Text("coverImgUrl"));
         _playlistSubscribed = Flag(playlist, "subscribed"); _playlistSubscribers = playlist.Number("subscribedCount");
+        ApplyPlaylistOwnership(playlist.Number("specialType") != 5);
+        if (_api.HasSession && _accountId == 0) _ = ResolvePlaylistOwnershipAsync(id, _api.Cookie, playlist.Number("specialType") != 5, ct);
         UpdatePlaylistSubscribe(); PlaylistCommentsButton.IsEnabled = true;
-        var comments = playlist.Number("commentCount"); PlaylistCommentsButton.Content = comments > 0 ? "评论 (" + CountText(comments) + ")" : "评论";
-        Root.UpdateLayout(); ConnectedAnimationService.GetForCurrentView().GetAnimation("PlaylistCover")?.TryStart(PlaylistDetailCover);
+        var comments = playlist.Number("commentCount"); PlaylistCommentsLabel.Text = comments > 0 ? "评论 (" + CountText(comments) + ")" : "评论";
+        Root.UpdateLayout();
+    }
+    private void ApplyPlaylistOwnership(bool canDelete)
+    {
+        EditPlaylistButton.Visibility = DeletePlaylistButton.Visibility = _accountId > 0 && _playlistOwner == _accountId ? Visibility.Visible : Visibility.Collapsed;
+        if (!canDelete) DeletePlaylistButton.Visibility = Visibility.Collapsed;
+        PlaylistOwnerActions.Visibility = EditPlaylistButton.Visibility;
+    }
+    private async Task ResolvePlaylistOwnershipAsync(long id, string session, bool canDelete, CancellationToken token)
+    {
+        try
+        {
+            var profile = await GetProfileAsync(token);
+            if (token.IsCancellationRequested || _view != "playlist" || _playlistId != id || _api.Cookie != session || _hidden) return;
+            _accountId = profile?.Number("userId") ?? 0; ApplyPlaylistOwnership(canDelete); UpdatePlaylistSubscribe();
+        }
+        catch (OperationCanceledException) { }
+        catch { }
     }
     private void UpdatePlaylistSubscribe()
     {
-        PlaylistSubscribeButton.Content = (_playlistSubscribed ? "已收藏" : "收藏") + (_playlistSubscribers > 0 ? " (" + CountText(_playlistSubscribers) + ")" : "");
+        PlaylistSubscribeLabel.Text = (_playlistSubscribed ? "已收藏" : "收藏") + (_playlistSubscribers > 0 ? " (" + CountText(_playlistSubscribers) + ")" : "");
+        PlaylistSubscribeIcon.Glyph = _playlistSubscribed ? "\uE735" : "\uE734";
         PlaylistSubscribeButton.IsEnabled = !_playlistSubscribeWriting && (_accountId == 0 || _playlistOwner != _accountId);
     }
     private void ExpandDescription_Click(object sender, RoutedEventArgs args)
@@ -42,7 +65,7 @@ public sealed partial class MainWindow
         // Keep the songs reachable when a playlist has a very long description.
         if (expand)
         {
-            var text = new TextBlock { Text = PlaylistDescription.Text, TextWrapping = TextWrapping.Wrap, IsTextSelectionEnabled = true, MaxWidth = 440 };
+            var text = new TextBlock { Text = PlaylistDescription.Text, TextWrapping = TextWrapping.Wrap, IsTextSelectionEnabled = false, MaxWidth = 440 };
             var flyout = new Flyout { Content = new ScrollViewer { Content = text, MaxHeight = 360 } };
             flyout.Closed += (_, _) => { PlaylistDescription.MaxLines = 3; ExpandDescriptionButton.Content = "展开简介"; };
             PlaylistDescription.MaxLines = 3; flyout.ShowAt(ExpandDescriptionButton);

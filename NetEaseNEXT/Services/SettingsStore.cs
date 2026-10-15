@@ -7,6 +7,10 @@ namespace NetEaseNEXT.Services;
 public sealed class SettingsStore
 {
     public static string DataDirectory { get; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "NetEaseNEXT");
+    public List<string> ReadInboxItems { get; set; } = [];
+    public Dictionary<string, long> ReadInboxOffsets { get; set; } = [];
+    public Dictionary<string, long> InboxCounterSnapshots { get; set; } = [];
+    public List<string> AcknowledgedInboxItems { get; set; } = [];
     public bool CloseToTray { get; set; } = true;
     public string Backdrop { get; set; } = "Mica";
     public string Theme { get; set; } = "Default";

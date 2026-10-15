@@ -1,4 +1,4 @@
-using Microsoft.UI.Xaml;
+﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
@@ -13,6 +13,7 @@ public sealed partial class MainWindow
     private long? _redCount;
     private bool _songLiked, _heartWriting, _songLikeKnown;
     private long _songStatsTrack;
+    private Task _songStatsTask = Task.CompletedTask;
     private static string CountText(long count) => count >= 100000000 ? (count / 100000000d).ToString("0.#") + "亿" : count >= 10000 ? (count / 10000d).ToString("0.#") + "万" : count.ToString("N0");
     private void UpdateSongActions()
     {
@@ -24,7 +25,12 @@ public sealed partial class MainWindow
         AutomationProperties.SetName(HeartButton, _songLiked ? "取消红心" : "红心");
         ToolTipService.SetToolTip(HeartButton, (_songLiked ? "取消红心" : "红心") + (_redCount is long total ? "\n" + total.ToString("N0") : ""));
     }
-    private async Task LoadSongEngagementAsync(Track track)
+    private Task LoadSongEngagementAsync(Track track)
+    {
+        if (!_songStatsTask.IsCompleted && _songStatsTrack == track.Id) return _songStatsTask;
+        _songStatsTask = LoadSongEngagementCoreAsync(track); return _songStatsTask;
+    }
+    private async Task LoadSongEngagementCoreAsync(Track track)
     {
         if (_hidden || _exiting) return;
         _songStatsLoad?.Cancel(); using var load = new CancellationTokenSource(); _songStatsLoad = load;
@@ -34,7 +40,7 @@ public sealed partial class MainWindow
         {
         try
         {
-            var response = await _api.CallAsync("song_red_count", new { id = track.Id }, load.Token);
+            var response = await _api.CallCachedAsync("song_red_count", new { id = track.Id }, load.Token);
             if (_playback.Current?.Id != track.Id || load.IsCancellationRequested) return;
             if (response.TryGetProperty("data", out var data) && data.TryGetProperty("count", out var count) && count.TryGetInt64(out var value)) _redCount = value;
             UpdateSongActions();
@@ -45,7 +51,7 @@ public sealed partial class MainWindow
         {
             try
             {
-                var response = await _api.CallAsync("song_like_check", new { ids = "[" + track.Id + "]" }, load.Token);
+                var response = await _api.CallCachedAsync("song_like_check", new { ids = "[" + track.Id + "]" }, load.Token);
                 if (_playback.Current?.Id != track.Id || load.IsCancellationRequested) return;
                 _songLiked = response.TryGetProperty("ids", out var ids) && ids.ValueKind == JsonValueKind.Array && ids.EnumerateArray().Any(id => id.ToString() == track.Id.ToString());
                 _songLikeKnown = true;

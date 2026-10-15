@@ -1,0 +1,140 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "lyric metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "song_detail metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "song_music_detail metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "album metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "playlist_track_all metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "playlist_detail metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "personalized metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "user_playlist metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "login_status metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "song_red_count metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "song_like_check metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback URLs and writes bypass metadata caching",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event like notices retain actor, content and original event",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song reply notice links to the source song",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event replies preserve their embedded source post for navigation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Events retain every safe image and shared song artwork",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Shared song appends without interrupting playback or replacing order",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Startup fetches playlist details and tracks without waiting for UI consumption",
+    "passed": true,
+    "detail": {
+      "RequestCount": 2,
+      "ticks": 20
+    }
+  },
+  {
+    "name": "Prepared startup results are reused when the window consumes them",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Publishing opens a native draft dialog without sending",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Photo viewer supports bounded pinch zoom and touch panning",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Image can zoom and expose pannable content",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "All nine touch thumbnails wrap within the social row",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 344,
+      "ActualHeight": 344
+    }
+  },
+  {
+    "name": "Own events have an authenticated account",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Own events load using the subscribed account",
+    "passed": true,
+    "detail": {
+      "count": 20
+    }
+  }
+]

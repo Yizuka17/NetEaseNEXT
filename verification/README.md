@@ -1,5 +1,27 @@
 # 验证记录
 
+启动、消息来源、我的动态、发布入口及图片查看见 [启动与动态修复](fixes-2026-10-15-events-startup.md)。新增 26 项运行检查、8 项 API 契约检查；真实滚轮缩放和双击还原已验证，未向真实账号发布动态。
+
+侧栏图标裁切与设置旋转见 [尺寸与动画修复](fixes-2026-10-15-sidebar-fit.md)。26 项专项检查通过，并实际点击验证首次及再次点击设置均触发旋转。
+
+最新托盘菜单使用 Win32 系统菜单，选中侧栏图标实心化，见 [原生菜单与侧栏](fixes-2026-10-15-native-tray.md)。23 项原生菜单与 Shell 检查、35 项既有界面检查通过；已查看深色和浅色菜单的实际外观。
+
+托盘收起与启动等待更新见 [响应与菜单修复](fixes-2026-10-15-responsive.md)。`artifacts/win-x64-responsive` 通过 130 项播放回归、7 项 API 契约检查；专项结果见 [启动与菜单](startup-menu-responsive-2026-10-15.json)，后台样本见 [CPU 记录](background-responsive-2026-10-15.json)。真实鼠标点击自动验证受坐标不可用限制。
+
+任务栏与托盘主题更新见 [主题修复](fixes-2026-10-15-shell-theme.md)。`artifacts/win-x64-theme` 通过 19 项专项运行检查，见 [主题结果](shell-theme-2026-10-15.json)；菜单的真实鼠标和键盘自动输入检查受工具窗口激活失败限制。
+
+播放恢复和响应速度更新见 [会话与播放修复](fixes-2026-10-15-session.md)。`artifacts/win-x64-session` 通过 143 项运行检查、6 项 API 契约检查，见 [发布版运行结果](integration-session-2026-10-15.json) 和 [后台 CPU 样本](background-session-2026-10-15.json)。当前样本在下一首预解码就绪时切歌 35.01 ms。
+
+最新反馈见 [2026-10-15 修复记录](fixes-2026-10-15-current.md)。`artifacts/win-x64-current` 通过 129 项运行检查与 6 项 API 契约检查，见 [运行检查](integration-current-2026-10-15.json) 和 [后台 CPU 采样](background-current-2026-10-15.json)。封面加载与持久缓存、SMTC 名称注册、封面动画、全屏切换和服务器全部已读入口已更新。
+
+第三批反馈见 [当前修复记录](fixes-2026-10-14-latest.md)。`artifacts/win-x64-latest` 通过 104 项运行检查与 5 项 API 契约测试，原始结果见 [当前运行检查](integration-latest-2026-10-14.json)。当前音质选择改为下一首生效；以下两批记录只描述对应历史版本。
+
+后续反馈见 [后续修复记录](fixes-2026-10-14-followup.md)。`artifacts/win-x64-followup` 通过 97 项运行检查，见 [运行结果](integration-followup-2026-10-14.json) 和 [后台播放样本](background-followup-2026-10-14.json)。API 契约测试 5 项通过，新增订阅播客的分页检查，没有对真实账号执行写入。高音质检查见 [音质切换结果](quality-2026-10-14.json)。
+
+首轮 29 项反馈的修改见 [首轮修复记录](fixes-2026-10-14.md)，其 85 项检查及后台样本保留在 `integration-2026-10-14.json`、`background-2026-10-14.json`，仅对应首轮版本。
+
+以下为先前版本在 Windows 10 的验证记录。
+
 2026-10-14，Windows 10 22H2（19045），x64，.NET SDK 9.0.319，Node.js 24.15.0。
 
 - Release 构建：0 警告，0 错误。

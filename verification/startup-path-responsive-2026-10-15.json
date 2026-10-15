@@ -1,0 +1,22 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Production startup restores session without eager font scan",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Production startup restores the saved queue and current song",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restored playback remains paused",
+    "passed": true,
+    "detail": null
+  }
+]

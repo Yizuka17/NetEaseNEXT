@@ -1,0 +1,129 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Shell icon follows Windows even when app theme differs",
+    "passed": true,
+    "detail": {
+      "appTheme": "Light",
+      "shellTheme": "Dark",
+      "icon": "C:\\zako\\NetEaseNEXT_Dev\\artifacts\\win-x64-tray-border\\Assets\\AppIconDark.ico"
+    }
+  },
+  {
+    "name": "Taskbar relaunch icon matches shell theme",
+    "passed": true,
+    "detail": "C:\\zako\\NetEaseNEXT_Dev\\artifacts\\win-x64-tray-border\\Assets\\AppIconDark.ico"
+  },
+  {
+    "name": "SMTC identity survives icon update",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Both Windows icon sizes are installed",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Both transparent icon variants ship",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light shell icon updates registry, window and tray",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark shell icon updates registry, window and tray",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark native menu has contrasting text",
+    "passed": true,
+    "detail": {
+      "foreground": "#FFFFFFFF",
+      "background": "#FF202020",
+      "theme": "Dark"
+    }
+  },
+  {
+    "name": "Dark menu keeps the main window hidden",
+    "passed": true,
+    "detail": {
+      "IsVisible": false,
+      "nativeVisible": false,
+      "_hidden": true,
+      "timer": false
+    }
+  },
+  {
+    "name": "Dark menu stays off taskbar and switcher",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark menu fits monitor work area",
+    "passed": true,
+    "detail": {
+      "X": 2400,
+      "Y": 1542,
+      "Width": 480,
+      "Height": 366
+    }
+  },
+  {
+    "name": "Dark menu releases its window on dismissal",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light native menu has contrasting text",
+    "passed": true,
+    "detail": {
+      "foreground": "#E4000000",
+      "background": "#FFF3F3F3",
+      "theme": "Light"
+    }
+  },
+  {
+    "name": "Light menu keeps the main window hidden",
+    "passed": true,
+    "detail": {
+      "IsVisible": false,
+      "nativeVisible": false,
+      "_hidden": true,
+      "timer": false
+    }
+  },
+  {
+    "name": "Light menu stays off taskbar and switcher",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light menu fits monitor work area",
+    "passed": true,
+    "detail": {
+      "X": 2400,
+      "Y": 1542,
+      "Width": 480,
+      "Height": 366
+    }
+  },
+  {
+    "name": "Light menu releases its window on dismissal",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Windows theme notification refreshes icons while hidden",
+    "passed": true,
+    "detail": null
+  }
+]

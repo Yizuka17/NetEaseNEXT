@@ -1,0 +1,212 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Keyboard accelerator hints are hidden",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Social pagination is embedded in list footer",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Track and catalog pagination use themed list footers",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "NetEase emoji tokens display as symbols",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Outgoing private conversation selects recipient",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Incoming private conversation selects sender",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comment notification preserves content and reply target",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event actions retain full thread identifier",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reply notification keeps original and new comments",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Mention notification resolves author and comment",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Translated lyrics align by timestamp",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Liked events use a solid vector icon",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unread private item has a dot and separate count",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Opening unread item clears dot and count",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Discover binds real playlists",
+    "passed": true,
+    "detail": 24
+  },
+  {
+    "name": "Playlist details load cover and title",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist subscription and comments are available",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist details keep song list",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist actions have Windows icons and content sized rows",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist metadata and actions scroll with songs",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Artist sidebar is removed and podcast is named",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Search binds tracks",
+    "passed": true,
+    "detail": 50
+  },
+  {
+    "name": "Search songs remain bound to the visible native list",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Load more is outside the initial song viewport",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Load more is visible at the end of songs",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback bar controls are centered",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Favorite playlist picker has cover template",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback mode cycles directly with notice",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback mode cycle returns to sequential",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "MediaPlayer advances",
+    "passed": true,
+    "detail": {
+      "seconds": 0.5326876,
+      "duration": 233
+    }
+  },
+  {
+    "name": "Play-next preserves current and places requested song next",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unsupported quality preserves the playing stream",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "SMTC reports playing",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "SMTC publishes the registered app identity",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Supported quality switch keeps position and plays",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Quality switch lossless decodes and resumes",
+    "passed": true,
+    "detail": {
+      "requested": "lossless",
+      "actual": "lossless",
+      "local": true
+    }
+  },
+  {
+    "name": "Quality switch hires decodes and resumes",
+    "passed": true,
+    "detail": {
+      "requested": "hires",
+      "actual": "lossless",
+      "local": true
+    }
+  },
+  {
+    "name": "Quality switch jymaster decodes and resumes",
+    "passed": true,
+    "detail": {
+      "requested": "jymaster",
+      "actual": "jymaster",
+      "local": true
+    }
+  }
+]

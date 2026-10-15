@@ -5,7 +5,28 @@ import { createInterface } from 'node:readline';
 import { once } from 'node:events';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
-import { methods, normalizeResult } from './bridge.mjs';
+import { methods, normalizeResult, readAllMessagesRequest, createScheduler } from './bridge.mjs';
+
+test('independent reads overlap; writes remain ordered barriers with bounded concurrency', async () => {
+  let active = 0, max = 0;
+  const events = [];
+  let finish;
+  const done = new Promise(resolve => { finish = resolve; });
+  const scheduler = createScheduler(async request => {
+    active++; max = Math.max(max, active); events.push('start:' + request.id);
+    await new Promise(resolve => setTimeout(resolve, request.delay));
+    events.push('end:' + request.id); active--;
+  }, finish, 2);
+  scheduler.enqueue({ id: 'slow', method: 'login_status', delay: 100 });
+  scheduler.enqueue({ id: 'fast', method: 'personalized', delay: 5 });
+  scheduler.enqueue({ id: 'save', method: 'playlist_tracks', delay: 5 });
+  scheduler.enqueue({ id: 'after', method: 'playlist_detail', delay: 5 });
+  await done;
+  assert.equal(max, 2);
+  assert.ok(events.indexOf('end:fast') < events.indexOf('end:slow'));
+  assert.ok(events.indexOf('start:save') > events.indexOf('end:slow'));
+  assert.ok(events.indexOf('start:after') > events.indexOf('end:save'));
+});
 
 function bridge() {
   const child = spawn(process.execPath, ['bridge.mjs'], { cwd: import.meta.dirname, stdio: ['pipe', 'pipe', 'pipe'] });
@@ -59,6 +80,10 @@ test('social writes use the intended recipient, thread and operation without net
   assert.equal(calls.pop().data.like, false);
   await invoke('playlist_subscribe', { id: 9, t: 2 });
   assert.equal(calls.pop().url, '/api/playlist/unsubscribe');
+  await invoke('playlist_delete', { id: 9 });
+  assert.deepEqual(calls.pop(), { url: '/api/playlist/remove', data: { ids: '[9]' } });
+  await invoke('song_order_update', { pid: 9, ids: '[123,456]' });
+  assert.deepEqual(calls.pop(), { url: '/api/playlist/manipulate/tracks', data: { pid: 9, trackIds: '[123,456]', op: 'update' } });
   await invoke('playlist_create', { name: 'draft', privacy: 10, type: 'NORMAL' });
   assert.deepEqual(calls.pop(), { url: '/api/playlist/create', data: { name: 'draft', privacy: 10, type: 'NORMAL' } });
 });
@@ -67,4 +92,43 @@ test('rejected playlist saves and recipient restrictions cannot report success',
   assert.throws(() => normalizeResult('send_text', { body: { code: 200, blacklist: [200] } }));
   assert.throws(() => normalizeResult('send_song', { body: { code: 200, data: { success: false } } }));
   assert.equal(normalizeResult('send_text', { body: { code: 200, msgs: [] } }).code, 200);
+  assert.throws(() => normalizeResult('share_resource', { body: { code: 200, data: { success: false } } }));
+});
+test('my podcasts requests subscribed content with pagination', async () => {
+  const require = createRequire(import.meta.url);
+  const root = dirname(require.resolve('@neteasecloudmusicapienhanced/api'));
+  assert.ok(methods.has('dj_sublist'));
+  let requested;
+  await require(join(root, 'module', 'dj_sublist.js'))({ limit: 48, offset: 48 }, async (url, data) => {
+    requested = { url, data }; return { status: 200, body: { code: 200, djRadios: [] } };
+  });
+  assert.deepEqual(requested, { url: '/api/djradio/get/subed', data: { limit: 48, offset: 48, total: true } });
+});
+test('server read acknowledgement uses the fixed official count-clear route', async () => {
+  const require = createRequire(import.meta.url);
+  const root = dirname(require.resolve('@neteasecloudmusicapienhanced/api'));
+  assert.ok(methods.has('msg_read_all'));
+  assert.ok(!methods.has('api'));
+  const params = readAllMessagesRequest({ cookie: 'unit-test', timestamp: 123, uri: '/api/msg/private/delete', data: { userId: 99 }, crypto: 'eapi' });
+  let requested;
+  await require(join(root, 'module', 'api.js'))(params, async (uri, data, options) => {
+    requested = { uri, data, crypto: options.crypto }; return { status: 200, body: { code: 200 } };
+  });
+  assert.deepEqual(requested, { uri: '/api/msg/count/clear', data: {}, crypto: 'weapi' });
+  assert.equal(params.cookie, 'unit-test');
+  assert.equal(params.timestamp, 123);
+});
+
+test('own events paginate and publishing sends only the selected draft resource', async () => {
+  const require = createRequire(import.meta.url);
+  const root = dirname(require.resolve('@neteasecloudmusicapienhanced/api'));
+  const calls = [];
+  const request = async (url, data) => { calls.push({ url, data }); return { status: 200, body: { code: 200 } }; };
+  assert.ok(methods.has('user_event')); assert.ok(methods.has('share_resource'));
+  await require(join(root, 'module', 'user_event.js'))({ uid: 7, lasttime: 123, limit: 20 }, request);
+  assert.deepEqual(calls.pop(), { url: '/api/event/get/7', data: { getcounts: true, time: 123, limit: 20, total: false, fromRN: 'true' } });
+  await require(join(root, 'module', 'share_resource.js'))({ type: 'noresource', msg: 'draft', id: '' }, request);
+  assert.deepEqual(calls.pop(), { url: '/api/share/friends/resource', data: { type: 'noresource', msg: 'draft', id: '' } });
+  await require(join(root, 'module', 'share_resource.js'))({ type: 'song', msg: 'draft', id: '123' }, request);
+  assert.deepEqual(calls.pop(), { url: '/api/share/friends/resource', data: { type: 'song', msg: 'draft', id: '123' } });
 });

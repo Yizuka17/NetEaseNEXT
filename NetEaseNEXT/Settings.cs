@@ -12,16 +12,63 @@ namespace NetEaseNEXT;
 
 public sealed partial class MainWindow
 {
+    private void UpdateAppIcon()
+    {
+        if (_exiting) return;
+        var path = ShellAppearance.IconPath();
+        if (File.Exists(path))
+        {
+            ApplicationIdentity.UpdateIcon(WinRT.Interop.WindowNative.GetWindowHandle(this), path);
+            AppWindow.SetIcon(path); _tray?.SetIcon(path); _tray?.UpdateMenuTheme();
+        }
+    }
+    private bool _loadingOutputs;
+    private async Task LoadOutputsAsync(CancellationToken ct)
+    {
+        _loadingOutputs = true;
+        try
+        {
+            var fonts = LoadFontsAsync(ct);
+            SettingsVolume.Value = _settings.Volume * 100;
+            var devices = await Windows.Devices.Enumeration.DeviceInformation.FindAllAsync(Windows.Media.Devices.MediaDevice.GetAudioRenderSelector()).AsTask(ct);
+            ct.ThrowIfCancellationRequested(); OutputCombo.Items.Clear();
+            OutputCombo.Items.Add(new ComboBoxItem { Content = "系统默认", Tag = "" });
+            foreach (var device in devices) OutputCombo.Items.Add(new ComboBoxItem { Content = device.Name, Tag = device.Id });
+            SelectTag(OutputCombo, _settings.AudioDeviceId);
+            await fonts;
+        }
+        finally { _loadingOutputs = false; }
+    }
+    private async void Output_Changed(object sender, SelectionChangedEventArgs args)
+    {
+        if (!_ready || _loadingOutputs) return;
+        try { var id = Tag(OutputCombo); await _playback.SetOutputAsync(id); _settings.AudioDeviceId = id; SaveSettings(); }
+        catch (Exception ex) { ShowError(ex.Message); }
+    }
+    private void SettingsVolume_Changed(object sender, RangeBaseValueChangedEventArgs args) { if (_ready && !_loadingOutputs) { _playback.SetVolume(args.NewValue / 100); _appearanceTimer.Stop(); _appearanceTimer.Start(); } }
+    private async void SystemAudio_Click(object sender, RoutedEventArgs args) => await OpenSystemAudioAsync();
     private readonly DispatcherTimer _appearanceTimer = new() { Interval = TimeSpan.FromMilliseconds(180) };
     private string _appliedFont = "";
     private static void SelectTag(ComboBox combo, string value) => combo.SelectedItem = combo.Items.OfType<ComboBoxItem>().FirstOrDefault(item => (string)item.Tag == value) ?? combo.Items[0];
     private static string Tag(ComboBox combo) => (combo.SelectedItem as ComboBoxItem)?.Tag as string ?? "";
     private void InitializeFonts()
     {
-        try { FontCombo.ItemsSource = CanvasTextFormat.GetSystemFontFamilies().OrderBy(name => name, StringComparer.CurrentCultureIgnoreCase).ToArray(); }
-        catch { FontCombo.ItemsSource = new[] { "Segoe UI", "Microsoft YaHei UI" }; }
+        FontCombo.ItemsSource = new[] { _settings.FontFamily, "Segoe UI", "Microsoft YaHei UI" }.Distinct().ToArray();
         FontCombo.SelectedItem = _settings.FontFamily;
         _appearanceTimer.Tick += (_, _) => { _appearanceTimer.Stop(); SaveSettings(); ApplyAppearance(); };
+    }
+    private bool _fontsLoaded, _loadingFonts;
+    private async Task LoadFontsAsync(CancellationToken ct)
+    {
+        if (_fontsLoaded) return;
+        string[] families;
+        try { families = await Task.Run(() => CanvasTextFormat.GetSystemFontFamilies().OrderBy(name => name, StringComparer.CurrentCultureIgnoreCase).ToArray(), ct); }
+        catch (OperationCanceledException) { throw; }
+        catch { return; }
+        ct.ThrowIfCancellationRequested();
+        _loadingFonts = true;
+        try { FontCombo.ItemsSource = families.Prepend(_settings.FontFamily).Distinct().ToArray(); FontCombo.SelectedItem = _settings.FontFamily; _fontsLoaded = true; }
+        finally { _loadingFonts = false; }
     }
     private void Setting_Changed(object sender, RoutedEventArgs args)
     {
@@ -30,10 +77,10 @@ public sealed partial class MainWindow
         _settings.Backdrop = Tag(BackdropCombo); _settings.Theme = Tag(ThemeCombo);
         SaveSettings(); ApplyAppearance();
     }
-    private void SaveSettings() { try { _settings.Save(); } catch (Exception ex) { ShowError(ex.Message); } }
+    private void SaveSettings() { if (_runningSmokeTest) return; try { _settings.Save(); } catch (Exception ex) { ShowError(ex.Message); } }
     private void Font_Changed(object sender, SelectionChangedEventArgs args)
     {
-        if (!_ready || FontCombo.SelectedItem is not string family) return;
+        if (!_ready || _loadingFonts || FontCombo.SelectedItem is not string family) return;
         _settings.FontFamily = family; ApplyFont(); SaveSettings();
     }
     private void ApplyFont()
@@ -47,6 +94,16 @@ public sealed partial class MainWindow
     }
     private static void ApplyTextFont(DependencyObject element, FontFamily family)
     {
+        // Icon controls render private-use glyphs; their internal text must keep
+        // the symbol font even when the user's content font changes.
+        if (element is IconElement) return;
+        // InfoBar and other native templates also use private-use characters
+        // directly in TextBlocks, without an IconElement ancestor.
+        if (element is TextBlock symbol && symbol.Text.Any(c => c is >= '\uE000' and <= '\uF8FF'))
+        {
+            symbol.FontFamily = new FontFamily("Segoe Fluent Icons");
+            return;
+        }
         if (element is TextBlock text) text.FontFamily = family;
         else if (element is Control control) control.FontFamily = family;
         for (var index = 0; index < VisualTreeHelper.GetChildrenCount(element); index++) ApplyTextFont(VisualTreeHelper.GetChild(element, index), family);
@@ -75,6 +132,7 @@ public sealed partial class MainWindow
         AppWindow.TitleBar.ButtonBackgroundColor = Microsoft.UI.Colors.Transparent;
         AppWindow.TitleBar.ButtonInactiveBackgroundColor = Microsoft.UI.Colors.Transparent;
         AppWindow.TitleBar.ButtonForegroundColor = Root.ActualTheme == ElementTheme.Dark ? Microsoft.UI.Colors.White : Microsoft.UI.Colors.Black;
+        UpdateAppIcon();
     }
     private async void ChooseFolder_Click(object sender, RoutedEventArgs args)
     {

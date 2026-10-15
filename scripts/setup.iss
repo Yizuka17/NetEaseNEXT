@@ -29,8 +29,8 @@ Name: "desktopicon"; Description: "Create a desktop shortcut"; Flags: unchecked
 Source: "..\artifacts\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*.pdb"
 
 [Icons]
-Name: "{autoprograms}\NetEaseNEXT"; Filename: "{app}\NetEaseNEXT.exe"
-Name: "{autodesktop}\NetEaseNEXT"; Filename: "{app}\NetEaseNEXT.exe"; Tasks: desktopicon
+Name: "{autoprograms}\NetEaseNEXT\NetEaseNEXT"; Filename: "{app}\NetEaseNEXT.exe"; AppUserModelID: "NetEaseNEXT.Desktop"
+Name: "{autodesktop}\NetEaseNEXT"; Filename: "{app}\NetEaseNEXT.exe"; Tasks: desktopicon; AppUserModelID: "NetEaseNEXT.Desktop"
 
 [Run]
 Filename: "{app}\NetEaseNEXT.exe"; Description: "Launch NetEaseNEXT"; Flags: nowait postinstall skipifsilent

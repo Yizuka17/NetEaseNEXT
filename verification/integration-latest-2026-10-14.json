@@ -1,0 +1,533 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Keyboard accelerator hints are hidden",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Social pagination is embedded in list footer",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Track and catalog pagination use themed list footers",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "NetEase emoji tokens display as symbols",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Outgoing private conversation selects recipient",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Incoming private conversation selects sender",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comment notification preserves content and reply target",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event actions retain full thread identifier",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reply notification keeps original and new comments",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Mention notification resolves author and comment",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Translated lyrics align by timestamp",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Liked events use a solid vector icon",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unread private item has a dot and separate count",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Opening unread item clears dot and count",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Stale unread counter cannot resurrect read private messages",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A new private message counts only unread additions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Acknowledged server counters do not hide later private messages",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Discover binds real playlists",
+    "passed": true,
+    "detail": 24
+  },
+  {
+    "name": "Playlist details load cover and title",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist subscription and comments are available",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist details keep song list",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist actions have Windows icons and content sized rows",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist metadata and actions scroll with songs",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Artist sidebar is removed and podcast is named",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Search binds tracks",
+    "passed": true,
+    "detail": 50
+  },
+  {
+    "name": "Search songs remain bound to the visible native list",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Load more is outside the initial song viewport",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Load more is visible at the end of songs",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback bar controls are centered",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback tool glyphs share a vertical center",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Heart and comment glyphs share a vertical center",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Favorite playlist picker has cover template",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback mode cycles directly with notice",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Popup uses an opaque theme background",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback mode cycle returns to sequential",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "MediaPlayer advances",
+    "passed": true,
+    "detail": {
+      "seconds": 0.5644168,
+      "duration": 233
+    }
+  },
+  {
+    "name": "Two rapid touch activations replace the full queue during audio loading",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Play-next preserves current and places requested song next",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unsupported quality preserves the playing stream",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "SMTC reports playing",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "SMTC publishes the registered app identity",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Selecting quality is deferred without reloading current audio",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The next song uses the selected quality",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song red-heart count is real and visible",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Independent player hosts shared controls",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Heart and song comments follow player controls",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Lyrics bind",
+    "passed": true,
+    "detail": 69
+  },
+  {
+    "name": "Player window provides native caption controls and drag area",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Player cover and all controls stay within the window",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Cover background renders",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Seek",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Hidden window stops UI timer",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Hidden window keeps audio playing",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Hidden window releases list and artwork bindings",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Shell tray registered",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Pause and SMTC",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Settings fit the scroll viewport",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Settings content is not clipped at either edge",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Settings host audio output controls",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unread count does not shift the compact sidebar avatar",
+    "passed": true,
+    "detail": {
+      "avatarCenter": 36,
+      "paneCenter": 36
+    }
+  },
+  {
+    "name": "Narrow window keeps settings and navigation accessible",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Solid backdrop",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Mica supported or fallback",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Leaving player restores playback bar",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback queue opens without navigation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Second queue click closes panel",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Queue preserved",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Queue scroll range while paused",
+    "passed": true,
+    "detail": 3764.5
+  },
+  {
+    "name": "Paused queue scrolls down",
+    "passed": true,
+    "detail": 400
+  },
+  {
+    "name": "Paused queue scrolls up",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Paused lyrics keep manual position",
+    "passed": true,
+    "detail": {
+      "lyricOffset": 516.4121704101562,
+      "afterUpdate": 516.4121704101562,
+      "range": 5729,
+      "_followLyrics": false
+    }
+  },
+  {
+    "name": "Paused lyrics scroll up",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Player enters full screen",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Fullscreen removes return button and caption drag region",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Fullscreen uses same page and native exit icon",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Player exits full screen",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song comment window opens",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Real song comments bind",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comments use per-row actions without selection",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "System fonts available",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Font inherits into player",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Changing text font preserves Windows playback icon",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Warning popup retains the Windows symbol font",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Account quality checked",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Artists loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Artist detail starts with top songs and profile",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Artist biography tab renders",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Artist albums loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Album tracks loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "My podcasts loads subscriptions without recommendations",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Subscribed podcast programs load",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Subscribed podcast program plays",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Authenticated events loads",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Native comment dialog opens",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Empty comment cannot be sent",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Authenticated messages loads",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Message inbox excludes private conversations",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Authenticated private loads",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comment reply inbox loads",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Mention inbox loads",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Private composer is hidden outside conversation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Library offers playlist creation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Native create playlist dialog opens",
+    "passed": true,
+    "detail": null
+  }
+]

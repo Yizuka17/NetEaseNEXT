@@ -1,0 +1,116 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Startup does not scan the installed font collection",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Cached account identity and avatar start without server validation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A slow account-sized request does not block an independent page request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Out-of-order pipe responses match the requesting task",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "UI dispatcher continues running during worker startup and requests",
+    "passed": true,
+    "detail": {
+      "ticks": 33
+    }
+  },
+  {
+    "name": "Canceled request stops waiting",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Canceling one request preserves other pending responses",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Canceling the last interested request stops unnecessary worker work",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Worker exit completes outstanding tasks",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Request channel restarts after worker exit",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A response from before a write cannot refill invalidated metadata",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark menu installs outside-click and focus observers",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark press inside menu does not dismiss it",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark outside press dismisses without a foreground change",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark dismissal removes all temporary input observers",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light menu installs outside-click and focus observers",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light press inside menu does not dismiss it",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light outside press dismisses without a foreground change",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light dismissal removes all temporary input observers",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Settings can load the complete font collection on demand",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Real outside-click inspection dismisses the menu",
+    "passed": true,
+    "detail": {
+      "LastCommand": 0
+    }
+  }
+]
