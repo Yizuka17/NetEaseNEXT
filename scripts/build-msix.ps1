@@ -43,8 +43,14 @@ if ($LASTEXITCODE) { throw 'Creating the package resource configuration failed.'
 [xml]$taskPri = Get-Content -LiteralPath $taskPriConfig -Raw
 [void]$taskPri.resources.RemoveChild($taskPri.resources.packaging)
 $taskAssetIndex = $taskPri.resources.index
-$taskAssetIndex.SetAttribute('startIndexAt','PackageAssets')
-foreach ($taskIndexer in @($taskAssetIndex.'indexer-config')) { if ($taskIndexer.type -ne 'folder') { [void]$taskAssetIndex.RemoveChild($taskIndexer) } }
+# A folder seed flattens its first directory in logical resource names. Use an
+# explicit file list so manifest paths retain the PackageAssets/ prefix.
+$taskAssetList = Join-Path $taskStage 'shell-assets.resfiles'
+Get-ChildItem -LiteralPath (Join-Path $taskStage 'PackageAssets') -File | ForEach-Object { 'PackageAssets\' + $_.Name } | Set-Content -LiteralPath $taskAssetList -Encoding utf8NoBOM
+$taskAssetIndex.SetAttribute('startIndexAt','shell-assets.resfiles')
+foreach ($taskIndexer in @($taskAssetIndex.'indexer-config')) { [void]$taskAssetIndex.RemoveChild($taskIndexer) }
+$taskFileIndexer = $taskPri.CreateElement('indexer-config'); $taskFileIndexer.SetAttribute('type','resfiles'); $taskFileIndexer.SetAttribute('qualifierDelimiter','.')
+[void]$taskAssetIndex.AppendChild($taskFileIndexer)
 $taskAppIndex = $taskAssetIndex.CloneNode($true)
 $taskAppIndex.SetAttribute('startIndexAt','NetEaseNEXT.pri')
 foreach ($taskIndexer in @($taskAppIndex.'indexer-config')) { [void]$taskAppIndex.RemoveChild($taskIndexer) }
@@ -53,6 +59,8 @@ $taskPriIndexer = $taskPri.CreateElement('indexer-config'); $taskPriIndexer.SetA
 $taskPri.Save($taskPriConfig)
 & (Join-Path $taskTools 'makepri.exe') new /pr $taskStage /cf $taskPriConfig /of (Join-Path $taskStage 'resources.pri') /mn (Join-Path $taskStage 'AppxManifest.xml') /o | Out-Null
 if ($LASTEXITCODE) { throw 'Generating the package resource index failed.' }
+Remove-Item -LiteralPath $taskAssetList
+& (Join-Path $PSScriptRoot 'test-package-icons.ps1') -PackageRoot $taskStage -SdkTools $taskTools -ReportPath (Join-Path $taskOutput 'icon-resource-check.json')
 $taskSuffix = if ($Unsigned) { '.unsigned' } else { '' }
 $taskPackage = Join-Path $taskOutput "NetEaseNEXT-$taskVersion-$($Architecture.ToLowerInvariant())$taskSuffix.msix"
 & (Join-Path $taskTools 'makeappx.exe') pack /d $taskStage /p $taskPackage /o

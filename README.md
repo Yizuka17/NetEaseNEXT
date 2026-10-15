@@ -31,7 +31,7 @@ pwsh -NoProfile -File scripts/new-certificate.ps1
 pwsh -NoProfile -File scripts/build-installer.ps1
 ```
 
-便携包：`artifacts/win-x64`。已签名安装包与公钥证书：`artifacts/msix`。MSIX 使用 Windows SDK 的 MakeAppx、MakePri 和 SignTool；签名证书的 Subject 必须与 `packaging/AppxManifest.xml` 的 Publisher 一致。`build-installer.ps1` 默认构建已签名 MSIX，`-Unsigned` 仅用于 CI 验证，输出带 `.unsigned` 后缀。可用 `scripts/run.ps1` 运行开发构建。
+便携包：`artifacts/win-x64`。已签名安装包与公钥证书：`artifacts/msix`。MSIX 使用 Windows SDK 的 MakeAppx、MakePri 和 SignTool；签名证书的 Subject 必须与 `packaging/AppxManifest.xml` 的 Publisher 一致。`build-installer.ps1` 默认构建已签名 MSIX，打包前核对清单图标路径、实际 PRI 候选资源与深浅色变体；`-Unsigned` 仅用于 CI 验证，输出带 `.unsigned` 后缀。可用 `scripts/run.ps1` 运行开发构建。
 
 首次侧载自签名 MSIX，需将随包的 `NetEaseNEXT.cer` 信任到本机“受信任人”；这一步需要管理员权限。`install-msix.ps1 -TrustCertificate` 显式执行证书信任和安装，证书已信任时不需要该参数。后续安装同发布者、更高版本的包即可更新。迁移普通安装版时，从旧托盘退出后加 `-RemoveLegacyInstall`：先确认 MSIX 安装成功，再运行旧版卸载器并清理其两个旧快捷方式，不清除 `%LOCALAPPDATA%/NetEaseNEXT` 的账号、配置与缓存。MSIX 不再自行创建开始菜单快捷方式。
 
