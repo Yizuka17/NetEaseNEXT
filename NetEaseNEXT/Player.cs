@@ -41,8 +41,9 @@ public sealed partial class MainWindow
     private void Playback_Changed()
     {
         if (_exiting) return;
-        SchedulePlaybackSave(); UpdateModeIcon();
-        if (_hidden) { _displayedTrack = null; return; }
+        SchedulePlaybackSave();
+        if (_hidden) return;
+        UpdateModeIcon();
         PlayPauseIcon.Glyph = _playback.IsPlaying ? "\uE769" : "\uE768";
         if (_displayedTrack != _playback.Current)
         {

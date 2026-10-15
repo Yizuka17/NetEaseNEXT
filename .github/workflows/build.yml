@@ -24,12 +24,13 @@ jobs:
       - name: Test API bridge
         working-directory: api
         run: npm test
-      - name: Build installer
+      # The private signing key remains on the maintainer's machine.
+      - name: Build unsigned MSIX for CI validation
         shell: pwsh
-        run: ./scripts/build-installer.ps1
+        run: ./scripts/build-installer.ps1 -Unsigned
       - uses: actions/upload-artifact@v4
         with:
           name: NetEaseNEXT-windows-x64
           path: |
             artifacts/win-x64
-            artifacts/installer
+            artifacts/msix/*.unsigned.msix

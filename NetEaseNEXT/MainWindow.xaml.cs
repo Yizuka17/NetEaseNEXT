@@ -175,15 +175,15 @@ public sealed partial class MainWindow : Window
             _playerNoticeTimer.Stop(); PlayerNotice.IsOpen = false; QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null;
             _songStatsLoad?.Cancel(); _qualityLoad?.Cancel();
             _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _loginLoad?.Cancel(); _coverLoad?.Cancel();
-            PlaylistGrid.ItemsSource = null; CatalogGrid.ItemsSource = null;
-            LargeCover.Source = null; BlurredCover.Source = null; LyricsList.ItemsSource = null; _lyrics.Clear(); _lyricId = 0;
-            Artwork.SuspendTree(Root); TrackList.ItemsSource = null; SocialList.ItemsSource = null;
-            AccountAvatar.ProfilePicture = null;
+            // Keep completed UI data and decoded images. Hiding should stop work,
+            // not force network requests, decoding and layout on every restore.
+            if (_lyrics.Count == 0) _lyricId = 0;
+            ++_lyricScrollGeneration;
+            Artwork.SuspendTree(Root);
         }
         else
         {
-            PlaylistGrid.ItemsSource = Playlists; CatalogGrid.ItemsSource = Catalog;
-            TrackList.ItemsSource = Tracks; SocialList.ItemsSource = SocialItems; Artwork.ResumeTree(Root);
+            Artwork.ResumeTree(Root);
             Playback_Changed();
             if (_sessionReady || _runningSmokeTest)
             {

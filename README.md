@@ -4,7 +4,7 @@
 
 ## 使用
 
-[下载安装包](https://github.com/Yizuka17/NetEaseNEXT/releases/latest)。安装时可选择目录。也可以解压便携包，运行 `NetEaseNEXT.exe`，保留目录内所有文件。
+[下载安装包](https://github.com/Yizuka17/NetEaseNEXT/releases/latest)。默认安装包为 MSIX，由 Windows 管理安装目录和开始菜单入口。便携版仍可解压后运行 `NetEaseNEXT.exe`，保留目录内所有文件。
 
 - 在歌曲菜单打开歌手详情：热门50、专辑、MV、歌手详情。搜索只在发现页显示，Ctrl+F 可回到主页搜索。
 - 歌单详情展示封面、简介、标签和创建者，打开时有封面过渡。支持收藏歌单、歌单评论，以及创建公开或私密歌单；自己的歌单可删除、移除曲目和调整顺序。添加歌曲到歌单使用“文件夹＋”图标。
@@ -26,10 +26,14 @@
 
 ```powershell
 pwsh -NoProfile -File scripts/build.ps1 -Publish
+# 首次在本机生成并绑定 17 年签名证书；后续构建复用该证书
+pwsh -NoProfile -File scripts/new-certificate.ps1
 pwsh -NoProfile -File scripts/build-installer.ps1
 ```
 
-便携包：`artifacts/win-x64`。安装包：`artifacts/installer`。安装器使用 Inno Setup 6.7.3，编译脚本按需取得编译器，不更改系统安装。可用 `scripts/run.ps1` 运行开发构建。
+便携包：`artifacts/win-x64`。已签名安装包与公钥证书：`artifacts/msix`。MSIX 使用 Windows SDK 的 MakeAppx、MakePri 和 SignTool；签名证书的 Subject 必须与 `packaging/AppxManifest.xml` 的 Publisher 一致。`build-installer.ps1` 默认构建已签名 MSIX，`-Unsigned` 仅用于 CI 验证，输出带 `.unsigned` 后缀。可用 `scripts/run.ps1` 运行开发构建。
+
+首次侧载自签名 MSIX，需将随包的 `NetEaseNEXT.cer` 信任到本机“受信任人”；这一步需要管理员权限。`install-msix.ps1 -TrustCertificate` 显式执行证书信任和安装，证书已信任时不需要该参数。后续安装同发布者、更高版本的包即可更新。迁移普通安装版时，从旧托盘退出后加 `-RemoveLegacyInstall`：先确认 MSIX 安装成功，再运行旧版卸载器并清理其两个旧快捷方式，不清除 `%LOCALAPPDATA%/NetEaseNEXT` 的账号、配置与缓存。MSIX 不再自行创建开始菜单快捷方式。
 
 2026-10-15 任务栏与托盘主题修正版：`artifacts/win-x64-theme/NetEaseNEXT.exe`。先从旧版托盘退出，再启动新版；保留便携包内全部文件。任务栏和托盘图标随 Windows 系统颜色模式切换，暗色使用白色线条，浅色使用深色线条。托盘菜单使用原生 WinUI 主题资源。
 
@@ -57,7 +61,7 @@ pwsh -NoProfile -File scripts/verify.ps1 -MeasureBackground
 
 ## 数据与性能
 
-账号会话以 Windows DPAPI 加密，绑定当前 Windows 用户，位于 `%LOCALAPPDATA%/NetEaseNEXT`。配置和限长日志也保存在此处。自选缓存目录保存封面、歌曲缓存和 API 临时状态，不移动账号凭据；旧目录不自动删除。封面按最近使用时间在 256 MiB 上限内整理，同图请求共享下载、损坏缓存自动重取。可见窗口保留最多 32 MiB 已解码封面，减少页面切换的重复解码。
+账号会话以 Windows DPAPI 加密，绑定当前 Windows 用户，位于 `%LOCALAPPDATA%/NetEaseNEXT`。配置和限长日志也保存在此处。自选缓存目录保存封面、歌曲缓存和 API 临时状态，不移动账号凭据；旧目录不自动删除。封面按最近使用时间在 256 MiB 上限内整理，同图请求共享下载、损坏缓存自动重取。已解码封面的复用缓存上限为 32 MiB，隐藏窗口时保留；界面当前引用的图片也会继续保留，减少恢复时的重复解码。
 
 歌曲缓存上限 1 GiB，按歌曲、实际音质和文件版本区分；完整下载并通过长度和 MD5 校验后保存。播放地址按会话和音质在内存中短期复用，遵守接口有效期，过期后重新请求，不写入磁盘。试听片段不保存为完整歌曲，此缓存不提供离线播放。下载目录只写入用户主动下载的歌曲。
 
@@ -65,7 +69,7 @@ pwsh -NoProfile -File scripts/verify.ps1 -MeasureBackground
 
 打开消息或私信条目会消除本地未读标记。两个列表右上角的“全部已读”会调用服务器的全局已读操作，清除消息和私信的全部提醒，保留消息内容。
 
-音频由 Windows MediaPlayer 播放。列表虚拟化；封面根据 DPI 解码，UI 声明 Per-Monitor V2。模糊背景仅在换曲或进入播放页时生成，不持续渲染动画。优化以后台 CPU 和唤醒次数为主。隐藏后停止界面进度、消息轮询、封面处理及额外歌曲缓存下载，保留播放器和必要状态，取消无用请求并释放列表图片与歌词。API 使用私有管道，播放地址独立请求以减少页面加载的阻塞；Node 按需启动，15 秒空闲退出，不监听端口，不启用替代音源。
+音频由 Windows MediaPlayer 播放。列表虚拟化；封面根据 DPI 解码，UI 声明 Per-Monitor V2。模糊背景仅在换曲或主题变化后按需生成，不持续渲染动画。优化以后台 CPU 和唤醒次数为主。隐藏后停止界面进度、动画、消息轮询、封面处理及额外歌曲缓存下载，取消无用请求，保留完成的头像、封面、列表和歌词，恢复时复用；已解码封面的复用缓存仍有 32 MiB 上限，不主动清空或强制回收内存。API 使用私有管道，播放地址独立请求以减少页面加载的阻塞；Node 按需启动，15 秒空闲退出，不监听端口，不启用替代音源。
 
 ## 参考与依赖
 
@@ -74,4 +78,4 @@ pwsh -NoProfile -File scripts/verify.ps1 -MeasureBackground
 - [Enhanced API](https://github.com/NeteaseCloudMusicApiEnhanced/api-enhanced)，固定 npm 版本 4.41.1。
 - Microsoft Windows App SDK、Win2D、.NET；分发的 Node 许可位于 `third-party`，npm 依赖许可保留在 `api/node_modules`。
 
-当前采用免安装或普通安装器分发，无需开发证书。若需要签名开发证书，`scripts/new-certificate.ps1` 生成有效期 17 年的证书，私钥留在当前用户证书存储，不自动信任。
+`scripts/new-certificate.ps1` 生成有效期 17 年的 MSIX 签名证书并保存本机指纹绑定，后续运行复用该证书。私钥留在当前用户证书存储；`certificates` 不进入源码仓库，安装包只附带公钥 `.cer`。生成证书和签名不会自动更改系统信任。

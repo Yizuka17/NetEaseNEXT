@@ -1,0 +1,61 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Shell icon follows Windows even when app theme differs",
+    "passed": true,
+    "detail": {
+      "appTheme": "Light",
+      "shellTheme": "Dark",
+      "icon": "C:\\Program Files\\WindowsApps\\NetEaseNEXT_0.2.1.0_x64__1wr5cf65fxq72\\Assets\\AppIconDark.ico"
+    }
+  },
+  {
+    "name": "Taskbar relaunch icon matches shell theme",
+    "passed": true,
+    "detail": "C:\\Program Files\\WindowsApps\\NetEaseNEXT_0.2.1.0_x64__1wr5cf65fxq72\\Assets\\AppIconDark.ico"
+  },
+  {
+    "name": "SMTC identity survives icon update",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Both Windows icon sizes are installed",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Both transparent icon variants ship",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light shell icon updates window and tray with the appropriate identity",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark shell icon updates window and tray with the appropriate identity",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark tray uses a real USER32 popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark tray owner receives foreground for automatic dismissal",
+    "passed": false,
+    "detail": null
+  },
+  {
+    "name": "exception",
+    "passed": false,
+    "detail": "System.InvalidOperationException: Smoke test failed: Dark tray owner receives foreground for automatic dismissal\r\n   at NetEaseNEXT.MainWindow.\u003C\u003Ec__DisplayClass61_0.\u003CRunSmokeTestAsync\u003Eg__Check|0(String name, Boolean condition, Object detail)\r\n   at NetEaseNEXT.MainWindow.RunNativeMenuChecksAsync(Action\u00603 check)\r\n   at NetEaseNEXT.MainWindow.RunShellThemeChecksAsync(Action\u00603 check)\r\n   at NetEaseNEXT.MainWindow.RunSmokeTestAsync()"
+  }
+]

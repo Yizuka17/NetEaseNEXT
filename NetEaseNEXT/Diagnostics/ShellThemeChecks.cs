@@ -22,7 +22,7 @@ public sealed partial class MainWindow
         {
             var path = ShellAppearance.IconPath(dark);
             ApplicationIdentity.UpdateIcon(handle, path); AppWindow.SetIcon(path); _tray.SetIcon(path);
-            check((dark ? "Dark" : "Light") + " shell icon updates registry, window and tray", ApplicationIdentity.ReadWindowIconPath(handle) == path && _tray.IconPath == path && (string?)Microsoft.Win32.Registry.GetValue(@"HKEY_CURRENT_USER\Software\Classes\AppUserModelId\" + ApplicationIdentity.Id, "IconUri", "") == path, null);
+            check((dark ? "Dark" : "Light") + " shell icon updates window and tray with the appropriate identity", ApplicationIdentity.ReadWindowIconPath(handle) == path && _tray.IconPath == path && (ApplicationIdentity.IsPackaged || (string?)Microsoft.Win32.Registry.GetValue(@"HKEY_CURRENT_USER\Software\Classes\AppUserModelId\" + ApplicationIdentity.Id, "IconUri", "") == path), null);
         }
         UpdateAppIcon();
         await RunNativeMenuChecksAsync(check);

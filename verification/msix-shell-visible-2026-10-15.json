@@ -1,0 +1,127 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Shell icon follows Windows even when app theme differs",
+    "passed": true,
+    "detail": {
+      "appTheme": "Light",
+      "shellTheme": "Dark",
+      "icon": "C:\\Program Files\\WindowsApps\\NetEaseNEXT_0.2.1.0_x64__1wr5cf65fxq72\\Assets\\AppIconDark.ico"
+    }
+  },
+  {
+    "name": "Taskbar relaunch icon matches shell theme",
+    "passed": true,
+    "detail": "C:\\Program Files\\WindowsApps\\NetEaseNEXT_0.2.1.0_x64__1wr5cf65fxq72\\Assets\\AppIconDark.ico"
+  },
+  {
+    "name": "SMTC identity survives icon update",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Both Windows icon sizes are installed",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Both transparent icon variants ship",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light shell icon updates window and tray with the appropriate identity",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark shell icon updates window and tray with the appropriate identity",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark tray uses a real USER32 popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark tray owner receives foreground for automatic dismissal",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark tray keeps expected WinUI visibility",
+    "passed": true,
+    "detail": {
+      "inspect": false,
+      "hidden": true
+    }
+  },
+  {
+    "name": "Dark native tray menu keeps all commands",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark native menu theme support is available",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark native menu and owner are destroyed after dismissal",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark dismissal does not execute a playback or exit command",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light tray uses a real USER32 popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light tray owner receives foreground for automatic dismissal",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light tray keeps expected WinUI visibility",
+    "passed": true,
+    "detail": {
+      "inspect": false,
+      "hidden": true
+    }
+  },
+  {
+    "name": "Light native tray menu keeps all commands",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light native menu theme support is available",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light native menu and owner are destroyed after dismissal",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light dismissal does not execute a playback or exit command",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Windows theme notification refreshes icons while hidden",
+    "passed": true,
+    "detail": null
+  }
+]

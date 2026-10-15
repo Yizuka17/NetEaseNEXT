@@ -44,7 +44,7 @@ public sealed partial class MainWindow
     {
         if (_hidden || _exiting || url.Length == 0) return;
         var session = _api.Cookie;
-        if (_accountAvatarUrl == url && _accountAvatarSession == session && (_accountAvatarLoad != null || AccountAvatar.ProfilePicture != null)) return;
+        if (_accountAvatarUrl == url && _accountAvatarSession == session && (_accountAvatarLoad is { IsCancellationRequested: false } || AccountAvatar.ProfilePicture != null)) return;
         _accountAvatarLoad?.Cancel();
         using var load = new CancellationTokenSource(); _accountAvatarLoad = load;
         _accountAvatarUrl = url; _accountAvatarSession = session;
@@ -61,7 +61,7 @@ public sealed partial class MainWindow
     private async Task UpdateAccountAsync()
     {
         if (_hidden || _exiting) return;
-        if (_accountLoad != null) return;
+        if (_accountLoad is { IsCancellationRequested: false }) return;
         using var load = new CancellationTokenSource(); _accountLoad = load; var session = _api.Cookie;
         try
         {

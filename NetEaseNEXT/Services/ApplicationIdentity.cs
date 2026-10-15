@@ -5,7 +5,15 @@ namespace NetEaseNEXT.Services;
 
 internal static class ApplicationIdentity
 {
-    internal const string Id = "NetEaseNEXT.Desktop";
+    internal const string LegacyId = "NetEaseNEXT.Desktop";
+    internal static bool IsPackaged { get; } = GetPackageFamilyName() != null;
+    internal static string Id { get; } = GetPackageFamilyName() is { } family ? family + "!App" : LegacyId;
+    private static string? GetPackageFamilyName()
+    {
+        try { return Windows.ApplicationModel.Package.Current.Id.FamilyName; }
+        catch (InvalidOperationException) { return null; }
+        catch (COMException) { return null; }
+    }
     private static string _iconPath = "";
     internal static string RegisteredIconPath => _iconPath;
     internal static string ReadWindowIconPath(nint window)
@@ -35,11 +43,13 @@ internal static class ApplicationIdentity
     }
     internal static void Initialize()
     {
+        _iconPath = ShellAppearance.IconPath();
+        // MSIX supplies the process identity and the sole Start menu entry.
+        if (IsPackaged) return;
         Marshal.ThrowExceptionForHR(SetCurrentProcessExplicitAppUserModelID(Id));
         // Register the display identity for Windows shell/SMTC on unpackaged builds.
         using var key = Registry.CurrentUser.CreateSubKey(@"Software\Classes\AppUserModelId\" + Id);
         key.SetValue("DisplayName", "NetEaseNEXT");
-        _iconPath = ShellAppearance.IconPath();
         key.SetValue("IconUri", _iconPath);
         key.SetValue("IconBackgroundColor", "0");
         EnsureShortcut(_iconPath);
@@ -51,10 +61,13 @@ internal static class ApplicationIdentity
         Marshal.ThrowExceptionForHR(SHGetPropertyStoreForWindow(window, ref iid, out var store));
         try
         {
-            SetString(store, 5, Id);
-            SetString(store, 2, "\"" + Environment.ProcessPath + "\"");
+            if (!IsPackaged)
+            {
+                SetString(store, 5, Id);
+                SetString(store, 2, "\"" + Environment.ProcessPath + "\"");
+                SetString(store, 4, "NetEaseNEXT");
+            }
             SetString(store, 3, _iconPath);
-            SetString(store, 4, "NetEaseNEXT");
             store.Commit();
         }
         finally { Marshal.FinalReleaseComObject(store); }
@@ -63,6 +76,7 @@ internal static class ApplicationIdentity
     {
         if (_iconPath == path) return;
         _iconPath = path;
+        if (IsPackaged) { BindWindow(window); return; }
         using var key = Registry.CurrentUser.CreateSubKey(@"Software\Classes\AppUserModelId\" + Id);
         key.SetValue("IconUri", path);
         BindWindow(window);

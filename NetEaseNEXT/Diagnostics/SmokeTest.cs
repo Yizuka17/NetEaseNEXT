@@ -302,11 +302,13 @@ public sealed partial class MainWindow
             if (Environment.GetCommandLineArgs().Contains("--inspect-layout")) await Task.Delay(TimeSpan.FromSeconds(25));
             _playback.Seek(TimeSpan.FromSeconds(10)); await Task.Delay(500);
             Check("Seek", _playback.Position.TotalSeconds >= 9);
+            var retainedCover = MiniCover.Source; var retainedBackground = BlurredCover.Source; var retainedAvatar = AccountAvatar.ProfilePicture;
+            var retainedLyrics = LyricsList.ItemsSource;
             HideWindow(); UpdateVisibility(); await Task.Delay(800);
             Check("Hidden window stops UI timer", _hidden && !_timer.IsEnabled);
             Check("Hidden playback stops extra audio cache downloads", !_playback.IsCaching);
             Check("Hidden window keeps audio playing", _playback.IsPlaying && _playback.Position.TotalSeconds > 10);
-            Check("Hidden window releases list and artwork bindings", TrackList.ItemsSource == null && SocialList.ItemsSource == null && MiniCover.Source == null && !_inboxTimer.IsEnabled);
+            Check("Hidden window retains completed images, lyrics and list bindings without polling", ReferenceEquals(TrackList.ItemsSource, Tracks) && ReferenceEquals(SocialList.ItemsSource, SocialItems) && ReferenceEquals(MiniCover.Source, retainedCover) && ReferenceEquals(BlurredCover.Source, retainedBackground) && ReferenceEquals(AccountAvatar.ProfilePicture, retainedAvatar) && ReferenceEquals(LyricsList.ItemsSource, retainedLyrics) && !_inboxTimer.IsEnabled);
             Check("Shell tray registered", _tray.IsAvailable);
             if (Environment.GetCommandLineArgs().Contains("--measure-background"))
             {
@@ -323,7 +325,9 @@ public sealed partial class MainWindow
             }
             _playback.Toggle(); await Task.Delay(300);
             Check("Pause and SMTC", !_playback.IsPlaying && _playback.SystemPlaybackStatus == MediaPlaybackStatus.Paused);
-            RestoreWindow(); await NavigateAsync("settings");
+            RestoreWindow(); await Task.Delay(150);
+            Check("Tray restore reuses the existing cover, background, avatar and lyrics", ReferenceEquals(MiniCover.Source, retainedCover) && ReferenceEquals(BlurredCover.Source, retainedBackground) && ReferenceEquals(AccountAvatar.ProfilePicture, retainedAvatar) && ReferenceEquals(LyricsList.ItemsSource, retainedLyrics));
+            await NavigateAsync("settings");
             Root.UpdateLayout();
             Check("Settings fit the scroll viewport", SettingsContent.ActualWidth > 0 && SettingsContent.ActualWidth <= SettingsPanel.ActualWidth && BackdropCombo.ActualWidth <= SettingsContent.ActualWidth);
             var settingsLeft = SettingsContent.TransformToVisual(SettingsPanel).TransformPoint(new Windows.Foundation.Point(0, 0)).X;

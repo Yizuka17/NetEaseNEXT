@@ -22,7 +22,7 @@ public static class Artwork
     private static readonly Dictionary<string, (BitmapImage Bitmap, string Path, long Bytes, long Used)> Decoded = new();
     private static long _decodedBytes, _used;
     private static bool _suspended;
-    public static void SuspendTree(DependencyObject root) { _suspended = true; Decoded.Clear(); _decodedBytes = 0; Visit(root, image => { if (States.TryGetValue(image, out var state)) state.Load?.Cancel(); image.Source = null; }); }
+    public static void SuspendTree(DependencyObject root) { _suspended = true; Visit(root, image => { if (States.TryGetValue(image, out var state)) state.Load?.Cancel(); }); }
     public static void ResumeTree(DependencyObject root) { _suspended = false; Visit(root, image => { if (States.TryGetValue(image, out _)) Load(image); }); }
     private static void Visit(DependencyObject root, Action<Image> action)
     {
@@ -39,7 +39,7 @@ public static class Artwork
     public static readonly DependencyProperty PreserveSourceProperty = DependencyProperty.RegisterAttached("PreserveSource", typeof(bool), typeof(Artwork), new PropertyMetadata(false));
     public static bool GetPreserveSource(DependencyObject obj) => (bool)obj.GetValue(PreserveSourceProperty);
     public static void SetPreserveSource(DependencyObject obj, bool value) => obj.SetValue(PreserveSourceProperty, value);
-    private sealed class State { public CancellationTokenSource? Load; public string? Error; public bool Queued; }
+    private sealed class State { public CancellationTokenSource? Load; public string? Error, Key; public bool Queued; }
     internal static object Inspect(Image image) => new { uri = GetUri(image), image.IsLoaded, suspended = _suspended, loading = States.TryGetValue(image, out var state) && state.Load != null, error = state?.Error, source = image.Source?.GetType().Name };
     public static void Refresh(Image image) => QueueLoad(image);
     private static void QueueLoad(Image image)
@@ -63,7 +63,8 @@ public static class Artwork
                 // Unloaded notification arrives. Do not erase its new bitmap.
                 image.DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
                 {
-                    if (!_suspended && (image.IsLoaded || image.XamlRoot != null)) QueueLoad(image);
+                    if (_suspended) return;
+                    if (image.IsLoaded || image.XamlRoot != null) QueueLoad(image);
                     else image.Source = null;
                 });
             };
@@ -75,7 +76,8 @@ public static class Artwork
         var state = States.GetOrCreateValue(image); state.Load?.Cancel();
         state.Error = null;
         using var load = new CancellationTokenSource(); state.Load = load;
-        if (!GetPreserveSource(image) || _suspended || string.IsNullOrWhiteSpace(GetUri(image))) image.Source = null;
+        if (_suspended) { state.Load = null; return; }
+        if (string.IsNullOrWhiteSpace(GetUri(image))) { image.Source = null; state.Key = null; }
         // Empty named Images can still report IsLoaded=false while attached to
         // the window. Use the visual root, otherwise no Source is ever assigned.
         if (_suspended || !image.IsLoaded && image.XamlRoot == null || string.IsNullOrWhiteSpace(GetUri(image))) { state.Load = null; return; }
@@ -83,9 +85,11 @@ public static class Artwork
         {
             var size = (int)Math.Ceiling(GetSize(image) * (image.XamlRoot?.RasterizationScale ?? 1));
             var key = CacheDirectory + ":" + CacheIdentity(GetUri(image), size) + ":" + size;
+            if (state.Key == key && image.Source != null) return;
+            if (!GetPreserveSource(image)) image.Source = null;
             if (Decoded.TryGetValue(key, out var cached))
             {
-                Decoded[key] = cached with { Used = ++_used }; Touch(cached.Path); image.Source = cached.Bitmap; return;
+                Decoded[key] = cached with { Used = ++_used }; Touch(cached.Path); image.Source = cached.Bitmap; state.Key = key; return;
             }
             for (var attempt = 0; attempt < 2; attempt++)
             {
@@ -99,6 +103,7 @@ public static class Artwork
                     load.Token.ThrowIfCancellationRequested();
                     if (_suspended || !image.IsLoaded && image.XamlRoot == null) return;
                     image.Source = bitmap;
+                    state.Key = key;
                     Remember(key, bitmap, path); break;
                 }
                 catch (OperationCanceledException) { throw; }

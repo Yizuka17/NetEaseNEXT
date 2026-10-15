@@ -13,8 +13,11 @@ namespace NetEaseNEXT;
 public sealed partial class MainWindow
 {
     private CancellationTokenSource? _coverLoad;
+    private string? _coverBackgroundKey;
     private async Task UpdateCoverBackgroundAsync(Track track)
     {
+        var key = Artwork.CacheDirectory + ":" + track.Cover + ":" + Root.ActualTheme;
+        if (_hidden || _coverBackgroundKey == key && BlurredCover.Source != null) return;
         _coverLoad?.Cancel(); using var load = new CancellationTokenSource(); _coverLoad = load;
         try
         {
@@ -38,6 +41,7 @@ public sealed partial class MainWindow
             var source = new BitmapImage(); await source.SetSourceAsync(stream); load.Token.ThrowIfCancellationRequested();
             if (_hidden || _view != "playing") return;
             BlurredCover.Source = source;
+            _coverBackgroundKey = key;
             CoverTint.Background = new LinearGradientBrush { StartPoint = new Point(0, 0), EndPoint = new Point(1, 1), GradientStops = { new GradientStop { Color = tint }, new GradientStop { Color = dark ? Color.FromArgb(255, 20, 20, 24) : Color.FromArgb(255, 250, 250, 250), Offset = 1 } } };
         }
         catch (OperationCanceledException) { }
