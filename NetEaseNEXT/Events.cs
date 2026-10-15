@@ -117,10 +117,11 @@ public sealed partial class MainWindow
             ShowPlayerMessage("已发布", InfoBarSeverity.Success);
         }
     }
-    private void SocialTrack_Click(object sender, RoutedEventArgs args)
+    private async void SocialTrack_Click(object sender, RoutedEventArgs args)
     {
         if ((sender as FrameworkElement)?.DataContext is not SocialItem { SharedTrack: { } track }) return;
-        ShowPlayerMessage(_playback.AddToQueue(track) ? "已加入播放列表" : "已在播放列表中");
+        try { await _playback.PlayNextAsync(track); }
+        catch (Exception ex) { ShowError(ex.Message); }
     }
     private async void SocialPhotoButton_Click(object sender, RoutedEventArgs args)
     {

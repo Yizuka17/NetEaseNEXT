@@ -33,8 +33,14 @@ public sealed partial class MainWindow
             """);
         var item = ParseSocialItem(eventJson.RootElement, "events", "", 7);
         check("Events retain every safe image and shared song artwork", item.Pictures.Count == 2 && item.SharedTrack?.Cover == "https://example.com/cover.jpg" && item.SharedTrack.Subtitle == "artist - album" && item.ThreadId == "A_EV_2_12_7", null);
-        _playback.Restore(new() { Queue = [new(456, "current", "a", "b", "", 60000)], CurrentId = 456, Mode = "Shuffle" });
-        check("Shared song appends without interrupting playback or replacing order", _playback.AddToQueue(item.SharedTrack!) && _playback.Current?.Id == 456 && !_playback.IsPlaying && _playback.Mode == "Shuffle" && _playback.Queue.Select(t => t.Id).SequenceEqual(new long[] { 456, 123 }) && !_playback.AddToQueue(item.SharedTrack!), null);
+        _playback.Restore(new() { Queue = [new(456, "current", "a", "b", "", 60000), new(789, "following", "a", "b", "", 60000)], CurrentId = 456, Mode = "Shuffle" });
+        _playback.AddNext(item.SharedTrack!); _playback.AddNext(item.SharedTrack!);
+        check("Inserting a shared song keeps following songs and avoids duplicate entries", _playback.Current?.Id == 456 && _playback.Mode == "Shuffle" && _playback.Queue.Select(t => t.Id).SequenceEqual(new long[] { 456, 123, 789 }), null);
+        using var privateJson = JsonDocument.Parse("""
+            {"fromUser":{"userId":8,"nickname":"sender"},"msg":"{\"song\":{\"id\":123,\"name\":\"song\",\"album\":{\"name\":\"album\",\"picUrl\":\"https://example.com/cover.jpg\"},\"artists\":[{\"name\":\"artist\"}],\"duration\":60000}}"}
+            """);
+        var privateSong = ParseSocialItem(privateJson.RootElement, "conversation", "", 7);
+        check("Private shared songs expose the same playback card as events", privateSong.SharedTrack?.Id == item.SharedTrack?.Id && privateSong.SharedTrackVisibility == Visibility.Visible, null);
         _playback.Restore(new());
         var folder = Path.Combine(Path.GetTempPath(), "NetEaseNEXT-startup-fixture-" + Guid.NewGuid().ToString("N")); Directory.CreateDirectory(folder);
         try

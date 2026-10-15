@@ -149,21 +149,25 @@ public sealed class PlaybackService : IDisposable
         else { var effective = Queue.ToList(); var match = effective.FindIndex(t => t.Id == track.Id); if (match < 0) effective.Add(track); else effective[match] = track; Queue = effective.ToArray(); }
         _index = Queue.ToList().FindIndex(t => t.Id == track.Id); QueueRevision++; Changed?.Invoke(); WarmFollowing();
     }
-    public void AddNext(Track track)
+    public void AddNext(Track track) => InsertNext(track, prepare: true);
+    private void InsertNext(Track track, bool prepare)
     {
+        if (Current?.Id == track.Id) return;
         var queue = Queue.ToList();
         var current = Current == null ? -1 : queue.FindIndex(t => t.Id == Current.Id);
         for (var i = queue.Count - 1; i >= 0; i--) if (i != current && queue[i].Id == track.Id) { queue.RemoveAt(i); if (i < current) current--; }
         queue.Insert(Math.Clamp(current + 1, 0, queue.Count), track);
-        Queue = queue.ToArray(); _index = current; Changed?.Invoke();
+        Queue = queue.ToArray(); _index = current;
         var original = _orderedQueue.Where(t => t.Id != track.Id || t.Id == Current?.Id).ToList();
-        original.Insert(Math.Clamp(original.FindIndex(t => t.Id == Current?.Id) + 1, 0, original.Count), track); _orderedQueue = original; QueueRevision++; WarmFollowing();
+        original.Insert(Math.Clamp(original.FindIndex(t => t.Id == Current?.Id) + 1, 0, original.Count), track); _orderedQueue = original;
+        QueueRevision++; Changed?.Invoke(); if (prepare) WarmFollowing();
     }
-    public bool AddToQueue(Track track)
+    public Task PlayNextAsync(Track track)
     {
-        if (Queue.Any(t => t.Id == track.Id)) return false;
-        Queue = [.. Queue, track]; _orderedQueue = [.. _orderedQueue, track];
-        QueueRevision++; Changed?.Invoke(); return true;
+        // Direct playback prepares the selected song itself; avoid starting a
+        // second speculative download/decoder just before switching to it.
+        InsertNext(track, prepare: false);
+        return PlayAsync(track);
     }
     public void Remove(Track track)
     {
