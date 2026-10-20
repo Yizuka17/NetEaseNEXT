@@ -36,6 +36,11 @@ public sealed partial class MainWindow
         try
         {
             Check("XAML root loaded", Root.IsLoaded);
+            if (Environment.GetCommandLineArgs().Contains("--sidebar-theme-check"))
+            {
+                await RunSidebarThemeChecksAsync(Check, results);
+                return;
+            }
             if (Environment.GetCommandLineArgs().Contains("--library-check"))
             {
                 await RunLibraryChecksAsync(Check, results);

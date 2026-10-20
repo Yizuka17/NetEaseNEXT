@@ -1,0 +1,684 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark discover normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE80F",
+    "brightness": 238.6268717749002,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark discover normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark library normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE8F1",
+    "brightness": 237.98793895535596,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark library normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark saved-albums normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE93C",
+    "brightness": 238.8199169364197,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark saved-albums normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark radio normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE8D6",
+    "brightness": 234.9714236291299,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark radio normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark events normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE77D",
+    "brightness": 236.84487984626662,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark events normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark queue normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE770",
+    "brightness": 243.5626520681265,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark queue normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark Settings normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE713",
+    "brightness": 235.2727287209469,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark Settings normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark discover selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uEA8A",
+    "brightness": 251.600793564649,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark discover selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark library selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B2",
+    "brightness": 252.87946089344513,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark library selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark saved-albums selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B1",
+    "brightness": 250.30722166192965,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark saved-albums selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark radio selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B3",
+    "brightness": 247.23330926545515,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark radio selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark events selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B4",
+    "brightness": 250.89368607216437,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark events selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark queue selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B5",
+    "brightness": 247.78613639197107,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark queue selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark Settings selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B0",
+    "brightness": 249.81388583973654,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark Settings selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light discover normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE80F",
+    "brightness": 0,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#E4000000",
+    "itemColor": "#E4000000"
+  },
+  {
+    "name": "Light discover normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light library normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE8F1",
+    "brightness": 0,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#E4000000",
+    "itemColor": "#E4000000"
+  },
+  {
+    "name": "Light library normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light saved-albums normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE93C",
+    "brightness": 0,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#E4000000",
+    "itemColor": "#E4000000"
+  },
+  {
+    "name": "Light saved-albums normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light radio normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE8D6",
+    "brightness": 0,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#E4000000",
+    "itemColor": "#E4000000"
+  },
+  {
+    "name": "Light radio normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light events normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE77D",
+    "brightness": 0,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#E4000000",
+    "itemColor": "#E4000000"
+  },
+  {
+    "name": "Light events normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light queue normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE770",
+    "brightness": 0,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#E4000000",
+    "itemColor": "#E4000000"
+  },
+  {
+    "name": "Light queue normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light Settings normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE713",
+    "brightness": 0,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#E4000000",
+    "itemColor": "#E4000000"
+  },
+  {
+    "name": "Light Settings normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light discover selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uEA8A",
+    "brightness": 0,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#E4000000",
+    "itemColor": "#E4000000"
+  },
+  {
+    "name": "Light discover selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light library selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B2",
+    "brightness": 0,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#E4000000",
+    "itemColor": "#E4000000"
+  },
+  {
+    "name": "Light library selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light saved-albums selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B1",
+    "brightness": 0,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#E4000000",
+    "itemColor": "#E4000000"
+  },
+  {
+    "name": "Light saved-albums selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light radio selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B3",
+    "brightness": 0,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#E4000000",
+    "itemColor": "#E4000000"
+  },
+  {
+    "name": "Light radio selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light events selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B4",
+    "brightness": 0,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#E4000000",
+    "itemColor": "#E4000000"
+  },
+  {
+    "name": "Light events selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light queue selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B5",
+    "brightness": 0,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#E4000000",
+    "itemColor": "#E4000000"
+  },
+  {
+    "name": "Light queue selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light Settings selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B0",
+    "brightness": 0,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#E4000000",
+    "itemColor": "#E4000000"
+  },
+  {
+    "name": "Light Settings selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark discover normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE80F",
+    "brightness": 238.70829602522676,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark discover normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark library normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE8F1",
+    "brightness": 237.9998787908172,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark library normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark saved-albums normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE93C",
+    "brightness": 238.83055195053058,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark saved-albums normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark radio normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE8D6",
+    "brightness": 235.00024214331424,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark radio normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark events normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE77D",
+    "brightness": 236.87025335261376,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark events normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark queue normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE770",
+    "brightness": 243.5626520681265,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark queue normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark Settings normal",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uE713",
+    "brightness": 235.34665180348753,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark Settings normal keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark discover selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uEA8A",
+    "brightness": 251.600793564649,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark discover selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark library selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B2",
+    "brightness": 252.87709966405376,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark library selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark saved-albums selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B1",
+    "brightness": 250.30722166192965,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark saved-albums selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark radio selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B3",
+    "brightness": 247.2306471952162,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark radio selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark events selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B4",
+    "brightness": 250.89368607216437,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark events selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark queue selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B5",
+    "brightness": 247.78613639197107,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark queue selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark Settings selected",
+    "type": "FontIcon",
+    "font": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons",
+    "glyph": "\uF8B0",
+    "brightness": 249.81388583973654,
+    "themeMatches": true,
+    "fontMatches": true,
+    "iconColor": "#FFFFFFFF",
+    "itemColor": "#FFFFFFFF"
+  },
+  {
+    "name": "Dark Settings selected keeps its bundled icon and theme binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "All sidebar states use bundled glyphs and follow light/dark foregrounds",
+    "passed": true,
+    "detail": []
+  }
+]

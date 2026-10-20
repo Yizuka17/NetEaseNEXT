@@ -1,0 +1,45 @@
+{
+  "Package": "NetEaseNEXT-0.2.6.0-x64.msix",
+  "SignatureChecked": true,
+  "AuthenticodeStatus": "Valid",
+  "PublicCertificateMatchesSigner": true,
+  "CertificateContainsPrivateKey": false,
+  "Thumbprint": "548494EE74C33B2A77C73CC4E25CE0EEDD5E8733",
+  "NotAfter": "2043-10-20T13:06:04.0000000+08:00",
+  "Sha256": "6F0C8B9CE8A950711FA6D876516EB128C8D81ACFFE8CCCBA92729F82B2D09BDB",
+  "Payload": [
+    {
+      "Path": "NetEaseNEXT.dll",
+      "MatchesPublish": true,
+      "Sha256": "274BFD55DC437BFC49FEAF36A7A37FDD33728A18CB321D5D7365D30F6A411B58",
+      "Bytes": 844288
+    },
+    {
+      "Path": "MainWindow.xbf",
+      "MatchesPublish": true,
+      "Sha256": "D6F7DF69F92EEA18C81590BC556E153F31EFDD10DA8E2B69759407AA6A30420E",
+      "Bytes": 25990
+    },
+    {
+      "Path": "NetEaseNEXT.pri",
+      "MatchesPublish": true,
+      "Sha256": "95E98C5C328112347D1BA648996608D564079F7F94A7138609E3F1C0254CD197",
+      "Bytes": 1381456
+    },
+    {
+      "Path": "Assets/Fonts/NetEaseNEXTIcons.ttf",
+      "MatchesPublish": true,
+      "Sha256": "FB9FAD9E33763E761F3E482BD05491D68D82E4DE3956C8DBF749086D6C891ECD",
+      "Bytes": 11252
+    },
+    {
+      "Path": "third-party/fluent-system-icons/source.json",
+      "MatchesPublish": true,
+      "Sha256": "8B6BE1DED271736B21EC71E949318866DD1C27DBA013BE1F6464878D16B44D2B",
+      "Bytes": 482
+    }
+  ],
+  "SystemTrustChanged": false,
+  "InstalledByThisCheck": false,
+  "Published": false
+}

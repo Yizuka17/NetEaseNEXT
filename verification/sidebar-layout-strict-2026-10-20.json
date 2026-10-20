@@ -1,0 +1,144 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "LeftCompact \u53D1\u73B0 selected icon keeps the standard slot",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 20,
+      "ActualHeight": 20
+    }
+  },
+  {
+    "name": "LeftCompact \u6B4C\u5355 selected icon keeps the standard slot",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 20,
+      "ActualHeight": 20
+    }
+  },
+  {
+    "name": "LeftCompact \u6536\u85CF\u7684\u4E13\u8F91 selected icon keeps the standard slot",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 20,
+      "ActualHeight": 20
+    }
+  },
+  {
+    "name": "LeftCompact \u6211\u7684\u64AD\u5BA2 selected icon keeps the standard slot",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 20,
+      "ActualHeight": 20
+    }
+  },
+  {
+    "name": "LeftCompact \u52A8\u6001 selected icon keeps the standard slot",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 20,
+      "ActualHeight": 20
+    }
+  },
+  {
+    "name": "LeftCompact \u64AD\u653E\u5217\u8868 selected icon keeps the standard slot",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 20,
+      "ActualHeight": 20
+    }
+  },
+  {
+    "name": "LeftCompact \u8BBE\u7F6E selected icon keeps the standard slot",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 20,
+      "ActualHeight": 20
+    }
+  },
+  {
+    "name": "Left \u53D1\u73B0 selected icon keeps the standard slot",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 20,
+      "ActualHeight": 20
+    }
+  },
+  {
+    "name": "Left \u6B4C\u5355 selected icon keeps the standard slot",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 20,
+      "ActualHeight": 20
+    }
+  },
+  {
+    "name": "Left \u6536\u85CF\u7684\u4E13\u8F91 selected icon keeps the standard slot",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 20,
+      "ActualHeight": 20
+    }
+  },
+  {
+    "name": "Left \u6211\u7684\u64AD\u5BA2 selected icon keeps the standard slot",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 20,
+      "ActualHeight": 20
+    }
+  },
+  {
+    "name": "Left \u52A8\u6001 selected icon keeps the standard slot",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 20,
+      "ActualHeight": 20
+    }
+  },
+  {
+    "name": "Left \u64AD\u653E\u5217\u8868 selected icon keeps the standard slot",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 20,
+      "ActualHeight": 20
+    }
+  },
+  {
+    "name": "Left \u8BBE\u7F6E selected icon keeps the standard slot",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 20,
+      "ActualHeight": 20
+    }
+  },
+  {
+    "name": "Settings rotation targets the visible selected icon",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Repeated settings activation restarts rotation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Settings rotation finishes without a persistent animation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Hiding the app stops settings rotation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Disabled animations keep the settings icon still",
+    "passed": true,
+    "detail": null
+  }
+]

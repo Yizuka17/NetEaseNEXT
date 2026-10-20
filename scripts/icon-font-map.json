@@ -1,7 +1,7 @@
 {
   "E700": "navigation_24_regular", "E70D": "chevron_down_24_regular", "E70E": "chevron_up_24_regular",
   "E70F": "edit_24_regular", "E710": "add_24_regular", "E711": "dismiss_24_regular", "E712": "more_horizontal_24_regular",
-  "E713": "settings_24_regular", "E72A": "arrow_right_24_regular", "E72B": "arrow_left_24_regular", "E72D": "share_24_regular",
+  "E713": "settings_24_regular", "E721": "search_24_regular", "E72A": "arrow_right_24_regular", "E72B": "arrow_left_24_regular", "E72D": "share_24_regular",
   "E734": "star_24_regular", "E735": "star_24_filled", "E739": "checkbox_unchecked_24_regular",
   "E73A": "checkbox_checked_24_regular", "E73B": "checkmark_24_regular", "E73C": "checkbox_unchecked_24_regular",
   "E73D": "checkbox_checked_24_regular", "E73E": "checkmark_24_regular", "E73F": "full_screen_minimize_24_regular",
@@ -16,6 +16,7 @@
   "E8ED": "arrow_repeat_1_24_regular", "E8EE": "arrow_repeat_all_24_regular", "E8F1": "library_24_regular",
   "E8F4": "folder_add_24_regular", "E8FD": "text_bullet_list_ltr_24_regular", "E90A": "comment_24_regular",
   "E93C": "album_24_regular", "F8B1": "album_24_filled",
+  "F8B2": "library_24_filled", "F8B3": "music_note_2_24_filled", "F8B4": "people_24_filled", "F8B5": "list_24_filled",
   "E946": "info_24_regular", "EA39": "dismiss_circle_24_regular", "EA8A": "home_24_filled",
   "EB51": "heart_24_regular", "EB52": "heart_24_filled", "F8B0": "settings_24_filled"
 }

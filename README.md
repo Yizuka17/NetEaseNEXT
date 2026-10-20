@@ -84,4 +84,6 @@ pwsh -NoProfile -File scripts/verify.ps1 -MeasureBackground
 - [Enhanced API](https://github.com/NeteaseCloudMusicApiEnhanced/api-enhanced)，固定 npm 版本 4.41.1。
 - Microsoft Windows App SDK、Win2D、.NET；分发的 Node 许可位于 `third-party`，npm 依赖许可保留在 `api/node_modules`。
 
+应用自行定义的图标显式使用包内字体，包括侧栏的空心与实心状态；侧栏图标颜色绑定导航项前景色。WinUI 原生控件模板对未包含的符号保留系统回退，Windows 标题栏与系统菜单仍由系统绘制。
+
 `scripts/new-certificate.ps1` 生成有效期 17 年的 MSIX 签名证书并保存本机指纹绑定，后续运行复用该证书。私钥留在当前用户证书存储；`certificates` 不进入源码仓库，安装包只附带公钥 `.cer`。生成证书和签名不会自动更改系统信任。

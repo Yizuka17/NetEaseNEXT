@@ -1,0 +1,755 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback cover button fits the entire square artwork",
+    "passed": true,
+    "detail": {
+      "buttonHeight": 54,
+      "height": "Auto",
+      "coverHeight": 0
+    }
+  },
+  {
+    "name": "Cached login identity is available without a request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Cached login identity cannot cross sessions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Metadata cache survives a new client instance",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Play URLs are never persisted as generic metadata",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restart restores current song, position and fixed shuffle order paused",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Leaving restored shuffle returns the original playlist order",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Windows Shell resolves SMTC application name",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Artwork sizes reuse one normalized thumbnail request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Rotating NetEase image hosts share one cache entry",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Non-NetEase signed image URL is preserved",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Trial audio cannot use the full-song disk cache",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Audio cache separates quality and ignores expiring URL tokens",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Keyboard accelerator hints are hidden",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Social pagination is embedded in list footer",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Track and catalog pagination use themed list footers",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "NetEase emoji tokens display as symbols",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Outgoing private conversation selects recipient",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Incoming private conversation selects sender",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comment notification preserves content and reply target",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event actions retain full thread identifier",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reply notification keeps original and new comments",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Mention notification resolves author and comment",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Translated lyrics align by timestamp",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Liked events use a solid vector icon",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unread private item has a dot and separate count",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Opening unread item clears dot and count",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Stale unread counter cannot resurrect read private messages",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A new private message counts only unread additions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Acknowledged server counters do not hide later private messages",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Server read-all acknowledgment clears all local reminders",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "New message after server read-all is still unread",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Discover binds real playlists",
+    "passed": true,
+    "detail": 24
+  },
+  {
+    "name": "Discover artwork decodes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist cover transition starts before network detail load",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist details load cover and title",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist subscription and comments are available",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist details keep song list",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist actions have Windows icons and content sized rows",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist metadata and actions scroll with songs",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Artist sidebar is removed and podcast is named",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Search binds tracks",
+    "passed": true,
+    "detail": 50
+  },
+  {
+    "name": "Search songs remain bound to the visible native list",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Load more is outside the initial song viewport",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Load more is visible at the end of songs",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback bar controls are centered",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback tool glyphs share a vertical center",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Heart and comment glyphs share a vertical center",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Favorite playlist picker has cover template",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback mode cycles directly with notice",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Popup uses an opaque theme background",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback mode cycle returns to sequential",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "MediaPlayer advances",
+    "passed": true,
+    "detail": {
+      "seconds": 0.5201043,
+      "duration": 233
+    }
+  },
+  {
+    "name": "Returning to a fully cached song decodes from disk",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Shuffle advances through one fixed permutation without regenerating",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reentering shuffle generates exactly one new sequence",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Sequential restores the original queue after shuffle",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Preloaded song uses a valid cached playback authorization",
+    "passed": true,
+    "detail": {
+      "switchMilliseconds": 39.6392
+    }
+  },
+  {
+    "name": "Next song reuses a prepared decoder",
+    "passed": true,
+    "detail": {
+      "preparedStatus": "ready",
+      "after": "pending"
+    }
+  },
+  {
+    "name": "Two rapid touch activations replace the full queue during audio loading",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Play-next preserves current and places requested song next",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event song card moves an existing song after current and immediately plays it",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Clicking the current shared song keeps one queue entry",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Private song card inserts and plays without reshuffling remaining songs",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A new shared song is inserted before the existing next song and plays",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A shared song starts playback when the queue is empty",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unsupported quality preserves the playing stream",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "SMTC reports playing",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "SMTC source identity",
+    "expected": "NetEaseNEXT.Desktop",
+    "actual": "NetEaseNEXT.exe"
+  },
+  {
+    "name": "SMTC publishes current song metadata to the system",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Selecting quality is deferred without reloading current audio",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The next song uses the selected quality",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song red-heart count is real and visible",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback bar cover decodes before entering player",
+    "passed": true,
+    "detail": {
+      "uri": "http://p4.music.126.net/3mi073axgjg-g-79ObwwEQ==/109951171836582062.jpg",
+      "IsLoaded": false,
+      "suspended": false,
+      "loading": false,
+      "error": null,
+      "source": "BitmapImage"
+    }
+  },
+  {
+    "name": "Entering player restores the cover transition",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Independent player hosts shared controls",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Heart and song comments follow player controls",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Lyrics bind",
+    "passed": true,
+    "detail": 69
+  },
+  {
+    "name": "First opening centers the active lyric after viewport layout",
+    "passed": true,
+    "detail": {
+      "firstLyricY": 185.5,
+      "ViewportHeight": 371
+    }
+  },
+  {
+    "name": "Lyrics before the first timestamp also start in the center",
+    "passed": true,
+    "detail": {
+      "upcomingY": 185.5,
+      "ViewportHeight": 371
+    }
+  },
+  {
+    "name": "Player window provides native caption controls and drag area",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Player cover and all controls stay within the window",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Cover background renders",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Seek",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Account avatar load completes before lifecycle snapshot",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Hidden window stops UI timer",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Hidden playback stops extra audio cache downloads",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Hidden window keeps audio playing",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Hidden window retains completed images, lyrics and list bindings without polling",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Shell tray registered",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Pause and SMTC",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Tray restore reuses the existing cover, background, avatar and lyrics",
+    "passed": true,
+    "detail": {
+      "cover": true,
+      "background": true,
+      "avatar": true,
+      "lyrics": true
+    }
+  },
+  {
+    "name": "Settings fit the scroll viewport",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Settings content is not clipped at either edge",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Settings host audio output controls",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unread count does not shift the compact sidebar avatar",
+    "passed": true,
+    "detail": {
+      "avatarCenter": 36,
+      "paneCenter": 36
+    }
+  },
+  {
+    "name": "Narrow window keeps settings and navigation accessible",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Solid backdrop",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Mica supported or fallback",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Leaving player restores playback bar",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback queue opens without navigation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Second queue click closes panel",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Queue preserved",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Queue scroll range while paused",
+    "passed": true,
+    "detail": 3777.5
+  },
+  {
+    "name": "Paused queue scrolls down",
+    "passed": true,
+    "detail": 400
+  },
+  {
+    "name": "Paused queue scrolls up",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Paused lyrics keep manual position",
+    "passed": true,
+    "detail": {
+      "lyricOffset": 500,
+      "afterUpdate": 500,
+      "range": 5854.5,
+      "_followLyrics": false
+    }
+  },
+  {
+    "name": "Paused lyrics scroll up",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Player enters full screen",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Fullscreen suppresses window zoom and cancels cover animation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Fullscreen removes return button and caption drag region",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Fullscreen uses same page and native exit icon",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Player exits full screen",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Fullscreen presenter switch starts no cover transition",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Normal window animation policy is restored",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song comment window opens",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Real song comments bind",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comments use per-row actions without selection",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "System fonts available",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Font inherits into player",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Changing text font preserves Windows playback icon",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Warning popup retains the bundled symbol font",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Account quality checked",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Artists loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Artist detail starts with top songs and profile",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Artist header scrolls with songs without consuming the viewport",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "First three artist songs display decoded artwork",
+    "passed": true,
+    "detail": {
+      "count": 3,
+      "images": [
+        {
+          "uri": "https://p4.music.126.net/dhVJPBn-ViQsNvJp3nVG_A==/109951174134541578.jpg",
+          "IsLoaded": true,
+          "suspended": false,
+          "loading": false,
+          "error": null,
+          "source": "BitmapImage"
+        },
+        {
+          "uri": "https://p3.music.126.net/FsAzE0md9REibijVPjyilQ==/109951173028465217.jpg",
+          "IsLoaded": true,
+          "suspended": false,
+          "loading": false,
+          "error": null,
+          "source": "BitmapImage"
+        },
+        {
+          "uri": "https://p3.music.126.net/JAGW93A3HMgu7vEMZbxecA==/109951173044668418.jpg",
+          "IsLoaded": true,
+          "suspended": false,
+          "loading": false,
+          "error": null,
+          "source": "BitmapImage"
+        }
+      ],
+      "ActualHeight": 108.5,
+      "scroll": 300.5
+    }
+  },
+  {
+    "name": "Unloading one image does not cancel a shared cover download",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Repeated artwork request reuses the persisted thumbnail",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Broken disk artwork is replaced instead of remaining blank",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Artist biography tab renders",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Artist albums loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Album tracks loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "My podcasts loads subscriptions without recommendations",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Subscribed podcast programs load",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Subscribed podcast program plays",
+    "passed": true,
+    "detail": null
+  }
+]

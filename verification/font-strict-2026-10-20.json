@@ -1,0 +1,45 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Icon font ships inside the application",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Windows symbol resource uses the bundled font",
+    "passed": true,
+    "detail": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons"
+  },
+  {
+    "name": "Playback and heart icons use the bundled font",
+    "passed": true,
+    "detail": "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons"
+  },
+  {
+    "name": "Native popup icon source uses the bundled font",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Filled sidebar icon uses the bundled font",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Changing content font preserves bundled playback icons",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Bundled glyphs render in WinUI",
+    "passed": true,
+    "detail": {
+      "PixelWidth": 1044,
+      "PixelHeight": 270
+    }
+  }
+]

@@ -83,7 +83,7 @@ public sealed partial class MainWindow
         var track = _playback.Current;
         var input = new TextBox { PlaceholderText = "分享新鲜事", AcceptsReturn = true, TextWrapping = TextWrapping.Wrap, MaxLength = 140, MinHeight = 140, MaxHeight = 240 };
         var share = new CheckBox { Content = track == null ? "分享正在播放的歌曲" : "分享歌曲：" + track.Title, IsEnabled = track != null };
-        var emoji = new Button { Content = new SymbolIcon(Symbol.Emoji2), Style = (Style)Application.Current.Resources["BareButtonStyle"], MinWidth = 44, MinHeight = 44 };
+        var emoji = new Button { Content = Services.IconFonts.Create("\uE899"), Style = (Style)Application.Current.Resources["BareButtonStyle"], MinWidth = 44, MinHeight = 44 };
         emoji.Click += (_, _) => ShowEmojiPicker(emoji, input);
         var error = new TextBlock { TextWrapping = TextWrapping.Wrap };
         var panel = new StackPanel { Spacing = 12, Width = Math.Max(240, Math.Min(440, Root.ActualWidth - 120)) };
@@ -140,8 +140,8 @@ public sealed partial class MainWindow
         var dialog = new ContentDialog { XamlRoot = Root.XamlRoot, CloseButtonText = "关闭" };
         var panel = new StackPanel { Spacing = 12 }; panel.Children.Add(scroll);
         var controls = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, HorizontalAlignment = HorizontalAlignment.Center };
-        var previous = new Button { Content = new SymbolIcon(Symbol.Back), MinWidth = 44, MinHeight = 44 };
-        var next = new Button { Content = new SymbolIcon(Symbol.Forward), MinWidth = 44, MinHeight = 44 };
+        var previous = new Button { Content = Services.IconFonts.Create("\uE72B"), MinWidth = 44, MinHeight = 44 };
+        var next = new Button { Content = Services.IconFonts.Create("\uE72A"), MinWidth = 44, MinHeight = 44 };
         var smaller = new Button { Content = "−", MinWidth = 44, MinHeight = 44 };
         var larger = new Button { Content = "+", MinWidth = 44, MinHeight = 44 };
         var reset = new Button { Content = "还原", MinHeight = 44 };
