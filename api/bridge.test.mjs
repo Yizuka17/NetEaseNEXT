@@ -5,7 +5,17 @@ import { createInterface } from 'node:readline';
 import { once } from 'node:events';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
-import { methods, normalizeResult, readAllMessagesRequest, createScheduler } from './bridge.mjs';
+import { methods, normalizeResult, readAllMessagesRequest, createScheduler, dispatch } from './bridge.mjs';
+
+test('a local request loads only its endpoint without the upstream entry point or server', async () => {
+  const require = createRequire(import.meta.url);
+  const entry = require.resolve('@neteasecloudmusicapienhanced/api');
+  const data = await dispatch({ id: 1, method: 'login_qr_create', params: { key: 'lazy-test', qrimg: true } });
+  assert.match(data.data.qrimg, /^data:image\/png;base64,/);
+  assert.equal(require.cache[entry], undefined);
+  assert.equal(require.cache[join(dirname(entry), 'server.js')], undefined);
+  assert.equal(require.cache[join(dirname(entry), 'util', 'request.js')], undefined);
+});
 
 test('independent reads overlap; writes remain ordered barriers with bounded concurrency', async () => {
   let active = 0, max = 0;
@@ -36,6 +46,22 @@ function bridge() {
     return JSON.parse((await lines.next()).value);
   } };
 }
+
+test('saved albums use authenticated library paging and playlist removal preserves server errors', async () => {
+  const require = createRequire(import.meta.url);
+  const root = dirname(require.resolve('@neteasecloudmusicapienhanced/api'));
+  assert.ok(methods.has('album_sublist'));
+  let call;
+  await require(join(root, 'module', 'album_sublist.js'))({ limit: 48, offset: 48 }, async (url, data) => {
+    call = { url, data }; return { status: 200, body: { code: 200, data: [], hasMore: false } };
+  });
+  assert.deepEqual(call, { url: '/api/album/sublist', data: { limit: 48, offset: 48, total: true } });
+  const result = await require(join(root, 'module', 'playlist_tracks.js'))({ op: 'del', pid: 900, tracks: '123' }, async (url, data) => {
+    call = { url, data }; return { status: 200, body: { code: 403, msg: 'denied' } };
+  });
+  assert.deepEqual(call, { url: '/api/playlist/manipulate/tracks', data: { op: 'del', pid: 900, trackIds: '["123"]', imme: 'true' } });
+  assert.equal(normalizeResult('playlist_tracks', result).code, 403);
+});
 test('protocol recovers from malformed input; arbitrary upstream methods are rejected', { timeout: 15000 }, async () => {
   const { child, request } = bridge();
   try {

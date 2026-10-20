@@ -1,0 +1,21 @@
+2026-10-20T12:55:13.0414023+08:00 Load settings
+2026-10-20T12:55:13.0647871+08:00 Settings loaded; decrypt session
+2026-10-20T12:55:13.0673999+08:00 Session decrypted
+2026-10-20T12:55:13.0695557+08:00 Startup requests scheduled before window construction
+2026-10-20T12:55:13.0697269+08:00 Create window
+2026-10-20T12:55:13.0701916+08:00 Startup initial requests: discover
+2026-10-20T12:55:13.0796779+08:00 Startup initial data ready
+2026-10-20T12:55:13.0934879+08:00 InitializeComponent
+2026-10-20T12:55:13.1628682+08:00 XAML initialized
+2026-10-20T12:55:13.2028549+08:00 Configure window
+2026-10-20T12:55:13.2441915+08:00 Initialize fonts
+2026-10-20T12:55:13.2511213+08:00 Apply appearance
+2026-10-20T12:55:13.2722279+08:00 Appearance applied
+2026-10-20T12:55:13.2762299+08:00 Window created
+2026-10-20T12:55:13.2763595+08:00 Activate window
+2026-10-20T12:55:13.2998968+08:00 Window activated
+2026-10-20T12:55:13.3873428+08:00 Root loaded
+2026-10-20T12:55:13.4074284+08:00 Check XAML root loaded: True
+2026-10-20T12:55:13.4365896+08:00 Check Production startup restores session without eager font scan: True
+2026-10-20T12:55:13.4373156+08:00 Check Production startup restores the saved queue and current song: True
+2026-10-20T12:55:13.4374681+08:00 Check Restored playback remains paused: True

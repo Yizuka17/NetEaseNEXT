@@ -1,0 +1,13 @@
+{
+  "Package": "NetEaseNEXT-0.2.3.0-x64.msix",
+  "SignatureChecked": true,
+  "AuthenticodeStatus": "UnknownError",
+  "PublicCertificateMatchesSigner": true,
+  "CertificateContainsPrivateKey": false,
+  "Subject": "CN=NetEaseNEXT Development",
+  "Thumbprint": "548494EE74C33B2A77C73CC4E25CE0EEDD5E8733",
+  "NotAfter": "2043-10-20T13:06:04.0000000+08:00",
+  "Sha256": "A8F353E1169BE83D8990D102626120915B3B72B3CC8F31F055FBCF75ACCA54B8",
+  "SystemTrustChanged": false,
+  "Installed": false
+}

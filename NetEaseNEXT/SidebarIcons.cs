@@ -20,6 +20,7 @@ public sealed partial class MainWindow
             var filled = (item.Tag as string) switch
             {
                 "discover" => SolidSidebarGlyph("\uEA8A"),
+                "saved-albums" => SolidSidebarGlyph("\uF8B1"),
                 "library" => SolidSidebarPath("M2,2 L6,2 L6,22 L2,22 Z M8,2 L12,2 L12,22 L8,22 Z M14,3 L18,2 L23,21 L19,22 Z"),
                 "radio" => SolidSidebarPath("M7,5 L21,2 L21,17 C21,20 15,22 15,19 C15,17 17,16 19,16 L19,7 L9,9 L9,20 C9,23 3,25 3,22 C3,20 5,19 7,19 Z"),
                 "events" => SolidSidebarPath("M8,2 A4,4 0 1 1 8,10 A4,4 0 1 1 8,2 Z M18,4 A3,3 0 1 1 18,10 A3,3 0 1 1 18,4 Z M4,12 L12,12 C14,12 15,13 15,15 L15,17 C15,23 1,23 1,17 L1,15 C1,13 2,12 4,12 Z M17,12 L20,12 C22,12 23,13 23,15 L23,17 C23,20 19,22 16,20 C17,19 17,18 17,16 Z"),
@@ -61,7 +62,7 @@ public sealed partial class MainWindow
     }
     private static IconElement SolidSidebarGlyph(string glyph) => new FontIcon
     {
-        Glyph = glyph, FontFamily = new FontFamily("Segoe Fluent Icons"), FontSize = 20, Width = 20, Height = 20,
+        Glyph = glyph, FontFamily = Services.IconFonts.Symbols, FontSize = 20, Width = 20, Height = 20,
         IsTextScaleFactorEnabled = false
     };
     private static IconElement SolidSidebarPath(string data)

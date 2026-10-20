@@ -93,7 +93,8 @@ public static class Artwork
             }
             for (var attempt = 0; attempt < 2; attempt++)
             {
-                var path = await GetFileAsync(GetUri(image), Math.Clamp(size, 64, 1600), load.Token);
+                var url = GetUri(image);
+                var path = await Task.Run(() => GetFileAsync(url, Math.Clamp(size, 64, 1600), load.Token), load.Token);
                 load.Token.ThrowIfCancellationRequested();
                 try
                 {
@@ -143,7 +144,7 @@ public static class Artwork
             }
             fetch.Readers++;
         }
-        try { return await fetch.Task.WaitAsync(ct); }
+        try { return await fetch.Task.WaitAsync(ct).ConfigureAwait(false); }
         finally
         {
             lock (FetchLock)
@@ -187,19 +188,24 @@ public static class Artwork
     private static void Touch(string path) { try { if (DateTime.UtcNow - File.GetLastWriteTimeUtc(path) > TimeSpan.FromHours(1)) File.SetLastWriteTimeUtc(path, DateTime.UtcNow); } catch { } }
     private static async Task<string> DownloadAsync(string request, string path, CancellationToken ct)
     {
-        await Gate.WaitAsync(ct);
+        await Gate.WaitAsync(ct).ConfigureAwait(false);
         var temp = path + "." + Guid.NewGuid().ToString("N") + ".tmp";
         try
         {
             if (ValidImage(path)) { Touch(path); return path; }
             Interlocked.Increment(ref Downloads);
-            using var response = await Client.GetAsync(request, HttpCompletionOption.ResponseHeadersRead, ct); response.EnsureSuccessStatusCode();
-            await using var stream = await response.Content.ReadAsStreamAsync(ct);
+            // ResponseHeadersRead only applies HttpClient.Timeout to headers.
+            // Bound the body too so stalled transfers cannot occupy all slots.
+            using var timeout = CancellationTokenSource.CreateLinkedTokenSource(ct);
+            timeout.CancelAfter(TimeSpan.FromSeconds(20));
+            var token = timeout.Token;
+            using var response = await Client.GetAsync(request, HttpCompletionOption.ResponseHeadersRead, token).ConfigureAwait(false); response.EnsureSuccessStatusCode();
+            await using var stream = await response.Content.ReadAsStreamAsync(token).ConfigureAwait(false);
             await using (var output = File.Create(temp))
             {
                 var buffer = new byte[32768]; int read; long total = 0;
-                while ((read = await stream.ReadAsync(buffer, ct)) != 0)
-                { if ((total += read) > 12 * 1024 * 1024) throw new InvalidDataException("图片过大"); await output.WriteAsync(buffer.AsMemory(0, read), ct); }
+                while ((read = await stream.ReadAsync(buffer, token).ConfigureAwait(false)) != 0)
+                { if ((total += read) > 12 * 1024 * 1024) throw new InvalidDataException("图片过大"); await output.WriteAsync(buffer.AsMemory(0, read), token).ConfigureAwait(false); }
             }
             if (!ValidImage(temp)) throw new InvalidDataException("图片内容无效");
             ct.ThrowIfCancellationRequested(); File.Move(temp, path, true); return path;

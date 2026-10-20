@@ -36,6 +36,31 @@ public sealed partial class MainWindow
         try
         {
             Check("XAML root loaded", Root.IsLoaded);
+            if (Environment.GetCommandLineArgs().Contains("--library-check"))
+            {
+                await RunLibraryChecksAsync(Check, results);
+                return;
+            }
+            if (Environment.GetCommandLineArgs().Contains("--font-check"))
+            {
+                await RunFontChecksAsync(Check);
+                return;
+            }
+            if (Environment.GetCommandLineArgs().Contains("--smtc-check"))
+            {
+                await RunSmtcChecksAsync(Check, results);
+                return;
+            }
+            if (Environment.GetCommandLineArgs().Contains("--loading-lifecycle-check"))
+            {
+                await RunLoadingLifecycleChecksAsync(Check);
+                return;
+            }
+            if (Environment.GetCommandLineArgs().Contains("--background-network-check"))
+            {
+                await RunBackgroundNetworkChecksAsync(Check, results);
+                return;
+            }
             if (Environment.GetCommandLineArgs().Contains("--events-startup-check"))
             {
                 await RunEventsStartupChecksAsync(Check);
@@ -266,7 +291,16 @@ public sealed partial class MainWindow
             Check("Unsupported quality preserves the playing stream", !_playback.ScheduleQuality("unsupported-quality") && _playback.IsPlaying && _playback.CurrentQuality == oldQuality && _playback.Queue.Select(t => t.Id).SequenceEqual(originalQueue));
             Check("SMTC reports playing", _playback.SystemPlaybackStatus == MediaPlaybackStatus.Playing);
             var sessions = await Windows.Media.Control.GlobalSystemMediaTransportControlsSessionManager.RequestAsync();
-            Check("SMTC publishes the registered app identity", sessions.GetSessions().Any(session => session.SourceAppUserModelId == ApplicationIdentity.Id));
+            var published = false;
+            foreach (var session in sessions.GetSessions())
+            {
+                var metadata = await session.TryGetMediaPropertiesAsync();
+                if (metadata.Title != _playback.Current?.Title || metadata.Artist != _playback.Current?.Artist) continue;
+                published = true;
+                results.Add(new { name = "SMTC source identity", expected = ApplicationIdentity.Id, actual = session.SourceAppUserModelId });
+                break;
+            }
+            Check("SMTC publishes current song metadata to the system", published);
             var currentId = _playback.Current!.Id;
             var qualityPosition = _playback.Position;
             Check("Selecting quality is deferred without reloading current audio", _playback.ScheduleQuality("standard") && _playback.IsPlaying && _playback.Current.Id == currentId && _playback.CurrentQuality == oldQuality && _playback.Position >= qualityPosition);
@@ -320,6 +354,12 @@ public sealed partial class MainWindow
             if (Environment.GetCommandLineArgs().Contains("--inspect-layout")) await Task.Delay(TimeSpan.FromSeconds(25));
             _playback.Seek(TimeSpan.FromSeconds(10)); await Task.Delay(500);
             Check("Seek", _playback.Position.TotalSeconds >= 9);
+            // Smoke tests skip production session initialization. Complete the
+            // initial account/avatar load before checking reuse on restoration.
+            if (_api.HasSession) await UpdateAccountAsync();
+            var avatarWait = Stopwatch.StartNew();
+            while (_accountAvatarLoad != null && avatarWait.Elapsed < TimeSpan.FromSeconds(20)) await Task.Delay(50);
+            Check("Account avatar load completes before lifecycle snapshot", _accountAvatarLoad == null);
             var retainedCover = MiniCover.Source; var retainedBackground = BlurredCover.Source; var retainedAvatar = AccountAvatar.ProfilePicture;
             var retainedLyrics = LyricsList.ItemsSource;
             HideWindow(); UpdateVisibility(); await Task.Delay(800);
@@ -344,7 +384,8 @@ public sealed partial class MainWindow
             _playback.Toggle(); await Task.Delay(300);
             Check("Pause and SMTC", !_playback.IsPlaying && _playback.SystemPlaybackStatus == MediaPlaybackStatus.Paused);
             RestoreWindow(); await Task.Delay(150);
-            Check("Tray restore reuses the existing cover, background, avatar and lyrics", ReferenceEquals(MiniCover.Source, retainedCover) && ReferenceEquals(BlurredCover.Source, retainedBackground) && ReferenceEquals(AccountAvatar.ProfilePicture, retainedAvatar) && ReferenceEquals(LyricsList.ItemsSource, retainedLyrics));
+            Check("Tray restore reuses the existing cover, background, avatar and lyrics", ReferenceEquals(MiniCover.Source, retainedCover) && ReferenceEquals(BlurredCover.Source, retainedBackground) && ReferenceEquals(AccountAvatar.ProfilePicture, retainedAvatar) && ReferenceEquals(LyricsList.ItemsSource, retainedLyrics),
+                new { cover = ReferenceEquals(MiniCover.Source, retainedCover), background = ReferenceEquals(BlurredCover.Source, retainedBackground), avatar = ReferenceEquals(AccountAvatar.ProfilePicture, retainedAvatar), lyrics = ReferenceEquals(LyricsList.ItemsSource, retainedLyrics) });
             await NavigateAsync("settings");
             Root.UpdateLayout();
             Check("Settings fit the scroll viewport", SettingsContent.ActualWidth > 0 && SettingsContent.ActualWidth <= SettingsPanel.ActualWidth && BackdropCombo.ActualWidth <= SettingsContent.ActualWidth);
@@ -415,7 +456,7 @@ public sealed partial class MainWindow
             Check("Changing text font preserves Windows playback icon", PlayPauseIcon.FontFamily.Source.Contains("Icons") && PlayPauseIcon.Glyph.Length == 1);
             ShowError("音质切换失败，当前播放已保留。"); await Task.Delay(100); Root.UpdateLayout();
             var warningNotice = _view == "playing" ? PlayerNotice : Notice;
-            Check("Warning popup retains the Windows symbol font", warningNotice.IconSource is FontIconSource { Glyph: "\uE7BA" } warning && warning.FontFamily.Source == "Segoe Fluent Icons");
+            Check("Warning popup retains the bundled symbol font", warningNotice.IconSource is FontIconSource { Glyph: "\uE7BA" } warning && warning.FontFamily.Source == IconFonts.Source);
             if (Environment.GetCommandLineArgs().Contains("--inspect-layout")) { _playerNoticeTimer.Stop(); await Task.Delay(TimeSpan.FromSeconds(15)); }
             warningNotice.IsOpen = false;
             await LoadQualityAsync(_playback.Current!); Check("Account quality checked", _qualityTrack == _playback.Current!.Id);

@@ -7,6 +7,7 @@ internal sealed class StartupSession
 {
     private readonly CancellationTokenSource _load = new();
     private readonly CancellationTokenSource _pageLoad;
+    private int _pageConsumed;
     internal SettingsStore Settings { get; }
     internal ApiClient Api { get; }
     internal Task<JsonElement?> CachedProfile { get; }
@@ -44,14 +45,18 @@ internal sealed class StartupSession
                 Diagnostics.StartupTrace.Mark("Startup initial data ready");
             }
             catch (OperationCanceledException) { }
-            catch (Exception ex) { Diagnostics.StartupTrace.Mark("Startup prefetch failed: " + ex.GetType().Name); }
+            catch (Exception ex) { Diagnostics.StartupTrace.Mark("Startup prefetch failed: " + ex.GetType().Name); throw; }
         });
+        _ = InitialPage.ContinueWith(t => { _ = t.Exception; }, TaskContinuationOptions.OnlyOnFaulted);
     }
     internal void Cancel() => _load.Cancel();
     internal async Task WaitForPageAsync(string view, CancellationToken token)
     {
         if (_pageLoad.IsCancellationRequested) return;
         if (view is not ("playlist" or "discover" or "playing") || view != InitialView(await State)) { _pageLoad.Cancel(); return; }
+        // Consume failures once as well as successes. Otherwise a failed slow
+        // prefetch silently starts a second full timeout in the visible page.
+        if (Interlocked.Exchange(ref _pageConsumed, 1) != 0) return;
         await InitialPage.WaitAsync(token);
     }
 }

@@ -17,6 +17,7 @@ public sealed class PlaybackService : IDisposable
     private readonly DispatcherQueue _dispatcher;
     private MediaPlayer _player = CreatePlayer();
     private readonly SystemMediaTransportControls _smtc;
+    private CancellationTokenSource? _systemArtworkLoad;
     private MediaSource? _source;
     private string? _localPath;
     private readonly AudioCache _audioCache = new();
@@ -88,7 +89,7 @@ public sealed class PlaybackService : IDisposable
         _player.Volume = Math.Clamp(settings.Volume, 0, 1);
         if (settings.AudioDeviceId.Length > 0) _ = RestoreOutputAsync(settings.AudioDeviceId);
         _smtc = SystemMediaTransportControlsInterop.GetForWindow(window);
-        _smtc.IsEnabled = true;
+        _smtc.IsEnabled = false;
         _smtc.IsPlayEnabled = _smtc.IsPauseEnabled = _smtc.IsNextEnabled = _smtc.IsPreviousEnabled = true;
         _smtc.DisplayUpdater.AppMediaId = ApplicationIdentity.Id;
         _smtc.ButtonPressed += OnButton; _smtc.PlaybackPositionChangeRequested += OnPosition;
@@ -195,7 +196,7 @@ public sealed class PlaybackService : IDisposable
         Current = Queue.FirstOrDefault(t => t.Id == state.CurrentId); CurrentQuality = state.Quality;
         _index = Queue.ToList().FindIndex(t => t.Id == Current?.Id);
         _restoredPosition = TimeSpan.FromSeconds(Math.Clamp(double.IsFinite(state.PositionSeconds) ? state.PositionSeconds : 0, 0, Math.Max(0, (Current?.Duration ?? 0) / 1000d - 1)));
-        _desiredPlaying = false; QueueRevision++; UpdateTimeline(); Changed?.Invoke();
+        _desiredPlaying = false; QueueRevision++; PublishSystemTrack(); UpdateTimeline(); Changed?.Invoke();
     }
     internal Task WarmAsync(IEnumerable<Track> tracks)
     {
@@ -370,10 +371,7 @@ public sealed class PlaybackService : IDisposable
             oldPlayer.Source = null; oldSource?.Dispose(); oldPlayer.Dispose(); DeleteLocal(oldPath);
             _cacheRequest = (uri, cachePath, info.Number("size"), info.Text("md5"));
             if (!LastPlayUsedCache && !_background) _audioCache.Start(uri, cachePath, info.Number("size"), info.Text("md5"));
-            var updater = _smtc.DisplayUpdater; updater.Type = MediaPlaybackType.Music;
-            updater.MusicProperties.Title = track.Title; updater.MusicProperties.Artist = track.Artist; updater.MusicProperties.AlbumTitle = track.Album;
-            updater.Thumbnail = Uri.TryCreate(track.Cover, UriKind.Absolute, out var cover) ? RandomAccessStreamReference.CreateFromUri(cover) : null;
-            updater.Update(); UpdateTimeline(); Changed?.Invoke();
+            PublishSystemTrack(); UpdateTimeline(); Changed?.Invoke();
             if (info.TryGetProperty("freeTrialInfo", out var trial) && trial.ValueKind == System.Text.Json.JsonValueKind.Object) Error?.Invoke("当前为试听片段，完整播放取决于账号权限。");
             return true;
         }
@@ -384,6 +382,36 @@ public sealed class PlaybackService : IDisposable
             if (prepared != null) { prepared.Player.Source = null; prepared.Source.Dispose(); prepared.Player.Dispose(); }
             DeleteLocal(localPath); if (ReferenceEquals(_load, load)) _load = null;
         }
+    }
+    private void PublishSystemTrack()
+    {
+        _systemArtworkLoad?.Cancel();
+        var updater = _smtc.DisplayUpdater;
+        updater.ClearAll();
+        if (Current is not Track track) { updater.Update(); return; }
+        updater.AppMediaId = ApplicationIdentity.Id;
+        updater.Type = MediaPlaybackType.Music;
+        updater.MusicProperties.Title = track.Title;
+        updater.MusicProperties.Artist = track.Artist;
+        updater.MusicProperties.AlbumTitle = track.Album;
+        updater.Update();
+        _ = UpdateSystemArtworkAsync(track);
+    }
+    private async Task UpdateSystemArtworkAsync(Track track)
+    {
+        if (_disposed || track.Cover.Length == 0) return;
+        using var load = new CancellationTokenSource(); _systemArtworkLoad = load;
+        try
+        {
+            var path = await Task.Run(() => Artwork.GetFileInDirectoryAsync(track.Cover, 256, _streamApi.CacheDirectory, load.Token), load.Token);
+            var file = await StorageFile.GetFileFromPathAsync(path).AsTask(load.Token);
+            if (_disposed || load.IsCancellationRequested || !ReferenceEquals(_systemArtworkLoad, load) || Current?.Id != track.Id) return;
+            _smtc.DisplayUpdater.Thumbnail = RandomAccessStreamReference.CreateFromFile(file);
+            _smtc.DisplayUpdater.Update();
+        }
+        catch (OperationCanceledException) { }
+        catch (Exception ex) { Log.Write(new IOException("系统媒体封面加载失败", ex)); }
+        finally { if (ReferenceEquals(_systemArtworkLoad, load)) _systemArtworkLoad = null; }
     }
     public async Task NextAsync(bool wrap = true)
     {
@@ -426,13 +454,13 @@ public sealed class PlaybackService : IDisposable
     }
     private void UpdateTimeline()
     {
-        _smtc.IsEnabled = true;
+        _smtc.IsEnabled = Current != null;
         _smtc.PlaybackStatus = IsPlaying ? MediaPlaybackStatus.Playing : Current == null ? MediaPlaybackStatus.Stopped : MediaPlaybackStatus.Paused;
         _smtc.UpdateTimelineProperties(new SystemMediaTransportControlsTimelineProperties { StartTime = TimeSpan.Zero, EndTime = Duration, Position = Position, MinSeekTime = TimeSpan.Zero, MaxSeekTime = Duration });
     }
     public void Dispose()
     {
-        if (_disposed) return; _disposed = true; _load?.Cancel(); _nextCacheLoad?.Cancel(); DisposeNextPrepared(); _urls.Dispose(); _nextAudioCache.Dispose(); _audioCache.Dispose(); _streamApi.Dispose();
+        if (_disposed) return; _disposed = true; _load?.Cancel(); _systemArtworkLoad?.Cancel(); _nextCacheLoad?.Cancel(); DisposeNextPrepared(); _urls.Dispose(); _nextAudioCache.Dispose(); _audioCache.Dispose(); _streamApi.Dispose();
         _smtc.ButtonPressed -= OnButton; _smtc.PlaybackPositionChangeRequested -= OnPosition; _smtc.IsEnabled = false;
         Detach(_player); _player.Source = null; _source?.Dispose(); _player.Dispose(); DeleteLocal(_localPath);
     }

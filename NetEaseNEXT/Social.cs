@@ -143,7 +143,7 @@ public sealed partial class MainWindow
         var more = new Button { Content = "加载更多", Style = (Style)Application.Current.Resources["MoreButtonStyle"], HorizontalAlignment = HorizontalAlignment.Center, Visibility = Visibility.Collapsed, Margin = new Thickness(0, 12, 0, 12) };
         list.Footer = more;
         var cancelReply = new Button { Content = "取消回复", Style = (Style)Application.Current.Resources["BareButtonStyle"], Visibility = source.CommentId > 0 ? Visibility.Visible : Visibility.Collapsed };
-        var emoji = new Button { Content = new FontIcon { Glyph = "\uE899", FontFamily = new Microsoft.UI.Xaml.Media.FontFamily("Segoe Fluent Icons") }, Style = (Style)Application.Current.Resources["BareButtonStyle"] };
+        var emoji = new Button { Content = new FontIcon { Glyph = "\uE899", FontFamily = Services.IconFonts.Symbols }, Style = (Style)Application.Current.Resources["BareButtonStyle"] };
         emoji.Click += (_, _) => ShowEmojiPicker(emoji, input);
         var replyBar = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 }; replyBar.Children.Add(hint); replyBar.Children.Add(cancelReply); replyBar.Children.Add(emoji);
         var content = new StackPanel { MaxWidth = 500, Width = Math.Max(240, Math.Min(500, Root.ActualWidth - 160)), Spacing = 10 };

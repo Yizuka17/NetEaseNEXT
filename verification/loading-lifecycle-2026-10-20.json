@@ -1,0 +1,89 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Startup prefetch reports its first failure without an automatic second request",
+    "passed": true,
+    "detail": {
+      "RequestCount": 1
+    }
+  },
+  {
+    "name": "An explicit retry proceeds after failed startup prefetch",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Network fixture provides a playlist",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Hiding records the interrupted playlist request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restored loading finishes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restoring resumes playlist details and songs",
+    "passed": true,
+    "detail": {
+      "count": 35
+    }
+  },
+  {
+    "name": "A completed page survives hiding without rebuilding its collection",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Search loads its first page",
+    "passed": true,
+    "detail": {
+      "count": 50,
+      "_offset": 50
+    }
+  },
+  {
+    "name": "Hiding remembers that the interrupted request was pagination",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restored loading finishes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restoring appends the interrupted search page and keeps existing rows",
+    "passed": true,
+    "detail": {
+      "count": 100,
+      "_offset": 100
+    }
+  },
+  {
+    "name": "Restored loading finishes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restoring resumes interrupted lyrics for the current song",
+    "passed": true,
+    "detail": {
+      "count": 69
+    }
+  },
+  {
+    "name": "Lifecycle checks keep playback paused",
+    "passed": true,
+    "detail": null
+  }
+]

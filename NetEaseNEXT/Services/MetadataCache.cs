@@ -14,7 +14,7 @@ internal sealed class MetadataCache
     internal static string Key(string cookie, string method, object? parameters) => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(cookie + "\n" + method + "\n" + JsonSerializer.Serialize(parameters))));
     internal static (TimeSpan Lifetime, bool Disk) Policy(string method) => method switch
     {
-        "lyric" or "song_detail" or "song_music_detail" or "album" or "playlist_track_all" or "playlist_detail" or "personalized" or "user_playlist" => (TimeSpan.FromMinutes(5), true),
+        "lyric" or "song_detail" or "song_music_detail" or "album" or "album_sublist" or "playlist_track_all" or "playlist_detail" or "personalized" or "user_playlist" => (TimeSpan.FromMinutes(5), true),
         "login_status" or "song_red_count" or "song_like_check" => (TimeSpan.FromMinutes(5), false),
         _ => (TimeSpan.Zero, false)
     };

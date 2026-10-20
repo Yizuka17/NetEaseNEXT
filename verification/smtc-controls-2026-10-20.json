@@ -1,0 +1,86 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "SMTC fixture plays silently",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Windows enumerates the current song\u0027s real media session",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "SMTC identity observation",
+    "expected": "NetEaseNEXT.Desktop",
+    "actual": "NetEaseNEXT.exe",
+    "packaged": false,
+    "matched": false
+  },
+  {
+    "name": "System media metadata matches the playing song",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "System media card reports playing",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "System pause command reaches the player",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "System play command reaches the player",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "System next command reaches the player",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "System seek command reaches the player",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "System card follows the next song",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "System card artwork is readable",
+    "passed": true,
+    "detail": {
+      "Size": 164652
+    }
+  },
+  {
+    "name": "System controls keep working while hidden",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "System playback starts while hidden",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restoring a paused queue publishes song details without starting audio",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restored song artwork reaches the system session",
+    "passed": true,
+    "detail": null
+  }
+]

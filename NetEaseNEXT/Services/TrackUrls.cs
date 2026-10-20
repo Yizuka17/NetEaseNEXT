@@ -36,6 +36,7 @@ internal sealed class TrackUrls(ApiClient api) : IDisposable
             if (batch.Scope != Scope(level)) return;
             lock (_gate)
             {
+                if (batch.Cancel.IsCancellationRequested) return;
                 foreach (var info in result.GetProperty("data").EnumerateArray())
                 {
                     var id = info.Number("id"); if (id == 0 && batch.Ids.Length == 1) id = batch.Ids[0];
@@ -54,10 +55,15 @@ internal sealed class TrackUrls(ApiClient api) : IDisposable
     }
     internal async Task<(JsonElement Info, bool Cached)> GetAsync(Track track, string level, IEnumerable<Track> neighbors, CancellationToken ct)
     {
+        ct.ThrowIfCancellationRequested();
         var scope = Scope(level); var key = Key(scope, track.Id);
-        lock (_gate) if (_leases.TryGetValue(key, out var lease) && lease.Expires > DateTimeOffset.UtcNow) return (lease.Info, true);
-        Start(new[] { track.Id }.Concat(neighbors.Select(t => t.Id)), level);
-        Batch? batch; lock (_gate) { batch = _pending.GetValueOrDefault(key); if (batch != null) batch.Readers++; }
+        Batch? batch;
+        lock (_gate)
+        {
+            if (_leases.TryGetValue(key, out var lease) && lease.Expires > DateTimeOffset.UtcNow) return (lease.Info, true);
+            Start(new[] { track.Id }.Concat(neighbors.Select(t => t.Id)), level);
+            batch = _pending.GetValueOrDefault(key); if (batch != null) batch.Readers++;
+        }
         try { if (batch != null) await batch.Task.WaitAsync(ct); }
         finally { if (batch != null) lock (_gate) batch.Readers--; }
         ct.ThrowIfCancellationRequested();
@@ -71,7 +77,16 @@ internal sealed class TrackUrls(ApiClient api) : IDisposable
     }
     internal void SuspendWarm()
     {
-        lock (_gate) foreach (var batch in _pending.Values.Distinct()) if (batch.Readers == 0) batch.Cancel.Cancel();
+        lock (_gate)
+        {
+            foreach (var batch in _pending.Values.Distinct().Where(b => b.Readers == 0).ToArray())
+            {
+                // A foreground play immediately after hiding must start a new
+                // batch instead of joining a canceled warm-up still unwinding.
+                foreach (var id in batch.Ids) if (_pending.GetValueOrDefault(Key(batch.Scope, id)) == batch) _pending.Remove(Key(batch.Scope, id));
+                batch.Cancel.Cancel();
+            }
+        }
     }
     internal void Invalidate(long id, string level) { lock (_gate) _leases.Remove(Key(Scope(level), id)); }
     public void Dispose() { lock (_gate) { _disposed = true; foreach (var batch in _pending.Values.Distinct()) batch.Cancel.Cancel(); _leases.Clear(); } }

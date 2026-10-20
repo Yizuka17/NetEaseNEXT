@@ -34,6 +34,8 @@ pwsh -NoProfile -File scripts/build-installer.ps1
 
 便携包：`artifacts/win-x64`。已签名安装包与公钥证书：`artifacts/msix`。MSIX 使用 Windows SDK 的 MakeAppx、MakePri 和 SignTool；签名证书的 Subject 必须与 `packaging/AppxManifest.xml` 的 Publisher 一致。`build-installer.ps1` 默认构建已签名 MSIX，打包前核对清单图标路径、实际 PRI 候选资源与深浅色变体；`-Unsigned` 仅用于 CI 验证，输出带 `.unsigned` 后缀。可用 `scripts/run.ps1` 运行开发构建。
 
+未单独安装 Windows SDK 时，可以用 `-SdkTools` 指定已还原的 SDK BuildTools 中包含 MakeAppx、MakePri、SignTool 的工具目录。
+
 首次侧载自签名 MSIX，需将随包的 `NetEaseNEXT.cer` 信任到本机“受信任人”；这一步需要管理员权限。`install-msix.ps1 -TrustCertificate` 显式执行证书信任和安装，证书已信任时不需要该参数。后续安装同发布者、更高版本的包即可更新。迁移普通安装版时，从旧托盘退出后加 `-RemoveLegacyInstall`：先确认 MSIX 安装成功，再运行旧版卸载器并清理其两个旧快捷方式，不清除 `%LOCALAPPDATA%/NetEaseNEXT` 的账号、配置与缓存。MSIX 不再自行创建开始菜单快捷方式。
 
 2026-10-15 任务栏与托盘主题修正版：`artifacts/win-x64-theme/NetEaseNEXT.exe`。先从旧版托盘退出，再启动新版；保留便携包内全部文件。任务栏和托盘图标随 Windows 系统颜色模式切换，暗色使用白色线条，浅色使用深色线条。托盘菜单使用原生 WinUI 主题资源。
@@ -62,6 +64,8 @@ pwsh -NoProfile -File scripts/verify.ps1 -MeasureBackground
 
 ## 数据与性能
 
+侧栏“收藏的专辑”读取账号已有收藏，支持分页和进入专辑曲目；登录后自动刷新，退出账号时清除当前展示。自建歌单歌曲支持右键或触摸长按“从歌单移除”，服务器确认后更新列表，保留当前播放队列。播放栏的列表按钮直接展开当前队列。
+
 账号会话以 Windows DPAPI 加密，绑定当前 Windows 用户，位于 `%LOCALAPPDATA%/NetEaseNEXT`。配置和限长日志也保存在此处。自选缓存目录保存封面、歌曲缓存和 API 临时状态，不移动账号凭据；旧目录不自动删除。封面按最近使用时间在 256 MiB 上限内整理，同图请求共享下载、损坏缓存自动重取。已解码封面的复用缓存上限为 32 MiB，隐藏窗口时保留；界面当前引用的图片也会继续保留，减少恢复时的重复解码。
 
 歌曲缓存上限 1 GiB，按歌曲、实际音质和文件版本区分；完整下载并通过长度和 MD5 校验后保存。播放地址按会话和音质在内存中短期复用，遵守接口有效期，过期后重新请求，不写入磁盘。试听片段不保存为完整歌曲，此缓存不提供离线播放。下载目录只写入用户主动下载的歌曲。
@@ -74,6 +78,7 @@ pwsh -NoProfile -File scripts/verify.ps1 -MeasureBackground
 
 ## 参考与依赖
 
+- 应用内图标随包附带 MIT 许可的 [Fluent System Icons](https://github.com/microsoft/fluentui-system-icons) 字体子集，覆盖应用使用的图标和 WinUI Symbol 别名；不依赖系统安装 Segoe Fluent Icons。来源、固定版本和许可位于 `third-party/fluent-system-icons`，需要重新生成时运行 `scripts/generate-icon-font.py`（fonttools 4.67.0）。
 - [Myune Music](https://github.com/xiaobaimc/myune_music)：参考播放栏、封面与歌词布局、封面模糊和取色处理思路，独立以 WinUI 3 实现，未复制源码或资源。
 - [无羁音乐播放器](https://github.com/LanZhan-Harmony/WindowsMusicPlayer-TheUntamedMusicPlayer)：参考原生 Fluent 交互与短时动画。
 - [Enhanced API](https://github.com/NeteaseCloudMusicApiEnhanced/api-enhanced)，固定 npm 版本 4.41.1。

@@ -1,0 +1,346 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Saved albums has its own native sidebar entry",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Saved albums parse all artists and expose the next page",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Saved album pagination appends without losing the first page",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Saved albums read back from session-scoped cache",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Album failures retain existing contents and paging",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Canceled album requests cannot append stale rows",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "An empty saved album collection has no paging button",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Native track context menu supports holding and captures the selected playlist",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist removal is only shown to the authenticated owner",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Other users\u0027 playlists never show removal",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Non-owners cannot send a removal request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A menu from another playlist cannot remove the current row",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Server rejection preserves songs and displays the error",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Successful removal updates playlist rows, IDs, count and paging",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Removing a playlist song preserves the current playback queue",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The playback bar opens the native queue with all songs",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Queue and favorite buttons have different glyphs",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The queue button closes and releases queue bindings",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "footer transport buttons share a vertical center",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "footer icon ink",
+    "glyph": "U\u002BE72A",
+    "dx": 0,
+    "dy": -0.5000000000000004
+  },
+  {
+    "name": "footer visible glyph is centered E72A",
+    "passed": true,
+    "detail": {
+      "dx": 0,
+      "dy": -0.5000000000000004
+    }
+  },
+  {
+    "name": "footer icon ink",
+    "glyph": "U\u002BE892",
+    "dx": 0,
+    "dy": -0.5000000000000004
+  },
+  {
+    "name": "footer visible glyph is centered E892",
+    "passed": true,
+    "detail": {
+      "dx": 0,
+      "dy": -0.5000000000000004
+    }
+  },
+  {
+    "name": "footer icon ink",
+    "glyph": "U\u002BE768",
+    "dx": -0.4219394662197007,
+    "dy": -0.5000000000000004
+  },
+  {
+    "name": "footer visible glyph is centered E768",
+    "passed": true,
+    "detail": {
+      "dx": -0.4219394662197007,
+      "dy": -0.5000000000000004
+    }
+  },
+  {
+    "name": "footer icon ink",
+    "glyph": "U\u002BE893",
+    "dx": 0,
+    "dy": -0.5000000000000004
+  },
+  {
+    "name": "footer visible glyph is centered E893",
+    "passed": true,
+    "detail": {
+      "dx": 0,
+      "dy": -0.5000000000000004
+    }
+  },
+  {
+    "name": "footer icon ink",
+    "glyph": "U\u002BE8FD",
+    "dx": 0,
+    "dy": -0.2500000000000002
+  },
+  {
+    "name": "footer visible glyph is centered E8FD",
+    "passed": true,
+    "detail": {
+      "dx": 0,
+      "dy": -0.2500000000000002
+    }
+  },
+  {
+    "name": "paused-icon transport buttons share a vertical center",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "paused-icon icon ink",
+    "glyph": "U\u002BE72A",
+    "dx": 0,
+    "dy": -0.5000000000000004
+  },
+  {
+    "name": "paused-icon visible glyph is centered E72A",
+    "passed": true,
+    "detail": {
+      "dx": 0,
+      "dy": -0.5000000000000004
+    }
+  },
+  {
+    "name": "paused-icon icon ink",
+    "glyph": "U\u002BE892",
+    "dx": 0,
+    "dy": -0.5000000000000004
+  },
+  {
+    "name": "paused-icon visible glyph is centered E892",
+    "passed": true,
+    "detail": {
+      "dx": 0,
+      "dy": -0.5000000000000004
+    }
+  },
+  {
+    "name": "paused-icon icon ink",
+    "glyph": "U\u002BE769",
+    "dx": 0,
+    "dy": -0.5000000000000004
+  },
+  {
+    "name": "paused-icon visible glyph is centered E769",
+    "passed": true,
+    "detail": {
+      "dx": 0,
+      "dy": -0.5000000000000004
+    }
+  },
+  {
+    "name": "paused-icon icon ink",
+    "glyph": "U\u002BE893",
+    "dx": 0,
+    "dy": -0.5000000000000004
+  },
+  {
+    "name": "paused-icon visible glyph is centered E893",
+    "passed": true,
+    "detail": {
+      "dx": 0,
+      "dy": -0.5000000000000004
+    }
+  },
+  {
+    "name": "paused-icon icon ink",
+    "glyph": "U\u002BE8FD",
+    "dx": 0,
+    "dy": -0.2500000000000002
+  },
+  {
+    "name": "paused-icon visible glyph is centered E8FD",
+    "passed": true,
+    "detail": {
+      "dx": 0,
+      "dy": -0.2500000000000002
+    }
+  },
+  {
+    "name": "player transport buttons share a vertical center",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "player icon ink",
+    "glyph": "U\u002BE72A",
+    "dx": 0,
+    "dy": -0.5000000000000004
+  },
+  {
+    "name": "player visible glyph is centered E72A",
+    "passed": true,
+    "detail": {
+      "dx": 0,
+      "dy": -0.5000000000000004
+    }
+  },
+  {
+    "name": "player icon ink",
+    "glyph": "U\u002BE892",
+    "dx": 0,
+    "dy": -0.5000000000000004
+  },
+  {
+    "name": "player visible glyph is centered E892",
+    "passed": true,
+    "detail": {
+      "dx": 0,
+      "dy": -0.5000000000000004
+    }
+  },
+  {
+    "name": "player icon ink",
+    "glyph": "U\u002BE768",
+    "dx": -0.4219394662197007,
+    "dy": -0.5000000000000004
+  },
+  {
+    "name": "player visible glyph is centered E768",
+    "passed": true,
+    "detail": {
+      "dx": -0.4219394662197007,
+      "dy": -0.5000000000000004
+    }
+  },
+  {
+    "name": "player icon ink",
+    "glyph": "U\u002BE893",
+    "dx": 0,
+    "dy": -0.5000000000000004
+  },
+  {
+    "name": "player visible glyph is centered E893",
+    "passed": true,
+    "detail": {
+      "dx": 0,
+      "dy": -0.5000000000000004
+    }
+  },
+  {
+    "name": "player icon ink",
+    "glyph": "U\u002BE8FD",
+    "dx": 0,
+    "dy": -0.2500000000000002
+  },
+  {
+    "name": "player visible glyph is centered E8FD",
+    "passed": true,
+    "detail": {
+      "dx": 0,
+      "dy": -0.2500000000000002
+    }
+  },
+  {
+    "name": "The same queue button works on the player page",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Real saved albums load from the sidebar route",
+    "passed": true,
+    "detail": {
+      "count": 48
+    }
+  },
+  {
+    "name": "Saved album cards are realized in the native grid",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A saved album opens its actual songs",
+    "passed": true,
+    "detail": {
+      "tracks": 6
+    }
+  }
+]

@@ -1,6 +1,7 @@
 param(
     [ValidateSet('x64','ARM64')][string]$Architecture = 'x64',
     [string]$CertificateThumbprint,
+    [string]$SdkTools,
     [switch]$Unsigned
 )
 $ErrorActionPreference = 'Stop'
@@ -10,9 +11,15 @@ $taskRid = if ($Architecture -eq 'ARM64') { 'win-arm64' } else { 'win-x64' }
 $taskPublish = Join-Path $taskRoot "artifacts\$taskRid"
 if (-not (Test-Path -LiteralPath (Join-Path $taskPublish 'NetEaseNEXT.pri'))) { throw 'Run scripts/build.ps1 -Publish first.' }
 $taskSdkRoot = Join-Path ${env:ProgramFiles(x86)} 'Windows Kits\10\bin'
-$taskSdk = Get-ChildItem -LiteralPath $taskSdkRoot -Directory | Where-Object { $_.Name -match '^10\.0\.\d+\.0$' -and (Test-Path -LiteralPath (Join-Path $_.FullName 'x64\makeappx.exe')) } | Sort-Object { [version]$_.Name } -Descending | Select-Object -First 1
-if (-not $taskSdk) { throw 'Install the Windows 10/11 SDK with MakeAppx, MakePri and SignTool.' }
-$taskTools = Join-Path $taskSdk.FullName 'x64'
+if ($SdkTools) { $taskTools = (Resolve-Path -LiteralPath $SdkTools).Path }
+else {
+    $taskSdk = Get-ChildItem -LiteralPath $taskSdkRoot -Directory -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '^10\.0\.\d+\.0$' -and (Test-Path -LiteralPath (Join-Path $_.FullName 'x64\makeappx.exe')) } | Sort-Object { [version]$_.Name } -Descending | Select-Object -First 1
+    if (-not $taskSdk) { throw 'Install the Windows SDK, or pass -SdkTools with the restored SDK BuildTools directory.' }
+    $taskTools = Join-Path $taskSdk.FullName 'x64'
+}
+foreach ($taskTool in @('makeappx.exe','makepri.exe','signtool.exe')) {
+    if (-not (Test-Path -LiteralPath (Join-Path $taskTools $taskTool))) { throw "Missing SDK tool: $taskTool" }
+}
 [xml]$taskManifest = Get-Content -LiteralPath (Join-Path $taskRoot 'packaging\AppxManifest.xml') -Raw
 $taskManifest.Package.Identity.ProcessorArchitecture = $Architecture.ToLowerInvariant()
 $taskVersion = $taskManifest.Package.Identity.Version

@@ -8,6 +8,55 @@ namespace NetEaseNEXT;
 
 public sealed partial class MainWindow
 {
+    private sealed record PlaylistTrackRemoval(long PlaylistId, long TrackId, string Session);
+    private readonly HashSet<(long PlaylistId, long TrackId)> _playlistRemovals = [];
+    private bool OwnsDisplayedPlaylist => _view == "playlist" && _playlistId > 0 && _accountId > 0 && _playlistOwner == _accountId;
+    private void TrackContext_Opening(object sender, object args)
+    {
+        if (sender is not MenuFlyout menu) return;
+        var remove = menu.Items.OfType<MenuFlyoutItem>().First(i => i.Text == "从歌单移除");
+        var track = menu.Target?.DataContext as Track;
+        remove.Visibility = OwnsDisplayedPlaylist && _api.HasSession && track != null ? Visibility.Visible : Visibility.Collapsed;
+        remove.IsEnabled = track != null && _pageLoad == null && !_playlistRemovals.Any(t => t.PlaylistId == _playlistId);
+        remove.Tag = track == null ? null : new PlaylistTrackRemoval(_playlistId, track.Id, _api.Cookie);
+    }
+    private async void ContextRemovePlaylist_Click(object sender, RoutedEventArgs args)
+    {
+        if (_api.HasSession && sender is MenuFlyoutItem { Tag: PlaylistTrackRemoval target })
+            await RemovePlaylistTrackAsync(_api, target);
+    }
+    private async Task<bool> RemovePlaylistTrackAsync(Services.ApiClient api, PlaylistTrackRemoval target)
+    {
+        if (!OwnsDisplayedPlaylist || _pageLoad != null || _playlistRemovals.Any(t => t.PlaylistId == _playlistId) || target.PlaylistId != _playlistId || target.Session != _api.Cookie ||
+            !Tracks.Any(t => t.Id == target.TrackId) || !_playlistRemovals.Add((target.PlaylistId, target.TrackId))) return false;
+        var route = _route;
+        LoadMoreButton.IsEnabled = false;
+        try
+        {
+            await api.RemovePlaylistTrackAsync(target.PlaylistId, _playlistOwner, _accountId, target.TrackId);
+            if (_view == "playlist" && _playlistId == target.PlaylistId && _api.Cookie == target.Session)
+            {
+                _playlistTrackIds = _playlistTrackIds.Where(id => id != target.TrackId).ToArray();
+                _playlistTrackCount = Math.Max(0, _playlistTrackCount - 1);
+                if (_hidden) { _offset = 0; _pageInterrupted = true; _pageWasAppend = false; }
+                else if (!ReferenceEquals(route, _route) || _pageLoad != null)
+                {
+                    _pageLoad?.Cancel(); _offset = 0; await LoadPageAsync(false);
+                }
+                else
+                {
+                    foreach (var track in Tracks.Where(t => t.Id == target.TrackId).ToArray()) { Tracks.Remove(track); _offset = Math.Max(0, _offset - 1); }
+                    TrackCount.Text = $"{_playlistTrackCount} 首";
+                    if (Tracks.Count == 0) ShowEmpty("暂无歌曲", "重试");
+                    UpdateTrackLocator();
+                    ShowPlayerMessage("已从歌单移除", InfoBarSeverity.Success);
+                }
+            }
+            return true;
+        }
+        catch (Exception ex) { if (!_hidden && _view == "playlist" && _playlistId == target.PlaylistId) ShowError(ex.Message); return false; }
+        finally { _playlistRemovals.Remove((target.PlaylistId, target.TrackId)); LoadMoreButton.IsEnabled = _pageLoad == null; }
+    }
     private async void DeletePlaylist_Click(object sender, RoutedEventArgs args)
     {
         if (_dialog != null || _view != "playlist" || _accountId <= 0 || _playlistOwner != _accountId) return;

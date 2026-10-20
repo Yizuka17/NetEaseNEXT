@@ -31,7 +31,10 @@ public sealed partial class MainWindow
                   const request = JSON.parse(line);
                   if (request.method === 'exit') { process.exit(0); return; }
                   await new Promise(resolve => setTimeout(resolve, request.params?.delay ?? 10));
-                  process.stdout.write(JSON.stringify({ id: request.id, data: { code: 200, method: request.method } }) + '\n');
+                  const data = request.method === 'song_url_v1'
+                    ? { code: 200, data: [{ id: Number(request.params.id), url: 'https://example.invalid/audio', expi: 300 }] }
+                    : { code: 200, method: request.method };
+                  process.stdout.write(JSON.stringify({ id: request.id, data }) + '\n');
                 });
                 input.on('close', () => process.exit(0));
                 """);
@@ -66,13 +69,22 @@ public sealed partial class MainWindow
             try { await client.CallAsync("exit"); check("Worker exit completes outstanding tasks", false, null); }
             catch (IOException) { check("Worker exit completes outstanding tasks", true, null); }
             check("Request channel restarts after worker exit", (await client.CallAsync("restarted")).GetProperty("method").GetString() == "restarted", null);
+            using (var urls = new TrackUrls(client))
+            {
+                var track = new Models.Track(123, "fixture", "artist", "album", "", 60000);
+                var warm = urls.WarmAsync([track], "standard");
+                urls.SuspendWarm();
+                var resumed = await urls.GetAsync(track, "standard", [], CancellationToken.None);
+                await warm;
+                check("Playback after hiding never joins a canceled URL warm-up", resumed.Info.GetProperty("id").GetInt64() == track.Id, null);
+            }
             var cache = new MetadataCache(); var generation = cache.Version;
             using var payload = JsonDocument.Parse("{\"code\":200}");
             cache.Clear(fixture);
             cache.Put(fixture, "stale", payload.RootElement, TimeSpan.FromMinutes(1), true, generation);
             check("A response from before a write cannot refill invalidated metadata", !cache.TryGet(fixture, "stale", true, out _), null);
         }
-        finally { if (Directory.Exists(fixture)) Directory.Delete(fixture, true); }
+        finally { if (Directory.Exists(fixture)) await DeleteWorkerFixtureAsync(fixture); }
         await RunNativeMenuChecksAsync(check);
         using var fontLoad = new CancellationTokenSource();
         await LoadFontsAsync(fontLoad.Token);

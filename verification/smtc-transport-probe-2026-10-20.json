@@ -1,0 +1,41 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "window",
+    "expected": "NetEaseNEXT.Desktop",
+    "packaged": false,
+    "sessions": [
+      {
+        "id": "NetEaseNEXT.exe",
+        "title": "Space Oddity",
+        "status": "Paused"
+      },
+      {
+        "id": "NetEaseNEXT.exe",
+        "title": "NetEaseNEXT probe window",
+        "status": "Playing"
+      }
+    ]
+  },
+  {
+    "name": "player",
+    "expected": "NetEaseNEXT.Desktop",
+    "packaged": false,
+    "sessions": [
+      {
+        "id": "NetEaseNEXT.exe",
+        "title": "Space Oddity",
+        "status": "Paused"
+      },
+      {
+        "id": "NetEaseNEXT.exe",
+        "title": "NetEaseNEXT probe window",
+        "status": "Closed"
+      }
+    ]
+  }
+]

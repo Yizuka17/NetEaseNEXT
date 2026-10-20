@@ -124,6 +124,14 @@ public sealed class ApiClient : IDisposable
             await process.StandardInput.FlushAsync(timeout.Token);
             sent = true;
             }
+            catch (OperationCanceledException)
+            {
+                // Reset a potentially partial line while still owning the
+                // writer gate. A new request must not reuse this worker before
+                // the canceled writer has finished tearing it down.
+                if (process != null && !sent) Stop(process);
+                throw;
+            }
             finally { _gate.Release(); }
             var root = await pending.Completion.Task.WaitAsync(timeout.Token);
             if (root.TryGetProperty("error", out var error)) throw new InvalidOperationException(error.GetString());
@@ -139,13 +147,19 @@ public sealed class ApiClient : IDisposable
             if (process != null)
             {
                 await _gate.WaitAsync();
-                try { if (!sent || !_pending.Values.Any(p => ReferenceEquals(p.Process, process))) Stop(process); }
+                try { if (!_pending.Values.Any(p => ReferenceEquals(p.Process, process))) Stop(process); }
                 finally { _gate.Release(); }
             }
             throw;
         }
         catch (IOException) { if (process != null) Stop(process); throw; }
         finally { if (id != 0) _pending.TryRemove(id, out _); }
+    }
+    internal Task<JsonElement> RemovePlaylistTrackAsync(long playlistId, long ownerId, long accountId, long trackId)
+    {
+        if (playlistId <= 0 || trackId <= 0 || accountId <= 0 || ownerId != accountId)
+            throw new InvalidOperationException("只能从自己创建的歌单中移除歌曲");
+        return CallAsync("playlist_tracks", new { op = "del", pid = playlistId, tracks = trackId.ToString(System.Globalization.CultureInfo.InvariantCulture) });
     }
     public async Task<List<Track>> SearchAsync(string query, int offset, CancellationToken ct)
     {

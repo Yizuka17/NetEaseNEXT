@@ -1,0 +1,46 @@
+{
+  "Package": "NetEaseNEXT-0.2.4.0-x64.msix",
+  "SignatureChecked": true,
+  "AuthenticodeStatus": "Valid",
+  "PublicCertificateMatchesSigner": true,
+  "CertificateContainsPrivateKey": false,
+  "Thumbprint": "548494EE74C33B2A77C73CC4E25CE0EEDD5E8733",
+  "NotAfter": "2043-10-20T13:06:04.0000000+08:00",
+  "Sha256": "6FCAEBAC5E377269ABFA63B0D62EB2BF544184C409FDC8AC67519A988DA805E3",
+  "Payload": [
+    {
+      "Path": "NetEaseNEXT.dll",
+      "Bytes": 807936,
+      "MatchesPublish": true,
+      "Sha256": "388CE0AF0B02338BE29C5115BBFC9FBC395FDBE91EB517F7046CA5437B1D7A63"
+    },
+    {
+      "Path": "NetEaseNEXT.pri",
+      "Bytes": 1381240,
+      "MatchesPublish": true,
+      "Sha256": "F764576E5B3D5849643704047748487D0061DDD494A6A45BD7D2BC60BA47DD67"
+    },
+    {
+      "Path": "Assets/Fonts/NetEaseNEXTIcons.ttf",
+      "Bytes": 10184,
+      "MatchesPublish": true,
+      "Sha256": "49348BF28277A35060DC608D362184B69060EA1BB8764F98870F6A43CF08D900"
+    },
+    {
+      "Path": "third-party/fluent-system-icons/LICENSE.txt",
+      "Bytes": 1078,
+      "MatchesPublish": true,
+      "Sha256": "69BC45DC42B9ACB96A69823ADBC6AE538374E3C0BDE169B855B32C48EAAEF52F"
+    },
+    {
+      "Path": "third-party/fluent-system-icons/source.json",
+      "Bytes": 482,
+      "MatchesPublish": true,
+      "Sha256": "7375746410E35B02B6F72C6BF3C0D05AF067735DC50219F7F6D585D8EB962622"
+    }
+  ],
+  "SystemTrustChanged": false,
+  "InstalledByThisCheck": false,
+  "SystemCardVisuallyVerified": false,
+  "CaptureError": "window capture timed out: timed out waiting on channel"
+}

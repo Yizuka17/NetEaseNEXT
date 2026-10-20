@@ -100,7 +100,7 @@ public sealed partial class MainWindow
             _lyrics = response.TryGetProperty("lrc", out var lrc) ? LyricLine.Parse(lrc.Text("lyric"), response.TryGetProperty("tlyric", out var translated) ? translated.Text("lyric") : "") : [];
             BindLyrics(_lyrics.Count > 0 ? _lyrics : new List<LyricLine> { new(TimeSpan.Zero, "暂无歌词") });
         }
-        catch (OperationCanceledException) { }
+        catch (OperationCanceledException) { if (ReferenceEquals(_lyricsLoad, load)) _lyricId = 0; }
         catch { if (!load.IsCancellationRequested) { _lyricId = 0; LyricsList.ItemsSource = new List<LyricLine> { new(TimeSpan.Zero, "歌词加载失败") }; } }
         finally { if (ReferenceEquals(_lyricsLoad, load)) _lyricsLoad = null; }
     }

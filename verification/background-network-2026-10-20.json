@@ -1,0 +1,49 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Network audio plays before hiding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Hiding stops UI polling and speculative audio downloads",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Background next song obtains a usable network resource",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Background network playback sample",
+    "elapsedSeconds": 20.0116484,
+    "cpuMilliseconds": 406.25,
+    "workingSetMiB": 199,
+    "privateMiB": 135.2
+  },
+  {
+    "name": "Network playback advances while hidden",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Hidden playback keeps UI polling and extra downloads stopped",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Idle API workers exit without losing the active stream",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restoring shows the song selected in the background",
+    "passed": true,
+    "detail": null
+  }
+]

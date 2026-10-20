@@ -1,0 +1,51 @@
+{
+  "Package": "NetEaseNEXT-0.2.5.0-x64.msix",
+  "Version": "0.2.5.0",
+  "SignatureChecked": true,
+  "AuthenticodeStatus": "Valid",
+  "PublicCertificateMatchesSigner": true,
+  "CertificateContainsPrivateKey": false,
+  "Thumbprint": "548494EE74C33B2A77C73CC4E25CE0EEDD5E8733",
+  "NotAfter": "2043-10-20T13:06:04.0000000+08:00",
+  "Sha256": "F173D2FF82F7A096F9355119FA306B5061478B57F0CE798B74AC47313033CE2F",
+  "Payload": [
+    {
+      "Path": "NetEaseNEXT.dll",
+      "Bytes": 839168,
+      "MatchesPublish": true,
+      "Sha256": "041E3A1CFBAAF7537F4A5F7797CCACDFDDEC7DBD2346256D6CB1AE997E2B2F14"
+    },
+    {
+      "Path": "NetEaseNEXT.pri",
+      "Bytes": 1381384,
+      "MatchesPublish": true,
+      "Sha256": "56A4232E6332A3D8FFF6C319FD5D8FB99089A7AFF2C31443B5302E308BAEB322"
+    },
+    {
+      "Path": "MainWindow.xbf",
+      "Bytes": 26103,
+      "MatchesPublish": true,
+      "Sha256": "9EE6CA914E32AB64432967A18DB592D03336310E5F40F38C01EAC5DAADA7C0EF"
+    },
+    {
+      "Path": "Assets/Fonts/NetEaseNEXTIcons.ttf",
+      "Bytes": 10532,
+      "MatchesPublish": true,
+      "Sha256": "88A9F586A4CFAFAE9C44A0BD467B591E62A75446D1A47EA10FBED916CDDD1FF8"
+    },
+    {
+      "Path": "api/bridge.mjs",
+      "Bytes": 7012,
+      "MatchesPublish": true,
+      "Sha256": "93EE463979A2E1EA3D4DBF086E25419B08200E75BE8F7C9B6312B8996751C502"
+    },
+    {
+      "Path": "third-party/fluent-system-icons/source.json",
+      "Bytes": 482,
+      "MatchesPublish": true,
+      "Sha256": "BBB9A07EC1F19447944B991ACF40752753A2C32D740E4126DB49D92FDAA183E1"
+    }
+  ],
+  "SystemTrustChanged": false,
+  "InstalledByThisCheck": false
+}

@@ -8,3 +8,5 @@ certificates/
 *.user
 *.pfx
 *.log
+# Local captures of the connected account's saved album collection.
+verification/library-*/library-saved-albums.png

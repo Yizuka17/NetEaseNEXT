@@ -24,7 +24,10 @@ public partial class App : Application
         StartupSession? startup = null;
         if (!Environment.GetCommandLineArgs().Contains("--smoke-test") || Environment.GetCommandLineArgs().Contains("--startup-parallel-check"))
         {
-            var settings = SettingsStore.Load(); startup = new(settings, new ApiClient(settings));
+            Diagnostics.StartupTrace.Mark("Load settings");
+            var settings = SettingsStore.Load(); Diagnostics.StartupTrace.Mark("Settings loaded; decrypt session");
+            var api = new ApiClient(settings); Diagnostics.StartupTrace.Mark("Session decrypted");
+            startup = new(settings, api);
             Diagnostics.StartupTrace.Mark("Startup requests scheduled before window construction");
         }
         Diagnostics.StartupTrace.Mark("Create window"); _window = new MainWindow(startup); Diagnostics.StartupTrace.Mark("Window created");

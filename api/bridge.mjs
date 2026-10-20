@@ -1,7 +1,8 @@
 import { createInterface } from 'node:readline';
 import { createRequire } from 'node:module';
 import { pathToFileURL } from 'node:url';
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
+import { closeSync, openSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { tmpdir } from 'node:os';
 
@@ -10,7 +11,7 @@ export const methods = new Set([
   'cloudsearch', 'personalized', 'playlist_detail', 'playlist_track_all',
   'song_url_v1', 'lyric', 'login_qr_key', 'login_qr_create', 'login_qr_check',
   'login_status', 'user_playlist', 'recommend_songs', 'likelist', 'like',
-  'top_artists', 'artist_album', 'album', 'song_detail', 'song_music_detail',
+  'top_artists', 'artist_album', 'album', 'album_sublist', 'song_detail', 'song_music_detail',
   'vip_info', 'event', 'msg_notices', 'msg_comments', 'msg_private', 'msg_private_history', 'song_download_url_v1',
   'dj_recommend', 'dj_program', 'dj_sublist',
   'playlist_tracks', 'resource_like', 'comment_event', 'comment_music', 'comment_playlist', 'comment_album', 'comment_dj', 'comment_mv', 'comment_video', 'comment', 'comment_like', 'send_text', 'send_song', 'send_album', 'send_playlist', 'msg_forwards',
@@ -36,31 +37,39 @@ export function normalizeResult(method, result) {
     throw { body: { msg: body?.msg || '发布失败，请重试' } };
   return body;
 }
-let api;
+let upstreamRoot;
+let requestModule;
+function upstreamMethod(method) {
+  if (!upstreamRoot) {
+    upstreamRoot = dirname(require.resolve('@neteasecloudmusicapienhanced/api'));
+    // request.js expects this file even when anonymous login has not run.
+    closeSync(openSync(join(tmpdir(), 'anonymous_token'), 'a'));
+  }
+  return require(join(upstreamRoot, 'module', `${method}.js`));
+}
+function upstreamRequest(...args) {
+  requestModule ??= require(join(upstreamRoot, 'util', 'request.js'));
+  return requestModule(...args);
+}
 let playbackKeys;
-async function initializePlaybackKeys() {
-  const root = dirname(require.resolve('@neteasecloudmusicapienhanced/api'));
-  const { getXeapiPublicKey } = require(join(root, 'util', 'xeapiKey.js'));
-  const file = join(tmpdir(), 'xeapi_public_key');
-  let current = {};
-  try { current = JSON.parse(await readFile(file, 'utf8')); } catch { }
-  const key = await getXeapiPublicKey(current, global.deviceId);
-  await writeFile(file, JSON.stringify(key));
+async function hasPlaybackKeys() {
+  try { return !!JSON.parse(await readFile(join(tmpdir(), 'xeapi_public_key'), 'utf8')).sk; }
+  catch { return false; }
 }
 export async function dispatch(message) {
   if (!Number.isSafeInteger(message?.id) || !methods.has(message?.method))
     throw new Error('不支持的 API 方法');
-  api ??= require('@neteasecloudmusicapienhanced/api');
-  if (message.method === 'song_url_v1') {
-    // Some upstream key responses omit `sk`. Use the package's supported EAPI
-    // transport in that case; account and copyright checks still apply.
-    playbackKeys ??= initializePlaybackKeys().then(() => true).catch(() => false);
-  }
+  // Loading the package entry point eagerly imports every endpoint and the HTTP
+  // server. The private pipe needs only the allowlisted module being called.
+  const method = upstreamMethod(message.method === 'msg_read_all' ? 'api' : message.method);
   const parameters = { ...message.params, timeout: 20000, unblock: 'false' };
-  if (message.method === 'song_url_v1' && !(await playbackKeys)) parameters.crypto = 'eapi';
-  const result = message.method === 'msg_read_all'
-    ? await api.api(readAllMessagesRequest(parameters))
-    : await api[message.method](parameters);
+  if (typeof parameters.cookie === 'string') parameters.cookie = require(join(upstreamRoot, 'util', 'index.js')).cookieToJson(parameters.cookie);
+  else parameters.cookie ??= {};
+  // Key registration in this pinned dependency has no timeout. Do not repeat
+  // that network round trip after every idle worker exit; EAPI is supported by
+  // the same endpoint and applies the same account/rights checks.
+  if (message.method === 'song_url_v1' && !(await (playbackKeys ??= hasPlaybackKeys()))) parameters.crypto = 'eapi';
+  const result = await method(message.method === 'msg_read_all' ? readAllMessagesRequest(parameters) : parameters, upstreamRequest);
   return normalizeResult(message.method, result);
 }
 

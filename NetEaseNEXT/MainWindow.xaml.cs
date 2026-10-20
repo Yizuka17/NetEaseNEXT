@@ -152,7 +152,7 @@ public sealed partial class MainWindow : Window
     {
         notice.IconSource = new FontIconSource
         {
-            FontFamily = new Microsoft.UI.Xaml.Media.FontFamily("Segoe Fluent Icons"),
+            FontFamily = IconFonts.Symbols,
             Glyph = notice.Severity switch { InfoBarSeverity.Warning => "\uE7BA", InfoBarSeverity.Error => "\uEA39", InfoBarSeverity.Success => "\uE73E", _ => "\uE946" }
         };
     }
@@ -174,6 +174,7 @@ public sealed partial class MainWindow : Window
             ResetTrackGesture(); CancelCoverTransitions(); RestorePresenterTransition(); StopSettingsIconRotation();
             _playerNoticeTimer.Stop(); PlayerNotice.IsOpen = false; QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null;
             _songStatsLoad?.Cancel(); _qualityLoad?.Cancel();
+            if (_pageLoad != null) _pageInterrupted = true;
             _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _loginLoad?.Cancel(); _coverLoad?.Cancel();
             // Keep completed UI data and decoded images. Hiding should stop work,
             // not force network requests, decoding and layout on every restore.
@@ -187,13 +188,16 @@ public sealed partial class MainWindow : Window
             Playback_Changed();
             if (_sessionReady || _runningSmokeTest)
             {
-                if (_authenticated) { _inboxTimer.Start(); _ = CheckUnreadAsync(); _ = UpdateAccountAsync(); }
+                if (_api.HasSession) _ = UpdateAccountAsync();
+                if (_authenticated) { _inboxTimer.Start(); _ = CheckUnreadAsync(); }
+                var resumePage = _pageInterrupted;
+                if (resumePage) _ = LoadPageAsync(_pageWasAppend);
                 if (_view == "playing") { UpdateNowPlaying(); _ = LoadLyricsAsync(); }
-                else if (_view is "discover" or "library" && Playlists.Count == 0) _ = LoadPageAsync(false);
-                else if (_view is "artists" or "albums" or "radio" && Catalog.Count == 0) _ = LoadPageAsync(false);
+                else if (!resumePage && _view is "discover" or "library" && Playlists.Count == 0) _ = LoadPageAsync(false);
+                else if (!resumePage && _view is "artists" or "albums" or "saved-albums" or "radio" && Catalog.Count == 0) _ = LoadPageAsync(false);
             }
             UpdateProgress();
-            if (_playback.Current is Track track) _ = LoadSongEngagementAsync(track);
+            if (_playback.Current is Track track) { _qualityTrack = 0; _ = LoadQualityAsync(track); _ = LoadSongEngagementAsync(track); }
         }
         UpdateTimer();
         if (!hidden && Root.IsLoaded && !_runningSmokeTest && !_sessionReady && !_initializingSession) _ = InitializeSessionAsync();

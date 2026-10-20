@@ -101,7 +101,7 @@ public sealed partial class MainWindow
         // directly in TextBlocks, without an IconElement ancestor.
         if (element is TextBlock symbol && symbol.Text.Any(c => c is >= '\uE000' and <= '\uF8FF'))
         {
-            symbol.FontFamily = new FontFamily("Segoe Fluent Icons");
+            symbol.FontFamily = IconFonts.Symbols;
             return;
         }
         if (element is TextBlock text) text.FontFamily = family;

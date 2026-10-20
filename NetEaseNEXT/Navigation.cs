@@ -12,6 +12,7 @@ namespace NetEaseNEXT;
 
 public sealed partial class MainWindow
 {
+    private bool _pageInterrupted, _pageWasAppend;
     private async void Navigation_Changed(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {
         if (!_ready || _selectingNav || _runningSmokeTest) return;
@@ -20,6 +21,7 @@ public sealed partial class MainWindow
     }
     private async Task NavigateAsync(string view, bool remember = true)
     {
+        _pageInterrupted = false;
         _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _coverLoad?.Cancel();
         ResetTrackGesture();
         if (_fullScreen && view != "playing") SetFullScreen(false);
@@ -63,11 +65,11 @@ public sealed partial class MainWindow
         if (selected != null) Nav.SelectedItem = selected;
         else if (view is "messages" or "private" or "conversation") Nav.SelectedItem = null;
         _selectingNav = false;
-        PageTitle.Text = view switch { "discover" => "发现", "library" => "歌单", "artists" or "artist" => "歌手", "playlist" => "歌单", "albums" or "album" or "programs" or "conversation" => _playlistName, "search" => _query, "queue" => "播放列表", "playing" => "正在播放", "settings" => "设置", "events" or "event-detail" => "动态", "song" => "歌曲", "messages" => "消息", "private" => "私信", "radio" => "我的播客", _ => "" };
+        PageTitle.Text = view switch { "discover" => "发现", "library" => "歌单", "saved-albums" => "收藏的专辑", "artists" or "artist" => "歌手", "playlist" => "歌单", "albums" or "album" or "programs" or "conversation" => _playlistName, "search" => _query, "queue" => "播放列表", "playing" => "正在播放", "settings" => "设置", "events" or "event-detail" => "动态", "song" => "歌曲", "messages" => "消息", "private" => "私信", "radio" => "我的播客", _ => "" };
         switch (view)
         {
             case "discover": case "library": BrowsePanel.Visibility = Visibility.Visible; break;
-            case "artists": case "albums": case "radio": CatalogPanel.Visibility = Visibility.Visible; break;
+            case "artists": case "albums": case "saved-albums": case "radio": CatalogPanel.Visibility = Visibility.Visible; break;
             case "search": case "playlist": case "album": case "programs": case "queue": case "song": TracksPanel.Visibility = Visibility.Visible; break;
             case "playing": PlayingPanel.Visibility = Visibility.Visible; UpdateNowPlaying(); break;
             case "settings": SettingsPanel.Visibility = Visibility.Visible; break;
@@ -87,6 +89,8 @@ public sealed partial class MainWindow
     }
     private async Task LoadPageAsync(bool append)
     {
+        if (_hidden || _exiting) return;
+        _pageInterrupted = false; _pageWasAppend = append;
         _pageLoad?.Cancel(); using var load = new CancellationTokenSource(); _pageLoad = load;
         SetBusy(true); EmptyPanel.Visibility = Visibility.Collapsed;
         try
@@ -114,6 +118,10 @@ public sealed partial class MainWindow
                     var array = data.GetProperty(_view == "artists" ? "artists" : _view == "albums" ? "hotAlbums" : "djRadios");
                     foreach (var item in array.EnumerateArray()) Catalog.Add(_view == "artists" ? CatalogItem.Artist(item) : _view == "albums" ? CatalogItem.Album(item) : new CatalogItem(item.Number("id"), item.Text("name"), item.Text("picUrl"), "radio", item.TryGetProperty("dj", out var dj) ? dj.Text("nickname") : ""));
                     _offset += array.GetArrayLength(); CatalogMore.Visibility = array.GetArrayLength() == 48 && Catalog.Count < 1000 ? Visibility.Visible : Visibility.Collapsed; break;
+                case "saved-albums":
+                    if (!RequireLogin()) break;
+                    await LoadSavedAlbumsAsync(_api, load.Token);
+                    break;
                 case "radio":
                     if (!RequireLogin()) break;
                     var subscriptions = await _api.CallAsync("dj_sublist", new { limit = 48, offset = _offset }, load.Token); load.Token.ThrowIfCancellationRequested();
@@ -126,7 +134,12 @@ public sealed partial class MainWindow
                 case "search": case "playlist": case "album": case "programs":
                     var page = new List<Track>();
                     if (_view == "search") page = await _api.SearchAsync(_query, _offset, load.Token);
-                    else if (_view == "playlist") { if (!append) await LoadPlaylistDetailAsync(load.Token); page = await _api.PlaylistTracksAsync(_playlistId, _offset, load.Token); }
+                    else if (_view == "playlist")
+                    {
+                        var details = append ? Task.CompletedTask : LoadPlaylistDetailAsync(load.Token);
+                        var songs = _api.PlaylistTracksAsync(_playlistId, _offset, load.Token);
+                        await Task.WhenAll(details, songs); page = await songs;
+                    }
                     else if (_view == "album")
                     {
                         var album = await _api.CallAsync("album", new { id = _playlistId }, load.Token);
@@ -172,7 +185,11 @@ public sealed partial class MainWindow
     }
     private async void Catalog_Click(object sender, ItemClickEventArgs args)
     {
-        var item = (CatalogItem)args.ClickedItem; _playlistName = item.Name;
+        await OpenCatalogItemAsync((CatalogItem)args.ClickedItem);
+    }
+    private async Task OpenCatalogItemAsync(CatalogItem item)
+    {
+        _playlistName = item.Name;
         if (item.Kind == "artist") { _artistId = item.Id; await NavigateAsync("artist"); }
         else if (item.Kind == "mv") await OpenMvAsync(item);
         else { _playlistId = item.Id; await NavigateAsync(item.Kind == "album" ? "album" : "programs"); }

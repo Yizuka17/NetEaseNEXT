@@ -12,7 +12,9 @@ public sealed class CatalogItem(long id, string name, string cover, string kind,
     public override string ToString() => Name;
     public static CatalogItem Artist(JsonElement item) => new(item.Number("id"), item.Text("name"), item.Text("picUrl"), "artist");
     public static CatalogItem Album(JsonElement item) => new(item.Number("id"), item.Text("name"), item.Text("picUrl"), "album",
-        item.TryGetProperty("artist", out var artist) ? artist.Text("name") : "");
+        item.TryGetProperty("artists", out var artists) && artists.ValueKind == JsonValueKind.Array
+            ? string.Join(" / ", artists.EnumerateArray().Select(a => a.Text("name")))
+            : item.TryGetProperty("artist", out var artist) ? artist.Text("name") : "");
 }
 public sealed class SocialItem : System.ComponentModel.INotifyPropertyChanged
 {

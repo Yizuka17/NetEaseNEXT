@@ -206,11 +206,11 @@ public sealed partial class MainWindow
         try { await dialog.ShowAsync(); }
         catch (Exception e) { ShowError(e.Message); }
         finally { _loginLoad?.Cancel(); _dialog = null; }
-        if (signedIn) { await UpdateAccountAsync(); if (_view is "library" or "events" or "messages" or "private") await NavigateAsync(_view, false); }
+        if (signedIn) { await UpdateAccountAsync(); if (_view is "library" or "saved-albums" or "events" or "messages" or "private") await NavigateAsync(_view, false); }
     }
     private async void Logout_Click(object sender, RoutedEventArgs e)
     {
-        try { _accountLoad?.Cancel(); _profileTask = null; AccountCache.Clear(); _api.SetCookie(""); ResetAccount(); _qualityTrack = 0; if (_playback.Current is Track track) await LoadQualityAsync(track); if (_view == "library") await NavigateAsync("library"); }
+        try { _accountLoad?.Cancel(); _profileTask = null; AccountCache.Clear(); _api.SetCookie(""); ResetAccount(); if (_view is "library" or "saved-albums") await NavigateAsync(_view); _qualityTrack = 0; if (_playback.Current is Track track) await LoadQualityAsync(track); }
         catch (Exception ex) { ShowError(ex.Message); }
     }
 }

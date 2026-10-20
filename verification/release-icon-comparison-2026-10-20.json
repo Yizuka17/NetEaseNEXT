@@ -1,0 +1,457 @@
+[
+  {
+    "Path": "Assets\\AppIcon.ico",
+    "ReleaseBytes": 11939,
+    "Equal": true
+  },
+  {
+    "Path": "Assets\\AppIcon.png",
+    "ReleaseBytes": 21800,
+    "Equal": true
+  },
+  {
+    "Path": "Assets\\AppIconDark.ico",
+    "ReleaseBytes": 10032,
+    "Equal": true
+  },
+  {
+    "Path": "Assets\\AppIconDark.png",
+    "ReleaseBytes": 20993,
+    "Equal": true
+  },
+  {
+    "Path": "PackageAssets\\AppList.scale-100_altform-colorful_theme-light.png",
+    "ReleaseBytes": 1137,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.scale-100.png",
+    "ReleaseBytes": 919,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.scale-125_altform-colorful_theme-light.png",
+    "ReleaseBytes": 1428,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.scale-125.png",
+    "ReleaseBytes": 1198,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.scale-150_altform-colorful_theme-light.png",
+    "ReleaseBytes": 1733,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.scale-150.png",
+    "ReleaseBytes": 1435,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.scale-200_altform-colorful_theme-light.png",
+    "ReleaseBytes": 2318,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.scale-200.png",
+    "ReleaseBytes": 1918,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.scale-250_altform-colorful_theme-light.png",
+    "ReleaseBytes": 2915,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.scale-250.png",
+    "ReleaseBytes": 2383,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.scale-300_altform-colorful_theme-light.png",
+    "ReleaseBytes": 3529,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.scale-300.png",
+    "ReleaseBytes": 2943,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.scale-400_altform-colorful_theme-light.png",
+    "ReleaseBytes": 4758,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.scale-400.png",
+    "ReleaseBytes": 3936,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-16_altform-lightunplated.png",
+    "ReleaseBytes": 397,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-16_altform-unplated.png",
+    "ReleaseBytes": 355,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-16.png",
+    "ReleaseBytes": 355,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-20_altform-lightunplated.png",
+    "ReleaseBytes": 519,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-20_altform-unplated.png",
+    "ReleaseBytes": 444,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-20.png",
+    "ReleaseBytes": 444,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-24_altform-lightunplated.png",
+    "ReleaseBytes": 625,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-24_altform-unplated.png",
+    "ReleaseBytes": 519,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-24.png",
+    "ReleaseBytes": 519,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-256_altform-lightunplated.png",
+    "ReleaseBytes": 7096,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-256_altform-unplated.png",
+    "ReleaseBytes": 6017,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-256.png",
+    "ReleaseBytes": 6017,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-30_altform-lightunplated.png",
+    "ReleaseBytes": 781,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-30_altform-unplated.png",
+    "ReleaseBytes": 643,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-30.png",
+    "ReleaseBytes": 643,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-32_altform-lightunplated.png",
+    "ReleaseBytes": 827,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-32_altform-unplated.png",
+    "ReleaseBytes": 667,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-32.png",
+    "ReleaseBytes": 667,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-36_altform-lightunplated.png",
+    "ReleaseBytes": 898,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-36_altform-unplated.png",
+    "ReleaseBytes": 747,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-36.png",
+    "ReleaseBytes": 747,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-40_altform-lightunplated.png",
+    "ReleaseBytes": 1017,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-40_altform-unplated.png",
+    "ReleaseBytes": 846,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-40.png",
+    "ReleaseBytes": 846,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-44_altform-lightunplated.png",
+    "ReleaseBytes": 1137,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-44_altform-unplated.png",
+    "ReleaseBytes": 919,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-44.png",
+    "ReleaseBytes": 919,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-48_altform-lightunplated.png",
+    "ReleaseBytes": 1242,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-48_altform-unplated.png",
+    "ReleaseBytes": 1010,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-48.png",
+    "ReleaseBytes": 1010,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-60_altform-lightunplated.png",
+    "ReleaseBytes": 1530,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-60_altform-unplated.png",
+    "ReleaseBytes": 1252,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-60.png",
+    "ReleaseBytes": 1252,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-64_altform-lightunplated.png",
+    "ReleaseBytes": 1650,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-64_altform-unplated.png",
+    "ReleaseBytes": 1362,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-64.png",
+    "ReleaseBytes": 1362,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-72_altform-lightunplated.png",
+    "ReleaseBytes": 1855,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-72_altform-unplated.png",
+    "ReleaseBytes": 1541,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-72.png",
+    "ReleaseBytes": 1541,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-80_altform-lightunplated.png",
+    "ReleaseBytes": 2102,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-80_altform-unplated.png",
+    "ReleaseBytes": 1745,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-80.png",
+    "ReleaseBytes": 1745,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-96_altform-lightunplated.png",
+    "ReleaseBytes": 2538,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-96_altform-unplated.png",
+    "ReleaseBytes": 2124,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\AppList.targetsize-96.png",
+    "ReleaseBytes": 2124,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\Square150x150Logo.scale-100_altform-colorful_theme-light.png",
+    "ReleaseBytes": 4005,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\Square150x150Logo.scale-100.png",
+    "ReleaseBytes": 3385,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\Square150x150Logo.scale-125_altform-colorful_theme-light.png",
+    "ReleaseBytes": 5087,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\Square150x150Logo.scale-125.png",
+    "ReleaseBytes": 4244,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\Square150x150Logo.scale-150_altform-colorful_theme-light.png",
+    "ReleaseBytes": 6158,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\Square150x150Logo.scale-150.png",
+    "ReleaseBytes": 5125,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\Square150x150Logo.scale-200_altform-colorful_theme-light.png",
+    "ReleaseBytes": 8627,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\Square150x150Logo.scale-200.png",
+    "ReleaseBytes": 7257,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\Square150x150Logo.scale-250_altform-colorful_theme-light.png",
+    "ReleaseBytes": 11149,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\Square150x150Logo.scale-250.png",
+    "ReleaseBytes": 9446,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\Square150x150Logo.scale-300_altform-colorful_theme-light.png",
+    "ReleaseBytes": 13738,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\Square150x150Logo.scale-300.png",
+    "ReleaseBytes": 11758,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\Square150x150Logo.scale-400_altform-colorful_theme-light.png",
+    "ReleaseBytes": 19450,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\Square150x150Logo.scale-400.png",
+    "ReleaseBytes": 16785,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\StoreLogo.scale-100_altform-colorful_theme-light.png",
+    "ReleaseBytes": 1301,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\StoreLogo.scale-100.png",
+    "ReleaseBytes": 1058,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\StoreLogo.scale-125_altform-colorful_theme-light.png",
+    "ReleaseBytes": 1605,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\StoreLogo.scale-125.png",
+    "ReleaseBytes": 1326,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\StoreLogo.scale-150_altform-colorful_theme-light.png",
+    "ReleaseBytes": 1952,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\StoreLogo.scale-150.png",
+    "ReleaseBytes": 1613,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\StoreLogo.scale-200_altform-colorful_theme-light.png",
+    "ReleaseBytes": 2606,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\StoreLogo.scale-200.png",
+    "ReleaseBytes": 2146,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\StoreLogo.scale-250_altform-colorful_theme-light.png",
+    "ReleaseBytes": 3327,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\StoreLogo.scale-250.png",
+    "ReleaseBytes": 2769,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\StoreLogo.scale-300_altform-colorful_theme-light.png",
+    "ReleaseBytes": 4005,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\StoreLogo.scale-300.png",
+    "ReleaseBytes": 3385,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\StoreLogo.scale-400_altform-colorful_theme-light.png",
+    "ReleaseBytes": 5457,
+    "Equal": false
+  },
+  {
+    "Path": "PackageAssets\\StoreLogo.scale-400.png",
+    "ReleaseBytes": 4580,
+    "Equal": false
+  }
+]

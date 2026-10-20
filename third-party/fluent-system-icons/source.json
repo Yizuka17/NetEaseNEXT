@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/microsoft/fluentui-system-icons",
+  "commit": "83b26348c811f072429427ff48362238656524fe",
+  "sources": {
+    "FluentSystemIcons-Regular.ttf": "f977ae5bfb46661e7ba94b098e0d7720e27af888e57b9b14e239933ac4c0e6f4",
+    "FluentSystemIcons-Filled.ttf": "0a5adcf88ab5b243096da72d965bd22cd303200b36ba739a5a2a81086ef847ab"
+  },
+  "fonttools": "4.67.0",
+  "generated_sha256": "88a9f586a4cfafae9c44a0bd467b591e62a75446d1a47ea10fbed916cddd1ff8"
+}
