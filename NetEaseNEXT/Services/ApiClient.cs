@@ -156,10 +156,12 @@ public sealed class ApiClient : IDisposable
         finally { if (id != 0) _pending.TryRemove(id, out _); }
     }
     internal Task<JsonElement> RemovePlaylistTrackAsync(long playlistId, long ownerId, long accountId, long trackId)
+        => RemovePlaylistTracksAsync(playlistId, ownerId, accountId, [trackId]);
+    internal Task<JsonElement> RemovePlaylistTracksAsync(long playlistId, long ownerId, long accountId, IReadOnlyList<long> trackIds)
     {
-        if (playlistId <= 0 || trackId <= 0 || accountId <= 0 || ownerId != accountId)
+        if (playlistId <= 0 || trackIds.Count == 0 || trackIds.Any(id => id <= 0) || accountId <= 0 || ownerId != accountId)
             throw new InvalidOperationException("只能从自己创建的歌单中移除歌曲");
-        return CallAsync("playlist_tracks", new { op = "del", pid = playlistId, tracks = trackId.ToString(System.Globalization.CultureInfo.InvariantCulture) });
+        return CallAsync("playlist_tracks", new { op = "del", pid = playlistId, tracks = string.Join(',', trackIds.Distinct()) });
     }
     public async Task<List<Track>> SearchAsync(string query, int offset, CancellationToken ct)
     {

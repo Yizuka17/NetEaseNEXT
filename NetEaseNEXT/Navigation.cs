@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Hosting;
@@ -22,8 +22,8 @@ public sealed partial class MainWindow
     private async Task NavigateAsync(string view, bool remember = true)
     {
         _pageInterrupted = false;
-        _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _coverLoad?.Cancel();
-        ResetTrackGesture();
+        _trackLocateLoad?.Cancel(); _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _coverLoad?.Cancel();
+        EndTrackBatch(); ResetTrackGesture();
         if (_fullScreen && view != "playing") SetFullScreen(false);
         if (view != _view && (view == "playing" || _view == "playing"))
             PrepareCoverTransition("PlayerCover", view == "playing" ? MiniCover : LargeCover);
@@ -31,7 +31,7 @@ public sealed partial class MainWindow
         _route = new(view, _playlistId, _artistId, _peerId, _playlistName, _query, _linkedResource);
         BackButton.IsEnabled = _history.Count > 0 || _fullScreen;
         _view = view; _offset = 0; _socialCursor = -1;
-        if (view == "playlist") { _resumePlaylistId = _playlistId; _resumePlaylistName = _playlistName; }
+        if (view == "playlist") { _playlistTrackIds = []; _playlistTrackCount = 0; _resumePlaylistId = _playlistId; _resumePlaylistName = _playlistName; }
         SchedulePlaybackSave();
         if (view == "artist") _artistTab = "songs";
         ResetInbox();
@@ -154,9 +154,10 @@ public sealed partial class MainWindow
                             page.Add(new Track(song.Number("id"), p.Text("name"), p.TryGetProperty("dj", out var dj) ? dj.Text("nickname") : "", _playlistName, p.Text("coverUrl"), p.Number("duration")));
                         }
                     }
-                    load.Token.ThrowIfCancellationRequested(); if (!append) Tracks.Clear(); foreach (var item in page.Take(1000 - Tracks.Count)) Tracks.Add(item);
+                    var limit = _view == "playlist" ? 10000 : 1000;
+                    load.Token.ThrowIfCancellationRequested(); if (!append) Tracks.Clear(); foreach (var item in page.Take(limit - Tracks.Count)) Tracks.Add(item);
                     _offset += page.Count;
-                    LoadMoreButton.Visibility = _view != "album" && page.Count == (_view == "playlist" ? 100 : 50) && Tracks.Count < 1000 ? Visibility.Visible : Visibility.Collapsed;
+                    LoadMoreButton.Visibility = _view != "album" && page.Count == (_view == "playlist" ? 100 : 50) && Tracks.Count < limit ? Visibility.Visible : Visibility.Collapsed;
                     TrackCount.Text = $"{(_view == "playlist" && _playlistTrackCount > 0 ? _playlistTrackCount : Tracks.Count)} 首"; break;
                 case "song": case "event-detail": await LoadLinkedResourceAsync(load.Token); break;
                 case "queue": foreach (var item in _playback.Queue) Tracks.Add(item); TrackCount.Text = $"{Tracks.Count} 首"; break;
@@ -196,6 +197,7 @@ public sealed partial class MainWindow
     }
     private async void Track_Click(object sender, ItemClickEventArgs args)
     {
+        if (ReferenceEquals(_batchList, TrackList)) return;
         var track = (Track)args.ClickedItem;
         await ActivateTrackAsync(track);
     }
@@ -206,7 +208,7 @@ public sealed partial class MainWindow
         catch (OperationCanceledException) { }
         catch (Exception ex) { ShowError(ex.Message); }
     }
-    private async void LoadMore_Click(object sender, RoutedEventArgs args) => await LoadPageAsync(true);
+    private async void LoadMore_Click(object sender, RoutedEventArgs args) { if (_trackLocateLoad == null) await LoadPageAsync(true); }
     private async void EmptyAction_Click(object sender, RoutedEventArgs args) { if ((string)EmptyAction.Content == "登录") await ShowLoginAsync(); else await NavigateAsync((string)EmptyAction.Content == "发现" ? "discover" : _view, false); }
     private async Task GoBackAsync()
     {

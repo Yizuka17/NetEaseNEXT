@@ -104,6 +104,7 @@ public sealed partial class MainWindow
     }
     private async void Track_DoubleTapped(object sender, DoubleTappedRoutedEventArgs args)
     {
+        if (ReferenceEquals(sender, _batchList)) { args.Handled = true; return; }
         var element = args.OriginalSource as DependencyObject;
         while (element != null && (element as FrameworkElement)?.DataContext is not Track) element = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(element);
         if ((element as FrameworkElement)?.DataContext is not Track track) return;
@@ -125,19 +126,74 @@ public sealed partial class MainWindow
     private void UpdateTrackLocator()
     {
         var match = _playback.Current == null ? null : Tracks.FirstOrDefault(t => t.Id == _playback.Current.Id);
-        TrackLocateButton.Visibility = !_hidden && (_view is "playlist" or "queue") && match != null ? Visibility.Visible : Visibility.Collapsed;
+        var belongs = match != null || _view == "playlist" && _playback.Current is { } current && _playlistTrackIds.Contains(current.Id);
+        TrackLocateButton.Visibility = !_hidden && (_view is "playlist" or "queue") && belongs ? Visibility.Visible : Visibility.Collapsed;
+        TrackLocateButton.IsEnabled = _trackLocateLoad == null && _pageLoad == null && !_playlistRemovals.Any(t => t.PlaylistId == _playlistId);
         QueueLocateButton.Visibility = _playback.Current != null ? Visibility.Visible : Visibility.Collapsed;
     }
-    private void LocateCurrent_Click(object sender, RoutedEventArgs args)
+    private CancellationTokenSource? _trackLocateLoad;
+    private async void LocateCurrent_Click(object sender, RoutedEventArgs args) => await LocateCurrentAsync(_api);
+    private async Task LocateCurrentAsync(ApiClient api)
     {
-        var match = _playback.Current == null ? null : Tracks.FirstOrDefault(t => t.Id == _playback.Current.Id);
-        if (match == null) return;
-        TrackList.SelectedItem = match; TrackList.ScrollIntoView(match);
+        if (_hidden || _trackLocateLoad != null || _pageLoad != null || _playlistRemovals.Any(t => t.PlaylistId == _playlistId) || _playback.Current is not { } current || _view is not ("playlist" or "queue")) return;
+        using var load = new CancellationTokenSource(); _trackLocateLoad = load;
+        var route = _route; var playlist = _playlistId; var ids = _playlistTrackIds; var session = _api.Cookie;
+        var target = Array.IndexOf(ids, current.Id);
+        bool StillCurrent() => !_hidden && !load.IsCancellationRequested && ReferenceEquals(route, _route) && _playlistId == playlist &&
+            ReferenceEquals(ids, _playlistTrackIds) && _playback.Current?.Id == current.Id && _api.Cookie == session;
+        UpdateTrackLocator();
+        try
+        {
+            while (!Tracks.Any(t => t.Id == current.Id) && _view == "playlist" && target >= _offset && StillCurrent())
+            {
+                SetBusy(true);
+                var offset = _offset;
+                var batch = ids.Skip(offset).Take(Math.Min(500, target - offset + 1)).ToArray();
+                if (batch.Length == 0) break;
+                var result = await api.CallCachedAsync("song_detail", new { ids = string.Join(',', batch) }, load.Token);
+                load.Token.ThrowIfCancellationRequested();
+                if (!StillCurrent() || offset != _offset) return;
+                var songs = result.GetProperty("songs").EnumerateArray().Select(Track.FromJson).DistinctBy(t => t.Id).ToDictionary(t => t.Id);
+                var loaded = Tracks.Select(t => t.Id).ToHashSet();
+                foreach (var id in batch) if (songs.TryGetValue(id, out var track) && loaded.Add(id)) Tracks.Add(track);
+                _offset += batch.Length;
+                TrackCount.Text = $"{_playlistTrackCount} 首";
+                LoadMoreButton.Visibility = _offset < ids.Length ? Visibility.Visible : Visibility.Collapsed;
+            }
+            if (!StillCurrent()) return;
+            var match = Tracks.FirstOrDefault(t => t.Id == current.Id);
+            if (match == null) { ShowError("暂时无法定位这首歌曲，请重试"); return; }
+            if (!ReferenceEquals(_batchList, TrackList)) TrackList.SelectedItem = match;
+            // Newly appended virtualized rows need a layout frame before their
+            // real heights replace ListView's scroll estimates.
+            for (var attempt = 0; attempt < 5 && StillCurrent(); attempt++)
+            {
+                Root.UpdateLayout(); TrackList.ScrollIntoView(match, ScrollIntoViewAlignment.Leading);
+                await Task.Delay(32, load.Token); Root.UpdateLayout();
+                if (TrackList.ContainerFromItem(match) is FrameworkElement row)
+                {
+                    var top = row.TransformToVisual(TrackList).TransformPoint(new Point()).Y;
+                    if (top >= -1 && top + row.ActualHeight <= TrackList.ActualHeight + 1) break;
+                }
+            }
+        }
+        catch (OperationCanceledException) { }
+        catch (Exception ex) { if (StillCurrent()) ShowError(ex.Message); }
+        finally
+        {
+            if (ReferenceEquals(_trackLocateLoad, load))
+            {
+                _trackLocateLoad = null;
+                if (_pageLoad == null) SetBusy(false);
+                UpdateTrackLocator();
+            }
+        }
     }
     private void QueueLocate_Click(object sender, RoutedEventArgs args)
     {
         var match = _playback.Current == null ? null : _playback.Queue.FirstOrDefault(t => t.Id == _playback.Current.Id);
         if (match == null) return;
-        QueueList.SelectedItem = match; QueueList.ScrollIntoView(match);
+        if (!ReferenceEquals(_batchList, QueueList)) QueueList.SelectedItem = match;
+        QueueList.ScrollIntoView(match);
     }
 }

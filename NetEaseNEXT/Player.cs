@@ -1,4 +1,4 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 using System.Text.Json;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
@@ -32,11 +32,12 @@ public sealed partial class MainWindow
     private void ShowQueue_Click(object sender, RoutedEventArgs args)
     {
         var open = QueuePane.Visibility != Visibility.Visible;
+        if (!open && ReferenceEquals(_batchList, QueueList)) EndTrackBatch();
         QueuePane.Visibility = open ? Visibility.Visible : Visibility.Collapsed;
         QueueList.ItemsSource = open ? _playback.Queue : null;
         if (open && _playback.Current != null) { QueueList.SelectedItem = _playback.Queue.FirstOrDefault(t => t.Id == _playback.Current?.Id); if (QueueList.SelectedItem != null) QueueList.ScrollIntoView(QueueList.SelectedItem); }
     }
-    private async void QueueTrack_Click(object sender, ItemClickEventArgs args) { await _playback.PlayAsync((Track)args.ClickedItem); }
+    private async void QueueTrack_Click(object sender, ItemClickEventArgs args) { if (!ReferenceEquals(_batchList, QueueList)) await _playback.PlayAsync((Track)args.ClickedItem); }
     private async void CurrentArtist_Click(object sender, RoutedEventArgs args) { if (_playback.Current is Track track) await OpenArtistAsync(track); }
     private void Playback_Changed()
     {
@@ -58,10 +59,10 @@ public sealed partial class MainWindow
             }
         }
         QualityButton.Content = Qualities.FirstOrDefault(q => q.Level == _playback.CurrentQuality).Name ?? "音质";
-        if (QueuePane.Visibility == Visibility.Visible) { QueueList.ItemsSource = _playback.Queue; QueueList.SelectedItem = _playback.Queue.FirstOrDefault(t => t.Id == _playback.Current?.Id); }
+        if (QueuePane.Visibility == Visibility.Visible) RefreshQueueList();
         if (_view == "queue" && !Tracks.Select(t => t.Id).SequenceEqual(_playback.Queue.Select(t => t.Id)))
         {
-            Tracks.Clear(); foreach (var track in _playback.Queue) Tracks.Add(track); TrackCount.Text = $"{Tracks.Count} 首";
+            RefreshQueueTracks();
         }
         UpdateTrackLocator(); UpdateProgress(); UpdateTimer();
     }
@@ -123,6 +124,7 @@ public sealed partial class MainWindow
     private async void Escape_Key(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
     {
         if (_dialog != null) return;
+        if (_batchList != null) { EndTrackBatch(); args.Handled = true; return; }
         if (QueuePane.Visibility == Visibility.Visible) { QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null; }
         else if (_fullScreen) SetFullScreen(false);
         else if (_view == "playing") await GoBackAsync();
@@ -162,13 +164,15 @@ public sealed partial class MainWindow
     }
     private async void FavoriteCurrent_Click(object sender, RoutedEventArgs args) { if (_playback.Current is Track track) await FavoriteAsync(track); }
     private async void ContextFavorite_Click(object sender, RoutedEventArgs args) { if (((FrameworkElement)sender).DataContext is Track track) await FavoriteAsync(track); }
-    private async Task FavoriteAsync(Track track)
+    private Task FavoriteAsync(Track track) => FavoriteTracksAsync([track]);
+    private async Task FavoriteTracksAsync(IReadOnlyList<Track> tracks)
     {
         if (_dialog != null) return;
         if (!_api.HasSession) { await ShowLoginAsync(); if (!_api.HasSession) return; }
         try
         {
-            var profile = await GetProfileAsync(); if (profile == null) return;
+            var session = _api.Cookie;
+            var profile = await GetProfileAsync(); if (profile == null || session != _api.Cookie) return;
             var uid = profile.Value.Number("userId"); var choices = new List<Playlist>(); var offset = 0;
             while (offset < 1000)
             {
@@ -184,9 +188,10 @@ public sealed partial class MainWindow
             _dialog = dialog;
             try
             {
-                if (await dialog.ShowAsync() == ContentDialogResult.Primary && list.SelectedItem is Playlist playlist)
+                if (await ShowThemedDialogAsync(dialog) == ContentDialogResult.Primary && list.SelectedItem is Playlist playlist)
                 {
-                    await _api.CallAsync("playlist_tracks", new { op = "add", pid = playlist.Id, tracks = track.Id.ToString() });
+                    if (session != _api.Cookie) { ShowError("登录状态已改变，请重试"); return; }
+                    await _api.CallAsync("playlist_tracks", new { op = "add", pid = playlist.Id, tracks = string.Join(',', tracks.Select(t => t.Id).Distinct()) });
                     ShowPlayerMessage("已添加到歌单", InfoBarSeverity.Success);
                 }
             }
@@ -238,7 +243,7 @@ public sealed partial class MainWindow
             };
             menu.Items.Add(item);
         }
-        menu.ShowAt(QualityButton);
+        ShowThemedFlyout(menu, QualityButton);
     }
     private void Sound_Click(object sender, RoutedEventArgs args)
     {
@@ -246,7 +251,7 @@ public sealed partial class MainWindow
         panel.Children.Add(new TextBlock { Text = "音量" });
         var volume = new Slider { Minimum = 0, Maximum = 100, Value = _settings.Volume * 100 };
         volume.ValueChanged += (_, value) => _playback.SetVolume(value.NewValue / 100); panel.Children.Add(volume);
-        new Flyout { Content = panel }.ShowAt(SoundButton);
+        ShowThemedFlyout(new Flyout { Content = panel }, SoundButton);
     }
     private async Task OpenSystemAudioAsync()
     {

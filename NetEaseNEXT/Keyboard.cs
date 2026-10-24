@@ -14,6 +14,7 @@ public sealed partial class MainWindow
     private async void Playback_KeyDown(object sender, KeyRoutedEventArgs args)
     {
         if (_hidden || _dialog != null) return;
+        if (_batchList != null && args.Key == VirtualKey.Space) return;
         var focused = FocusManager.GetFocusedElement(Root.XamlRoot) as DependencyObject;
         for (var element = focused; element != null; element = VisualTreeHelper.GetParent(element))
             if (element is TextBox or RichEditBox or AutoSuggestBox) return;

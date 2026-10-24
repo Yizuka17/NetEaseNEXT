@@ -1,0 +1,12 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Navigation icon candidates rendered from real WinUI fonts",
+    "passed": true,
+    "detail": null
+  }
+]

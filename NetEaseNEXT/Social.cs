@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Text.Json;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -119,7 +119,7 @@ public sealed partial class MainWindow
             input.SelectionStart = start + emoji.Token.Length; input.SelectionLength = 0;
             flyout.Hide(); input.Focus(FocusState.Programmatic);
         };
-        flyout.ShowAt(anchor);
+        ShowThemedFlyout(flyout, anchor);
     }
     private async Task ShowMessageDetailAsync(SocialItem item)
     {
@@ -127,11 +127,12 @@ public sealed partial class MainWindow
         var text = string.Join("\n\n", new[] { item.Action, item.Text, item.OriginalText, item.Time }.Where(s => s.Length > 0));
         var dialog = new ContentDialog { XamlRoot = Root.XamlRoot, Title = item.Name.Length > 0 ? item.Name : "消息", Content = new ScrollViewer { Content = new TextBlock { Text = text, TextWrapping = TextWrapping.Wrap, IsTextSelectionEnabled = false }, MaxHeight = 480 }, CloseButtonText = "关闭", SecondaryButtonText = SourceLinkLabel(item) };
         ContentDialogResult result;
-        _dialog = dialog; try { result = await dialog.ShowAsync(); } finally { _dialog = null; }
+        _dialog = dialog; try { result = await ShowThemedDialogAsync(dialog); } finally { _dialog = null; }
         if (result == ContentDialogResult.Secondary) await OpenMessageSourceAsync(item);
     }
-    private async Task ShowCommentsAsync(SocialItem source)
+    private async Task ShowCommentsAsync(SocialItem source, Services.ApiClient? client = null)
     {
+        var api = client ?? _api;
         if (_dialog != null) return;
         if (source.ThreadId.Length == 0 || source.ResourceType < 0) { await ShowMessageDetailAsync(source); return; }
         var items = new ObservableCollection<SocialItem>();
@@ -158,7 +159,7 @@ public sealed partial class MainWindow
             try
             {
                 var method = source.ResourceType switch { 0 => "comment_music", 1 => "comment_mv", 2 => "comment_playlist", 3 => "comment_album", 4 => "comment_dj", 5 => "comment_video", _ => "comment_event" };
-                var result = await _api.CallAsync(method, new { id = source.ResourceKey, threadId = source.ThreadId, limit = 20, offset }, load.Token);
+                var result = await api.CallAsync(method, new { id = source.ResourceKey, threadId = source.ThreadId, limit = 20, offset }, load.Token);
                 load.Token.ThrowIfCancellationRequested();
                 dialog.Title = "评论 (" + result.Number("total").ToString("N0") + ")";
                 if (result.TryGetProperty("comments", out var array))
@@ -173,7 +174,7 @@ public sealed partial class MainWindow
                         {
                             var key = source.ThreadId + ":" + comment.CommentId;
                             if (!_socialWrites.Add(key)) return;
-                            try { await _api.CallAsync("comment_like", new { type = source.ResourceType, id = source.ResourceKey, threadId = source.ThreadId, cid = comment.CommentId, t = comment.Liked ? 0 : 1 }, load.Token); comment.Liked = !comment.Liked; comment.LikeCount = Math.Max(0, comment.LikeCount + (comment.Liked ? 1 : -1)); comment.NotifyInteraction(); }
+                            try { await api.CallAsync("comment_like", new { type = source.ResourceType, id = source.ResourceKey, threadId = source.ThreadId, cid = comment.CommentId, t = comment.Liked ? 0 : 1 }, load.Token); comment.Liked = !comment.Liked; comment.LikeCount = Math.Max(0, comment.LikeCount + (comment.Liked ? 1 : -1)); comment.NotifyInteraction(); }
                             catch (OperationCanceledException) { }
                             catch (Exception ex) { error.Text = ex.Message; }
                             finally { _socialWrites.Remove(key); }
@@ -197,7 +198,7 @@ public sealed partial class MainWindow
             args.Cancel = true; var deferral = args.GetDeferral();
             try
             {
-                await _api.CallAsync("comment", new { t = replyId > 0 ? 2 : 1, type = source.ResourceType, id = source.ResourceKey, threadId = source.ThreadId, commentId = replyId, content = input.Text.Trim() }, load.Token);
+                await api.CallAsync("comment", new { t = replyId > 0 ? 2 : 1, type = source.ResourceType, id = source.ResourceKey, threadId = source.ThreadId, commentId = replyId, content = input.Text.Trim() }, load.Token);
                 input.Text = ""; replyId = 0; hint.Text = ""; cancelReply.Visibility = Visibility.Collapsed;
                 source.CommentCount++; source.NotifyInteraction(); items.Clear(); offset = 0; await Fetch();
             }
@@ -207,7 +208,7 @@ public sealed partial class MainWindow
         };
         dialog.Opened += async (_, _) => await Fetch(); dialog.Closed += (_, _) => load.Cancel();
         ContentDialogResult result;
-        try { result = await dialog.ShowAsync(); } finally { load.Cancel(); if (ReferenceEquals(_commentsLoad, load)) _commentsLoad = null; _dialog = null; }
+        try { result = await ShowThemedDialogAsync(dialog); } finally { load.Cancel(); if (ReferenceEquals(_commentsLoad, load)) _commentsLoad = null; _dialog = null; }
         if (result == ContentDialogResult.Secondary) await OpenMessageSourceAsync(source);
     }
     private CancellationTokenSource? _commentsLoad;
@@ -246,7 +247,7 @@ public sealed partial class MainWindow
             finally { deferral.Complete(); }
         };
         _dialog = dialog;
-        try { if (await dialog.ShowAsync() == ContentDialogResult.Primary && _view == "conversation" && _peerId == peer) await RefreshSocialAsync(); }
+        try { if (await ShowThemedDialogAsync(dialog) == ContentDialogResult.Primary && _view == "conversation" && _peerId == peer) await RefreshSocialAsync(); }
         finally { _dialog = null; }
     }
 }

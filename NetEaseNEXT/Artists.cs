@@ -108,7 +108,7 @@ public sealed partial class MainWindow
             var video = new MediaPlayerElement { AreTransportControlsEnabled = true, Width = Math.Min(700, Root.ActualWidth - 160), Height = Math.Min(394, Root.ActualHeight - 200) }; video.SetMediaPlayer(player); player.Source = source;
             var dialog = new ContentDialog { XamlRoot = Root.XamlRoot, Title = item.Name, Content = video, CloseButtonText = "关闭" }; _dialog = dialog;
             dialog.Opened += (_, _) => player.Play();
-            try { await dialog.ShowAsync(); }
+            try { await ShowThemedDialogAsync(dialog); }
             finally { player.Pause(); player.Source = null; video.SetMediaPlayer(null); _dialog = null; if (resume) _playback.Toggle(); }
         }
         catch (Exception ex) { ShowError(ex.Message); }

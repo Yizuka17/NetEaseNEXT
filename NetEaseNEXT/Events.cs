@@ -106,7 +106,7 @@ public sealed partial class MainWindow
         };
         ContentDialogResult result;
         _dialog = dialog;
-        try { result = await dialog.ShowAsync(); }
+        try { result = await ShowThemedDialogAsync(dialog); }
         finally { load.Cancel(); _dialog = null; }
         if (result == ContentDialogResult.Primary)
         {
@@ -182,7 +182,7 @@ public sealed partial class MainWindow
             scroll.Height = image.Height = Math.Max(180, Math.Min(500, Root.ActualHeight - 230));
         }
         Root.SizeChanged += ResizeViewer;
-        try { await dialog.ShowAsync(); }
+        try { await ShowThemedDialogAsync(dialog); }
         finally { Root.SizeChanged -= ResizeViewer; Artwork.SetUri(image, ""); image.Source = null; _dialog = null; }
     }
 }

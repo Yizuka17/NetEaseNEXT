@@ -36,6 +36,21 @@ public sealed partial class MainWindow
         try
         {
             Check("XAML root loaded", Root.IsLoaded);
+            if (Environment.GetCommandLineArgs().Contains("--track-locator-check"))
+            {
+                await RunTrackLocatorChecksAsync(Check);
+                return;
+            }
+            if (Environment.GetCommandLineArgs().Contains("--navigation-icon-preview"))
+            {
+                await ShowNavigationIconPreviewAsync(Check);
+                return;
+            }
+            if (Environment.GetCommandLineArgs().Contains("--theme-batch-check"))
+            {
+                await RunThemeBatchChecksAsync(Check);
+                return;
+            }
             if (Environment.GetCommandLineArgs().Contains("--sidebar-theme-check"))
             {
                 await RunSidebarThemeChecksAsync(Check, results);

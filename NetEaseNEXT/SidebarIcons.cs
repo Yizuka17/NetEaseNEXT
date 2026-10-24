@@ -20,9 +20,9 @@ public sealed partial class MainWindow
             var glyphs = (item.Tag as string) switch
             {
                 "discover" => ("\uE80F", "\uEA8A"),
-                "library" => ("\uE8F1", "\uF8B2"),
+                "library" => ("\uE8D6", "\uF8B3"),
                 "saved-albums" => ("\uE93C", "\uF8B1"),
-                "radio" => ("\uE8D6", "\uF8B3"),
+                "radio" => ("\uF8BA", "\uF8BB"),
                 "events" => ("\uE77D", "\uF8B4"),
                 "queue" => ("\uE770", "\uF8B5"),
                 _ => ("", "")

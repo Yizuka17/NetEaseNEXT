@@ -151,6 +151,21 @@ public sealed class PlaybackService : IDisposable
         _index = Queue.ToList().FindIndex(t => t.Id == track.Id); QueueRevision++; Changed?.Invoke(); WarmFollowing();
     }
     public void AddNext(Track track) => InsertNext(track, prepare: true);
+    public void AddNext(IEnumerable<Track> tracks)
+    {
+        var added = tracks.Where(t => t.Id != Current?.Id).DistinctBy(t => t.Id).ToArray();
+        if (added.Length == 0) return;
+        var ids = added.Select(t => t.Id).ToHashSet();
+        List<Track> Insert(IEnumerable<Track> source)
+        {
+            var items = source.Where(t => !ids.Contains(t.Id)).ToList();
+            items.InsertRange(Math.Clamp(items.FindIndex(t => t.Id == Current?.Id) + 1, 0, items.Count), added);
+            return items;
+        }
+        Queue = Insert(Queue).ToArray(); _orderedQueue = Insert(_orderedQueue);
+        _index = Queue.ToList().FindIndex(t => t.Id == Current?.Id);
+        QueueRevision++; Changed?.Invoke(); WarmFollowing();
+    }
     private void InsertNext(Track track, bool prepare)
     {
         if (Current?.Id == track.Id) return;
@@ -172,9 +187,16 @@ public sealed class PlaybackService : IDisposable
     }
     public void Remove(Track track)
     {
-        if (Current?.Id == track.Id) return;
-        Queue = Queue.Where(t => t.Id != track.Id).ToArray(); _index = Current == null ? -1 : Queue.ToList().FindIndex(t => t.Id == Current.Id); Changed?.Invoke();
-        _orderedQueue = _orderedQueue.Where(t => t.Id != track.Id).ToArray(); QueueRevision++; WarmFollowing();
+        Remove(new[] { track });
+    }
+    public int Remove(IEnumerable<Track> tracks)
+    {
+        var ids = tracks.Where(t => t.Id != Current?.Id).Select(t => t.Id).ToHashSet();
+        var removed = Queue.Count(t => ids.Contains(t.Id)); if (removed == 0) return 0;
+        Queue = Queue.Where(t => !ids.Contains(t.Id)).ToArray();
+        _orderedQueue = _orderedQueue.Where(t => !ids.Contains(t.Id)).ToArray();
+        _index = Current == null ? -1 : Queue.ToList().FindIndex(t => t.Id == Current.Id);
+        QueueRevision++; Changed?.Invoke(); WarmFollowing(); return removed;
     }
     internal void CompleteQueue(IEnumerable<Track> tracks, int revision)
     {

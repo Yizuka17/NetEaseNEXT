@@ -1,0 +1,78 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Locator appears before the current song\u0027s page is loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Locator reaches songs beyond the old 1000-row limit",
+    "passed": true,
+    "detail": {
+      "elapsedMs": 388,
+      "count": 1251
+    }
+  },
+  {
+    "name": "Located song is realized inside the visible list",
+    "passed": true,
+    "detail": {
+      "top": 518.5,
+      "height": 654.5
+    }
+  },
+  {
+    "name": "Locator batches at most 500 IDs per request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Locator preserves playlist order and playback queue",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "More pages remain available after locating",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Repeated locate reuses already loaded rows",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Locate preserves active multiselection",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Canceled locate preserves loaded rows and resets controls",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Route changes reject stale locator results",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Hiding cancels locator requests and hides its button",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Failed locate retains data and allows retry",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Other playlists do not show a false locator",
+    "passed": true,
+    "detail": null
+  }
+]

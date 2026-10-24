@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Animation;
@@ -21,6 +21,7 @@ public sealed partial class MainWindow
         var playlist = result.GetProperty("playlist");
         _playlistTrackIds = playlist.TryGetProperty("trackIds", out var ids) ? ids.EnumerateArray().Select(t => t.Number("id")).Where(id => id > 0).Take(10000).ToArray() : [];
         _playlistTrackCount = playlist.Number("trackCount");
+        UpdateTrackLocator();
         PlaylistDetailTitle.Text = playlist.Text("name");
         PlaylistDescription.Text = playlist.Text("description"); PlaylistDescription.MaxLines = 3;
         ExpandDescriptionButton.Content = "展开简介"; ExpandDescriptionButton.Visibility = PlaylistDescription.Text.Length > 100 ? Visibility.Visible : Visibility.Collapsed;
@@ -68,7 +69,7 @@ public sealed partial class MainWindow
             var text = new TextBlock { Text = PlaylistDescription.Text, TextWrapping = TextWrapping.Wrap, IsTextSelectionEnabled = false, MaxWidth = 440 };
             var flyout = new Flyout { Content = new ScrollViewer { Content = text, MaxHeight = 360 } };
             flyout.Closed += (_, _) => { PlaylistDescription.MaxLines = 3; ExpandDescriptionButton.Content = "展开简介"; };
-            PlaylistDescription.MaxLines = 3; flyout.ShowAt(ExpandDescriptionButton);
+            PlaylistDescription.MaxLines = 3; ShowThemedFlyout(flyout, ExpandDescriptionButton);
         }
     }
     private async void PlaylistSubscribe_Click(object sender, RoutedEventArgs args)
@@ -119,7 +120,7 @@ public sealed partial class MainWindow
             finally { deferral.Complete(); }
         };
         _dialog = dialog;
-        try { await dialog.ShowAsync(); } finally { _dialog = null; }
+        try { await ShowThemedDialogAsync(dialog); } finally { _dialog = null; }
         if (createdId > 0) { _playlistId = createdId; _playlistName = createdName; await NavigateAsync("playlist"); }
     }
 }

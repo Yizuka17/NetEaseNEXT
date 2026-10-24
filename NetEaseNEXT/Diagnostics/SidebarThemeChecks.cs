@@ -17,6 +17,13 @@ public sealed partial class MainWindow
         Nav.PaneDisplayMode = NavigationViewPaneDisplayMode.Left; Nav.IsPaneOpen = true;
         var items = Nav.MenuItems.OfType<NavigationViewItem>().Append((NavigationViewItem)Nav.SettingsItem).ToArray();
         var originalIcons = items.ToDictionary(item => item, item => item.Icon);
+        foreach (var (tag, regular, filled) in new[] { ("library", "\uE8D6", "\uF8B3"), ("radio", "\uF8BA", "\uF8BB"), ("saved-albums", "\uE93C", "\uF8B1") })
+        {
+            var item = items.First(i => (string?)i.Tag == tag);
+            item.IsSelected = false; var outline = (item.Icon as FontIcon)?.Glyph;
+            item.IsSelected = true; var selected = (item.Icon as FontIcon)?.Glyph; item.IsSelected = false;
+            check(tag + " uses the approved bundled outline and filled glyphs", outline == regular && selected == filled, null);
+        }
         var failures = new List<string>();
         foreach (var theme in new[] { "Dark", "Light", "Dark" })
         {

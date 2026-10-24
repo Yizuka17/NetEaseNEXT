@@ -1,0 +1,30 @@
+{
+  "Version": "0.2.8.0",
+  "SignatureValid": true,
+  "Thumbprint": "548494EE74C33B2A77C73CC4E25CE0EEDD5E8733",
+  "Sha256": "418898679FD2B2E6F1B0B6C3790F384985205929BF4AE1F58F32DBA5C12A3082",
+  "Payload": [
+    {
+      "Path": "NetEaseNEXT.dll",
+      "MatchesTestedPublish": true,
+      "Sha256": "3B930FEB69FB98160584083D928F5607A92FAFE6E6498CB0356DCE314515552B"
+    },
+    {
+      "Path": "MainWindow.xbf",
+      "MatchesTestedPublish": true,
+      "Sha256": "4B55E8D8CE7AD31215F0D331DD3E7AB53F2662ACCF009DB32945C6B434E537D3"
+    },
+    {
+      "Path": "NetEaseNEXT.pri",
+      "MatchesTestedPublish": true,
+      "Sha256": "BF4B1FAC598511AEB363F6A8A7FBCC932CDB6268264A9F28E750FBD71E6232F3"
+    },
+    {
+      "Path": "Assets/Fonts/NetEaseNEXTIcons.ttf",
+      "MatchesTestedPublish": true,
+      "Sha256": "55906D9048BCD6B8C9911FDA85A70657B2F8E689CD7FF5187A14F34271851A0A"
+    }
+  ],
+  "Installed": false,
+  "Published": false
+}

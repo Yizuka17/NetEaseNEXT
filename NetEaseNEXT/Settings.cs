@@ -117,7 +117,7 @@ public sealed partial class MainWindow
     }
     private void ApplyAppearance()
     {
-        Root.RequestedTheme = _settings.Theme switch { "Light" => ElementTheme.Light, "Dark" => ElementTheme.Dark, _ => ElementTheme.Default };
+        Root.RequestedTheme = PreferredAppTheme;
         ApplyFont();
         var supported = _settings.Backdrop == "Acrylic" ? DesktopAcrylicController.IsSupported() : _settings.Backdrop is "Mica" or "MicaAlt" && MicaController.IsSupported();
         var transparency = _settings.Backdrop == "Acrylic" ? _settings.AcrylicTransparency : _settings.MicaTransparency;

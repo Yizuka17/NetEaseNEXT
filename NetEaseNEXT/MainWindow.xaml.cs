@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
@@ -44,7 +44,7 @@ public sealed partial class MainWindow : Window
         Diagnostics.StartupTrace.Mark("InitializeComponent"); InitializeComponent(); Diagnostics.StartupTrace.Mark("XAML initialized");
         _api = startup?.Api ?? new(_settings);
         if (startup != null) { _profileTask = startup.Profile; _profileSession = _api.Cookie; _profileExpires = DateTimeOffset.UtcNow.AddMinutes(5); }
-        InitializeSidebarIcons();
+        InitializeSidebarIcons(); InitializeTrackBatch();
         ToolTipService.SetToolTip(ReadAllButton, "清除消息和私信的全部未读提醒");
         foreach (var notice in new[] { Notice, PlayerNotice })
         {
@@ -58,7 +58,7 @@ public sealed partial class MainWindow : Window
         _tray = new(WinRT.Interop.WindowNative.GetWindowHandle(this));
         _tray.Restore += RestoreWindow; _tray.TogglePlayback += _playback.Toggle;
         _tray.Next += () => _ = _playback.NextAsync(); _tray.Exit += ExitApp;
-        _tray.ThemeChanged += () => DispatcherQueue.TryEnqueue(() => { if (!_exiting) UpdateAppIcon(); });
+        _tray.ThemeChanged += () => SystemColorsChanged(_themeSettings, EventArgs.Empty);
         Diagnostics.StartupTrace.Mark("Configure window"); ExtendsContentIntoTitleBar = true; SetTitleBar(TitleBar);
         AppWindow.SetIcon(ShellAppearance.IconPath());
         AppWindow.Resize(new SizeInt32(1280, 900));
@@ -83,7 +83,8 @@ public sealed partial class MainWindow : Window
         _inboxTimer.Tick += async (_, _) => await CheckUnreadAsync();
         SettingsVolume.Value = _settings.Volume * 100;
         Nav.DisplayModeChanged += (_, _) => UpdateLayout();
-        Root.ActualThemeChanged += (_, _) => { UpdateAppIcon(); RefreshLyricAppearance(); };
+        Root.ActualThemeChanged += (_, _) => RefreshThemeSurfaces();
+        _themeSettings.ColorValuesChanged += SystemColorsChanged;
         _playerNoticeTimer.Tick += (_, _) => { _playerNoticeTimer.Stop(); PlayerNotice.IsOpen = false; };
         _windowTransitionTimer.Tick += (_, _) => RestorePresenterTransition();
         _playbackSaveTimer.Tick += (_, _) => SavePlaybackState();
@@ -158,7 +159,7 @@ public sealed partial class MainWindow : Window
     }
     private void ShowError(string message) { if (_exiting) return; if (_view == "playing") { ShowPlayerMessage(message, InfoBarSeverity.Warning); return; } Notice.Message = message; Notice.Severity = InfoBarSeverity.Warning; Notice.IsOpen = true; }
     private void ShowEmpty(string text, string action = "重试") { EmptyText.Text = text; EmptyAction.Content = action; EmptyPanel.Visibility = Visibility.Visible; }
-    private void SetBusy(bool busy) { Busy.IsActive = busy; Busy.Visibility = busy ? Visibility.Visible : Visibility.Collapsed; LoadMoreButton.IsEnabled = CatalogMore.IsEnabled = SocialMore.IsEnabled = !busy; }
+    private void SetBusy(bool busy) { Busy.IsActive = busy; Busy.Visibility = busy ? Visibility.Visible : Visibility.Collapsed; LoadMoreButton.IsEnabled = CatalogMore.IsEnabled = SocialMore.IsEnabled = !busy; UpdateBatchBar(); }
     private void UpdateVisibility()
     {
         var hidden = !AppWindow.IsVisible || (AppWindow.Presenter is OverlappedPresenter p && p.State == OverlappedPresenterState.Minimized);
@@ -172,10 +173,10 @@ public sealed partial class MainWindow : Window
             SavePlaybackState(); _accountLoad?.Cancel(); _accountAvatarLoad?.Cancel(); _metadataWarmLoad?.Cancel();
             _inboxTimer.Stop(); _inboxCheck?.Cancel(); _appearanceTimer.Stop(); _commentsLoad?.Cancel(); _playlistEditLoad?.Cancel(); _dialog?.Hide();
             ResetTrackGesture(); CancelCoverTransitions(); RestorePresenterTransition(); StopSettingsIconRotation();
-            _playerNoticeTimer.Stop(); PlayerNotice.IsOpen = false; QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null;
+            EndTrackBatch(); _playerNoticeTimer.Stop(); PlayerNotice.IsOpen = false; QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null;
             _songStatsLoad?.Cancel(); _qualityLoad?.Cancel();
             if (_pageLoad != null) _pageInterrupted = true;
-            _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _loginLoad?.Cancel(); _coverLoad?.Cancel();
+            _trackLocateLoad?.Cancel(); _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _loginLoad?.Cancel(); _coverLoad?.Cancel();
             // Keep completed UI data and decoded images. Hiding should stop work,
             // not force network requests, decoding and layout on every restore.
             if (_lyrics.Count == 0) _lyricId = 0;
@@ -214,7 +215,8 @@ public sealed partial class MainWindow : Window
     private void Cleanup()
     {
         SavePlaybackState(); _playbackSaveTimer.Stop(); _accountLoad?.Cancel(); _accountAvatarLoad?.Cancel(); _metadataWarmLoad?.Cancel();
-        _exiting = true; _windowTransitionTimer.Stop(); CancelCoverTransitions(); _timer.Stop(); _playerNoticeTimer.Stop(); _appearanceTimer.Stop(); _inboxTimer.Stop(); _inboxCheck?.Cancel(); _readAllLoad?.Cancel(); _commentsLoad?.Cancel(); _playlistEditLoad?.Cancel(); _playlistQueueLoad?.Cancel(); _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _loginLoad?.Cancel(); _coverLoad?.Cancel(); _downloads.Cancel();
+        _exiting = true; _trackLocateLoad?.Cancel(); _windowTransitionTimer.Stop(); CancelCoverTransitions(); _timer.Stop(); _playerNoticeTimer.Stop(); _appearanceTimer.Stop(); _inboxTimer.Stop(); _inboxCheck?.Cancel(); _readAllLoad?.Cancel(); _commentsLoad?.Cancel(); _playlistEditLoad?.Cancel(); _playlistQueueLoad?.Cancel(); _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _loginLoad?.Cancel(); _coverLoad?.Cancel(); _downloads.Cancel();
+        _themeSettings.ColorValuesChanged -= SystemColorsChanged;
         _playback.Changed -= Playback_Changed; _playback.Error -= ShowError;
         _songStatsLoad?.Cancel(); _qualityLoad?.Cancel();
         _startup?.Cancel(); _playback.Dispose(); _api.Dispose(); _tray.Dispose();

@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
@@ -94,7 +94,7 @@ public sealed partial class MainWindow
         foreach (var (view, text) in new[] { ("messages", "消息"), ("private", "私信") })
         { var count = view == "messages" ? _messageUnreadCount : _privateUnreadCount; var item = new MenuFlyoutItem { Text = text + (count > 0 ? " (" + count + ")" : "") }; item.Click += async (_, _) => await NavigateAsync(view); menu.Items.Add(item); }
         menu.Items.Add(new MenuFlyoutSeparator());
-        var logout = new MenuFlyoutItem { Text = "退出登录" }; logout.Click += Logout_Click; menu.Items.Add(logout); menu.ShowAt(AccountButton);
+        var logout = new MenuFlyoutItem { Text = "退出登录" }; logout.Click += Logout_Click; menu.Items.Add(logout); ShowThemedFlyout(menu, AccountButton);
     }
     private static JsonElement Payload(JsonElement item, string name)
     {
@@ -203,7 +203,7 @@ public sealed partial class MainWindow
         dialog.Opened += async (_, _) => await GenerateAsync();
         dialog.PrimaryButtonClick += (sender, args) => { args.Cancel = true; _ = GenerateAsync(); };
         dialog.Closed += (_, _) => _loginLoad?.Cancel();
-        try { await dialog.ShowAsync(); }
+        try { await ShowThemedDialogAsync(dialog); }
         catch (Exception e) { ShowError(e.Message); }
         finally { _loginLoad?.Cancel(); _dialog = null; }
         if (signedIn) { await UpdateAccountAsync(); if (_view is "library" or "saved-albums" or "events" or "messages" or "private") await NavigateAsync(_view, false); }
