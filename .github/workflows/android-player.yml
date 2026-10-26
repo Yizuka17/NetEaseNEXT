@@ -1,0 +1,49 @@
+name: Android player preview
+
+on:
+  push:
+    branches: [main, feature/android-player-actions]
+    paths:
+      - "android-player/**"
+      - ".github/workflows/android-player.yml"
+      - "NetEaseNEXT/Models/Music.cs"
+      - "api/**"
+  pull_request:
+    paths:
+      - "android-player/**"
+      - ".github/workflows/android-player.yml"
+      - "NetEaseNEXT/Models/Music.cs"
+      - "api/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  debug-apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Install Android workload
+        run: dotnet workload install android
+
+      - name: Install Uno templates
+        run: dotnet new install Uno.Templates
+
+      - name: Build Android player APK
+        run: bash android-player/build.sh
+
+      - name: Upload installable debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: NetEaseNEXT-Android-player-debug
+          path: android-player/generated/**/bin/Debug/**/*.apk
+          if-no-files-found: error
+          retention-days: 14
