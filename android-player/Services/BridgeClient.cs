@@ -4,8 +4,8 @@ using System.Text.Json;
 
 namespace NetEaseNEXTMobile.Services;
 
-// Local, read-only development bridge. USB adb reverse maps phone loopback
-// to the computer. Never transmit account credentials over this link.
+// USB loopback developer bridge. Cookies never enter the Android process.
+// A standalone phone version will require a native on-device API client.
 internal sealed class BridgeClient
 {
     private static readonly HttpClient Http = new()
@@ -14,10 +14,10 @@ internal sealed class BridgeClient
         Timeout = TimeSpan.FromSeconds(30)
     };
 
-    public async Task<JsonElement> CallAsync(string method, object parameters)
+    public async Task<JsonElement> RequestAsync(string action, object? parameters = null)
     {
         using var request = new StringContent(
-            JsonSerializer.Serialize(new { method, @params = parameters }),
+            JsonSerializer.Serialize(new { action, @params = parameters ?? new { } }),
             Encoding.UTF8,
             "application/json");
         using var response = await Http.PostAsync("api", request);
@@ -26,13 +26,7 @@ internal sealed class BridgeClient
         var root = parsed.RootElement;
         if (!response.IsSuccessStatusCode)
             throw new InvalidOperationException(root.TryGetProperty("error", out var err)
-                ? err.ToString() : "无法连接本机 API。请检查 adb reverse 和 Node 服务。");
-
-        var data = root.GetProperty("data");
-        if (data.TryGetProperty("code", out var code) && code.ValueKind == JsonValueKind.Number
-            && code.GetInt32() is not (200 or 800 or 801 or 802 or 803))
-            throw new InvalidOperationException(data.TryGetProperty("msg", out var msg)
-                ? msg.ToString() : "网易云 API 返回错误");
-        return data.Clone();
+                ? err.ToString() : "无法连接电脑端服务，请检查 USB 调试与 adb reverse。");
+        return root.GetProperty("data").Clone();
     }
 }

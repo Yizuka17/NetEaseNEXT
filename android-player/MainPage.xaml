@@ -4,30 +4,61 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Padding="24" Spacing="16">
+        <StackPanel Padding="20" Spacing="14">
             <TextBlock Text="NetEaseNEXT" FontSize="28" FontWeight="SemiBold"/>
             <TextBlock Text="Android 播放器验证版" Opacity="0.65" FontSize="13"/>
-            <TextBox x:Name="SongIdBox" Header="网易云歌曲 ID" PlaceholderText="例如歌曲分享链接中的 id" InputScope="Number"/>
-            <Button x:Name="LoadButton" Content="加载并播放" HorizontalAlignment="Stretch" Click="Load_Click"/>
-            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="12" HorizontalAlignment="Center">
-                <Image x:Name="CoverImage" Width="200" Height="200" Stretch="UniformToFill"/>
-            </Border>
-            <TextBlock x:Name="TitleText" Text="尚未加载歌曲" FontSize="23" FontWeight="SemiBold" TextWrapping="Wrap" HorizontalAlignment="Center"/>
-            <TextBlock x:Name="ArtistText" Text="" TextWrapping="Wrap" Opacity="0.7" HorizontalAlignment="Center"/>
-            <Slider x:Name="PositionSlider" Minimum="0" Maximum="100" Value="0" ValueChanged="Position_Changed"/>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock x:Name="PositionText" Text="0:00" FontSize="12" Opacity="0.7"/>
-                <TextBlock x:Name="DurationText" Grid.Column="1" Text="0:00" FontSize="12" Opacity="0.7"/>
-            </Grid>
-            <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center">
-                <Button x:Name="ToggleButton" Content="播放 / 暂停" Click="Toggle_Click" IsEnabled="False"/>
-                <Button x:Name="StopButton" Content="停止" Click="Stop_Click" IsEnabled="False"/>
+            <StackPanel x:Name="LoginPanel" Spacing="12">
+                <TextBlock Text="登录网易云音乐" FontSize="21" FontWeight="SemiBold"/>
+                <TextBlock Text="使用另一台设备上的网易云音乐扫描下方二维码，并在客户端确认。" TextWrapping="Wrap"/>
+                <Button x:Name="LoginButton" Content="获取登录二维码" Click="Login_Click" HorizontalAlignment="Stretch"/>
+                <Image x:Name="QrImage" Width="224" Height="224" Stretch="Uniform" Visibility="Collapsed"/>
+                <TextBlock x:Name="LoginStatusText" Text="连接电脑端 API 后，点击获取二维码。" TextWrapping="Wrap" Opacity="0.75"/>
             </StackPanel>
-            <TextBlock x:Name="StatusText" Text="连接电脑端 API 后，输入歌曲 ID 开始播放。" TextWrapping="Wrap" Opacity="0.75"/>
+            <StackPanel x:Name="LibraryPanel" Spacing="12" Visibility="Collapsed">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="AccountText" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    <Button Grid.Column="1" Content="退出登录" Click="Logout_Click"/>
+                </Grid>
+                <TextBlock Text="我的歌单" FontSize="19" FontWeight="SemiBold"/>
+                <ListView x:Name="PlaylistList" Height="180" DisplayMemberPath="Name"
+                          SelectionChanged="Playlist_Changed" SelectionMode="Single"/>
+                <TextBlock Text="歌单歌曲" FontSize="19" FontWeight="SemiBold"/>
+                <ListView x:Name="TrackList" Height="260" SelectionMode="Single" SelectionChanged="Track_Changed">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Padding="0,6" Spacing="3">
+                                <TextBlock Text="{Binding Title}" FontSize="15" TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Text="{Binding Subtitle}" FontSize="12" Opacity="0.65" TextTrimming="CharacterEllipsis"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+            <StackPanel x:Name="PlayerPanel" Spacing="10" Visibility="Collapsed">
+                <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="12" HorizontalAlignment="Center">
+                    <Image x:Name="CoverImage" Width="200" Height="200" Stretch="UniformToFill"/>
+                </Border>
+                <TextBlock x:Name="TitleText" Text="尚未加载歌曲" FontSize="23" FontWeight="SemiBold" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="ArtistText" TextWrapping="Wrap" Opacity="0.7" HorizontalAlignment="Center"/>
+                <Slider x:Name="PositionSlider" Minimum="0" Maximum="100" Value="0" ValueChanged="Position_Changed"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="PositionText" Text="0:00" FontSize="12" Opacity="0.7"/>
+                    <TextBlock x:Name="DurationText" Grid.Column="1" Text="0:00" FontSize="12" Opacity="0.7"/>
+                </Grid>
+                <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center">
+                    <Button x:Name="ToggleButton" Content="播放 / 暂停" Click="Toggle_Click"/>
+                    <Button x:Name="StopButton" Content="停止" Click="Stop_Click"/>
+                </StackPanel>
+            </StackPanel>
+            <TextBlock x:Name="StatusText" Text="" TextWrapping="Wrap" Opacity="0.75"/>
         </StackPanel>
     </ScrollViewer>
 </Page>
