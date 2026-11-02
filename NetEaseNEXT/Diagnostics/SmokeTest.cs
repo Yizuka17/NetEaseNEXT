@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text.Json;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
@@ -36,6 +36,18 @@ public sealed partial class MainWindow
         try
         {
             Check("XAML root loaded", Root.IsLoaded);
+            if (Environment.GetCommandLineArgs().Contains("--download-indicator-check"))
+            {
+                await RunDownloadIndicatorChecksAsync(Check); return;
+            }
+            if (Environment.GetCommandLineArgs().Contains("--library-workflow-check"))
+            {
+                await RunLibraryWorkflowChecksAsync(Check); return;
+            }
+            if (Environment.GetCommandLineArgs().Contains("--native-feature-check"))
+            {
+                await RunNativeFeatureChecksAsync(Check); return;
+            }
             if (Environment.GetCommandLineArgs().Contains("--track-locator-check"))
             {
                 await RunTrackLocatorChecksAsync(Check);
@@ -146,8 +158,8 @@ public sealed partial class MainWindow
             using var audioCacheFixture = JsonDocument.Parse("{\"size\":123,\"md5\":\"abc\",\"br\":320000,\"type\":\"mp3\"}");
             Check("Audio cache separates quality and ignores expiring URL tokens", AudioCache.PathFor("cache", 1, "standard", audioCacheFixture.RootElement, new Uri("https://example.com/audio?token=1")) != AudioCache.PathFor("cache", 1, "lossless", audioCacheFixture.RootElement, new Uri("https://example.com/audio?token=1")) && AudioCache.PathFor("cache", 1, "standard", audioCacheFixture.RootElement, new Uri("https://example.com/audio?token=1")) == AudioCache.PathFor("cache", 1, "standard", audioCacheFixture.RootElement, new Uri("https://example.com/audio?token=2")));
             Check("Keyboard accelerator hints are hidden", Root.KeyboardAcceleratorPlacementMode == Microsoft.UI.Xaml.Input.KeyboardAcceleratorPlacementMode.Hidden);
-            Check("Social pagination is embedded in list footer", ReferenceEquals(SocialList.Footer, SocialMore));
-            Check("Track and catalog pagination use themed list footers", ReferenceEquals(TrackList.Footer, LoadMoreButton) && ReferenceEquals(CatalogGrid.Footer, CatalogMore) && ReferenceEquals(LoadMoreButton.Style, Application.Current.Resources["MoreButtonStyle"]) && ReferenceEquals(CatalogMore.Style, LoadMoreButton.Style));
+            Check("Social pagination uses native scrolling without a load-more button", SocialList.Footer is not Button);
+            Check("Tracks and catalog use native scrolling without load-more buttons", TrackList.Footer is not Button && CatalogGrid.Footer is not Button);
             Check("NetEase emoji tokens display as symbols", Emojis.Display("[大笑] [爱心] [未知]") == "😄 ❤️ [未知]");
             using var outgoing = JsonDocument.Parse("{\"fromUser\":{\"userId\":1},\"toUser\":{\"userId\":2}}");
             Check("Outgoing private conversation selects recipient", ConversationPeer(outgoing.RootElement, 1).Number("userId") == 2);
@@ -235,15 +247,7 @@ public sealed partial class MainWindow
             Root.UpdateLayout();
             Check("Search songs remain bound to the visible native list", TrackList.Items.Count == Tracks.Count);
             var searchScroll = FindDescendant<ScrollViewer>(TrackList)!;
-            if (LoadMoreButton.Visibility == Visibility.Visible)
-            {
-                var footerTop = LoadMoreButton.ActualHeight == 0 ? double.PositiveInfinity : LoadMoreButton.TransformToVisual(TrackList).TransformPoint(new Windows.Foundation.Point(0, 0)).Y;
-                Check("Load more is outside the initial song viewport", footerTop >= TrackList.ActualHeight);
-                searchScroll.ChangeView(null, searchScroll.ScrollableHeight, null, true); await Task.Delay(150); Root.UpdateLayout();
-                var bottomTop = LoadMoreButton.TransformToVisual(TrackList).TransformPoint(new Windows.Foundation.Point(0, 0)).Y;
-                Check("Load more is visible at the end of songs", LoadMoreButton.ActualHeight > 0 && bottomTop >= 0 && bottomTop + LoadMoreButton.ActualHeight <= TrackList.ActualHeight + 2);
-                searchScroll.ChangeView(null, 0, null, true); await Task.Delay(100);
-            }
+            Check("Song pagination has no manual footer button", TrackList.Footer is not Button);
             var center = TransportButtons.TransformToVisual(Root).TransformPoint(new Windows.Foundation.Point(TransportButtons.ActualWidth / 2, 0));
             Check("Playback bar controls are centered", Math.Abs(center.X - Root.ActualWidth / 2) < 2);
             var toolCenters = PlayerTools.Children.OfType<Button>().Select(b => FindDescendant<FontIcon>(b)).Where(i => i != null).Select(i => i!.TransformToVisual(PlayerTools).TransformPoint(new Windows.Foundation.Point(0, i.ActualHeight / 2)).Y).ToArray();
@@ -399,7 +403,7 @@ public sealed partial class MainWindow
                     cpuMilliseconds = (process.TotalProcessorTime - cpu).TotalMilliseconds,
                     workingSetMiB = Math.Round(process.WorkingSet64 / 1048576d, 1),
                     privateMiB = Math.Round(process.PrivateMemorySize64 / 1048576d, 1) });
-                Check("Idle Node processes exited", !_api.IsWorkerRunning && !_playback.IsWorkerRunning);
+                Check("Native API starts no Node processes", !_api.IsWorkerRunning && !_playback.IsWorkerRunning);
             }
             _playback.Toggle(); await Task.Delay(300);
             Check("Pause and SMTC", !_playback.IsPlaying && _playback.SystemPlaybackStatus == MediaPlaybackStatus.Paused);
@@ -467,7 +471,7 @@ public sealed partial class MainWindow
                 var commentsList = FindDescendant<ListView>(_dialog!)!;
                 watch.Restart(); while (commentsList.Items.Count == 0 && watch.Elapsed < TimeSpan.FromSeconds(20)) await Task.Delay(100);
                 Check("Real song comments bind", commentsList.Items.Count > 0);
-                Check("Comments use per-row actions without selection", commentsList.SelectionMode == ListViewSelectionMode.None && commentsList.Footer is Button && commentsList.Items.OfType<SocialItem>().All(i => i.Kind == "comment" && i.ActionsVisibility == Visibility.Visible && i.LikeAsync != null && i.Reply != null));
+                Check("Comments use per-row actions and automatic paging", commentsList.SelectionMode == ListViewSelectionMode.None && commentsList.Footer is not Button && commentsList.Items.OfType<SocialItem>().All(i => i.Kind == "comment" && i.ActionsVisibility == Visibility.Visible && i.LikeAsync != null && i.Reply != null));
             }
             finally { _dialog?.Hide(); await songCommentTask; }
             Check("System fonts available", FontCombo.Items.Count > 0);
@@ -544,8 +548,8 @@ public sealed partial class MainWindow
                             try
                             {
                                 await Task.Delay(800);
-                                Check("Native comment dialog opens", _dialog is { IsLoaded: true, PrimaryButtonText: "发送" });
-                                Check("Empty comment cannot be sent", _dialog is { IsPrimaryButtonEnabled: false });
+                                Check("Native comment dialog opens", _dialog is { IsLoaded: true } && Descendants<Button>(_dialog).Any(b => b.Content as string == "发送"));
+                                Check("Empty comment cannot be sent", Descendants<Button>(_dialog!).First(b => b.Content as string == "发送").IsEnabled == false);
                             }
                             finally { _dialog?.Hide(); await commentsTask; }
                         }

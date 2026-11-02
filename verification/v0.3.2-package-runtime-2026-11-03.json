@@ -1,0 +1,7 @@
+{
+  "Package": "NetEaseNEXT-0.3.2.0-x64.msix",
+  "Sha256": "CA9AC8F866F5D111746246F8891E613D7878496DF490B5B6DD52A1A4D7EC1851",
+  "ForbiddenPayload": [],
+  "NativeApiDll": true,
+  "Entries": 629
+}

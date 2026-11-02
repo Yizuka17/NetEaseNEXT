@@ -22,13 +22,15 @@ public sealed partial class MainWindow
     private async Task NavigateAsync(string view, bool remember = true)
     {
         _pageInterrupted = false;
+        StopLocalMonitoring();
+        _lyricFollowTimer.Stop();
         _trackLocateLoad?.Cancel(); _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _coverLoad?.Cancel();
         EndTrackBatch(); ResetTrackGesture();
         if (_fullScreen && view != "playing") SetFullScreen(false);
         if (view != _view && (view == "playing" || _view == "playing"))
             PrepareCoverTransition("PlayerCover", view == "playing" ? MiniCover : LargeCover);
-        if (remember && _route != null && (_route.View != view || view is "albums" or "album" or "playlist" or "search" or "conversation")) _history.Push(_route);
-        _route = new(view, _playlistId, _artistId, _peerId, _playlistName, _query, _linkedResource);
+        if (remember && _route != null && (_route.View != view || view is "albums" or "album" or "playlist" or "search" or "conversation" or "local-playlist")) _history.Push(_route);
+        _route = new(view, _playlistId, _artistId, _peerId, _playlistName, _query, _linkedResource, _localPlaylistId);
         BackButton.IsEnabled = _history.Count > 0 || _fullScreen;
         _view = view; _offset = 0; _socialCursor = -1;
         if (view == "playlist") { _playlistTrackIds = []; _playlistTrackCount = 0; _resumePlaylistId = _playlistId; _resumePlaylistName = _playlistName; }
@@ -39,8 +41,9 @@ public sealed partial class MainWindow
         _lyrics.Clear(); LyricsList.ItemsSource = null; _lyricId = 0; Artwork.SetUri(LargeCover, ""); BlurredCover.Source = null;
         Notice.IsOpen = false; EmptyPanel.Visibility = Visibility.Collapsed;
         RestoreArtistContent();
-        BrowsePanel.Visibility = CatalogPanel.Visibility = TracksPanel.Visibility = SettingsPanel.Visibility = PlayingPanel.Visibility = SocialPanel.Visibility = ArtistPanel.Visibility = Visibility.Collapsed;
-        LoadMoreButton.Visibility = CatalogMore.Visibility = SocialMore.Visibility = Visibility.Collapsed;
+        BrowsePanel.Visibility = CatalogPanel.Visibility = TracksPanel.Visibility = SettingsPanel.Visibility = PlayingPanel.Visibility = SocialPanel.Visibility = ArtistPanel.Visibility = DownloadsPanel.Visibility = LocalLibraryPanel.Visibility = Visibility.Collapsed;
+        LocalToolbar.Visibility = view == "local-playlist" ? Visibility.Visible : Visibility.Collapsed;
+        _tracksMore = _catalogMore = _socialMore = false;
         Nav.Visibility = view == "playing" ? Visibility.Collapsed : Visibility.Visible;
         UpdateWindowChrome();
         MovePlayerControls(view == "playing"); QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null;
@@ -59,18 +62,20 @@ public sealed partial class MainWindow
         PrivateComposer.Visibility = view == "conversation" ? Visibility.Visible : Visibility.Collapsed;
         PrivateText.Text = "";
         _selectingNav = true;
-        var selected = view == "settings" ? Nav.SettingsItem : Nav.MenuItems.OfType<NavigationViewItem>().FirstOrDefault(i => (string)i.Tag == (view == "event-detail" ? "events" : view));
+        var selected = view == "settings" ? Nav.SettingsItem : Nav.MenuItems.OfType<NavigationViewItem>().FirstOrDefault(i => (string)i.Tag == (view == "event-detail" ? "events" : view == "local-playlist" ? "local" : view));
         if (selected == null && view is not ("messages" or "private" or "conversation")) selected = Nav.SelectedItem;
         foreach (var item in Nav.MenuItems.OfType<NavigationViewItem>()) if (!ReferenceEquals(item, selected)) item.IsSelected = false;
         if (selected != null) Nav.SelectedItem = selected;
         else if (view is "messages" or "private" or "conversation") Nav.SelectedItem = null;
         _selectingNav = false;
-        PageTitle.Text = view switch { "discover" => "发现", "library" => "歌单", "saved-albums" => "收藏的专辑", "artists" or "artist" => "歌手", "playlist" => "歌单", "albums" or "album" or "programs" or "conversation" => _playlistName, "search" => _query, "queue" => "播放列表", "playing" => "正在播放", "settings" => "设置", "events" or "event-detail" => "动态", "song" => "歌曲", "messages" => "消息", "private" => "私信", "radio" => "我的播客", _ => "" };
+        PageTitle.Text = view switch { "discover" => "发现", "library" => "歌单", "saved-albums" => "收藏的专辑", "artists" or "artist" => "歌手", "playlist" => "歌单", "albums" or "album" or "programs" or "conversation" => _playlistName, "search" => _query, "queue" => "播放列表", "playing" => "正在播放", "settings" => "设置", "events" or "event-detail" => "动态", "song" => "歌曲", "messages" => "消息", "private" => "私信", "radio" => "我的播客", "local" => "本地音乐", "downloads" => "下载管理", _ => "" };
         switch (view)
         {
             case "discover": case "library": BrowsePanel.Visibility = Visibility.Visible; break;
             case "artists": case "albums": case "saved-albums": case "radio": CatalogPanel.Visibility = Visibility.Visible; break;
-            case "search": case "playlist": case "album": case "programs": case "queue": case "song": TracksPanel.Visibility = Visibility.Visible; break;
+            case "search": case "playlist": case "album": case "programs": case "queue": case "song": case "local-playlist": TracksPanel.Visibility = Visibility.Visible; break;
+            case "local": LocalLibraryPanel.Visibility = Visibility.Visible; break;
+            case "downloads": UpdateDownloadLists(); DownloadsPanel.Visibility = Visibility.Visible; break;
             case "playing": PlayingPanel.Visibility = Visibility.Visible; UpdateNowPlaying(); break;
             case "settings": SettingsPanel.Visibility = Visibility.Visible; break;
             case "artist": ArtistPanel.Visibility = Visibility.Visible; break;
@@ -98,6 +103,8 @@ public sealed partial class MainWindow
             if (_startup != null) await _startup.WaitForPageAsync(_view, load.Token);
             switch (_view)
             {
+                case "local": case "local-playlist": await LoadLocalLibraryAsync(load.Token); break;
+                case "downloads": break;
                 case "discover":
                     var recommendations = await _api.DiscoverAsync(load.Token); load.Token.ThrowIfCancellationRequested();
                     foreach (var item in recommendations) Playlists.Add(item); break;
@@ -117,7 +124,7 @@ public sealed partial class MainWindow
                     load.Token.ThrowIfCancellationRequested();
                     var array = data.GetProperty(_view == "artists" ? "artists" : _view == "albums" ? "hotAlbums" : "djRadios");
                     foreach (var item in array.EnumerateArray()) Catalog.Add(_view == "artists" ? CatalogItem.Artist(item) : _view == "albums" ? CatalogItem.Album(item) : new CatalogItem(item.Number("id"), item.Text("name"), item.Text("picUrl"), "radio", item.TryGetProperty("dj", out var dj) ? dj.Text("nickname") : ""));
-                    _offset += array.GetArrayLength(); CatalogMore.Visibility = array.GetArrayLength() == 48 && Catalog.Count < 1000 ? Visibility.Visible : Visibility.Collapsed; break;
+                    _offset += array.GetArrayLength(); _catalogMore = array.GetArrayLength() == 48 && Catalog.Count < 1000; break;
                 case "saved-albums":
                     if (!RequireLogin()) break;
                     await LoadSavedAlbumsAsync(_api, load.Token);
@@ -128,7 +135,7 @@ public sealed partial class MainWindow
                     if (subscriptions.TryGetProperty("djRadios", out var radios))
                     {
                         foreach (var item in radios.EnumerateArray()) Catalog.Add(new CatalogItem(item.Number("id"), item.Text("name"), item.Text("picUrl"), "radio", Object(item, "dj").Text("nickname")));
-                        _offset += radios.GetArrayLength(); CatalogMore.Visibility = Flag(subscriptions, "hasMore") || Flag(subscriptions, "more") ? Visibility.Visible : Visibility.Collapsed;
+                        _offset += radios.GetArrayLength(); _catalogMore = Flag(subscriptions, "hasMore") || Flag(subscriptions, "more");
                     }
                     break;
                 case "search": case "playlist": case "album": case "programs":
@@ -157,7 +164,7 @@ public sealed partial class MainWindow
                     var limit = _view == "playlist" ? 10000 : 1000;
                     load.Token.ThrowIfCancellationRequested(); if (!append) Tracks.Clear(); foreach (var item in page.Take(limit - Tracks.Count)) Tracks.Add(item);
                     _offset += page.Count;
-                    LoadMoreButton.Visibility = _view != "album" && page.Count == (_view == "playlist" ? 100 : 50) && Tracks.Count < limit ? Visibility.Visible : Visibility.Collapsed;
+                    _tracksMore = _view != "album" && page.Count == (_view == "playlist" ? 100 : 50) && Tracks.Count < limit;
                     TrackCount.Text = $"{(_view == "playlist" && _playlistTrackCount > 0 ? _playlistTrackCount : Tracks.Count)} 首"; break;
                 case "song": case "event-detail": await LoadLinkedResourceAsync(load.Token); break;
                 case "queue": foreach (var item in _playback.Queue) Tracks.Add(item); TrackCount.Text = $"{Tracks.Count} 首"; break;
@@ -166,12 +173,12 @@ public sealed partial class MainWindow
                 case "artist": await LoadArtistAsync(load.Token); break;
                 case "events": case "messages": case "private": case "conversation": if (RequireLogin()) await LoadSocialAsync(load.Token); break;
             }
-            if (_view is not ("playing" or "settings" or "artist") && Playlists.Count + Tracks.Count + Catalog.Count + SocialItems.Count == 0 && EmptyPanel.Visibility != Visibility.Visible) ShowEmpty("暂无内容", _view == "queue" ? "发现" : "重试");
+            if (_view is not ("playing" or "settings" or "artist" or "local" or "local-playlist" or "downloads") && Playlists.Count + Tracks.Count + Catalog.Count + SocialItems.Count == 0 && EmptyPanel.Visibility != Visibility.Visible) ShowEmpty("暂无内容", _view == "queue" ? "发现" : "重试");
             if (!_hidden && Tracks.Count > 0 && _view is "playlist" or "album" or "search" or "artist" or "queue") { _ = _playback.WarmAsync(Tracks); WarmVisibleMetadata(); }
         }
         catch (OperationCanceledException) { }
         catch (Exception ex) { if (!load.IsCancellationRequested) { ShowError(ex.Message); if (Playlists.Count + Tracks.Count + Catalog.Count + SocialItems.Count == 0) ShowEmpty("加载失败"); } }
-        finally { if (ReferenceEquals(_pageLoad, load)) { SetBusy(false); _pageLoad = null; UpdateTrackLocator(); } }
+        finally { if (ReferenceEquals(_pageLoad, load)) { SetBusy(false); _pageLoad = null; UpdateTrackLocator(); QueueAutoPage(); } }
     }
     private bool RequireLogin() { if (_api.HasSession) return true; ShowEmpty("请先登录", "登录"); return false; }
     private async void Search_Submitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args) { if (string.IsNullOrWhiteSpace(args.QueryText)) return; _query = args.QueryText.Trim(); await NavigateAsync("search"); }
@@ -214,7 +221,7 @@ public sealed partial class MainWindow
     {
         if (_fullScreen) { SetFullScreen(false); return; }
         if (!_history.TryPop(out var route)) return;
-        _playlistId = route.Id; _artistId = route.ArtistId; _peerId = route.PeerId; _playlistName = route.Name; _query = route.Query; _linkedResource = route.Source;
+        _playlistId = route.Id; _artistId = route.ArtistId; _peerId = route.PeerId; _playlistName = route.Name; _query = route.Query; _linkedResource = route.Source; _localPlaylistId = route.LocalId;
         await NavigateAsync(route.View, false);
     }
     private async void Back_Click(object sender, RoutedEventArgs args) => await GoBackAsync();

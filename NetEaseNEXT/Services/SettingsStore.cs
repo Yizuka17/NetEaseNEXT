@@ -17,6 +17,9 @@ public sealed class SettingsStore
     public bool Animations { get; set; } = true;
     public double Volume { get; set; } = .65;
     public string Quality { get; set; } = "exhigh";
+    public string DownloadQuality { get; set; } = "lossless";
+    public string DownloadSource { get; set; } = "download";
+    public bool LocalOnlineInfo { get; set; } = true;
     public string FontFamily { get; set; } = "Segoe UI";
     public double MicaTransparency { get; set; } = 65;
     public double AcrylicTransparency { get; set; } = 65;

@@ -29,7 +29,7 @@ public sealed partial class MainWindow
             privateMiB = Math.Round(process.PrivateMemorySize64 / 1048576d, 1) });
         check("Network playback advances while hidden", _hidden && _playback.IsPlaying && _playback.Position > position + TimeSpan.FromSeconds(15), null);
         check("Hidden playback keeps UI polling and extra downloads stopped", !_timer.IsEnabled && !_inboxTimer.IsEnabled && !_playback.IsCaching, null);
-        check("Idle API workers exit without losing the active stream", !_api.IsWorkerRunning && !_playback.IsWorkerRunning && _playback.IsPlaying, null);
+        check("Native API needs no worker process while audio continues", !_api.IsWorkerRunning && !_playback.IsWorkerRunning && _playback.IsPlaying, null);
         _playback.Toggle(); RestoreWindow();
         check("Restoring shows the song selected in the background", _displayedTrack?.Id == tracks[1].Id && MiniTitle.Text == tracks[1].Title && !_playback.IsPlaying, null);
     }
@@ -49,16 +49,7 @@ public sealed partial class MainWindow
         Directory.CreateDirectory(fixture);
         try
         {
-            var script = Path.Combine(fixture, "bridge.mjs");
-            await File.WriteAllTextAsync(script, """
-                import {createInterface} from 'node:readline';
-                createInterface({input:process.stdin}).on('line', async line => {
-                  const r = JSON.parse(line);
-                  await new Promise(resolve => setTimeout(resolve, 100));
-                  process.stdout.write(JSON.stringify({id:r.id,error:'fixture failure'})+'\n');
-                }).on('close',()=>process.exit(0));
-                """);
-            using var api = new ApiClient(script, fixture);
+            using var api = NativeApiFixtures.Create("loading", fixture);
             var startup = new StartupSession(new(), api, () => new());
             try
             {

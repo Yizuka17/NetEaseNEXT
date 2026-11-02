@@ -11,11 +11,27 @@ public sealed class Track(long id, string title, string artist, string album, st
     public string Album { get; } = album;
     public string Cover { get; } = cover;
     public long Duration { get; } = duration;
+    public string LocalPath { get; set; } = "";
+    public long SourceSongId { get; set; }
+    public string SourceLevel { get; set; } = "";
+    public long SourceFileSize { get; set; }
+    public long SourceModifiedUtcTicks { get; set; }
+    [JsonIgnore] public bool IsLocal => LocalPath.Length > 0;
     [JsonIgnore] public string DurationText => TimeSpan.FromMilliseconds(Duration).ToString(@"m\:ss");
     [JsonIgnore] public string Subtitle => $"{Artist} - {Album}";
     [JsonIgnore] public string Thumbnail => Cover.Length == 0 ? "" : Cover + (Cover.Contains('?') ? "&" : "?") + "param=192y192";
     [JsonInclude] public long ArtistId { get; private set; }
     [JsonInclude] public long AlbumId { get; private set; }
+    internal void SetLocalSource(long id, string level, long size, long modified, long artistId = 0, long albumId = 0)
+    {
+        SourceSongId = id; SourceLevel = level; SourceFileSize = size; SourceModifiedUtcTicks = modified; ArtistId = artistId; AlbumId = albumId;
+    }
+    internal bool HasValidLocalSource()
+    {
+        try { var file = new FileInfo(LocalPath); return IsLocal && SourceSongId > 0 && file.Exists && file.Length == SourceFileSize && file.LastWriteTimeUtc.Ticks == SourceModifiedUtcTicks; }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException) { return false; }
+    }
+    internal Track OnlineSource(long id) => new(id, Title, Artist, Album, Cover, Duration) { ArtistId = ArtistId, AlbumId = AlbumId };
     public override string ToString() => Title;
     public static Track FromJson(JsonElement song)
     {

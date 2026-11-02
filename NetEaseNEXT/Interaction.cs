@@ -1,4 +1,4 @@
-﻿using Microsoft.UI.Input;
+using Microsoft.UI.Input;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -158,7 +158,7 @@ public sealed partial class MainWindow
                 foreach (var id in batch) if (songs.TryGetValue(id, out var track) && loaded.Add(id)) Tracks.Add(track);
                 _offset += batch.Length;
                 TrackCount.Text = $"{_playlistTrackCount} 首";
-                LoadMoreButton.Visibility = _offset < ids.Length ? Visibility.Visible : Visibility.Collapsed;
+                _tracksMore = _offset < ids.Length;
             }
             if (!StillCurrent()) return;
             var match = Tracks.FirstOrDefault(t => t.Id == current.Id);

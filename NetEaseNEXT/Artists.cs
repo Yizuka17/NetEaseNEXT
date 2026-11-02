@@ -71,7 +71,7 @@ public sealed partial class MainWindow
             }
             Tracks.Clear(); foreach (var track in tracks) Tracks.Add(track);
             PlaylistDetails.Visibility = PlaylistSubscribeButton.Visibility = PlaylistCommentsButton.Visibility = EditPlaylistButton.Visibility = DeletePlaylistButton.Visibility = Visibility.Collapsed;
-            TrackCount.Text = $"{Tracks.Count} 首"; LoadMoreButton.Visibility = Visibility.Collapsed;
+            TrackCount.Text = $"{Tracks.Count} 首"; _tracksMore = false;
         }
         else if (_artistTab is "albums" or "mvs")
         {
@@ -79,7 +79,7 @@ public sealed partial class MainWindow
             var result = await _api.CallAsync(_artistTab == "albums" ? "artist_album" : "artist_mv", new { id = _artistId, limit = 48, offset = _offset }, ct); ct.ThrowIfCancellationRequested();
             var array = result.GetProperty(_artistTab == "albums" ? "hotAlbums" : "mvs");
             foreach (var item in array.EnumerateArray()) Catalog.Add(_artistTab == "albums" ? CatalogItem.Album(item) : new CatalogItem(item.Number("id"), item.Text("name"), FirstText(item.Text("imgurl"), item.Text("cover")), "mv"));
-            _offset += array.GetArrayLength(); CatalogMore.Visibility = array.GetArrayLength() == 48 && Catalog.Count < 1000 ? Visibility.Visible : Visibility.Collapsed;
+            _offset += array.GetArrayLength(); _catalogMore = array.GetArrayLength() == 48 && Catalog.Count < 1000;
         }
         else
         {

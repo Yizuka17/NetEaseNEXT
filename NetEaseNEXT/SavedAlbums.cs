@@ -15,6 +15,6 @@ public sealed partial class MainWindow
         var albums = result.GetProperty("data");
         foreach (var item in albums.EnumerateArray().Take(1000 - Catalog.Count)) Catalog.Add(CatalogItem.Album(item));
         _offset += albums.GetArrayLength();
-        CatalogMore.Visibility = (Flag(result, "hasMore") || Flag(result, "more") || result.Number("count") > _offset) && albums.GetArrayLength() > 0 && Catalog.Count < 1000 ? Visibility.Visible : Visibility.Collapsed;
+        _catalogMore = (Flag(result, "hasMore") || Flag(result, "more") || result.Number("count") > _offset) && albums.GetArrayLength() > 0 && Catalog.Count < 1000;
     }
 }

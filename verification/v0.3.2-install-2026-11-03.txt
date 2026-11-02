@@ -1,0 +1,4 @@
+
+Name        Version PackageFamilyName         InstallLocation
+----        ------- -----------------         ---------------
+NetEaseNEXT 0.3.2.0 NetEaseNEXT_1wr5cf65fxq72 C:\Program Files\WindowsApps\NetEaseNEXT_0.3.2.0_x64__1wr5cf65fxq72

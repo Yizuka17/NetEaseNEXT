@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Text.Json;
 using Microsoft.UI.Xaml;
 using NetEaseNEXT.Services;
+using NetEaseNEXT.Models;
 using Windows.Graphics;
 
 namespace NetEaseNEXT;
@@ -14,31 +15,19 @@ public sealed partial class MainWindow
         check("Startup does not scan the installed font collection", !_fontsLoaded && ((IEnumerable<string>)FontCombo.ItemsSource).Count() <= 3, null);
         if (await Task.Run(() => AccountCache.Load(_api.Cookie)) is { } profile)
         {
-            var requests = _api.RequestCount;
+            var requests = _api.ProfileRequestCount;
             ApplyAccountProfile(profile);
-            check("Cached account identity and avatar start without server validation", _authenticated && AccountName.Text.Length > 0 && _api.RequestCount == requests && _accountAvatarUrl == profile.GetProperty("avatarUrl").GetString(), null);
+            // Count account validation separately from independent page loading.
+            // A hidden window intentionally defers avatar I/O.
+            check("Cached identity applies without account validation and defers hidden avatar work", _authenticated && AccountName.Text.Length > 0 && AccountAvatar.DisplayName == AccountName.Text && _api.ProfileRequestCount == requests && (_hidden ? _accountAvatarLoad == null : _accountAvatarUrl == profile.Text("avatarUrl")), new { validationRequests = _api.ProfileRequestCount - requests, _hidden });
             _accountAvatarLoad?.Cancel(); ResetAccount();
         }
-        var fixture = Path.Combine(Path.GetTempPath(), "NetEaseNEXT-pipe-test-" + Guid.NewGuid().ToString("N"));
+        RestoreWindow();
+        var fixture = Path.Combine(Path.GetTempPath(), "NetEaseNEXT-native-test-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(fixture);
         try
         {
-            var script = Path.Combine(fixture, "bridge.mjs");
-            await File.WriteAllTextAsync(script, """
-                import { createInterface } from 'node:readline';
-                const input = createInterface({ input: process.stdin });
-                input.on('line', async line => {
-                  const request = JSON.parse(line);
-                  if (request.method === 'exit') { process.exit(0); return; }
-                  await new Promise(resolve => setTimeout(resolve, request.params?.delay ?? 10));
-                  const data = request.method === 'song_url_v1'
-                    ? { code: 200, data: [{ id: Number(request.params.id), url: 'https://example.invalid/audio', expi: 300 }] }
-                    : { code: 200, method: request.method };
-                  process.stdout.write(JSON.stringify({ id: request.id, data }) + '\n');
-                });
-                input.on('close', () => process.exit(0));
-                """);
-            using var client = new ApiClient(script, fixture);
+            using var client = NativeApiFixtures.Create("startup", fixture);
             var ticks = 0; var pulse = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(20) };
             pulse.Tick += (_, _) => ticks++; pulse.Start();
             try
@@ -46,8 +35,8 @@ public sealed partial class MainWindow
                 var slow = client.CallAsync("slow", new { delay = 800 });
                 var fast = client.CallAsync("fast", new { delay = 10 });
                 check("A slow account-sized request does not block an independent page request", await Task.WhenAny(slow, fast) == fast, null);
-                check("Out-of-order pipe responses match the requesting task", (await fast).GetProperty("method").GetString() == "fast" && (await slow).GetProperty("method").GetString() == "slow", null);
-                check("UI dispatcher continues running during worker startup and requests", ticks >= 10, new { ticks });
+                check("Out-of-order HTTP responses match the requesting task", (await fast).GetProperty("method").GetString() == "fast" && (await slow).GetProperty("method").GetString() == "slow", null);
+                check("UI dispatcher continues running during HTTP requests", ticks >= 10, new { ticks });
             }
             finally { pulse.Stop(); }
             using (var cancel = new CancellationTokenSource())
@@ -64,11 +53,11 @@ public sealed partial class MainWindow
                 var last = client.CallAsync("last", new { delay = 800 }, cancelLast.Token);
                 await Task.Delay(50); cancelLast.Cancel();
                 try { await last; } catch (OperationCanceledException) { }
-                check("Canceling the last interested request stops unnecessary worker work", !client.IsWorkerRunning, null);
+                check("Canceled native requests never require a worker process", !client.IsWorkerRunning, null);
             }
-            try { await client.CallAsync("exit"); check("Worker exit completes outstanding tasks", false, null); }
-            catch (IOException) { check("Worker exit completes outstanding tasks", true, null); }
-            check("Request channel restarts after worker exit", (await client.CallAsync("restarted")).GetProperty("method").GetString() == "restarted", null);
+            try { await client.CallAsync("exit"); check("HTTP failure completes outstanding tasks", false, null); }
+            catch (IOException) { check("HTTP failure completes outstanding tasks", true, null); }
+            check("Requests recover after a transport failure", (await client.CallAsync("restarted")).GetProperty("method").GetString() == "restarted", null);
             using (var urls = new TrackUrls(client))
             {
                 var track = new Models.Track(123, "fixture", "artist", "album", "", 60000);

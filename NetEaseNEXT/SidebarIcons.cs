@@ -25,6 +25,8 @@ public sealed partial class MainWindow
                 "radio" => ("\uF8BA", "\uF8BB"),
                 "events" => ("\uE77D", "\uF8B4"),
                 "queue" => ("\uE770", "\uF8B5"),
+                "local" => ("\uE8B7", "\uF8BC"),
+                "downloads" => ("\uE896", "\uE896"),
                 _ => ("", "")
             };
             if (glyphs.Item1.Length > 0) BindSidebarIcon(item, glyphs.Item1, glyphs.Item2);

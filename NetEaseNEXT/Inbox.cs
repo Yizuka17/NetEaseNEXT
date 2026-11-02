@@ -173,7 +173,7 @@ public sealed partial class MainWindow
             var index = 0; while (index < SocialItems.Count && SocialItems[index].Timestamp >= item.Timestamp) index++;
             if (SocialItems.Count < 500) SocialItems.Insert(index, item);
         }
-        SocialMore.Visibility = _inboxPages.Values.Any(p => p.More) && SocialItems.Count < 500 ? Visibility.Visible : Visibility.Collapsed;
+        _socialMore = _inboxPages.Values.Any(p => p.More) && SocialItems.Count < 500;
         if (failures.Count > 0) ShowError(failures[0]);
         UpdateUnreadCounts();
     }

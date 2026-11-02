@@ -1,7 +1,8 @@
 param(
     [string]$PackagePath,
     [switch]$TrustCertificate,
-    [switch]$RemoveLegacyInstall
+    [switch]$RemoveLegacyInstall,
+    [switch]$CloseRunningApp
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'msix-signature.ps1')
@@ -23,7 +24,7 @@ if ($TrustCertificate) {
 }
 $taskLegacyKey = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\{F2431F11-C7B6-4E8C-80FC-C273231D908E}_is1'
 $taskLegacy = Get-ItemProperty -LiteralPath $taskLegacyKey -ErrorAction SilentlyContinue
-Add-AppxPackage -Path $PackagePath -ErrorAction Stop
+Add-AppxPackage -Path $PackagePath -ForceApplicationShutdown:$CloseRunningApp -ErrorAction Stop
 $taskInstalled = Get-AppxPackage -Name NetEaseNEXT
 if (-not $taskInstalled -or $taskInstalled.Publisher -cne $taskSignature.SignerCertificate.Subject) { throw 'Package installation could not be confirmed. The old installation has been retained.' }
 if ($RemoveLegacyInstall -and $taskLegacy) {
@@ -51,4 +52,5 @@ if ($RemoveLegacyInstall -and $taskLegacy) {
         if ($taskIdentity.DisplayName -eq 'NetEaseNEXT') { Remove-Item -LiteralPath $taskIdentityKey }
     }
 }
+if ($RemoveLegacyInstall) { & (Join-Path $PSScriptRoot 'cleanup-legacy-shortcuts.ps1') }
 $taskInstalled | Select-Object Name,Version,PackageFamilyName,InstallLocation

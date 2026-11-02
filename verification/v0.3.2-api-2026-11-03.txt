@@ -1,0 +1,335 @@
+[
+  {
+    "name": "EAPI matches the pinned upstream encryption vector",
+    "passed": true
+  },
+  {
+    "name": "WEAPI AES and raw RSA match the pinned upstream vector",
+    "passed": true
+  },
+  {
+    "name": "cloudsearch preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "personalized preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "playlist_detail preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "song_url_v1 preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "lyric preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "login_qr_key preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "login_qr_check preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "login_status preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "user_playlist preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "recommend_songs preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "likelist preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "like preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "top_artists preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "artist_album preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "album preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "album_sublist preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "song_detail preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "song_music_detail preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "vip_info preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "event preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "msg_notices preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "msg_comments preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "msg_private preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "msg_private_history preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "song_download_url_v1 preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "dj_recommend preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "dj_program preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "dj_sublist preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "playlist_tracks preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "resource_like preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "comment_event preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "comment_music preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "comment_playlist preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "comment_album preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "comment_dj preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "comment_mv preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "comment_video preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "comment preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "comment_like preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "send_text preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "send_song preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "send_album preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "send_playlist preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "msg_forwards preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "song_red_count preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "song_like_check preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "playlist_subscribe preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "playlist_create preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "playlist_delete preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "song_order_update preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "artists preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "artist_detail preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "artist_desc preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "artist_mv preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "mv_url preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "pl_count preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "msg_read_all preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "user_event preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "share_resource preserves the upstream endpoint and payload",
+    "passed": true
+  },
+  {
+    "name": "Unknown dispatcher rejected",
+    "passed": true
+  },
+  {
+    "name": "QR login renders a PNG without a network request",
+    "passed": true
+  },
+  {
+    "name": "Reads overlap and writes remain FIFO barriers",
+    "passed": true
+  },
+  {
+    "name": "Canceled request stops",
+    "passed": true
+  },
+  {
+    "name": "Canceling one request preserves other requests",
+    "passed": true
+  },
+  {
+    "name": "Native HTTP decodes encrypted responses",
+    "passed": true
+  },
+  {
+    "name": "Server failure preserves code and message",
+    "passed": true
+  },
+  {
+    "name": "QR login preserves authorization cookies",
+    "passed": true
+  },
+  {
+    "name": "Rejected private send cannot succeed",
+    "passed": true
+  },
+  {
+    "name": "Rejected comment cannot succeed",
+    "passed": true
+  },
+  {
+    "name": "MusicUnlock direct endpoint uses only the official host and selected session cookies",
+    "passed": true
+  },
+  {
+    "name": "Direct source rejects an unknown bitrate",
+    "passed": true
+  },
+  {
+    "name": "Native WEAPI reads real recommendations",
+    "passed": true
+  },
+  {
+    "name": "Native EAPI searches real songs",
+    "passed": true
+  },
+  {
+    "name": "Native lyrics read",
+    "passed": true
+  },
+  {
+    "name": "Native stream URL response",
+    "passed": true
+  },
+  {
+    "name": "MusicUnlock official direct endpoint responds without an external provider",
+    "passed": true
+  },
+  {
+    "name": "Native playlist composition reads tracks",
+    "passed": true
+  },
+  {
+    "name": "Native QR key available",
+    "passed": true
+  },
+  {
+    "name": "Native comments sort by time",
+    "passed": true
+  },
+  {
+    "name": "Native comments sort by popularity",
+    "passed": true
+  },
+  {
+    "name": "Native publishing initializes a signed XEAPI key and a fresh token without posting",
+    "passed": true
+  }
+]
+Passed 83 checks.

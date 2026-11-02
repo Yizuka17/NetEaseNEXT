@@ -10,3 +10,5 @@ certificates/
 *.log
 # Local captures of the connected account's saved album collection.
 verification/library-*/library-saved-albums.png
+# Local before-upgrade fingerprints; publish only preservation results.
+verification/*migration-before-*.json

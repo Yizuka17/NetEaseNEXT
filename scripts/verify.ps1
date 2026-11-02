@@ -1,11 +1,12 @@
 param([switch]$Network, [switch]$MeasureBackground, [switch]$SocialRead)
 $ErrorActionPreference = 'Stop'
 $taskRoot = Split-Path $PSScriptRoot -Parent
-Push-Location (Join-Path $taskRoot 'api')
+Push-Location $taskRoot
 try {
-    & npm test
-    if ($LASTEXITCODE) { throw 'Bridge tests failed.' }
-    if ($Network) { & node smoke.mjs; if ($LASTEXITCODE) { throw 'Network contract checks failed.' } }
+    $taskApiArguments = @('run','--project','tests\NetEaseNEXT.Api.Checks','-c','Release','--')
+    if ($Network) { $taskApiArguments += '--network' }
+    & dotnet @taskApiArguments
+    if ($LASTEXITCODE) { throw 'Native API checks failed.' }
 } finally { Pop-Location }
 $taskExe = Join-Path $taskRoot 'artifacts\win-x64\NetEaseNEXT.exe'
 if (-not (Test-Path -LiteralPath $taskExe)) { throw 'Run scripts\build.ps1 -Publish first.' }

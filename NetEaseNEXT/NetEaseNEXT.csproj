@@ -4,7 +4,7 @@
     <TargetFramework>net9.0-windows10.0.26100.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
     <RootNamespace>NetEaseNEXT</RootNamespace>
-    <Version>0.2.8</Version>
+    <Version>0.3.2</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
     <Platforms>x64;ARM64</Platforms>
@@ -28,9 +28,8 @@
     <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.4.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7627" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="9.0.10" />
-    <Content Include="..\api\bridge.mjs" Link="api\bridge.mjs" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\api\package.json" Link="api\package.json" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\api\package-lock.json" Link="api\package-lock.json" CopyToOutputDirectory="PreserveNewest" />
+    <PackageReference Include="TagLibSharp" Version="2.3.0" />
+    <ProjectReference Include="..\NetEaseNEXT.Api\NetEaseNEXT.Api.csproj" />
   </ItemGroup>
   <Target Name="CopyWinUIResourcesToPublish" AfterTargets="Publish">
     <ItemGroup><WinUIResource Include="$(TargetDir)*.xbf;$(TargetDir)$(AssemblyName).pri" /></ItemGroup>

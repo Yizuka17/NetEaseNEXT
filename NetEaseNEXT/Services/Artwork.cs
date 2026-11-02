@@ -130,6 +130,13 @@ public static class Artwork
     internal static async Task<string> GetFileInDirectoryAsync(string url, int size, string cacheDirectory, CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
+        if (System.Uri.TryCreate(url, UriKind.Absolute, out var local) && local.IsFile)
+        {
+            var allowed = Path.GetFullPath(Path.Combine(SettingsStore.DataDirectory, "LocalArtwork")) + Path.DirectorySeparatorChar;
+            var file = Path.GetFullPath(local.LocalPath);
+            if (!file.StartsWith(allowed, StringComparison.OrdinalIgnoreCase) || !ValidImage(file)) throw new InvalidDataException("无效本地封面");
+            return file;
+        }
         var request = CacheRequest(url, size);
         var directory = Path.Combine(cacheDirectory, "Artwork"); Directory.CreateDirectory(directory);
         var path = Path.Combine(directory, Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(CacheIdentity(url, size)))) + ".img");
@@ -169,6 +176,12 @@ public static class Artwork
     }
     internal static string CacheIdentity(string url, int size)
     {
+        if (System.Uri.TryCreate(url, UriKind.Absolute, out var local) && local.IsFile)
+        {
+            var allowed = Path.GetFullPath(Path.Combine(SettingsStore.DataDirectory, "LocalArtwork")) + Path.DirectorySeparatorChar;
+            if (!Path.GetFullPath(local.LocalPath).StartsWith(allowed, StringComparison.OrdinalIgnoreCase)) throw new InvalidDataException("无效本地封面");
+            return local.AbsoluteUri;
+        }
         var request = new Uri(CacheRequest(url, size));
         // The API rotates these CDN hosts for the same immutable image path.
         return request.Host is "p1.music.126.net" or "p2.music.126.net" or "p3.music.126.net" or "p4.music.126.net"

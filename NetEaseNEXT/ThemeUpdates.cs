@@ -35,6 +35,17 @@ public sealed partial class MainWindow
     private void ApplyPopupTheme(FrameworkElement element) => element.RequestedTheme = Root.ActualTheme;
     private async Task<ContentDialogResult> ShowThemedDialogAsync(ContentDialog dialog)
     {
+        dialog.Resources["ContentDialogButtonHeight"] = 44d;
+        dialog.Resources["ContentDialogButtonMinHeight"] = 44d;
+        Style TouchStyle(Style? original)
+        {
+            var style = new Style(typeof(Button)) { BasedOn = original ?? (Style)Application.Current.Resources["DefaultButtonStyle"] };
+            style.Setters.Add(new Setter(FrameworkElement.MinHeightProperty, 44d));
+            return style;
+        }
+        dialog.PrimaryButtonStyle = TouchStyle(dialog.PrimaryButtonStyle ?? (dialog.DefaultButton == ContentDialogButton.Primary ? (Style)Application.Current.Resources["AccentButtonStyle"] : null));
+        dialog.SecondaryButtonStyle = TouchStyle(dialog.SecondaryButtonStyle);
+        dialog.CloseButtonStyle = TouchStyle(dialog.CloseButtonStyle);
         ApplyPopupTheme(dialog);
         try { return await dialog.ShowAsync(); }
         finally { dialog.ClearValue(FrameworkElement.RequestedThemeProperty); }

@@ -23,6 +23,8 @@ public sealed class PlaybackService : IDisposable
     private readonly AudioCache _audioCache = new();
     private readonly AudioCache _nextAudioCache = new();
     private readonly TrackUrls _urls;
+    internal DownloadedLibrary Downloads { get; set; } = DownloadedLibrary.Shared;
+    internal string? CurrentDownloadedPath { get; private set; }
     private CancellationTokenSource? _nextCacheLoad;
     private Prepared? _nextPrepared;
     private long _nextPreparedId;
@@ -80,6 +82,7 @@ public sealed class PlaybackService : IDisposable
     public TimeSpan Duration => _source == null ? TimeSpan.FromMilliseconds(Current?.Duration ?? 0) : _player.PlaybackSession.NaturalDuration;
     internal MediaPlaybackStatus SystemPlaybackStatus => _smtc.PlaybackStatus;
     internal bool IsWorkerRunning => _streamApi.IsWorkerRunning;
+    internal int StreamRequestCount => _streamApi.RequestCount;
     internal bool LastSwitchUsedLocalStream { get; private set; }
     public event Action? Changed;
     public event Action<string>? Error;
@@ -225,12 +228,13 @@ public sealed class PlaybackService : IDisposable
         if (_background || _disposed) return Task.CompletedTask;
         var context = tracks.ToArray();
         var candidates = Current != null && context.Any(t => t.Id == Current.Id) ? Neighbors(Current, context).Prepend(Current).Concat(context.Take(4)) : context.Take(8);
-        return _urls.WarmAsync(candidates.DistinctBy(t => t.Id), _settings.Quality);
+        return _urls.WarmAsync(candidates.Where(t => !t.IsLocal && Downloads.Find(t.Id) == null).DistinctBy(t => t.Id), _settings.Quality);
     }
     private IEnumerable<Track> Neighbors(Track track, IEnumerable<Track>? hints = null)
     {
         var context = (hints ?? Queue).ToArray(); var index = Array.FindIndex(context, t => t.Id == track.Id);
-        return index < 0 ? context.Take(3) : context.Skip(index + 1).Take(2).Concat(context.Skip(Math.Max(0, index - 1)).Take(1));
+        var neighbors = index < 0 ? context.Take(3) : context.Skip(index + 1).Take(2).Concat(context.Skip(Math.Max(0, index - 1)).Take(1));
+        return neighbors.Where(t => !t.IsLocal && Downloads.Find(t.Id) == null);
     }
     private void WarmFollowing() => _nextPreparationTask = PrepareFollowingAsync();
     private void DisposeNextPrepared()
@@ -248,6 +252,7 @@ public sealed class PlaybackService : IDisposable
         try
         {
             var next = Queue[(_index + 1) % Queue.Count]; var level = _settings.Quality;
+            if (next.IsLocal || Downloads.Find(next.Id) != null) { DisposeNextPrepared(); NextPreparationStatus = "local"; return; }
             await _urls.WarmAsync(Neighbors(Current).Prepend(next), level);
             await _audioCache.Completion.WaitAsync(load.Token);
             if (_background || _disposed || level != _settings.Quality) return;
@@ -344,6 +349,19 @@ public sealed class PlaybackService : IDisposable
         catch { DeleteLocal(path); throw; }
     }
     private static void DeleteLocal(string? path) { if (path == null) return; try { File.Delete(path); } catch { } }
+    private async Task<bool> UseLocalAudioAsync(Track track, string path, string level, bool downloaded, bool resume, CancellationToken ct)
+    {
+        DisposeNextPrepared(); LastPlayUsedCache = LastPlayUsedPreparedDecoder = false;
+        if (!File.Exists(path)) throw new FileNotFoundException("本地音频文件已移动或删除");
+        var prepared = await PrepareAsync(new Uri(path), path, resume, ct);
+        var previousPlayer = _player; var previousSource = _source; var previousPath = _localPath;
+        previousPlayer.Pause(); Detach(previousPlayer);
+        _player = prepared.Player; _source = prepared.Source; _localPath = null;
+        _cacheRequest = null; _audioCache.ActivePath = null; Current = track; CurrentQuality = level; CurrentDownloadedPath = downloaded ? path : null; _restoredPosition = TimeSpan.Zero;
+        Attach(_player); if (!_desiredPlaying) _player.Pause(); _player.Volume = Math.Clamp(_settings.Volume, 0, 1);
+        previousPlayer.Source = null; previousSource?.Dispose(); previousPlayer.Dispose(); DeleteLocal(previousPath);
+        PublishSystemTrack(); UpdateTimeline(); Changed?.Invoke(); return true;
+    }
     private async Task<bool> LoadAsync(Track track, bool resume = false, bool autoplay = true, string? quality = null, IEnumerable<Track>? hints = null)
     {
         _load?.Cancel(); _audioCache.Stop(); _nextCacheLoad?.Cancel(); _nextAudioCache.Stop(); using var load = new CancellationTokenSource(TimeSpan.FromMinutes(2)); _load = load;
@@ -351,10 +369,27 @@ public sealed class PlaybackService : IDisposable
         try
         {
             var requested = quality ?? _settings.Quality;
+            var downloaded = track.IsLocal ? null : Downloads.Find(track.Id, quality == null ? null : requested);
+            if (quality != null && downloaded?.Level != requested) downloaded = null;
+            if (track.IsLocal || downloaded != null)
+            {
+                var audioPath = downloaded?.Path ?? track.LocalPath;
+                var origin = track.IsLocal ? Downloads.FindPath(track.LocalPath) : downloaded;
+                if (track.IsLocal && origin != null) track.SetLocalSource(origin.SongId, origin.Level, origin.Size, origin.ModifiedUtcTicks, origin.ArtistId, origin.AlbumId);
+                var localLevel = origin?.Level ?? (track.HasValidLocalSource() && AudioQuality.Rank(track.SourceLevel) >= 0 ? track.SourceLevel : "local");
+                try { return await UseLocalAudioAsync(track, audioPath, localLevel, downloaded != null || origin != null || track.HasValidLocalSource(), resume, load.Token); }
+                catch (Exception ex) when (downloaded != null && !load.IsCancellationRequested) { Log.Write(ex); }
+            }
             var metadata = await _urls.GetAsync(track, requested, Neighbors(track, hints), load.Token);
             var info = metadata.Info; LastPlayUsedCachedUrl = metadata.Cached;
             if (!Uri.TryCreate(info.Text("url"), UriKind.Absolute, out var uri) || uri.Scheme is not ("http" or "https")) throw new InvalidOperationException("这首歌暂不可播放，可能需要登录、会员或版权授权。");
             var actualQuality = info.Text("level") is { Length: > 0 } actual ? actual : requested;
+            var matching = Downloads.Find(track.Id, actualQuality);
+            if (matching?.Level == actualQuality)
+            {
+                try { return await UseLocalAudioAsync(track, matching.Path, matching.Level, true, resume, load.Token); }
+                catch (Exception ex) when (!load.IsCancellationRequested) { Log.Write(ex); }
+            }
             // Refresh authorization before considering a persistent file, including
             // account changes, quality downgrades and trial-only playback.
             var cachePath = AudioCache.PathFor(_streamApi.CacheDirectory, track.Id, actualQuality, info, uri);
@@ -387,7 +422,7 @@ public sealed class PlaybackService : IDisposable
             oldPlayer.Pause(); Detach(oldPlayer);
             _player = prepared.Player; _source = prepared.Source; _localPath = LastPlayUsedCache ? null : prepared.LocalPath; prepared = null; localPath = null;
             _audioCache.ActivePath = LastPlayUsedCache ? cached ?? cachePath : null;
-            Attach(_player); Current = track; CurrentQuality = actualQuality;
+            Attach(_player); Current = track; CurrentQuality = actualQuality; CurrentDownloadedPath = null;
             _restoredPosition = TimeSpan.Zero;
             if (!_desiredPlaying) _player.Pause(); _player.Volume = Math.Clamp(_settings.Volume, 0, 1);
             oldPlayer.Source = null; oldSource?.Dispose(); oldPlayer.Dispose(); DeleteLocal(oldPath);

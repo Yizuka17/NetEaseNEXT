@@ -1,0 +1,189 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Local music opens a playlist card grid rather than a selector list",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Folder playlists preserve cover, directory and existing manual playlists",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A file-system event automatically adds a new song without manual refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Renames replace the old folder playlist path",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Deleting a file updates a bound playlist without deleting other files",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Hidden windows stop folder scans",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Returning to the window reconciles folder changes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A local playlist has a cover header, folder path and song details",
+    "passed": true,
+    "detail": {
+      "count": 2,
+      "toolbar": "Visible",
+      "folderMatched": true,
+      "ActualWidth": 164,
+      "import": "Collapsed"
+    }
+  },
+  {
+    "name": "Editing a playlist persists its name, cover and folder binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A failed local save rolls back playlist edits",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Manual refresh works without an active file watcher",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Folder scans never change source audio bytes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Quality fallback chooses the highest available level below the selected ceiling",
+    "passed": true,
+    "detail": {
+      "attempts": [
+        "jymaster",
+        "sky",
+        "jyeffect",
+        "hires"
+      ]
+    }
+  },
+  {
+    "name": "MusicUnlock source uses official bitrate fallback and records actual quality",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Download asks for a maximum quality before queueing",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Native download confirmation buttons have 44 DIP touch targets",
+    "passed": true,
+    "detail": [
+      {
+        "Content": "\u5F00\u59CB\u4E0B\u8F7D",
+        "ActualHeight": 44,
+        "MinHeight": 44
+      },
+      {
+        "Content": "\u53D6\u6D88",
+        "ActualHeight": 44,
+        "MinHeight": 44
+      }
+    ]
+  },
+  {
+    "name": "Canceling the quality prompt leaves the queue unchanged",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Pause all cancels both transfers and queued work while keeping partial files",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A resumed download finishes with its verified actual quality",
+    "passed": true,
+    "detail": {
+      "Status": "\u5DF2\u5B8C\u6210",
+      "Error": ""
+    }
+  },
+  {
+    "name": "Completed song identity, file and actual quality survive a catalog restart",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A failed catalog save keeps audio and does not commit memory state",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Resuming after tag writing finishes locally without rechecking the original network hash",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Cancel all removes only unfinished partial files and keeps completed audio",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Failed tasks are excluded from the normal download queue",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Failed downloads have a separate list with a retry action",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The failed song, error and retry button are actually rendered",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Successful retries leave the failure list automatically",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Clearing the queue preserves music files and their durable playback mapping",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "An online song plays its matching download with the actual quality and no stream request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A modified or missing downloaded file cannot be silently reused",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Download source is switchable in native settings",
+    "passed": true,
+    "detail": null
+  }
+]

@@ -19,18 +19,7 @@ public sealed partial class MainWindow
         Directory.CreateDirectory(fixture);
         try
         {
-            var script = Path.Combine(fixture, "bridge.mjs");
-            await File.WriteAllTextAsync(script, """
-                import {createInterface} from 'node:readline';
-                createInterface({input:process.stdin}).on('line',async line=>{
-                  const r=JSON.parse(line),p=r.params??{};
-                  await new Promise(resolve=>setTimeout(resolve,80));
-                  const ids=String(p.ids??'').split(',').filter(Boolean).map(Number);
-                  const data=ids.includes(9999)?{code:500,msg:'fixture locator denied'}:{code:200,songs:ids.reverse().map(id=>({id,name:'Song '+id,ar:[{id:1,name:'Artist'}],al:{id:1,name:'Album',picUrl:''},dt:60000}))};
-                  process.stdout.write(JSON.stringify({id:r.id,data})+'\n');
-                }).on('close',()=>process.exit(0));
-                """);
-            using var api = new ApiClient(script, fixture);
+            using var api = NativeApiFixtures.Create("locator", fixture);
             void Prepare(long current, int count = 1500)
             {
                 _restoringPlayback = true;
@@ -40,7 +29,7 @@ public sealed partial class MainWindow
                 _playlistTrackIds = Enumerable.Range(1, count).Select(i => (long)i).ToArray(); _playlistTrackCount = count;
                 Tracks.Clear(); foreach (var id in _playlistTrackIds.Take(100)) Tracks.Add(new Track(id, "Song " + id, "Artist", "Album", "", 60000));
                 _offset = 100; EmptyPanel.Visibility = Visibility.Collapsed; Notice.IsOpen = false;
-                LoadMoreButton.Visibility = Visibility.Visible; TrackCount.Text = count + " 首"; PageTitle.Text = "长歌单定位检查";
+                _tracksMore = true; TrackCount.Text = count + " 首"; PageTitle.Text = "长歌单定位检查";
                 UpdateTrackLocator(); Root.UpdateLayout();
             }
             Prepare(1251);
@@ -56,7 +45,7 @@ public sealed partial class MainWindow
             check("Located song is realized inside the visible list", row != null && top >= -1 && top < TrackList.ActualHeight, new { top, height = TrackList.ActualHeight });
             check("Locator batches at most 500 IDs per request", api.RequestCount - requests == 3, null);
             check("Locator preserves playlist order and playback queue", Tracks.Select(t => t.Id).SequenceEqual(_playlistTrackIds.Take(1251)) && _playback.Queue.Count == 1 && _playback.Current?.Id == 1251 && !_playback.IsPlaying, null);
-            check("More pages remain available after locating", LoadMoreButton.Visibility == Visibility.Visible && LoadMoreButton.IsEnabled && TrackLocateButton.IsEnabled, null);
+            check("More pages remain available after locating", _tracksMore && !_trackPagingBlocked && TrackLocateButton.IsEnabled, null);
             requests = api.RequestCount; await LocateCurrentAsync(api);
             check("Repeated locate reuses already loaded rows", api.RequestCount == requests && Tracks.Count == 1251, null);
             BeginTrackBatch(TrackList, Tracks[0]);

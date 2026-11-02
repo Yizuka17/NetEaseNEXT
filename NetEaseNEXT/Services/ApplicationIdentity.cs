@@ -6,8 +6,16 @@ namespace NetEaseNEXT.Services;
 internal static class ApplicationIdentity
 {
     internal const string LegacyId = "NetEaseNEXT.Desktop";
-    internal static bool IsPackaged { get; } = GetPackageFamilyName() != null;
-    internal static string Id { get; } = GetPackageFamilyName() is { } family ? family + "!App" : LegacyId;
+    private static readonly string? CurrentFamily = GetPackageFamilyName();
+    private static readonly string? RegisteredFamily = CurrentFamily ?? FindInstalledPackage();
+    internal static bool IsPackaged => CurrentFamily != null;
+    internal static bool UsesPackageIdentity => RegisteredFamily != null;
+    internal static string Id { get; } = RegisteredFamily is { } family ? family + "!App" : LegacyId;
+    private static string? FindInstalledPackage()
+    {
+        try { return new Windows.Management.Deployment.PackageManager().FindPackagesForUser("").FirstOrDefault(p => p.Id.Name == "NetEaseNEXT" && p.Id.Publisher == "CN=NetEaseNEXT Development")?.Id.FamilyName; }
+        catch (Exception ex) when (ex is COMException or UnauthorizedAccessException) { return null; }
+    }
     private static string? GetPackageFamilyName()
     {
         try { return Windows.ApplicationModel.Package.Current.Id.FamilyName; }
@@ -47,6 +55,9 @@ internal static class ApplicationIdentity
         // MSIX supplies the process identity and the sole Start menu entry.
         if (IsPackaged) return;
         Marshal.ThrowExceptionForHR(SetCurrentProcessExplicitAppUserModelID(Id));
+        // Developer/portable runs reuse an installed MSIX's Shell entry instead
+        // of recreating a second Start shortcut on every launch.
+        if (UsesPackageIdentity) return;
         // Register the display identity for Windows shell/SMTC on unpackaged builds.
         using var key = Registry.CurrentUser.CreateSubKey(@"Software\Classes\AppUserModelId\" + Id);
         key.SetValue("DisplayName", "NetEaseNEXT");
@@ -76,7 +87,7 @@ internal static class ApplicationIdentity
     {
         if (_iconPath == path) return;
         _iconPath = path;
-        if (IsPackaged) { BindWindow(window); return; }
+        if (UsesPackageIdentity) { BindWindow(window); return; }
         using var key = Registry.CurrentUser.CreateSubKey(@"Software\Classes\AppUserModelId\" + Id);
         key.SetValue("IconUri", path);
         BindWindow(window);

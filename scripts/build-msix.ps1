@@ -80,6 +80,7 @@ if ($taskCert) {
     Export-Certificate -Cert $taskCert -FilePath (Join-Path $taskOutput 'NetEaseNEXT.cer') | Out-Null
 }
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'install-msix.ps1') -Destination $taskOutput -Force
+Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'cleanup-legacy-shortcuts.ps1') -Destination $taskOutput -Force
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'msix-signature.ps1') -Destination $taskOutput -Force
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'trust-msix-certificate.ps1') -Destination $taskOutput -Force
 [ordered]@{ Package = (Split-Path $taskPackage -Leaf); Version = $taskVersion; Architecture = $Architecture; Signed = [bool]$taskCert; Subject = $taskCert.Subject; Thumbprint = $taskCert.Thumbprint; NotAfter = if ($taskCert) { $taskCert.NotAfter.ToString('o') } else { $null }; Sha256 = (Get-FileHash -LiteralPath $taskPackage -Algorithm SHA256).Hash } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $taskOutput 'package-info.json') -Encoding utf8

@@ -1,0 +1,136 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Audio tags round-trip title, artist, album, lyrics and artwork",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "FLAC Vorbis comments and embedded cover round-trip",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Pausing a download keeps a bounded partial file",
+    "passed": true,
+    "detail": {
+      "retained": 81920
+    }
+  },
+  {
+    "name": "Range resume reconstructs and verifies the exact source bytes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A download is bound to its song and becomes complete only after verification and tagging",
+    "passed": true,
+    "detail": {
+      "Status": "\u5DF2\u5B8C\u6210",
+      "Error": ""
+    }
+  },
+  {
+    "name": "Download management has a native page and independent quality preference",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Local import deduplicates source paths and uses local track identities",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Local songs and named playlists persist independently of the online session",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Local files play without an API request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Embedded local lyrics bind without an API request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Lyrics resume automatically after five seconds without a return button",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Removing a local playlist entry preserves the source audio",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comment close and inline composer fit inside the rendered dialog",
+    "passed": true,
+    "detail": {
+      "closePoint": {
+        "X": 820.5,
+        "Y": 102
+      },
+      "sendPoint": {
+        "X": 800.5,
+        "Y": 666.5
+      },
+      "ActualWidth": 1167,
+      "ActualHeight": 845
+    }
+  },
+  {
+    "name": "Comment send has a 44 DIP touch target",
+    "passed": true,
+    "detail": {
+      "ActualHeight": 44
+    }
+  },
+  {
+    "name": "Comments offer latest/popular sorting and an inline disabled send button",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Successful comments stay visible during upstream read-after-write delay",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Installed fonts refresh through an updated DirectWrite collection",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "An imported font file renders its actual glyphs instead of silently falling back",
+    "passed": true,
+    "detail": {
+      "fontSource": "ms-appx:///UserFonts/55906D9048BCD6B8C9911FDA85A70657B2F8E689CD7FF5187A14F34271851A0A.ttf#NetEaseNEXT Icons"
+    }
+  },
+  {
+    "name": "Scrolling to the end loads the next search page without a button",
+    "passed": true,
+    "detail": {
+      "count": 150
+    }
+  },
+  {
+    "name": "A small playlist loads completely without manual paging",
+    "passed": true,
+    "detail": {
+      "count": 200
+    }
+  },
+  {
+    "name": "No Node process is required for the native app or playback",
+    "passed": true,
+    "detail": null
+  }
+]

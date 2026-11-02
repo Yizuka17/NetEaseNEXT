@@ -36,6 +36,7 @@ public sealed class TrayIcon : IDisposable
     public event Action? Next;
     public event Action? Exit;
     public event Action? ThemeChanged;
+    public event Action? FontsChanged;
     public TrayIcon(nint window)
     {
         _window = window; _proc = WndProc; _dispatcher = DispatcherQueue.GetForCurrentThread();
@@ -54,6 +55,7 @@ public sealed class TrayIcon : IDisposable
     {
         if (message == _taskbarCreated) { IsAvailable = Shell_NotifyIcon(0, ref _data); ThemeChanged?.Invoke(); }
         if (message is 0x001A or 0x031A) ThemeChanged?.Invoke();
+        if (message == 0x001D) FontsChanged?.Invoke();
         if (message == Callback)
         {
             var action = (uint)(lParam.ToInt64() & 0xffff);

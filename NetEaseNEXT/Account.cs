@@ -143,7 +143,7 @@ public sealed partial class MainWindow
         _offset += array.GetArrayLength();
         if (_view == "private") UpdateUnreadCounts();
         var more = result.TryGetProperty("more", out var hasMore) && hasMore.ValueKind == JsonValueKind.True;
-        SocialMore.Visibility = (more || array.GetArrayLength() == (_view == "events" ? 20 : 30)) && SocialItems.Count < 500 ? Visibility.Visible : Visibility.Collapsed;
+        _socialMore = (more || array.GetArrayLength() == (_view == "events" ? 20 : 30)) && SocialItems.Count < 500;
     }
     private async void Social_Click(object sender, ItemClickEventArgs args)
     {

@@ -70,7 +70,7 @@ public sealed partial class MainWindow
         var selected = _batchList.SelectedItems.OfType<Track>().Select(t => t.Id).ToHashSet();
         return _batchList.Items.OfType<Track>().Where(t => selected.Contains(t.Id)).DistinctBy(t => t.Id).ToArray();
     }
-    private bool CanRemoveBatch => ReferenceEquals(_batchList, QueueList) || _view == "queue" || OwnsDisplayedPlaylist && _api.HasSession;
+    private bool CanRemoveBatch => ReferenceEquals(_batchList, QueueList) || _view == "queue" || IsLocalView && _localLibrary.Playlists.FirstOrDefault(p => p.Id == _localPlaylistId)?.FolderPath.Length is not > 0 || OwnsDisplayedPlaylist && _api.HasSession;
     private void UpdateBatchBar()
     {
         TrackBatchHost.Visibility = ReferenceEquals(_batchList, TrackList) ? Visibility.Visible : Visibility.Collapsed;
@@ -109,12 +109,13 @@ public sealed partial class MainWindow
                 case "next": _playback.AddNext(tracks); ShowPlayerMessage("已添加至下一首"); break;
                 case "favorite": await FavoriteTracksAsync(tracks); break;
                 case "download":
-                    foreach (var track in tracks) { if (_exiting || _downloads.IsCancellationRequested) break; await DownloadAsync(track); }
+                    await ConfirmDownloadsAsync(tracks, upgradeExisting: false);
                     break;
                 case "remove" when fromQueue:
                     var removed = _playback.Remove(tracks);
                     ShowPlayerMessage(removed < tracks.Length ? $"已移除 {removed} 首，保留正在播放的歌曲" : $"已移除 {removed} 首");
                     break;
+                case "remove" when IsLocalView: RemoveLocalTracks(tracks); break;
                 case "remove" when CanRemoveBatch:
                     await RemovePlaylistTracksAsync(_api, target, tracks.Select(t => t.Id).ToArray()); break;
             }

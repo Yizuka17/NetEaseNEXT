@@ -17,6 +17,20 @@ public sealed partial class MainWindow
         PrepareBatchMenu(menu, TrackList);
         var remove = menu.Items.OfType<MenuFlyoutItem>().First(i => i.Text == "从歌单移除");
         var track = menu.Target?.DataContext as Track;
+        var local = menu.Items.OfType<MenuFlyoutItem>().FirstOrDefault(i => i.Text == "从本地列表移除");
+        if (local != null) local.Visibility = IsLocalView && track?.IsLocal == true ? Visibility.Visible : Visibility.Collapsed;
+        if (track != null)
+        {
+            foreach (var item in menu.Items.OfType<MenuFlyoutItem>())
+            {
+                if (item.Text is "下载" or "升级音质" or "本地文件")
+                {
+                    var downloaded = DownloadForTrack(track); item.Text = downloaded != null ? "升级音质" : track.IsLocal ? "本地文件" : "下载";
+                    item.IsEnabled = !track.IsLocal || SourceSongId(track) > 0; item.Icon = downloaded != null ? Services.IconFonts.Create("\uE73E") : null;
+                }
+                if (item.Text is "歌手" or "专辑") item.Visibility = !track.IsLocal || OnlineSongId(track) > 0 && (item.Text == "歌手" ? track.ArtistId : track.AlbumId) > 0 ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
         remove.Visibility = OwnsDisplayedPlaylist && _api.HasSession && track != null ? Visibility.Visible : Visibility.Collapsed;
         remove.IsEnabled = !ReferenceEquals(_batchList, TrackList) && !_batchBusy && _trackLocateLoad == null && track != null && _pageLoad == null && !_playlistRemovals.Any(t => t.PlaylistId == _playlistId);
         remove.Tag = track == null ? null : new PlaylistTrackRemoval(_playlistId, track.Id, _api.Cookie);
@@ -34,7 +48,7 @@ public sealed partial class MainWindow
             trackIds.Count == 0 || trackIds.Any(id => !Tracks.Any(t => t.Id == id))) return false;
         foreach (var id in trackIds) _playlistRemovals.Add((target.PlaylistId, id));
         var route = _route;
-        LoadMoreButton.IsEnabled = false;
+        _trackPagingBlocked = true;
         try
         {
             await api.RemovePlaylistTracksAsync(target.PlaylistId, _playlistOwner, _accountId, trackIds.ToArray());
@@ -59,7 +73,7 @@ public sealed partial class MainWindow
             return true;
         }
         catch (Exception ex) { if (!_hidden && _view == "playlist" && _playlistId == target.PlaylistId) ShowError(ex.Message); return false; }
-        finally { foreach (var id in trackIds) _playlistRemovals.Remove((target.PlaylistId, id)); LoadMoreButton.IsEnabled = _pageLoad == null; }
+        finally { foreach (var id in trackIds) _playlistRemovals.Remove((target.PlaylistId, id)); _trackPagingBlocked = false; }
     }
     private async void DeletePlaylist_Click(object sender, RoutedEventArgs args)
     {

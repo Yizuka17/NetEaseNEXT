@@ -45,15 +45,7 @@ public sealed partial class MainWindow
         var folder = Path.Combine(Path.GetTempPath(), "NetEaseNEXT-startup-fixture-" + Guid.NewGuid().ToString("N")); Directory.CreateDirectory(folder);
         try
         {
-            var script = Path.Combine(folder, "bridge.mjs");
-            await File.WriteAllTextAsync(script, """
-                import {createInterface} from 'node:readline';
-                createInterface({input:process.stdin}).on('line', async line => {
-                  const r=JSON.parse(line); await new Promise(resolve=>setTimeout(resolve,250));
-                  process.stdout.write(JSON.stringify({id:r.id,data:{code:200,result:[],playlist:{},songs:[]}})+'\n');
-                }).on('close',()=>process.exit(0));
-                """);
-            using var client = new ApiClient(script, folder);
+            using var client = NativeApiFixtures.Create("events", folder);
             var startup = new StartupSession(new(), client, () => new() { PlaylistId = 9, View = "playlist" });
             try
             {

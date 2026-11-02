@@ -20,11 +20,10 @@ namespace NetEaseNEXT;
 public sealed partial class MainWindow
 {
     private readonly CancellationTokenSource _downloads = new();
-    private readonly HashSet<long> _activeDownloads = [];
     private int _maxQuality;
     private long _qualityTrack;
     private CancellationTokenSource? _qualityLoad;
-    private static readonly (string Level, string Name)[] Qualities = [("standard", "标准"), ("higher", "较高"), ("exhigh", "极高"), ("lossless", "无损"), ("hires", "Hi-Res"), ("jyeffect", "高清臻音"), ("sky", "沉浸环绕声"), ("jymaster", "超清母带")];
+    private static readonly (string Level, string Name)[] Qualities = AudioQuality.Levels;
     private void PlayPause_Click(object sender, RoutedEventArgs args) => _playback.Toggle();
     private async void Previous_Click(object sender, RoutedEventArgs args) => await _playback.PreviousAsync();
     private async void Next_Click(object sender, RoutedEventArgs args) => await _playback.NextAsync();
@@ -52,19 +51,21 @@ public sealed partial class MainWindow
             if (_displayedTrack is Track track)
             {
                 MiniTitle.Text = track.Title; MiniArtist.Text = track.Subtitle; Artwork.SetUri(MiniCover, track.Cover);
-                _followLyrics = true; FollowLyricsButton.Visibility = Visibility.Collapsed;
+                _lyricFollowTimer.Stop(); _followLyrics = true; FollowLyricsButton.Visibility = Visibility.Collapsed;
                 _qualityTrack = 0;
                 if (!_restoringPlayback) { _ = LoadQualityAsync(track); _ = LoadSongEngagementAsync(track); }
                 if (_view == "playing" && !_hidden) { UpdateNowPlaying(); _ = LoadLyricsAsync(); }
             }
         }
-        QualityButton.Content = Qualities.FirstOrDefault(q => q.Level == _playback.CurrentQuality).Name ?? "音质";
+        QualityButton.Content = _playback.Current?.IsLocal == true && _playback.CurrentQuality == "local" ? "本地" : Qualities.FirstOrDefault(q => q.Level == _playback.CurrentQuality).Name ?? "音质";
+        ToolTipService.SetToolTip(QualityButton, _playback.CurrentDownloadedPath != null ? "正在播放已下载的" + AudioQuality.Name(_playback.CurrentQuality) + "文件" : "播放音质");
         if (QueuePane.Visibility == Visibility.Visible) RefreshQueueList();
         if (_view == "queue" && !Tracks.Select(t => t.Id).SequenceEqual(_playback.Queue.Select(t => t.Id)))
         {
             RefreshQueueTracks();
         }
         UpdateTrackLocator(); UpdateProgress(); UpdateTimer();
+        UpdateDownloadIndicator(); UpdateSongActions();
     }
     private void UpdateNowPlaying()
     {
@@ -97,7 +98,11 @@ public sealed partial class MainWindow
         _lyrics = []; _activeLyricIndex = -1; LyricsList.ItemsSource = null;
         try
         {
-            var response = await _api.CallCachedAsync("lyric", new { id = track.Id }, load.Token); load.Token.ThrowIfCancellationRequested();
+            var lyricPath = track.IsLocal ? track.LocalPath : _playback.CurrentDownloadedPath;
+            var response = lyricPath is { Length: > 0 }
+                ? System.Text.Json.JsonSerializer.SerializeToElement(new { lrc = new { lyric = await Task.Run(() => File.Exists(Path.ChangeExtension(lyricPath, ".lrc")) ? File.ReadAllText(Path.ChangeExtension(lyricPath, ".lrc")) : AudioTags.Read(lyricPath).Lyrics, load.Token) } })
+                : await _api.CallCachedAsync("lyric", new { id = track.Id }, load.Token);
+            load.Token.ThrowIfCancellationRequested();
             _lyrics = response.TryGetProperty("lrc", out var lrc) ? LyricLine.Parse(lrc.Text("lyric"), response.TryGetProperty("tlyric", out var translated) ? translated.Text("lyric") : "") : [];
             BindLyrics(_lyrics.Count > 0 ? _lyrics : new List<LyricLine> { new(TimeSpan.Zero, "暂无歌词") });
         }
@@ -105,9 +110,18 @@ public sealed partial class MainWindow
         catch { if (!load.IsCancellationRequested) { _lyricId = 0; LyricsList.ItemsSource = new List<LyricLine> { new(TimeSpan.Zero, "歌词加载失败") }; } }
         finally { if (ReferenceEquals(_lyricsLoad, load)) _lyricsLoad = null; }
     }
-    private void SuspendLyrics() { _followLyrics = false; _initialLyricCenter = false; ++_lyricScrollGeneration; FollowLyricsButton.Visibility = Visibility.Visible; }
-    private void FollowLyrics_Click(object sender, RoutedEventArgs args) { _followLyrics = true; _activeLyricIndex = -1; FollowLyricsButton.Visibility = Visibility.Collapsed; UpdateProgress(); }
-    private void Lyric_Click(object sender, ItemClickEventArgs args) { if (args.ClickedItem is LyricLine line) { _playback.Seek(line.Position); _followLyrics = true; _activeLyricIndex = -1; FollowLyricsButton.Visibility = Visibility.Collapsed; UpdateProgress(); } }
+    private readonly DispatcherTimer _lyricFollowTimer = new() { Interval = TimeSpan.FromSeconds(5) };
+    private void SuspendLyrics()
+    {
+        _followLyrics = false; _initialLyricCenter = false; ++_lyricScrollGeneration;
+        _lyricFollowTimer.Stop(); if (!_hidden && _view == "playing") _lyricFollowTimer.Start();
+    }
+    private void FollowLyrics_Click(object sender, RoutedEventArgs args)
+    {
+        _lyricFollowTimer.Stop(); _followLyrics = true; _activeLyricIndex = -1; FollowLyricsButton.Visibility = Visibility.Collapsed; UpdateProgress();
+        if (!_hidden && _view == "playing") CenterCurrentLyric();
+    }
+    private void Lyric_Click(object sender, ItemClickEventArgs args) { if (args.ClickedItem is LyricLine line) { _playback.Seek(line.Position); FollowLyrics_Click(sender, new RoutedEventArgs()); } }
     private void SetFullScreen(bool enabled)
     {
         if (_fullScreen == enabled) return;
@@ -167,6 +181,8 @@ public sealed partial class MainWindow
     private Task FavoriteAsync(Track track) => FavoriteTracksAsync([track]);
     private async Task FavoriteTracksAsync(IReadOnlyList<Track> tracks)
     {
+        if (tracks.All(t => t.IsLocal)) { await FavoriteLocalTracksAsync(tracks); return; }
+        if (tracks.Any(t => t.IsLocal)) { ShowError("请分别选择本地和在线歌曲"); return; }
         if (_dialog != null) return;
         if (!_api.HasSession) { await ShowLoginAsync(); if (!_api.HasSession) return; }
         try
@@ -191,8 +207,20 @@ public sealed partial class MainWindow
                 if (await ShowThemedDialogAsync(dialog) == ContentDialogResult.Primary && list.SelectedItem is Playlist playlist)
                 {
                     if (session != _api.Cookie) { ShowError("登录状态已改变，请重试"); return; }
-                    await _api.CallAsync("playlist_tracks", new { op = "add", pid = playlist.Id, tracks = string.Join(',', tracks.Select(t => t.Id).Distinct()) });
-                    ShowPlayerMessage("已添加到歌单", InfoBarSeverity.Success);
+                    var detail = await _api.CallAsync("playlist_detail", new { id = playlist.Id, s = 0 });
+                    var savedIds = detail.GetProperty("playlist").GetProperty("trackIds").EnumerateArray().Select(item => item.Number("id")).ToHashSet();
+                    var requested = tracks.Select(t => t.Id).Distinct().ToArray();
+                    var missing = requested.Where(id => !savedIds.Contains(id)).ToArray();
+                    if (missing.Length == 0) { ShowPlayerMessage("已经收藏到此歌单"); return; }
+                    try { await _api.CallAsync("playlist_tracks", new { op = "add", pid = playlist.Id, tracks = string.Join(',', missing) }); }
+                    catch (NetEaseNEXT.Api.MusicApiException ex) when (ex.Code is 502 or 512)
+                    {
+                        var confirmed = await _api.CallAsync("playlist_detail", new { id = playlist.Id, s = 0 });
+                        var actual = confirmed.GetProperty("playlist").GetProperty("trackIds").EnumerateArray().Select(item => item.Number("id")).ToHashSet();
+                        if (!requested.All(actual.Contains)) throw;
+                        ShowPlayerMessage("歌曲已在此歌单中", InfoBarSeverity.Success); return;
+                    }
+                    ShowPlayerMessage(missing.Length == requested.Length ? "已添加到歌单" : $"已添加 {missing.Length} 首，其余歌曲已经收藏", InfoBarSeverity.Success);
                 }
             }
             finally { _dialog = null; }
@@ -201,6 +229,8 @@ public sealed partial class MainWindow
     }
     private async Task LoadQualityAsync(Track track)
     {
+        if (track.IsLocal) { QualityButton.Content = AudioQuality.Rank(_playback.CurrentQuality) >= 0 ? AudioQuality.Name(_playback.CurrentQuality) : "本地"; QualityButton.IsEnabled = false; return; }
+        QualityButton.IsEnabled = true;
         if (_hidden || _exiting) return;
         _qualityLoad?.Cancel(); using var load = new CancellationTokenSource(); _qualityLoad = load;
         _maxQuality = -1;
@@ -227,13 +257,14 @@ public sealed partial class MainWindow
     }
     private async void Quality_Click(object sender, RoutedEventArgs args)
     {
+        if (_playback.Current?.IsLocal == true) return;
         if (_playback.Current is Track track && _qualityTrack != track.Id) await LoadQualityAsync(track);
         var menu = new MenuFlyout();
         for (var i = 0; i < Qualities.Length; i++)
         {
             var quality = Qualities[i];
             var item = new ToggleMenuFlyoutItem { Text = quality.Name, IsChecked = _settings.Quality == quality.Level, IsEnabled = i <= _maxQuality && _playback.Current != null };
-            item.Click += async (_, _) =>
+            item.Click += (_, _) =>
             {
                 if (_playback.ScheduleQuality(quality.Level))
                 {
@@ -259,31 +290,6 @@ public sealed partial class MainWindow
         if (!OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000)) uri = "ms-settings:sound";
         if (!await Launcher.LaunchUriAsync(new Uri(uri))) await Launcher.LaunchUriAsync(new Uri("ms-settings:sound"));
     }
-    private async void ContextDownload_Click(object sender, RoutedEventArgs args) { if (((FrameworkElement)sender).DataContext is Track track) await DownloadAsync(track); }
-    private async void DownloadCurrent_Click(object sender, RoutedEventArgs args) { if (_playback.Current is Track track) await DownloadAsync(track); }
-    private async Task DownloadAsync(Track track)
-    {
-        if (!_activeDownloads.Add(track.Id)) return;
-        string? partial = null;
-        try
-        {
-            var response = await _api.CallAsync("song_download_url_v1", new { id = track.Id, level = _settings.Quality }, _downloads.Token);
-            var data = response.GetProperty("data"); var url = data.Text("url");
-            if (!Uri.TryCreate(url, UriKind.Absolute, out var uri) || uri.Scheme is not ("https" or "http")) { ShowError("当前账号不能下载此歌曲"); return; }
-            Directory.CreateDirectory(_settings.DownloadDirectory);
-            var name = string.Concat($"{track.Artist} - {track.Title}".Select(c => Path.GetInvalidFileNameChars().Contains(c) ? '_' : c)).Trim().TrimEnd('.');
-            name = name[..Math.Min(100, name.Length)];
-            var extension = data.Text("type").ToLowerInvariant(); if (extension is not ("mp3" or "flac" or "m4a" or "wav")) extension = "mp3";
-            var path = Path.Combine(_settings.DownloadDirectory, $"{name} ({track.Id}).{extension}");
-            if (File.Exists(path)) { ShowError("文件已存在"); return; }
-            partial = path + "." + Guid.NewGuid().ToString("N") + ".part";
-            ShowError("正在下载"); using var client = new HttpClient { Timeout = TimeSpan.FromMinutes(10) };
-            using var result = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, _downloads.Token); result.EnsureSuccessStatusCode();
-            await using (var file = File.Create(partial)) await result.Content.CopyToAsync(file, _downloads.Token);
-            File.Move(partial, path); Notice.Message = "下载完成"; Notice.Severity = InfoBarSeverity.Success; Notice.IsOpen = true;
-        }
-        catch (OperationCanceledException) { }
-        catch (Exception ex) { ShowError(ex.Message); }
-        finally { _activeDownloads.Remove(track.Id); try { if (partial != null && File.Exists(partial)) File.Delete(partial); } catch { } }
-    }
+    private void ContextDownload_Click(object sender, RoutedEventArgs args) { if (sender is FrameworkElement { DataContext: Track track } anchor) ShowDownloadOptions(anchor, [track]); }
+    private void DownloadCurrent_Click(object sender, RoutedEventArgs args) { if (_playback.Current is Track track && sender is FrameworkElement anchor) ShowDownloadOptions(anchor, [track]); }
 }

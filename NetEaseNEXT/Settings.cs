@@ -55,14 +55,51 @@ public sealed partial class MainWindow
     {
         FontCombo.ItemsSource = new[] { _settings.FontFamily, "Segoe UI", "Microsoft YaHei UI" }.Distinct().ToArray();
         FontCombo.SelectedItem = _settings.FontFamily;
+        FontCombo.DropDownOpened += async (_, _) => await RefreshFontsAsync();
+        _tray.FontsChanged += () => { _fontsLoaded = false; if (!_hidden && _view == "settings") _ = RefreshFontsAsync(); };
         _appearanceTimer.Tick += (_, _) => { _appearanceTimer.Stop(); SaveSettings(); ApplyAppearance(); };
     }
     private bool _fontsLoaded, _loadingFonts;
+    private async Task RefreshFontsAsync()
+    {
+        if (_loadingFonts) return;
+        _fontsLoaded = false;
+        try { await LoadFontsAsync(CancellationToken.None); }
+        catch (Exception ex) { ShowError(ex.Message); }
+    }
+    private async void RefreshFonts_Click(object sender, RoutedEventArgs args) => await RefreshFontsAsync();
+    private async void ChooseFont_Click(object sender, RoutedEventArgs args)
+    {
+        try
+        {
+            var picker = new FileOpenPicker(); picker.FileTypeFilter.Add(".ttf"); picker.FileTypeFilter.Add(".otf"); picker.FileTypeFilter.Add(".ttc");
+            WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(this));
+            var file = await picker.PickSingleFileAsync(); if (file == null) return;
+            _settings.FontFamily = await ImportFontSourceAsync(file.Path); ApplyFont(); SaveSettings();
+            await RefreshFontsAsync();
+        }
+        catch (Exception ex) { ShowError(ex.Message); }
+    }
+    private static async Task<string> ImportFontSourceAsync(string selectedPath)
+    {
+        var bytes = await File.ReadAllBytesAsync(selectedPath); if (bytes.Length > 64 * 1024 * 1024) throw new InvalidDataException("字体文件过大");
+        using var fonts = new CanvasFontSet(new Uri(Path.GetFullPath(selectedPath)));
+        var names = fonts.Fonts.FirstOrDefault()?.FamilyNames;
+        var family = names != null && names.TryGetValue("en-us", out var english) ? english : names?.Values.FirstOrDefault();
+        if (string.IsNullOrWhiteSpace(family)) throw new InvalidDataException("无法读取字体名称");
+        // XAML does not resolve file:// fonts. Use an app-data URI in MSIX,
+        // or an application-relative writable folder in portable deployments.
+        var directory = ApplicationIdentity.IsPackaged ? Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "Fonts") : Path.Combine(AppContext.BaseDirectory, "UserFonts");
+        Directory.CreateDirectory(directory);
+        var name = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(bytes)) + Path.GetExtension(selectedPath).ToLowerInvariant();
+        var path = Path.Combine(directory, name); if (!File.Exists(path)) await File.WriteAllBytesAsync(path, bytes);
+        return (ApplicationIdentity.IsPackaged ? "ms-appdata:///local/Fonts/" : "ms-appx:///UserFonts/") + name + "#" + family;
+    }
     private async Task LoadFontsAsync(CancellationToken ct)
     {
         if (_fontsLoaded) return;
         string[] families;
-        try { families = await Task.Run(() => CanvasTextFormat.GetSystemFontFamilies().OrderBy(name => name, StringComparer.CurrentCultureIgnoreCase).ToArray(), ct); }
+        try { families = await Task.Run(() => SystemFonts.Enumerate(ct), ct); }
         catch (OperationCanceledException) { throw; }
         catch { return; }
         ct.ThrowIfCancellationRequested();

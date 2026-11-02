@@ -35,19 +35,7 @@ public sealed partial class MainWindow
         Directory.CreateDirectory(fixture);
         try
         {
-            var script = Path.Combine(fixture, "bridge.mjs");
-            await File.WriteAllTextAsync(script, """
-                import {createInterface} from 'node:readline';
-                createInterface({input:process.stdin}).on('line',async line=>{
-                  const r=JSON.parse(line),p=r.params??{};
-                  await new Promise(resolve=>setTimeout(resolve,40));
-                  let data={code:200};
-                  if(r.method==='comment_music') data={code:200,total:1,more:false,comments:[{commentId:1,content:'Theme check comment',time:1700000000000,user:{nickname:'Test user',avatarUrl:''}}]};
-                  if(r.method==='playlist_tracks') data=Number(p.pid)===901?{code:403,msg:'fixture batch denied'}:{code:200,op:p.op,pid:p.pid,tracks:p.tracks};
-                  process.stdout.write(JSON.stringify({id:r.id,data})+'\n');
-                }).on('close',()=>process.exit(0));
-                """);
-            using var api = new ApiClient(script, fixture);
+            using var api = NativeApiFixtures.Create("theme", fixture);
             _settings.Theme = "Default"; ApplyAppearance();
             var comments = ShowCommentsAsync(new SocialItem { Kind = "song", ThreadId = "R_SO_4_123", ResourceType = 0, ResourceKey = "123" }, api);
             try

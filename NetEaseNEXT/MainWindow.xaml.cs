@@ -33,7 +33,7 @@ public sealed partial class MainWindow : Window
     private bool _ready, _updating, _exiting, _hidden, _selectingNav, _fullScreen, _followLyrics = true;
     private bool _hasBeenVisible;
     private Track? _displayedTrack;
-    private sealed record Route(string View, long Id, long ArtistId, long PeerId, string Name, string Query, SocialItem? Source = null);
+    private sealed record Route(string View, long Id, long ArtistId, long PeerId, string Name, string Query, SocialItem? Source = null, string LocalId = "");
     private readonly Stack<Route> _history = new();
     private Route? _route;
 
@@ -44,7 +44,7 @@ public sealed partial class MainWindow : Window
         Diagnostics.StartupTrace.Mark("InitializeComponent"); InitializeComponent(); Diagnostics.StartupTrace.Mark("XAML initialized");
         _api = startup?.Api ?? new(_settings);
         if (startup != null) { _profileTask = startup.Profile; _profileSession = _api.Cookie; _profileExpires = DateTimeOffset.UtcNow.AddMinutes(5); }
-        InitializeSidebarIcons(); InitializeTrackBatch();
+        InitializeSidebarIcons(); InitializeTrackBatch(); InitializePagination(); InitializeDownloads();
         ToolTipService.SetToolTip(ReadAllButton, "清除消息和私信的全部未读提醒");
         foreach (var notice in new[] { Notice, PlayerNotice })
         {
@@ -55,6 +55,7 @@ public sealed partial class MainWindow : Window
         ApplicationIdentity.BindWindow(WinRT.Interop.WindowNative.GetWindowHandle(this));
         _playback = new(_api, _settings, DispatcherQueue, WinRT.Interop.WindowNative.GetWindowHandle(this));
         _playback.Changed += Playback_Changed; _playback.Error += ShowError;
+        Windows.Networking.Connectivity.NetworkInformation.NetworkStatusChanged += NetworkStatusChanged;
         _tray = new(WinRT.Interop.WindowNative.GetWindowHandle(this));
         _tray.Restore += RestoreWindow; _tray.TogglePlayback += _playback.Toggle;
         _tray.Next += () => _ = _playback.NextAsync(); _tray.Exit += ExitApp;
@@ -68,7 +69,7 @@ public sealed partial class MainWindow : Window
             if (!_exiting && _settings.CloseToTray && _tray.IsAvailable) { args.Cancel = true; _dialog?.Hide(); HideWindow(); }
         };
         AppWindow.Changed += (_, args) => { if (args.DidVisibilityChange || args.DidPresenterChange) UpdateVisibility(); };
-        Activated += (_, _) => UpdateVisibility(); Closed += (_, _) => Cleanup();
+        Activated += (_, _) => { UpdateVisibility(); if (!_hidden) { UpdateDownloadIndicator(); UpdateSongActions(); } }; Closed += (_, _) => Cleanup();
         Root.SizeChanged += (_, _) => UpdateLayout();
         CoverColumn.SizeChanged += (_, _) => { if (_view == "playing" && !_hidden) UpdateLayout(); };
         SettingsPanel.SizeChanged += (_, _) => SettingsContent.Width = Math.Max(0, Math.Min(760, SettingsPanel.ActualWidth - 24));
@@ -76,8 +77,10 @@ public sealed partial class MainWindow : Window
         TrayToggle.IsOn = _settings.CloseToTray; AnimationToggle.IsOn = _settings.Animations;
         SelectTag(BackdropCombo, _settings.Backdrop); SelectTag(ThemeCombo, _settings.Theme);
         CachePath.Text = _settings.CacheDirectory; DownloadPath.Text = _settings.DownloadDirectory;
+        SelectTag(DownloadSourceCombo, _settings.DownloadSource); LocalOnlineInfoToggle.IsOn = _settings.LocalOnlineInfo;
         Diagnostics.StartupTrace.Mark("Initialize fonts"); InitializeFonts(); Diagnostics.StartupTrace.Mark("Apply appearance"); ApplyAppearance(); Diagnostics.StartupTrace.Mark("Appearance applied");
         _timer.Tick += (_, _) => UpdateProgress();
+        _lyricFollowTimer.Tick += (_, _) => FollowLyrics_Click(this, new RoutedEventArgs());
         ConnectTrackGestures(TrackList); ConnectTrackGestures(QueueList);
         Root.AddHandler(UIElement.KeyDownEvent, new KeyEventHandler(Playback_KeyDown), true);
         _inboxTimer.Tick += async (_, _) => await CheckUnreadAsync();
@@ -159,7 +162,7 @@ public sealed partial class MainWindow : Window
     }
     private void ShowError(string message) { if (_exiting) return; if (_view == "playing") { ShowPlayerMessage(message, InfoBarSeverity.Warning); return; } Notice.Message = message; Notice.Severity = InfoBarSeverity.Warning; Notice.IsOpen = true; }
     private void ShowEmpty(string text, string action = "重试") { EmptyText.Text = text; EmptyAction.Content = action; EmptyPanel.Visibility = Visibility.Visible; }
-    private void SetBusy(bool busy) { Busy.IsActive = busy; Busy.Visibility = busy ? Visibility.Visible : Visibility.Collapsed; LoadMoreButton.IsEnabled = CatalogMore.IsEnabled = SocialMore.IsEnabled = !busy; UpdateBatchBar(); }
+    private void SetBusy(bool busy) { Busy.IsActive = busy; Busy.Visibility = busy ? Visibility.Visible : Visibility.Collapsed;  UpdateBatchBar(); }
     private void UpdateVisibility()
     {
         var hidden = !AppWindow.IsVisible || (AppWindow.Presenter is OverlappedPresenter p && p.State == OverlappedPresenterState.Minimized);
@@ -169,6 +172,7 @@ public sealed partial class MainWindow : Window
         _playback.SetBackgroundMode(hidden);
         if (hidden)
         {
+            _lyricFollowTimer.Stop(); StopLocalMonitoring();
             if (_hasBeenVisible) _startup?.Cancel();
             SavePlaybackState(); _accountLoad?.Cancel(); _accountAvatarLoad?.Cancel(); _metadataWarmLoad?.Cancel();
             _inboxTimer.Stop(); _inboxCheck?.Cancel(); _appearanceTimer.Stop(); _commentsLoad?.Cancel(); _playlistEditLoad?.Cancel(); _dialog?.Hide();
@@ -185,7 +189,9 @@ public sealed partial class MainWindow : Window
         }
         else
         {
+            if (!_followLyrics && _view == "playing") _lyricFollowTimer.Start();
             Artwork.ResumeTree(Root);
+            if (IsLocalView && (!_runningSmokeTest || _checkingLibraryWorkflow)) ResumeLocalMonitoring();
             Playback_Changed();
             if (_sessionReady || _runningSmokeTest)
             {
@@ -214,6 +220,10 @@ public sealed partial class MainWindow : Window
     private void ExitApp() { _exiting = true; Close(); }
     private void Cleanup()
     {
+        StopLocalMonitoring();
+        Windows.Networking.Connectivity.NetworkInformation.NetworkStatusChanged -= NetworkStatusChanged;
+        _lyricFollowTimer.Stop();
+        SaveDownloads();
         SavePlaybackState(); _playbackSaveTimer.Stop(); _accountLoad?.Cancel(); _accountAvatarLoad?.Cancel(); _metadataWarmLoad?.Cancel();
         _exiting = true; _trackLocateLoad?.Cancel(); _windowTransitionTimer.Stop(); CancelCoverTransitions(); _timer.Stop(); _playerNoticeTimer.Stop(); _appearanceTimer.Stop(); _inboxTimer.Stop(); _inboxCheck?.Cancel(); _readAllLoad?.Cancel(); _commentsLoad?.Cancel(); _playlistEditLoad?.Cancel(); _playlistQueueLoad?.Cancel(); _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _loginLoad?.Cancel(); _coverLoad?.Cancel(); _downloads.Cancel();
         _themeSettings.ColorValuesChanged -= SystemColorsChanged;

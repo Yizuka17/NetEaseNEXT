@@ -23,30 +23,12 @@ public sealed partial class MainWindow
         Directory.CreateDirectory(fixture);
         try
         {
-            var script = Path.Combine(fixture, "bridge.mjs");
-            await File.WriteAllTextAsync(script, """
-                import {createInterface} from 'node:readline';
-                createInterface({input:process.stdin}).on('line',async line=>{
-                  const r=JSON.parse(line),p=r.params??{};
-                  await new Promise(resolve=>setTimeout(resolve,80));
-                  let data={code:200};
-                  if(r.method==='album_sublist') {
-                    const offset=Number(p.offset);
-                    data=offset===999 ? {code:500,msg:'fixture album failure'} : {
-                      code:200,count:offset===700?0:49,hasMore:offset===0,
-                      data:offset===700?[]:Array.from({length:offset===0?48:1},(_,i)=>({id:7000+offset+i,name:'Album '+(offset+i),picUrl:'',artists:[{name:'Artist A'},{name:'Artist B'}]}))
-                    };
-                  }
-                  if(r.method==='playlist_tracks') data=Number(p.pid)===901 ? {code:403,msg:'fixture removal denied'} : {code:200,op:p.op,pid:p.pid,tracks:p.tracks};
-                  process.stdout.write(JSON.stringify({id:r.id,data})+'\n');
-                }).on('close',()=>process.exit(0));
-                """);
-            using var api = new ApiClient(script, fixture);
+            using var api = NativeApiFixtures.Create("library", fixture);
             _view = "saved-albums"; Catalog.Clear(); _offset = 0;
             await LoadSavedAlbumsAsync(api, CancellationToken.None);
-            check("Saved albums parse all artists and expose the next page", Catalog.Count == 48 && Catalog[0].Kind == "album" && Catalog[0].Subtitle == "Artist A / Artist B" && _offset == 48 && CatalogMore.Visibility == Visibility.Visible, null);
+            check("Saved albums parse all artists and expose the next page", Catalog.Count == 48 && Catalog[0].Kind == "album" && Catalog[0].Subtitle == "Artist A / Artist B" && _offset == 48 && _catalogMore, null);
             await LoadSavedAlbumsAsync(api, CancellationToken.None);
-            check("Saved album pagination appends without losing the first page", Catalog.Count == 49 && Catalog.Select(a => a.Id).Distinct().Count() == 49 && _offset == 49 && CatalogMore.Visibility == Visibility.Collapsed, null);
+            check("Saved album pagination appends without losing the first page", Catalog.Count == 49 && Catalog.Select(a => a.Id).Distinct().Count() == 49 && _offset == 49 && !_catalogMore, null);
             var reads = api.RequestCount; Catalog.Clear(); _offset = 0;
             await LoadSavedAlbumsAsync(api, CancellationToken.None);
             check("Saved albums read back from session-scoped cache", Catalog.Count == 48 && api.RequestCount == reads, null);
@@ -60,7 +42,7 @@ public sealed partial class MainWindow
                 check("Canceled album requests cannot append stale rows", Catalog.Count == 48 && _offset == 500, null);
             }
             _offset = 700; Catalog.Clear(); await LoadSavedAlbumsAsync(api, CancellationToken.None);
-            check("An empty saved album collection has no paging button", Catalog.Count == 0 && CatalogMore.Visibility == Visibility.Collapsed, null);
+            check("An empty saved album collection has no paging button", Catalog.Count == 0 && !_catalogMore, null);
 
             await NavigateAsync("queue");
             var first = new Track(123, "First song", "Artist", "Album", "", 60000);
