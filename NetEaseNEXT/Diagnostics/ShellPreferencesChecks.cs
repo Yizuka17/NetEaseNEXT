@@ -90,22 +90,24 @@ public sealed partial class MainWindow
                 foreach (var theme in new[] { "Dark", "Light" })
                 {
                     _settings.Theme = theme; ApplyAppearance();
-                    await Wait(() => Root.ActualTheme.ToString() == theme);
-                    var values = new List<(float Tint, float Luminosity)>();
+                    await Wait(() => Root.ActualTheme.ToString() == theme && backdrop.NativeProfileReady);
+                    var values = new List<(float Tint, float Luminosity, double Blend)>();
                     var stableColors = true;
                     foreach (var step in new[] { 0, 25, 50, 65, 75, 100 })
                     {
                         TransparencySlider.Value = step;
-                        values.Add(backdrop.AppliedProfile!.Value);
+                        var profile = backdrop.AppliedProfile!.Value;
+                        values.Add((profile.Tint, profile.Luminosity, SolidLayer.Opacity));
                         var palette = backdrop.AppliedColors!.Value;
                         stableColors &= (palette.Tint.R < 128) == (theme == "Dark") && (palette.Fallback.R < 128) == (theme == "Dark");
                     }
-                    check(theme + " Acrylic changes across the full slider without replacing the native backdrop or mixing palettes", ReferenceEquals(backdrop, SystemBackdrop) && stableColors && values.Zip(values.Skip(1)).All(x => x.First.Tint > x.Second.Tint && x.First.Luminosity > x.Second.Luminosity) && !backdrop.UsesSystemDefaults, values.Select(p => new { p.Tint, p.Luminosity }).ToArray());
+                    check(theme + " Acrylic changes across the full slider without replacing the native backdrop or mixing palettes", ReferenceEquals(backdrop, SystemBackdrop) && stableColors && values.Zip(values.Skip(1)).All(x => x.First.Tint >= x.Second.Tint && x.First.Luminosity >= x.Second.Luminosity && x.First.Blend >= x.Second.Blend && x.First != x.Second) && !backdrop.UsesSystemDefaults, values.Select(p => new { p.Tint, p.Luminosity, p.Blend }).ToArray());
                 }
                 TransparencySlider.Value = 65;
-                check("65 percent can be selected in custom mode", _settings.AcrylicTransparency == 65 && _settings.AcrylicSystemMaterial == false && TransparencyValue.Text == "65%" && !backdrop.UsesSystemDefaults, null);
+                check("Dragging to 65 percent restores the native preset", _settings.AcrylicTransparency == 65 && TransparencyValue.Text.Contains("系统默认") && backdrop.UsesSystemDefaults && !ResetMaterialButton.IsEnabled, null);
+                TransparencySlider.Value = 75;
                 Invoke(ResetMaterialButton); await Wait(() => SystemBackdrop is AdjustableBackdrop { AppliedProfile: not null });
-                check("The reset control restores native defaults without overwriting the custom value", _settings.AcrylicTransparency == 65 && TransparencySlider.Value == 65 && TransparencyValue.Text == "系统默认" && backdrop.UsesSystemDefaults && !ResetMaterialButton.IsEnabled, null);
+                check("The reset control moves to the native preset without overwriting the custom value", _settings.AcrylicTransparency == 75 && TransparencySlider.Value == 65 && TransparencyValue.Text.Contains("系统默认") && backdrop.UsesSystemDefaults && !ResetMaterialButton.IsEnabled, null);
                 await SaveLibraryImageAsync(Root, "shell-preferences-settings-light.png"); _settings.Theme = "Dark"; ApplyAppearance(); await Wait(() => Root.ActualTheme == ElementTheme.Dark && SystemBackdrop is AdjustableBackdrop { AppliedProfile: not null });
                 await Wait(() => FontHost.ActualTheme == ElementTheme.Dark && SystemBackdrop is AdjustableBackdrop attached && attached.AppliedColors is { } darkColors && darkColors.Tint.R + darkColors.Tint.G + darkColors.Tint.B < 384);
                 current = ((AdjustableBackdrop)SystemBackdrop!).AppliedProfile!.Value;

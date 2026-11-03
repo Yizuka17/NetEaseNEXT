@@ -29,12 +29,12 @@ public sealed partial class MainWindow
                 stage, mica = MicaController.IsSupported(), acrylic = DesktopAcrylicController.IsSupported(),
                 tint = material?.AppliedProfile?.Tint, luminosity = material?.AppliedProfile?.Luminosity,
                 tintRed = material?.AppliedColors?.Tint.R, fallbackRed = material?.AppliedColors?.Fallback.R,
-                system = material?.UsesSystemDefaults, theme = Root.ActualTheme.ToString()
+                system = material?.UsesSystemDefaults, solidBlend = SolidLayer.Opacity, theme = Root.ActualTheme.ToString()
             });
             var target = Path.Combine(stageFolder, (++sequence).ToString("D3") + ".json");
             await File.WriteAllTextAsync(target + ".tmp", json);
             File.Move(target + ".tmp", target);
-            await Task.Delay(2500);
+            await Task.Delay(1500);
         }
         foreach (var kind in new[] { "Acrylic", "Mica", "MicaAlt" })
         {
@@ -51,22 +51,31 @@ public sealed partial class MainWindow
                 ResetMaterial_Click(ResetMaterialButton, new RoutedEventArgs());
                 await Record(kind + "-" + theme + "-system", backdrop);
                 var system = backdrop.AppliedColors!.Value;
-                check(kind + " uses system defaults with the selected theme", backdrop.UsesSystemDefaults && Root.ActualTheme.ToString() == theme
+                var nativeProfile = backdrop.AppliedProfile!.Value;
+                var neutral = AdjustableBackdrop.DefaultTransparency;
+                check(kind + " uses system defaults with the selected theme", backdrop.UsesSystemDefaults && TransparencySlider.Value == neutral && Root.ActualTheme.ToString() == theme
                     && (system.Tint.R < 128) == (theme == "Dark") && (system.Fallback.R < 128) == (theme == "Dark"),
                     new { system.Tint.R, Fallback = system.Fallback.R });
-                var previous = (Tint: 2f, Luminosity: 2f);
-                foreach (var percent in new[] { 0, 25, 50, 65, 75, 100 })
+                var previous = (Tint: 2f, Luminosity: 2f, Blend: 2d);
+                foreach (var percent in new[] { 0, 25, 50, 64, 65, 66, 75, 100 })
                 {
                     TransparencySlider.Value = percent;
                     await Record(kind + "-" + theme + "-" + percent, backdrop);
                     var profile = backdrop.AppliedProfile!.Value;
                     var colors = backdrop.AppliedColors!.Value;
-                    check(kind + " " + theme + " " + percent, ReferenceEquals(SystemBackdrop, backdrop) && !backdrop.UsesSystemDefaults
-                        && profile.Tint < previous.Tint && profile.Luminosity < previous.Luminosity
-                        && (colors.Tint.R < 128) == (theme == "Dark") && (colors.Fallback.R < 128) == (theme == "Dark")
-                        && TransparencyValue.Text == percent + "%", null);
-                    previous = profile;
+                    var blend = SolidLayer.Opacity;
+                    check(kind + " " + theme + " " + percent, ReferenceEquals(SystemBackdrop, backdrop)
+                        && backdrop.UsesSystemDefaults == (percent == neutral)
+                        && profile.Tint <= previous.Tint && profile.Luminosity <= previous.Luminosity && blend <= previous.Blend
+                        && (profile.Tint, profile.Luminosity, blend) != previous
+                        && colors == system && (percent > neutral || profile == nativeProfile), null);
+                    previous = (profile.Tint, profile.Luminosity, blend);
                 }
+                TransparencySlider.Value = neutral;
+                await Record(kind + "-" + theme + "-returned", backdrop);
+                check(kind + " " + theme + " returns to the original native preset after adjusting", backdrop.UsesSystemDefaults
+                    && backdrop.AppliedProfile == nativeProfile && backdrop.AppliedColors == system && SolidLayer.Opacity == 0
+                    && !ResetMaterialButton.IsEnabled, null);
             }
         }
     }

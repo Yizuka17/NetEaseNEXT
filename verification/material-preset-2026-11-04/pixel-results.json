@@ -1,0 +1,356 @@
+{
+  "Acrylic-Dark": {
+    "samples": {
+      "system": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      },
+      "0": {
+        "title": 18.979,
+        "sidebar": 11.041,
+        "player": 40.757
+      },
+      "25": {
+        "title": 11.405,
+        "sidebar": 6.041,
+        "player": 24.94
+      },
+      "50": {
+        "title": 4.767,
+        "sidebar": 3.0,
+        "player": 9.273
+      },
+      "64": {
+        "title": 1.0,
+        "sidebar": 1.0,
+        "player": 0.877
+      },
+      "65": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      },
+      "66": {
+        "title": 1.307,
+        "sidebar": 0.864,
+        "player": 0.409
+      },
+      "75": {
+        "title": 12.913,
+        "sidebar": 2.811,
+        "player": 3.928
+      },
+      "100": {
+        "title": 45.215,
+        "sidebar": 10.262,
+        "player": 13.73
+      },
+      "returned": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      }
+    },
+    "previousDefaultVs65": {
+      "title": 42.55,
+      "sidebar": 17.789,
+      "player": 13.264
+    }
+  },
+  "Acrylic-Light": {
+    "samples": {
+      "system": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      },
+      "0": {
+        "title": 3.36,
+        "sidebar": 26.676,
+        "player": 4.598
+      },
+      "25": {
+        "title": 2.061,
+        "sidebar": 16.792,
+        "player": 3.115
+      },
+      "50": {
+        "title": 0.636,
+        "sidebar": 5.943,
+        "player": 1.107
+      },
+      "64": {
+        "title": 0.0,
+        "sidebar": 1.0,
+        "player": 0.217
+      },
+      "65": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      },
+      "66": {
+        "title": 0.612,
+        "sidebar": 1.983,
+        "player": 0.339
+      },
+      "75": {
+        "title": 6.147,
+        "sidebar": 19.883,
+        "player": 3.906
+      },
+      "100": {
+        "title": 21.538,
+        "sidebar": 70.416,
+        "player": 13.661
+      },
+      "returned": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      }
+    },
+    "previousDefaultVs65": {
+      "title": 20.546,
+      "sidebar": 58.944,
+      "player": 16.734
+    }
+  },
+  "Mica-Dark": {
+    "samples": {
+      "system": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      },
+      "0": {
+        "title": 5.472,
+        "sidebar": 5.511,
+        "player": 6.201
+      },
+      "25": {
+        "title": 3.179,
+        "sidebar": 3.257,
+        "player": 3.499
+      },
+      "50": {
+        "title": 1.333,
+        "sidebar": 1.4,
+        "player": 1.333
+      },
+      "64": {
+        "title": 0.667,
+        "sidebar": 0.667,
+        "player": 0.667
+      },
+      "65": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      },
+      "66": {
+        "title": 1.24,
+        "sidebar": 1.291,
+        "player": 0.701
+      },
+      "75": {
+        "title": 13.958,
+        "sidebar": 14.182,
+        "player": 8.046
+      },
+      "100": {
+        "title": 49.737,
+        "sidebar": 50.268,
+        "player": 29.65
+      },
+      "returned": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      }
+    },
+    "previousDefaultVs65": {
+      "title": 46.523,
+      "sidebar": 46.937,
+      "player": 26.24
+    }
+  },
+  "Mica-Light": {
+    "samples": {
+      "system": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      },
+      "0": {
+        "title": 3.709,
+        "sidebar": 3.747,
+        "player": 0.712
+      },
+      "25": {
+        "title": 2.0,
+        "sidebar": 2.0,
+        "player": 0.622
+      },
+      "50": {
+        "title": 1.0,
+        "sidebar": 1.0,
+        "player": 0.045
+      },
+      "64": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      },
+      "65": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      },
+      "66": {
+        "title": 0.724,
+        "sidebar": 0.584,
+        "player": 0.378
+      },
+      "75": {
+        "title": 7.411,
+        "sidebar": 7.198,
+        "player": 3.822
+      },
+      "100": {
+        "title": 25.127,
+        "sidebar": 24.494,
+        "player": 13.201
+      },
+      "returned": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      }
+    },
+    "previousDefaultVs65": {
+      "title": 24.241,
+      "sidebar": 23.672,
+      "player": 12.953
+    }
+  },
+  "MicaAlt-Dark": {
+    "samples": {
+      "system": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      },
+      "0": {
+        "title": 19.9,
+        "sidebar": 19.852,
+        "player": 17.186
+      },
+      "25": {
+        "title": 12.625,
+        "sidebar": 12.624,
+        "player": 11.131
+      },
+      "50": {
+        "title": 4.063,
+        "sidebar": 4.111,
+        "player": 4.182
+      },
+      "64": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.145
+      },
+      "65": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      },
+      "66": {
+        "title": 1.566,
+        "sidebar": 1.53,
+        "player": 0.89
+      },
+      "75": {
+        "title": 16.153,
+        "sidebar": 16.307,
+        "player": 10.515
+      },
+      "100": {
+        "title": 56.499,
+        "sidebar": 57.022,
+        "player": 35.646
+      },
+      "returned": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      }
+    },
+    "previousDefaultVs65": {
+      "title": 58.252,
+      "sidebar": 58.596,
+      "player": 40.818
+    }
+  },
+  "MicaAlt-Light": {
+    "samples": {
+      "system": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      },
+      "0": {
+        "title": 22.364,
+        "sidebar": 22.304,
+        "player": 6.233
+      },
+      "25": {
+        "title": 14.27,
+        "sidebar": 14.166,
+        "player": 4.566
+      },
+      "50": {
+        "title": 4.998,
+        "sidebar": 4.925,
+        "player": 1.749
+      },
+      "64": {
+        "title": 0.667,
+        "sidebar": 0.667,
+        "player": 0.0
+      },
+      "65": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      },
+      "66": {
+        "title": 0.406,
+        "sidebar": 0.439,
+        "player": 0.127
+      },
+      "75": {
+        "title": 4.532,
+        "sidebar": 4.415,
+        "player": 2.895
+      },
+      "100": {
+        "title": 16.063,
+        "sidebar": 15.631,
+        "player": 10.423
+      },
+      "returned": {
+        "title": 0.0,
+        "sidebar": 0.0,
+        "player": 0.0
+      }
+    },
+    "previousDefaultVs65": {
+      "title": 5.231,
+      "sidebar": 5.333,
+      "player": 3.407
+    }
+  }
+}

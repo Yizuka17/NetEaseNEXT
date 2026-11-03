@@ -1,0 +1,4 @@
+APPHASH 856365C1D11BA5BCA3FCC947F49ECE855CD7A3E2F33E11054C40C6AAD801D24E
+REPORT {"mode":"--shell-preferences-check","pid":736,"count":30,"failures":[]}
+REPORT {"mode":"--material-vm-check","pid":1172,"count":61,"failures":[]}
+VM TESTS-FINISHED

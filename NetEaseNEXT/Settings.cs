@@ -182,13 +182,20 @@ public sealed partial class MainWindow
             else SystemBackdrop = new AdjustableBackdrop(_settings.Backdrop, transparency, systemDefaults, theme);
         }
         catch (Exception ex) { Log.Write(ex); SystemBackdrop = null; supported = false; }
-        SolidLayer.Visibility = SystemBackdrop == null ? Visibility.Visible : Visibility.Collapsed;
-        _updating = true; TransparencySlider.Value = transparency; _updating = false;
+        // Below the preset, blend the native material toward the solid page color.
+        // Increasing the controller tint directly can flatten Mica in a single step.
+        var solidBlend = (SystemBackdrop as AdjustableBackdrop)?.SolidBlend ?? 1;
+        SolidLayer.Opacity = solidBlend;
+        SolidLayer.Visibility = solidBlend > 0 ? Visibility.Visible : Visibility.Collapsed;
+        var atDefault = systemDefaults || transparency == AdjustableBackdrop.DefaultTransparency;
+        _updating = true;
+        TransparencySlider.Value = atDefault ? AdjustableBackdrop.DefaultTransparency : transparency;
+        _updating = false;
         var label = _settings.Backdrop.StartsWith("Mica") ? "壁纸融合度" : "透明度";
         MaterialCaption.Text = label; Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(TransparencySlider, label);
         TransparencySlider.IsEnabled = supported;
-        ResetMaterialButton.IsEnabled = supported && !systemDefaults;
-        TransparencyValue.Text = _settings.Backdrop == "Solid" ? "" : systemDefaults ? "系统默认" : $"{transparency:0}%";
+        ResetMaterialButton.IsEnabled = supported && !atDefault;
+        TransparencyValue.Text = !supported ? "" : atDefault ? $"{AdjustableBackdrop.DefaultTransparency:0}%（系统默认）" : $"{transparency:0}%";
         MaterialHint.Text = !supported && _settings.Backdrop != "Solid" ? "当前系统不支持此材质，已使用纯色背景" : _settings.Backdrop.StartsWith("Mica") ? "Mica 从桌面壁纸取色，不是实时透视。" : _settings.Backdrop == "Acrylic" ? "窗口未激活或系统关闭透明效果时，会使用纯色背景。" : "";
         MaterialHint.Visibility = MaterialHint.Text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
     }
