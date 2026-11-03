@@ -14,7 +14,7 @@ internal sealed class StartupSession
     internal Task<PlaybackSnapshot> State { get; }
     internal Task<JsonElement?> Profile { get; }
     internal Task InitialPage { get; }
-    internal static string InitialView(PlaybackSnapshot state) => state.View == "playlist" && state.PlaylistId > 0 ? "playlist" : state.View == "playing" && state.Queue.Any(t => t.Id == state.CurrentId) ? "playing" : state.Queue.Count > 0 ? "queue" : "discover";
+    internal static string InitialView(PlaybackSnapshot state) => state.View is "local" or "local-playlist" ? state.View : state.View == "playlist" && state.PlaylistId > 0 ? "playlist" : state.View == "playing" && state.Queue.Any(t => t.Id == state.CurrentId) ? "playing" : state.Queue.Count > 0 ? "queue" : "discover";
     internal StartupSession(SettingsStore settings, ApiClient api, Func<PlaybackSnapshot>? stateLoader = null)
     {
         Settings = settings; Api = api;
@@ -40,7 +40,7 @@ internal sealed class StartupSession
                         await Task.WhenAll(api.CallCachedAsync("playlist_detail", new { id = state.PlaylistId, s = 0 }, _pageLoad.Token),
                             api.CallCachedAsync("playlist_track_all", new { id = state.PlaylistId, limit = 100, offset = 0 }, _pageLoad.Token)); break;
                     case "discover": await api.DiscoverAsync(_pageLoad.Token); break;
-                    case "playing": await api.CallCachedAsync("lyric", new { id = state.CurrentId }, _pageLoad.Token); break;
+                    case "playing" when state.Queue.FirstOrDefault(t => t.Id == state.CurrentId)?.IsLocal != true: await api.CallCachedAsync("lyric", new { id = state.CurrentId }, _pageLoad.Token); break;
                 }
                 Diagnostics.StartupTrace.Mark("Startup initial data ready");
             }

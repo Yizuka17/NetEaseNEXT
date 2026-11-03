@@ -29,7 +29,7 @@ public sealed partial class MainWindow
     private void SystemColorsChanged(UISettings sender, object args) => DispatcherQueue.TryEnqueue(() =>
     {
         if (_exiting) return;
-        Root.RequestedTheme = PreferredAppTheme;
+        FontHost.RequestedTheme = Root.RequestedTheme = PreferredAppTheme;
         RefreshThemeSurfaces();
     });
     private void ApplyPopupTheme(FrameworkElement element) => element.RequestedTheme = Root.ActualTheme;
@@ -70,6 +70,7 @@ public sealed partial class MainWindow
         AppWindow.TitleBar.ButtonForegroundColor = Root.ActualTheme == ElementTheme.Dark ? Microsoft.UI.Colors.White : Microsoft.UI.Colors.Black;
         UpdateAppIcon();
         if (_hidden) return;
+        if (SystemBackdrop is Services.AdjustableBackdrop) ApplyMaterial(Root.ActualTheme);
         RefreshLyricAppearance();
         _coverBackgroundKey = null;
         if (_view == "playing" && _playback.Current is { } track) _ = UpdateCoverBackgroundAsync(track);

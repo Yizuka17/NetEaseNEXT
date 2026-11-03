@@ -99,6 +99,7 @@ public sealed partial class MainWindow
             var selected = i == _activeLyricIndex;
             var text = FindDescendant<TextBlock>(row);
             if (text != null) text.Style = (Style)Application.Current.Resources[selected ? "CurrentLyricTextStyle" : "OtherLyricTextStyle"];
+            if (row.ContentTemplateRoot is FrameworkElement content && content.FindName("LyricTranslation") is TextBlock translation) translation.Opacity = selected ? .65 : .9;
             var distance = Math.Abs(i - _activeLyricIndex);
             var visual = ElementCompositionPreview.GetElementVisual(row);
             visual.Opacity = selected ? 1 : (float)Math.Max(.18, .65 - distance * .09);

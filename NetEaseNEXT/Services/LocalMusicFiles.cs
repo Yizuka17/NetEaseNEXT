@@ -7,6 +7,8 @@ namespace NetEaseNEXT.Services;
 internal static class LocalMusicFiles
 {
     internal static readonly string[] Extensions = [".mp3", ".flac", ".m4a", ".wav", ".aac", ".ogg", ".opus", ".wma"];
+    internal static bool IsDownloadPartial(string path) => Path.GetFileName(path).StartsWith('.') && Path.GetFileNameWithoutExtension(path).EndsWith(".part", StringComparison.OrdinalIgnoreCase);
+    internal static bool IsAudioFile(string path) => Extensions.Contains(Path.GetExtension(path), StringComparer.OrdinalIgnoreCase) && !IsDownloadPartial(path);
     internal static string ArtworkDirectory => Path.Combine(SettingsStore.DataDirectory, "LocalArtwork");
     internal static string StoreCover(byte[] bytes)
     {
@@ -33,10 +35,12 @@ internal static class LocalMusicFiles
         if (!Directory.Exists(playlist.FolderPath)) throw new DirectoryNotFoundException("绑定的文件夹不可用");
         var options = new EnumerationOptions { RecurseSubdirectories = playlist.IncludeSubfolders, IgnoreInaccessible = false, AttributesToSkip = FileAttributes.ReparsePoint };
         var paths = new List<string>(); var limited = false;
+        var excluded = playlist.ExcludedPaths.ToHashSet(StringComparer.OrdinalIgnoreCase);
         foreach (var path in Directory.EnumerateFiles(playlist.FolderPath, "*", options))
         {
             ct.ThrowIfCancellationRequested();
-            if (!Extensions.Contains(Path.GetExtension(path).ToLowerInvariant())) continue;
+            if (!IsAudioFile(path)) continue;
+            if (excluded.Contains(Path.GetFullPath(path))) continue;
             if (paths.Count == 10000) { limited = true; break; }
             paths.Add(Path.GetFullPath(path));
         }
@@ -66,23 +70,80 @@ internal static class LocalMusicFiles
 internal sealed class LocalFolderMonitor : IDisposable
 {
     private readonly List<FileSystemWatcher> _watchers = [];
+    private readonly object _sync = new();
+    private readonly HashSet<string> _dirty = [];
     private readonly Timer _debounce;
     private int _disposed;
-    internal LocalFolderMonitor(IEnumerable<LocalPlaylist> playlists, Action changed)
+    internal LocalFolderMonitor(IEnumerable<LocalPlaylist> playlists, Action<IReadOnlySet<string>> changed)
     {
-        _debounce = new(_ => { if (Volatile.Read(ref _disposed) == 0) changed(); }, null, Timeout.Infinite, Timeout.Infinite);
-        foreach (var playlist in playlists.Where(p => p.FolderPath.Length > 0).DistinctBy(p => p.FolderPath, StringComparer.OrdinalIgnoreCase))
+        _debounce = new(_ =>
         {
-            try
+            HashSet<string> batch;
+            lock (_sync)
             {
-                var watcher = new FileSystemWatcher(playlist.FolderPath) { IncludeSubdirectories = true, NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName | NotifyFilters.LastWrite | NotifyFilters.Size };
-                watcher.Changed += Change; watcher.Created += Change; watcher.Deleted += Change; watcher.Renamed += Change;
-                watcher.Error += (_, _) => Schedule(); watcher.EnableRaisingEvents = true; _watchers.Add(watcher);
+                if (_disposed != 0 || _dirty.Count == 0) return;
+                batch = [.. _dirty]; _dirty.Clear();
             }
-            catch (Exception ex) when (ex is IOException or ArgumentException or UnauthorizedAccessException) { Log.Write(ex); }
+            changed(batch);
+        }, null, Timeout.Infinite, Timeout.Infinite);
+        var bindings = new List<(string Root, string Id, bool Recursive)>();
+        foreach (var playlist in playlists.Where(p => p.FolderPath.Length > 0))
+        {
+            try { bindings.Add((Path.TrimEndingDirectorySeparator(Path.GetFullPath(playlist.FolderPath)), playlist.Id, playlist.IncludeSubfolders)); }
+            catch (Exception ex) when (ex is ArgumentException or IOException) { Log.Write(ex); }
+        }
+        foreach (var group in bindings.GroupBy(p => p.Root, StringComparer.OrdinalIgnoreCase))
+        {
+            var entries = group.ToArray();
+            var recursive = entries.Where(p => p.Recursive).Select(p => p.Id).ToArray();
+            var all = entries.Select(p => p.Id).ToArray();
+            var root = group.Key;
+            bool Direct(string path) => string.Equals(Path.GetDirectoryName(path), root, StringComparison.OrdinalIgnoreCase);
+            void FileChanged(object sender, FileSystemEventArgs args)
+            {
+                var path = args.FullPath;
+                var previous = (args as RenamedEventArgs)?.OldFullPath;
+                var hasNew = LocalMusicFiles.IsAudioFile(path);
+                var hasOld = previous != null && LocalMusicFiles.IsAudioFile(previous);
+                if (hasNew || hasOld) Schedule(hasNew && Direct(path) || hasOld && Direct(previous!) ? all : recursive);
+            }
+            Watch(root, recursive.Length > 0, NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.Size, FileChanged, all);
+            if (recursive.Length > 0) Watch(root, true, NotifyFilters.DirectoryName, (_, _) => Schedule(recursive), recursive);
         }
     }
-    private void Change(object sender, FileSystemEventArgs args) => Schedule();
-    private void Schedule() { try { if (Volatile.Read(ref _disposed) == 0) _debounce.Change(650, Timeout.Infinite); } catch (ObjectDisposedException) { } }
-    public void Dispose() { if (Interlocked.Exchange(ref _disposed, 1) != 0) return; foreach (var watcher in _watchers) watcher.Dispose(); _debounce.Dispose(); }
+    private void Watch(string root, bool recursive, NotifyFilters filters, FileSystemEventHandler changed, string[] ids)
+    {
+        FileSystemWatcher? watcher = null;
+        try
+        {
+            watcher = new(root) { IncludeSubdirectories = recursive, NotifyFilter = filters };
+            watcher.Changed += changed; watcher.Created += changed; watcher.Deleted += changed;
+            watcher.Renamed += (sender, args) => changed(sender, args);
+            watcher.Error += (_, _) => Schedule(ids); watcher.EnableRaisingEvents = true; _watchers.Add(watcher);
+        }
+        catch (Exception ex) when (ex is IOException or ArgumentException or UnauthorizedAccessException)
+        {
+            watcher?.Dispose(); Log.Write(ex);
+        }
+    }
+    private void Schedule(string[] ids)
+    {
+        if (ids.Length == 0) return;
+        lock (_sync)
+        {
+            if (_disposed != 0) return;
+            var start = _dirty.Count == 0;
+            _dirty.UnionWith(ids);
+            if (start) _debounce.Change(650, Timeout.Infinite);
+        }
+    }
+    public void Dispose()
+    {
+        lock (_sync)
+        {
+            if (_disposed != 0) return;
+            _disposed = 1; _debounce.Dispose();
+        }
+        foreach (var watcher in _watchers) watcher.Dispose();
+    }
 }

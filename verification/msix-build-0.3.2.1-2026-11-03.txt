@@ -1,0 +1,1282 @@
+
+Logo                                Passed Candidates
+----                                ------ ----------
+PackageAssets\StoreLogo.png           True         14
+PackageAssets\AppList.png             True         59
+PackageAssets\Square150x150Logo.png   True         14
+unplated                              True         15
+lightunplated                         True         15
+
+
+Microsoft (R) MakeAppx Tool
+
+Copyright (C) 2013 Microsoft.  All rights reserved.
+
+
+
+The path (/p) parameter is: "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\NetEaseNEXT-0.3.2.1-x64.msix"
+
+The content directory (/d) parameter is: "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c"
+
+Enumerating files from directory "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c"
+
+Packing 625 file(s) in "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c" (content directory) to "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\NetEaseNEXT-0.3.2.1-x64.msix" (output file name).
+
+Memory limit defaulting to 17027569664 bytes.
+
+Using "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\AppxManifest.xml" as the manifest for the package.
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Win32.SystemEvents.dll" as a payload file.  Its path in the package will be "Microsoft.Win32.SystemEvents.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Drawing.Common.dll" as a payload file.  Its path in the package will be "System.Drawing.Common.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\TagLibSharp.dll" as a payload file.  Its path in the package will be "TagLibSharp.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Numerics.Tensors.dll" as a payload file.  Its path in the package will be "System.Numerics.Tensors.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\WinRT.Runtime.dll" as a payload file.  Its path in the package will be "WinRT.Runtime.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.SDK.NET.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.SDK.NET.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Web.WebView2.Core.dll" as a payload file.  Its path in the package will be "Microsoft.Web.WebView2.Core.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Web.WebView2.Core.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Web.WebView2.Core.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\WebView2Loader.dll" as a payload file.  Its path in the package will be "WebView2Loader.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Security.Cryptography.ProtectedData.dll" as a payload file.  Its path in the package will be "System.Security.Cryptography.ProtectedData.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Widgets.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.Widgets.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Graphics.Canvas.dll" as a payload file.  Its path in the package will be "Microsoft.Graphics.Canvas.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Graphics.Canvas.Interop.dll" as a payload file.  Its path in the package will be "Microsoft.Graphics.Canvas.Interop.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Graphics.Imaging.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Graphics.Imaging.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.Foundation.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.Foundation.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.Text.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.Text.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.ContentSafety.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.ContentSafety.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.Imaging.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.Imaging.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.InteractiveExperiences.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.InteractiveExperiences.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\BouncyCastle.Cryptography.dll" as a payload file.  Its path in the package will be "BouncyCastle.Cryptography.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.WindowsAppRuntime.Bootstrap.dll" as a payload file.  Its path in the package will be "Microsoft.WindowsAppRuntime.Bootstrap.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.ApplicationModel.Background.UniversalBGTask.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.ApplicationModel.Background.UniversalBGTask.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.ApplicationModel.Background.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.ApplicationModel.Background.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.ApplicationModel.WindowsAppRuntime.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.ApplicationModel.WindowsAppRuntime.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AppLifecycle.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.AppLifecycle.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AppNotifications.Builder.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.AppNotifications.Builder.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AppNotifications.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.AppNotifications.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.BadgeNotifications.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.BadgeNotifications.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Foundation.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.Foundation.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Management.Deployment.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.Management.Deployment.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Media.Capture.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.Media.Capture.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.PushNotifications.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.PushNotifications.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Security.Authentication.OAuth.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Security.Authentication.OAuth.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.System.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.System.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.ApplicationModel.DynamicDependency.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.ApplicationModel.DynamicDependency.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.System.Power.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.System.Power.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Security.AccessControl.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.Security.AccessControl.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Storage.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.Storage.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Storage.Pickers.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.Storage.Pickers.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.WindowsAppRuntime.Bootstrap.Net.dll" as a payload file.  Its path in the package will be "Microsoft.WindowsAppRuntime.Bootstrap.Net.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.ApplicationModel.Resources.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.ApplicationModel.Resources.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.WinUI.dll" as a payload file.  Its path in the package will be "Microsoft.WinUI.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.DiaSymReader.Native.amd64.dll" as a payload file.  Its path in the package will be "Microsoft.DiaSymReader.Native.amd64.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.MachineLearning.Projection.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.MachineLearning.Projection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.ML.OnnxRuntime.dll" as a payload file.  Its path in the package will be "Microsoft.ML.OnnxRuntime.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\DWriteCore.dll" as a payload file.  Its path in the package will be "DWriteCore.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.ContentModerationInternal.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.ContentModerationInternal.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.AICapabilities.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.AICapabilities.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\NpuDetect\NPUDetect.dll" as a payload file.  Its path in the package will be "NpuDetect\NPUDetect.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.Foundation.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.Foundation.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.FoundationInternal.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.FoundationInternal.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\WindowsAppSdk.AppxDeploymentExtensions.Desktop.dll" as a payload file.  Its path in the package will be "WindowsAppSdk.AppxDeploymentExtensions.Desktop.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.GenerativeInternal.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.GenerativeInternal.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.Imaging.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.Imaging.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.Imaging.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.Imaging.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\CoreMessagingXP.dll" as a payload file.  Its path in the package will be "CoreMessagingXP.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.PrivateCommon.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.PrivateCommon.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Private.Workloads.SessionManager.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.Private.Workloads.SessionManager.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\DwmSceneI.dll" as a payload file.  Its path in the package will be "DwmSceneI.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.Text.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.Text.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.UI.Windowing.dll" as a payload file.  Its path in the package will be "Microsoft.UI.Windowing.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\workloads.365.json" as a payload file.  Its path in the package will be "workloads.365.json".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Internal.Vision.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.Internal.Vision.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.UI.Windowing.Core.dll" as a payload file.  Its path in the package will be "Microsoft.UI.Windowing.Core.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.UI.pri" as a payload file.  Its path in the package will be "Microsoft.UI.pri".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.SemanticSearch.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.SemanticSearch.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.UI.Input.dll" as a payload file.  Its path in the package will be "Microsoft.UI.Input.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\workloads.json" as a payload file.  Its path in the package will be "workloads.json".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.UI.dll" as a payload file.  Its path in the package will be "Microsoft.UI.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\workloads.lnl.json" as a payload file.  Its path in the package will be "workloads.lnl.json".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.UI.Composition.OSSupport.dll" as a payload file.  Its path in the package will be "Microsoft.UI.Composition.OSSupport.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Vision.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.Vision.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.ContentSafety.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.ContentSafety.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.VisionInternal.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.VisionInternal.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\workloads.stx.json" as a payload file.  Its path in the package will be "workloads.stx.json".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Widgets.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.Widgets.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\workloads.qnn.json" as a payload file.  Its path in the package will be "workloads.qnn.json".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\SessionHandleIPCProxyStub.dll" as a payload file.  Its path in the package will be "SessionHandleIPCProxyStub.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.InputStateManager.dll" as a payload file.  Its path in the package will be "Microsoft.InputStateManager.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Graphics.Internal.Imaging.winmd" as a payload file.  Its path in the package will be "Microsoft.Graphics.Internal.Imaging.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Widgets.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.Widgets.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Graphics.ImagingInternal.winmd" as a payload file.  Its path in the package will be "Microsoft.Graphics.ImagingInternal.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\WindowsAppSdk.AppxDeploymentExtensions.Desktop-EventLog-Instrumentation.dll" as a payload file.  Its path in the package will be "WindowsAppSdk.AppxDeploymentExtensions.Desktop-EventLog-Instrumentation.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\WindowsAppRuntime.DeploymentExtensions.OneCore.dll" as a payload file.  Its path in the package will be "WindowsAppRuntime.DeploymentExtensions.OneCore.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Graphics.ImagingInternal.ImageObjectRemover.winmd" as a payload file.  Its path in the package will be "Microsoft.Graphics.ImagingInternal.ImageObjectRemover.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Workloads.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.Workloads.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Workloads.Resources.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.Workloads.Resources.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Graphics.Imaging.winmd" as a payload file.  Its path in the package will be "Microsoft.Graphics.Imaging.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Graphics.Imaging.dll" as a payload file.  Its path in the package will be "Microsoft.Graphics.Imaging.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Graphics.Display.dll" as a payload file.  Its path in the package will be "Microsoft.Graphics.Display.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\workloads.j32.json" as a payload file.  Its path in the package will be "workloads.j32.json".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Workloads.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.Workloads.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.DirectManipulation.dll" as a payload file.  Its path in the package will be "Microsoft.DirectManipulation.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\dcompi.dll" as a payload file.  Its path in the package will be "dcompi.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.Text.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.Text.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\marshal.dll" as a payload file.  Its path in the package will be "marshal.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Workloads.Resources_ec.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.Workloads.Resources_ec.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.ContentSafety.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.ContentSafety.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ka-GE\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "ka-GE\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\kk-KZ\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "kk-KZ\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\kk-KZ\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "kk-KZ\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ka-GE\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "ka-GE\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\km-KH\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "km-KH\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\kn-IN\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "kn-IN\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\kn-IN\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "kn-IN\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ja-JP\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "ja-JP\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ko-KR\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "ko-KR\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\kok-IN\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "kok-IN\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\kok-IN\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "kok-IN\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\lb-LU\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "lb-LU\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\lb-LU\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "lb-LU\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\lo-LA\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "lo-LA\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\lo-LA\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "lo-LA\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\lt-LT\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "lt-LT\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\lt-LT\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "lt-LT\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\lv-LV\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "lv-LV\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\lv-LV\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "lv-LV\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ja-JP\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "ja-JP\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\it-IT\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "it-IT\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\mi-NZ\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "mi-NZ\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\mi-NZ\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "mi-NZ\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\it-IT\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "it-IT\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\is-IS\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "is-IS\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\is-IS\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "is-IS\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Foundation.winmd" as a payload file.  Its path in the package will be "Microsoft.Foundation.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\id-ID\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "id-ID\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\id-ID\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "id-ID\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\hy-AM\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "hy-AM\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\hy-AM\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "hy-AM\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.WindowsAppRuntime.dll" as a payload file.  Its path in the package will be "Microsoft.WindowsAppRuntime.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\hu-HU\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "hu-HU\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.ApplicationModel.Background.UniversalBGTask.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.ApplicationModel.Background.UniversalBGTask.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.ApplicationModel.Background.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.ApplicationModel.Background.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.ApplicationModel.DynamicDependency.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.ApplicationModel.DynamicDependency.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Graphics.winmd" as a payload file.  Its path in the package will be "Microsoft.Graphics.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.ApplicationModel.Resources.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.ApplicationModel.Resources.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.ApplicationModel.Resources.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.ApplicationModel.Resources.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.ApplicationModel.WindowsAppRuntime.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.ApplicationModel.WindowsAppRuntime.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AppLifecycle.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.AppLifecycle.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\wuceffectsi.dll" as a payload file.  Its path in the package will be "wuceffectsi.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Security.Authentication.OAuth.winmd" as a payload file.  Its path in the package will be "Microsoft.Security.Authentication.OAuth.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AppNotifications.Builder.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.AppNotifications.Builder.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.UI.Designer.dll" as a payload file.  Its path in the package will be "Microsoft.UI.Designer.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AppNotifications.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.AppNotifications.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.BadgeNotifications.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.BadgeNotifications.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Foundation.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.Foundation.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.UI.Text.winmd" as a payload file.  Its path in the package will be "Microsoft.UI.Text.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Globalization.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.Globalization.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Management.Deployment.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.Management.Deployment.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.UI.winmd" as a payload file.  Its path in the package will be "Microsoft.UI.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.UI.Xaml.Controls.dll" as a payload file.  Its path in the package will be "Microsoft.UI.Xaml.Controls.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.UI.Xaml.Controls.pri" as a payload file.  Its path in the package will be "Microsoft.UI.Xaml.Controls.pri".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.ui.xaml.dll" as a payload file.  Its path in the package will be "Microsoft.ui.xaml.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\RestartAgent.exe" as a payload file.  Its path in the package will be "RestartAgent.exe".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.System.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.System.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.WindowsAppRuntime.pri" as a payload file.  Its path in the package will be "Microsoft.WindowsAppRuntime.pri".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Media.Capture.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.Media.Capture.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.UI.Xaml.winmd" as a payload file.  Its path in the package will be "Microsoft.UI.Xaml.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.PushNotifications.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.PushNotifications.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\zh-CN\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "zh-CN\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\es-ES\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "es-ES\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\es-ES\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "es-ES\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\en-us\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "en-us\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\MRM.dll" as a payload file.  Its path in the package will be "MRM.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\en-us\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "en-us\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\en-GB\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "en-GB\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.System.Power.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.System.Power.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Storage.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.Storage.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Security.AccessControl.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.Security.AccessControl.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\dwmcorei.dll" as a payload file.  Its path in the package will be "dwmcorei.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.Storage.Pickers.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.Storage.Pickers.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ko-KR\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "ko-KR\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PushNotificationsLongRunningTask.ProxyStub.dll" as a payload file.  Its path in the package will be "PushNotificationsLongRunningTask.ProxyStub.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ur-PK\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "ur-PK\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ur-PK\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "ur-PK\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\uz-Latn-UZ\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "uz-Latn-UZ\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\uz-Latn-UZ\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "uz-Latn-UZ\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.UI.Xaml\Assets\NoiseAsset_256x256_PNG.png" as a payload file.  Its path in the package will be "Microsoft.UI.Xaml\Assets\NoiseAsset_256x256_PNG.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.UI.Xaml\Assets\map.html" as a payload file.  Its path in the package will be "Microsoft.UI.Xaml\Assets\map.html".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.MachineLearning.dll" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.MachineLearning.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.ui.xaml.resources.common.dll" as a payload file.  Its path in the package will be "Microsoft.ui.xaml.resources.common.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Windows.AI.MachineLearning.winmd" as a payload file.  Its path in the package will be "Microsoft.Windows.AI.MachineLearning.winmd".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.ui.xaml.resources.19h1.dll" as a payload file.  Its path in the package will be "Microsoft.ui.xaml.resources.19h1.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.UI.Xaml.Phone.dll" as a payload file.  Its path in the package will be "Microsoft.UI.Xaml.Phone.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\vi-VN\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "vi-VN\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\vi-VN\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "vi-VN\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\km-KH\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "km-KH\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\hu-HU\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "hu-HU\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\hr-HR\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "hr-HR\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\hr-HR\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "hr-HR\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\hi-IN\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "hi-IN\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\hi-IN\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "hi-IN\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\he-IL\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "he-IL\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\he-IL\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "he-IL\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\gu-IN\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "gu-IN\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\gu-IN\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "gu-IN\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\gl-ES\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "gl-ES\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\gl-ES\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "gl-ES\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\gd-gb\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "gd-gb\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\gd-gb\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "gd-gb\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ga-IE\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "ga-IE\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ga-IE\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "ga-IE\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\fr-FR\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "fr-FR\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\fr-FR\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "fr-FR\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\fr-CA\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "fr-CA\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\fr-CA\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "fr-CA\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\fil-PH\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "fil-PH\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\fil-PH\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "fil-PH\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\fi-FI\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "fi-FI\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\fi-FI\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "fi-FI\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\fa-IR\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "fa-IR\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\fa-IR\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "fa-IR\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\eu-ES\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "eu-ES\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\eu-ES\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "eu-ES\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\et-EE\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "et-EE\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\et-EE\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "et-EE\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\es-MX\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "es-MX\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\es-MX\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "es-MX\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\en-GB\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "en-GB\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\el-GR\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "el-GR\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\el-GR\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "el-GR\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\de-DE\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "de-DE\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\de-DE\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "de-DE\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\da-DK\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "da-DK\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\da-DK\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "da-DK\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\cy-GB\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "cy-GB\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\cy-GB\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "cy-GB\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\cs-CZ\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "cs-CZ\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\cs-CZ\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "cs-CZ\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\WinUIEdit.dll" as a payload file.  Its path in the package will be "WinUIEdit.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ca-ES\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "ca-ES\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ca-ES\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "ca-ES\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ca-Es-VALENCIA\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "ca-Es-VALENCIA\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ca-Es-VALENCIA\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "ca-Es-VALENCIA\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\bs-Latn-BA\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "bs-Latn-BA\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\bs-Latn-BA\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "bs-Latn-BA\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\bn-IN\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "bn-IN\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\bn-IN\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "bn-IN\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\bg-BG\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "bg-BG\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\bg-BG\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "bg-BG\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\az-Latn-AZ\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "az-Latn-AZ\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\az-Latn-AZ\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "az-Latn-AZ\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\uk-UA\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "uk-UA\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\zh-CN\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "zh-CN\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\as-IN\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "as-IN\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\mk-MK\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "mk-MK\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\mk-MK\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "mk-MK\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ml-IN\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "ml-IN\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ml-IN\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "ml-IN\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\mr-IN\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "mr-IN\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\mr-IN\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "mr-IN\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\as-IN\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "as-IN\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ms-MY\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "ms-MY\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ms-MY\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "ms-MY\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\uk-UA\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "uk-UA\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ug-CN\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "ug-CN\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ug-CN\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "ug-CN\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\tt-RU\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "tt-RU\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\tt-RU\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "tt-RU\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\tr-TR\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "tr-TR\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\mt-MT\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "mt-MT\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\mt-MT\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "mt-MT\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\nb-NO\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "nb-NO\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\nb-NO\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "nb-NO\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ne-NP\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "ne-NP\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ne-NP\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "ne-NP\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\tr-TR\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "tr-TR\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\th-TH\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "th-TH\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\th-TH\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "th-TH\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\te-IN\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "te-IN\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\te-IN\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "te-IN\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ar-SA\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "ar-SA\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ta-IN\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "ta-IN\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\nl-NL\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "nl-NL\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\nl-NL\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "nl-NL\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\nn-NO\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "nn-NO\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\nn-NO\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "nn-NO\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ar-SA\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "ar-SA\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\onnxruntime.dll" as a payload file.  Its path in the package will be "onnxruntime.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\onnxruntime_providers_shared.dll" as a payload file.  Its path in the package will be "onnxruntime_providers_shared.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\or-IN\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "or-IN\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\or-IN\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "or-IN\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\pa-IN\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "pa-IN\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\pa-IN\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "pa-IN\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ta-IN\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "ta-IN\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\zh-TW\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "zh-TW\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\am-ET\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "am-ET\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\am-ET\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "am-ET\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\sv-SE\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "sv-SE\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\sv-SE\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "sv-SE\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\sr-Latn-RS\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "sr-Latn-RS\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\sr-Latn-RS\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "sr-Latn-RS\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\sr-Cyrl-RS\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "sr-Cyrl-RS\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\sr-Cyrl-RS\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "sr-Cyrl-RS\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\sr-Cyrl-BA\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "sr-Cyrl-BA\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\sr-Cyrl-BA\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "sr-Cyrl-BA\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\sq-AL\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "sq-AL\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\sq-AL\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "sq-AL\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\sl-SI\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "sl-SI\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\sl-SI\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "sl-SI\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\sk-SK\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "sk-SK\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\sk-SK\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "sk-SK\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\af-ZA\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "af-ZA\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ru-RU\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "ru-RU\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ru-RU\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "ru-RU\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ro-RO\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "ro-RO\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\ro-RO\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "ro-RO\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.UI.Xaml.Internal.dll" as a payload file.  Its path in the package will be "Microsoft.UI.Xaml.Internal.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\quz-PE\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "quz-PE\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\quz-PE\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "quz-PE\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\zh-TW\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "zh-TW\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\af-ZA\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "af-ZA\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\pt-PT\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "pt-PT\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\pt-PT\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "pt-PT\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\pt-BR\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "pt-BR\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\pt-BR\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "pt-BR\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\pl-PL\Microsoft.UI.Xaml.Phone.dll.mui" as a payload file.  Its path in the package will be "pl-PL\Microsoft.UI.Xaml.Phone.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\pl-PL\Microsoft.ui.xaml.dll.mui" as a payload file.  Its path in the package will be "pl-PL\Microsoft.ui.xaml.dll.mui".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.WindowsAppRuntime.Insights.Resource.dll" as a payload file.  Its path in the package will be "Microsoft.WindowsAppRuntime.Insights.Resource.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Internal.FrameworkUdk.dll" as a payload file.  Its path in the package will be "Microsoft.Internal.FrameworkUdk.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\WindowsAppRuntime.png" as a payload file.  Its path in the package will be "WindowsAppRuntime.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\DirectML.dll" as a payload file.  Its path in the package will be "DirectML.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\third-party\WINDOWSAPPSDK-LICENSE.txt" as a payload file.  Its path in the package will be "third-party\WINDOWSAPPSDK-LICENSE.txt".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\third-party\WINDOWSAPPSDK-NOTICE.txt" as a payload file.  Its path in the package will be "third-party\WINDOWSAPPSDK-NOTICE.txt".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\third-party\DOTNET-NOTICES.txt" as a payload file.  Its path in the package will be "third-party\DOTNET-NOTICES.txt".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\third-party\DOTNET-LICENSE.txt" as a payload file.  Its path in the package will be "third-party\DOTNET-LICENSE.txt".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\QRCoder.dll" as a payload file.  Its path in the package will be "QRCoder.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\msquic.dll" as a payload file.  Its path in the package will be "msquic.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\third-party\NODE-LICENSE.txt" as a payload file.  Its path in the package will be "third-party\NODE-LICENSE.txt".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\third-party\WIN2D-NOTICE.txt" as a payload file.  Its path in the package will be "third-party\WIN2D-NOTICE.txt".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Assets\AppIcon.png" as a payload file.  Its path in the package will be "Assets\AppIcon.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Assets\AppIcon.ico" as a payload file.  Its path in the package will be "Assets\AppIcon.ico".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Assets\AppIconDark.png" as a payload file.  Its path in the package will be "Assets\AppIconDark.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Assets\AppIconDark.ico" as a payload file.  Its path in the package will be "Assets\AppIconDark.ico".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\coreclr.dll" as a payload file.  Its path in the package will be "coreclr.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\clrjit.dll" as a payload file.  Its path in the package will be "clrjit.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\clrgcexp.dll" as a payload file.  Its path in the package will be "clrgcexp.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\clrgc.dll" as a payload file.  Its path in the package will be "clrgc.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\clretwrc.dll" as a payload file.  Its path in the package will be "clretwrc.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\createdump.exe" as a payload file.  Its path in the package will be "createdump.exe".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\mscorrc.dll" as a payload file.  Its path in the package will be "mscorrc.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\mscordbi.dll" as a payload file.  Its path in the package will be "mscordbi.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\mscordaccore.dll" as a payload file.  Its path in the package will be "mscordaccore.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\mscordaccore_amd64_amd64_9.0.2226.52218.dll" as a payload file.  Its path in the package will be "mscordaccore_amd64_amd64_9.0.2226.52218.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Private.CoreLib.dll" as a payload file.  Its path in the package will be "System.Private.CoreLib.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\hostfxr.dll" as a payload file.  Its path in the package will be "hostfxr.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\hostpolicy.dll" as a payload file.  Its path in the package will be "hostpolicy.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.IO.Compression.Native.dll" as a payload file.  Its path in the package will be "System.IO.Compression.Native.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.IO.Pipes.AccessControl.dll" as a payload file.  Its path in the package will be "System.IO.Pipes.AccessControl.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Diagnostics.Contracts.dll" as a payload file.  Its path in the package will be "System.Diagnostics.Contracts.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Diagnostics.Tracing.dll" as a payload file.  Its path in the package will be "System.Diagnostics.Tracing.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Reflection.Primitives.dll" as a payload file.  Its path in the package will be "System.Reflection.Primitives.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Win32.Primitives.dll" as a payload file.  Its path in the package will be "Microsoft.Win32.Primitives.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Runtime.Serialization.Json.dll" as a payload file.  Its path in the package will be "System.Runtime.Serialization.Json.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Threading.Thread.dll" as a payload file.  Its path in the package will be "System.Threading.Thread.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Numerics.Vectors.dll" as a payload file.  Its path in the package will be "System.Numerics.Vectors.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Runtime.Intrinsics.dll" as a payload file.  Its path in the package will be "System.Runtime.Intrinsics.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Text.Encoding.Extensions.dll" as a payload file.  Its path in the package will be "System.Text.Encoding.Extensions.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Threading.Overlapped.dll" as a payload file.  Its path in the package will be "System.Threading.Overlapped.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Runtime.dll" as a payload file.  Its path in the package will be "System.Runtime.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Runtime.Serialization.Xml.dll" as a payload file.  Its path in the package will be "System.Runtime.Serialization.Xml.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Runtime.Extensions.dll" as a payload file.  Its path in the package will be "System.Runtime.Extensions.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Globalization.Calendars.dll" as a payload file.  Its path in the package will be "System.Globalization.Calendars.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.ComponentModel.DataAnnotations.dll" as a payload file.  Its path in the package will be "System.ComponentModel.DataAnnotations.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Numerics.dll" as a payload file.  Its path in the package will be "System.Numerics.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Buffers.dll" as a payload file.  Its path in the package will be "System.Buffers.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.ValueTuple.dll" as a payload file.  Its path in the package will be "System.ValueTuple.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Reflection.Extensions.dll" as a payload file.  Its path in the package will be "System.Reflection.Extensions.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Threading.Timer.dll" as a payload file.  Its path in the package will be "System.Threading.Timer.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.IO.UnmanagedMemoryStream.dll" as a payload file.  Its path in the package will be "System.IO.UnmanagedMemoryStream.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Globalization.Extensions.dll" as a payload file.  Its path in the package will be "System.Globalization.Extensions.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Diagnostics.Tools.dll" as a payload file.  Its path in the package will be "System.Diagnostics.Tools.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Web.dll" as a payload file.  Its path in the package will be "System.Web.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Runtime.CompilerServices.Unsafe.dll" as a payload file.  Its path in the package will be "System.Runtime.CompilerServices.Unsafe.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.IO.dll" as a payload file.  Its path in the package will be "System.IO.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Dynamic.Runtime.dll" as a payload file.  Its path in the package will be "System.Dynamic.Runtime.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Diagnostics.Debug.dll" as a payload file.  Its path in the package will be "System.Diagnostics.Debug.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Globalization.dll" as a payload file.  Its path in the package will be "System.Globalization.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Threading.Tasks.dll" as a payload file.  Its path in the package will be "System.Threading.Tasks.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.AppContext.dll" as a payload file.  Its path in the package will be "System.AppContext.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Resources.ResourceManager.dll" as a payload file.  Its path in the package will be "System.Resources.ResourceManager.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.IO.FileSystem.dll" as a payload file.  Its path in the package will be "System.IO.FileSystem.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Resources.Reader.dll" as a payload file.  Its path in the package will be "System.Resources.Reader.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.ServiceProcess.dll" as a payload file.  Its path in the package will be "System.ServiceProcess.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\WindowsBase.dll" as a payload file.  Its path in the package will be "WindowsBase.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Reflection.dll" as a payload file.  Its path in the package will be "System.Reflection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.ServicePoint.dll" as a payload file.  Its path in the package will be "System.Net.ServicePoint.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.IO.Compression.FileSystem.dll" as a payload file.  Its path in the package will be "System.IO.Compression.FileSystem.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Runtime.Serialization.dll" as a payload file.  Its path in the package will be "System.Runtime.Serialization.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Threading.ThreadPool.dll" as a payload file.  Its path in the package will be "System.Threading.ThreadPool.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Security.Cryptography.Csp.dll" as a payload file.  Its path in the package will be "System.Security.Cryptography.Csp.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Runtime.InteropServices.RuntimeInformation.dll" as a payload file.  Its path in the package will be "System.Runtime.InteropServices.RuntimeInformation.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Runtime.Handles.dll" as a payload file.  Its path in the package will be "System.Runtime.Handles.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Security.Cryptography.Algorithms.dll" as a payload file.  Its path in the package will be "System.Security.Cryptography.Algorithms.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Security.Cryptography.Encoding.dll" as a payload file.  Its path in the package will be "System.Security.Cryptography.Encoding.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Security.Cryptography.OpenSsl.dll" as a payload file.  Its path in the package will be "System.Security.Cryptography.OpenSsl.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.IO.FileSystem.Primitives.dll" as a payload file.  Its path in the package will be "System.IO.FileSystem.Primitives.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Security.Cryptography.Primitives.dll" as a payload file.  Its path in the package will be "System.Security.Cryptography.Primitives.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Security.Cryptography.X509Certificates.dll" as a payload file.  Its path in the package will be "System.Security.Cryptography.X509Certificates.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Text.Encoding.dll" as a payload file.  Its path in the package will be "System.Text.Encoding.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Security.Principal.dll" as a payload file.  Its path in the package will be "System.Security.Principal.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Security.SecureString.dll" as a payload file.  Its path in the package will be "System.Security.SecureString.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Transactions.dll" as a payload file.  Its path in the package will be "System.Transactions.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Threading.Tasks.Extensions.dll" as a payload file.  Its path in the package will be "System.Threading.Tasks.Extensions.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.ServiceModel.Web.dll" as a payload file.  Its path in the package will be "System.ServiceModel.Web.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Security.Cryptography.Cng.dll" as a payload file.  Its path in the package will be "System.Security.Cryptography.Cng.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Windows.dll" as a payload file.  Its path in the package will be "System.Windows.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Security.dll" as a payload file.  Its path in the package will be "System.Security.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.VisualBasic.dll" as a payload file.  Its path in the package will be "Microsoft.VisualBasic.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Configuration.dll" as a payload file.  Its path in the package will be "System.Configuration.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Runtime.Loader.dll" as a payload file.  Its path in the package will be "System.Runtime.Loader.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Reflection.Emit.ILGeneration.dll" as a payload file.  Its path in the package will be "System.Reflection.Emit.ILGeneration.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Reflection.Emit.Lightweight.dll" as a payload file.  Its path in the package will be "System.Reflection.Emit.Lightweight.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Xml.XPath.dll" as a payload file.  Its path in the package will be "System.Xml.XPath.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Xml.XmlSerializer.dll" as a payload file.  Its path in the package will be "System.Xml.XmlSerializer.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.dll" as a payload file.  Its path in the package will be "System.Net.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Xml.ReaderWriter.dll" as a payload file.  Its path in the package will be "System.Xml.ReaderWriter.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Xml.XmlDocument.dll" as a payload file.  Its path in the package will be "System.Xml.XmlDocument.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Drawing.dll" as a payload file.  Its path in the package will be "System.Drawing.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Xml.Serialization.dll" as a payload file.  Its path in the package will be "System.Xml.Serialization.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Xml.dll" as a payload file.  Its path in the package will be "System.Xml.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Xml.XDocument.dll" as a payload file.  Its path in the package will be "System.Xml.XDocument.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Data.DataSetExtensions.dll" as a payload file.  Its path in the package will be "System.Data.DataSetExtensions.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Xml.Linq.dll" as a payload file.  Its path in the package will be "System.Xml.Linq.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Core.dll" as a payload file.  Its path in the package will be "System.Core.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.dll" as a payload file.  Its path in the package will be "System.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Data.dll" as a payload file.  Its path in the package will be "System.Data.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\mscorlib.dll" as a payload file.  Its path in the package will be "mscorlib.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\netstandard.dll" as a payload file.  Its path in the package will be "netstandard.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.CSharp.dll" as a payload file.  Its path in the package will be "Microsoft.CSharp.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.VisualBasic.Core.dll" as a payload file.  Its path in the package will be "Microsoft.VisualBasic.Core.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Microsoft.Win32.Registry.dll" as a payload file.  Its path in the package will be "Microsoft.Win32.Registry.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Collections.Concurrent.dll" as a payload file.  Its path in the package will be "System.Collections.Concurrent.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Collections.dll" as a payload file.  Its path in the package will be "System.Collections.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Collections.Immutable.dll" as a payload file.  Its path in the package will be "System.Collections.Immutable.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Collections.NonGeneric.dll" as a payload file.  Its path in the package will be "System.Collections.NonGeneric.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Collections.Specialized.dll" as a payload file.  Its path in the package will be "System.Collections.Specialized.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.ComponentModel.Annotations.dll" as a payload file.  Its path in the package will be "System.ComponentModel.Annotations.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.ComponentModel.dll" as a payload file.  Its path in the package will be "System.ComponentModel.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.ComponentModel.EventBasedAsync.dll" as a payload file.  Its path in the package will be "System.ComponentModel.EventBasedAsync.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.ComponentModel.Primitives.dll" as a payload file.  Its path in the package will be "System.ComponentModel.Primitives.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.ComponentModel.TypeConverter.dll" as a payload file.  Its path in the package will be "System.ComponentModel.TypeConverter.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Console.dll" as a payload file.  Its path in the package will be "System.Console.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Data.Common.dll" as a payload file.  Its path in the package will be "System.Data.Common.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Diagnostics.DiagnosticSource.dll" as a payload file.  Its path in the package will be "System.Diagnostics.DiagnosticSource.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Diagnostics.FileVersionInfo.dll" as a payload file.  Its path in the package will be "System.Diagnostics.FileVersionInfo.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Diagnostics.StackTrace.dll" as a payload file.  Its path in the package will be "System.Diagnostics.StackTrace.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Diagnostics.Process.dll" as a payload file.  Its path in the package will be "System.Diagnostics.Process.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Diagnostics.TextWriterTraceListener.dll" as a payload file.  Its path in the package will be "System.Diagnostics.TextWriterTraceListener.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Diagnostics.TraceSource.dll" as a payload file.  Its path in the package will be "System.Diagnostics.TraceSource.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Drawing.Primitives.dll" as a payload file.  Its path in the package will be "System.Drawing.Primitives.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Formats.Asn1.dll" as a payload file.  Its path in the package will be "System.Formats.Asn1.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.IO.Compression.Brotli.dll" as a payload file.  Its path in the package will be "System.IO.Compression.Brotli.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Formats.Tar.dll" as a payload file.  Its path in the package will be "System.Formats.Tar.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.IO.Compression.dll" as a payload file.  Its path in the package will be "System.IO.Compression.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.IO.FileSystem.AccessControl.dll" as a payload file.  Its path in the package will be "System.IO.FileSystem.AccessControl.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.IO.Compression.ZipFile.dll" as a payload file.  Its path in the package will be "System.IO.Compression.ZipFile.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.IO.FileSystem.DriveInfo.dll" as a payload file.  Its path in the package will be "System.IO.FileSystem.DriveInfo.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.IO.IsolatedStorage.dll" as a payload file.  Its path in the package will be "System.IO.IsolatedStorage.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.IO.FileSystem.Watcher.dll" as a payload file.  Its path in the package will be "System.IO.FileSystem.Watcher.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.IO.MemoryMappedFiles.dll" as a payload file.  Its path in the package will be "System.IO.MemoryMappedFiles.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.IO.Pipelines.dll" as a payload file.  Its path in the package will be "System.IO.Pipelines.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Linq.dll" as a payload file.  Its path in the package will be "System.Linq.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.IO.Pipes.dll" as a payload file.  Its path in the package will be "System.IO.Pipes.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Linq.Expressions.dll" as a payload file.  Its path in the package will be "System.Linq.Expressions.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Linq.Parallel.dll" as a payload file.  Its path in the package will be "System.Linq.Parallel.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Linq.Queryable.dll" as a payload file.  Its path in the package will be "System.Linq.Queryable.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Memory.dll" as a payload file.  Its path in the package will be "System.Memory.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.Http.dll" as a payload file.  Its path in the package will be "System.Net.Http.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.Http.Json.dll" as a payload file.  Its path in the package will be "System.Net.Http.Json.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.HttpListener.dll" as a payload file.  Its path in the package will be "System.Net.HttpListener.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.NameResolution.dll" as a payload file.  Its path in the package will be "System.Net.NameResolution.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.Mail.dll" as a payload file.  Its path in the package will be "System.Net.Mail.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.NetworkInformation.dll" as a payload file.  Its path in the package will be "System.Net.NetworkInformation.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.Ping.dll" as a payload file.  Its path in the package will be "System.Net.Ping.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.Quic.dll" as a payload file.  Its path in the package will be "System.Net.Quic.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.Primitives.dll" as a payload file.  Its path in the package will be "System.Net.Primitives.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.Requests.dll" as a payload file.  Its path in the package will be "System.Net.Requests.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.Security.dll" as a payload file.  Its path in the package will be "System.Net.Security.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.Sockets.dll" as a payload file.  Its path in the package will be "System.Net.Sockets.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.WebClient.dll" as a payload file.  Its path in the package will be "System.Net.WebClient.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.WebHeaderCollection.dll" as a payload file.  Its path in the package will be "System.Net.WebHeaderCollection.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.WebSockets.Client.dll" as a payload file.  Its path in the package will be "System.Net.WebSockets.Client.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.WebProxy.dll" as a payload file.  Its path in the package will be "System.Net.WebProxy.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Net.WebSockets.dll" as a payload file.  Its path in the package will be "System.Net.WebSockets.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.ObjectModel.dll" as a payload file.  Its path in the package will be "System.ObjectModel.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Private.DataContractSerialization.dll" as a payload file.  Its path in the package will be "System.Private.DataContractSerialization.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Private.Uri.dll" as a payload file.  Its path in the package will be "System.Private.Uri.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Private.Xml.dll" as a payload file.  Its path in the package will be "System.Private.Xml.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Private.Xml.Linq.dll" as a payload file.  Its path in the package will be "System.Private.Xml.Linq.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Reflection.DispatchProxy.dll" as a payload file.  Its path in the package will be "System.Reflection.DispatchProxy.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Reflection.Emit.dll" as a payload file.  Its path in the package will be "System.Reflection.Emit.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Reflection.TypeExtensions.dll" as a payload file.  Its path in the package will be "System.Reflection.TypeExtensions.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Reflection.Metadata.dll" as a payload file.  Its path in the package will be "System.Reflection.Metadata.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Resources.Writer.dll" as a payload file.  Its path in the package will be "System.Resources.Writer.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Runtime.CompilerServices.VisualC.dll" as a payload file.  Its path in the package will be "System.Runtime.CompilerServices.VisualC.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Runtime.InteropServices.dll" as a payload file.  Its path in the package will be "System.Runtime.InteropServices.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Runtime.InteropServices.JavaScript.dll" as a payload file.  Its path in the package will be "System.Runtime.InteropServices.JavaScript.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Runtime.Serialization.Formatters.dll" as a payload file.  Its path in the package will be "System.Runtime.Serialization.Formatters.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Runtime.Numerics.dll" as a payload file.  Its path in the package will be "System.Runtime.Numerics.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Runtime.Serialization.Primitives.dll" as a payload file.  Its path in the package will be "System.Runtime.Serialization.Primitives.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Security.Claims.dll" as a payload file.  Its path in the package will be "System.Security.Claims.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Security.AccessControl.dll" as a payload file.  Its path in the package will be "System.Security.AccessControl.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Security.Cryptography.dll" as a payload file.  Its path in the package will be "System.Security.Cryptography.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Security.Principal.Windows.dll" as a payload file.  Its path in the package will be "System.Security.Principal.Windows.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Text.Encoding.CodePages.dll" as a payload file.  Its path in the package will be "System.Text.Encoding.CodePages.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Text.Encodings.Web.dll" as a payload file.  Its path in the package will be "System.Text.Encodings.Web.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Text.Json.dll" as a payload file.  Its path in the package will be "System.Text.Json.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Text.RegularExpressions.dll" as a payload file.  Its path in the package will be "System.Text.RegularExpressions.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Threading.Channels.dll" as a payload file.  Its path in the package will be "System.Threading.Channels.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Threading.dll" as a payload file.  Its path in the package will be "System.Threading.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Threading.Tasks.Parallel.dll" as a payload file.  Its path in the package will be "System.Threading.Tasks.Parallel.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Threading.Tasks.Dataflow.dll" as a payload file.  Its path in the package will be "System.Threading.Tasks.Dataflow.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Transactions.Local.dll" as a payload file.  Its path in the package will be "System.Transactions.Local.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Web.HttpUtility.dll" as a payload file.  Its path in the package will be "System.Web.HttpUtility.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\System.Xml.XPath.XDocument.dll" as a payload file.  Its path in the package will be "System.Xml.XPath.XDocument.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\third-party\netease-api\LICENSE" as a payload file.  Its path in the package will be "third-party\netease-api\LICENSE".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\third-party\qrcoder\LICENSE" as a payload file.  Its path in the package will be "third-party\qrcoder\LICENSE".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\third-party\bouncycastle\LICENSE" as a payload file.  Its path in the package will be "third-party\bouncycastle\LICENSE".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\third-party\taglibsharp\COPYING" as a payload file.  Its path in the package will be "third-party\taglibsharp\COPYING".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\third-party\taglibsharp\AUTHORS" as a payload file.  Its path in the package will be "third-party\taglibsharp\AUTHORS".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\Assets\Fonts\NetEaseNEXTIcons.ttf" as a payload file.  Its path in the package will be "Assets\Fonts\NetEaseNEXTIcons.ttf".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\third-party\fluent-system-icons\LICENSE.txt" as a payload file.  Its path in the package will be "third-party\fluent-system-icons\LICENSE.txt".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\third-party\fluent-system-icons\source.json" as a payload file.  Its path in the package will be "third-party\fluent-system-icons\source.json".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\third-party\DEPENDENCIES.md" as a payload file.  Its path in the package will be "third-party\DEPENDENCIES.md".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\App.xbf" as a payload file.  Its path in the package will be "App.xbf".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\NetEaseNEXT.runtimeconfig.json" as a payload file.  Its path in the package will be "NetEaseNEXT.runtimeconfig.json".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\NetEaseNEXT.Api.dll" as a payload file.  Its path in the package will be "NetEaseNEXT.Api.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\MainWindow.xbf" as a payload file.  Its path in the package will be "MainWindow.xbf".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\NetEaseNEXT.deps.json" as a payload file.  Its path in the package will be "NetEaseNEXT.deps.json".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\NetEaseNEXT.pri" as a payload file.  Its path in the package will be "NetEaseNEXT.pri".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\README.md" as a payload file.  Its path in the package will be "README.md".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\NetEaseNEXT.dll" as a payload file.  Its path in the package will be "NetEaseNEXT.dll".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\NetEaseNEXT.exe" as a payload file.  Its path in the package will be "NetEaseNEXT.exe".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.scale-100.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.scale-100.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.scale-100_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.scale-100_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.scale-125.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.scale-125.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.scale-125_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.scale-125_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.scale-150.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.scale-150.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.scale-150_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.scale-150_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.scale-200.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.scale-200.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.scale-200_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.scale-200_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.scale-250.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.scale-250.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.scale-250_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.scale-250_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.scale-300.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.scale-300.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.scale-300_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.scale-300_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.scale-400.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.scale-400.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.scale-400_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.scale-400_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\Square150x150Logo.scale-100.png" as a payload file.  Its path in the package will be "PackageAssets\Square150x150Logo.scale-100.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\Square150x150Logo.scale-100_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\Square150x150Logo.scale-100_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\Square150x150Logo.scale-125.png" as a payload file.  Its path in the package will be "PackageAssets\Square150x150Logo.scale-125.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\Square150x150Logo.scale-125_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\Square150x150Logo.scale-125_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\Square150x150Logo.scale-150.png" as a payload file.  Its path in the package will be "PackageAssets\Square150x150Logo.scale-150.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\Square150x150Logo.scale-150_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\Square150x150Logo.scale-150_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\Square150x150Logo.scale-200.png" as a payload file.  Its path in the package will be "PackageAssets\Square150x150Logo.scale-200.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\Square150x150Logo.scale-200_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\Square150x150Logo.scale-200_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\Square150x150Logo.scale-250.png" as a payload file.  Its path in the package will be "PackageAssets\Square150x150Logo.scale-250.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\Square150x150Logo.scale-250_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\Square150x150Logo.scale-250_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\Square150x150Logo.scale-300.png" as a payload file.  Its path in the package will be "PackageAssets\Square150x150Logo.scale-300.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\Square150x150Logo.scale-300_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\Square150x150Logo.scale-300_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\Square150x150Logo.scale-400.png" as a payload file.  Its path in the package will be "PackageAssets\Square150x150Logo.scale-400.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\Square150x150Logo.scale-400_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\Square150x150Logo.scale-400_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\StoreLogo.scale-100.png" as a payload file.  Its path in the package will be "PackageAssets\StoreLogo.scale-100.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\StoreLogo.scale-100_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\StoreLogo.scale-100_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\StoreLogo.scale-125.png" as a payload file.  Its path in the package will be "PackageAssets\StoreLogo.scale-125.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\StoreLogo.scale-125_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\StoreLogo.scale-125_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\StoreLogo.scale-150.png" as a payload file.  Its path in the package will be "PackageAssets\StoreLogo.scale-150.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\StoreLogo.scale-150_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\StoreLogo.scale-150_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\StoreLogo.scale-200.png" as a payload file.  Its path in the package will be "PackageAssets\StoreLogo.scale-200.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\StoreLogo.scale-200_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\StoreLogo.scale-200_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\StoreLogo.scale-250.png" as a payload file.  Its path in the package will be "PackageAssets\StoreLogo.scale-250.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\StoreLogo.scale-250_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\StoreLogo.scale-250_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\StoreLogo.scale-300.png" as a payload file.  Its path in the package will be "PackageAssets\StoreLogo.scale-300.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\StoreLogo.scale-300_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\StoreLogo.scale-300_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\StoreLogo.scale-400.png" as a payload file.  Its path in the package will be "PackageAssets\StoreLogo.scale-400.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\StoreLogo.scale-400_altform-colorful_theme-light.png" as a payload file.  Its path in the package will be "PackageAssets\StoreLogo.scale-400_altform-colorful_theme-light.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-16.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-16.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-16_altform-unplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-16_altform-unplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-16_altform-lightunplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-16_altform-lightunplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-20.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-20.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-20_altform-unplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-20_altform-unplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-20_altform-lightunplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-20_altform-lightunplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-24.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-24.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-24_altform-unplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-24_altform-unplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-24_altform-lightunplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-24_altform-lightunplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-30.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-30.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-30_altform-unplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-30_altform-unplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-30_altform-lightunplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-30_altform-lightunplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-32.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-32.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-32_altform-unplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-32_altform-unplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-32_altform-lightunplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-32_altform-lightunplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-36.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-36.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-36_altform-unplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-36_altform-unplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-36_altform-lightunplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-36_altform-lightunplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-40.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-40.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-40_altform-unplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-40_altform-unplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-40_altform-lightunplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-40_altform-lightunplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-44.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-44.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-44_altform-unplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-44_altform-unplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-44_altform-lightunplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-44_altform-lightunplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-48.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-48.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-48_altform-unplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-48_altform-unplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-48_altform-lightunplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-48_altform-lightunplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-60.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-60.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-60_altform-unplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-60_altform-unplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-60_altform-lightunplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-60_altform-lightunplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-64.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-64.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-64_altform-unplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-64_altform-unplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-64_altform-lightunplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-64_altform-lightunplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-72.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-72.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-72_altform-unplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-72_altform-unplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-72_altform-lightunplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-72_altform-lightunplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-80.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-80.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-80_altform-unplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-80_altform-unplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-80_altform-lightunplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-80_altform-lightunplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-96.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-96.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-96_altform-unplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-96_altform-unplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-96_altform-lightunplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-96_altform-lightunplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-256.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-256.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-256_altform-unplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-256_altform-unplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\PackageAssets\AppList.targetsize-256_altform-lightunplated.png" as a payload file.  Its path in the package will be "PackageAssets\AppList.targetsize-256_altform-lightunplated.png".
+
+Processing "\\?\E:\NetEaseNEXT_Dev\artifacts\msix\staging\ae83e9a467af4573ba5e5ef2f2b1328c\resources.pri" as a payload file.  Its path in the package will be "resources.pri".
+
+Package creation succeeded.
+
+Done Adding Additional Store
+Successfully signed: E:\NetEaseNEXT_Dev\artifacts\msix\NetEaseNEXT-0.3.2.1-x64.msix
+
+MSIX package: E:\NetEaseNEXT_Dev\artifacts\msix\NetEaseNEXT-0.3.2.1-x64.msix

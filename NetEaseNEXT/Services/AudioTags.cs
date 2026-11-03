@@ -1,6 +1,6 @@
 namespace NetEaseNEXT.Services;
 
-public sealed record AudioFileInfo(string Path, string Title, string Artist, string Album, long Duration, string Lyrics, byte[]? Cover, long SongId = 0, string Level = "", long ArtistId = 0, long AlbumId = 0);
+public sealed record AudioFileInfo(string Path, string Title, string Artist, string Album, long Duration, string Lyrics, byte[]? Cover, long SongId = 0, string Level = "", long ArtistId = 0, long AlbumId = 0, string Translation = "");
 public static class AudioTags
 {
     public static AudioFileInfo Read(string path)
@@ -11,14 +11,21 @@ public static class AudioTags
         var level = ReadField(file, "NETEASENEXT_QUALITY");
         var artistId = long.TryParse(ReadField(file, "NETEASENEXT_ARTIST_ID"), out var artist) ? artist : 0;
         var albumId = long.TryParse(ReadField(file, "NETEASENEXT_ALBUM_ID"), out var album) ? album : 0;
+        var translation = ReadField(file, "NETEASENEXT_TRANSLATED_LYRICS");
+        var original = ReadField(file, "NETEASENEXT_ORIGINAL_LYRICS");
         return new(System.IO.Path.GetFullPath(path), string.IsNullOrWhiteSpace(file.Tag.Title) ? System.IO.Path.GetFileNameWithoutExtension(path) : file.Tag.Title,
-            string.Join(" / ", file.Tag.Performers), file.Tag.Album ?? "", (long)file.Properties.Duration.TotalMilliseconds, file.Tag.Lyrics ?? "",
-            picture != null && picture.Data.Count <= 8 * 1024 * 1024 ? picture.Data.Data : null, songId, AudioQuality.Rank(level) >= 0 ? level : "", artistId, albumId);
+            string.Join(" / ", file.Tag.Performers), file.Tag.Album ?? "", (long)file.Properties.Duration.TotalMilliseconds, translation.Length > 0 && original.Length > 0 ? original : file.Tag.Lyrics ?? "",
+            picture != null && picture.Data.Count <= 8 * 1024 * 1024 ? picture.Data.Data : null, songId, AudioQuality.Rank(level) >= 0 ? level : "", artistId, albumId, translation);
     }
-    public static void Write(string path, string title, string artist, string album, string lyrics, byte[]? cover, long songId = 0, string level = "", long artistId = 0, long albumId = 0)
+    public static void Write(string path, string title, string artist, string album, string lyrics, byte[]? cover, long songId = 0, string level = "", long artistId = 0, long albumId = 0, string translation = "")
     {
         using var file = TagLib.File.Create(path);
-        file.Tag.Title = title; file.Tag.Performers = artist.Split(" / ", StringSplitOptions.RemoveEmptyEntries); file.Tag.Album = album; file.Tag.Lyrics = lyrics;
+        file.Tag.Title = title; file.Tag.Performers = artist.Split(" / ", StringSplitOptions.RemoveEmptyEntries); file.Tag.Album = album; file.Tag.Lyrics = DownloadedLyrics.Combine(lyrics, translation);
+        if (translation.Length > 0 || ReadField(file, "NETEASENEXT_TRANSLATED_LYRICS").Length > 0)
+        {
+            WriteField(file, "NETEASENEXT_ORIGINAL_LYRICS", translation.Length > 0 ? lyrics : "");
+            WriteField(file, "NETEASENEXT_TRANSLATED_LYRICS", translation);
+        }
         if (cover is { Length: > 0 }) file.Tag.Pictures = [new TagLib.Picture(new TagLib.ByteVector(cover)) { Type = TagLib.PictureType.FrontCover, Description = "Cover" }];
         if (songId > 0)
         {

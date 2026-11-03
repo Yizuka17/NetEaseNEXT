@@ -42,6 +42,7 @@ public sealed partial class MainWindow : Window
     {
         _startup = startup; _settings = startup?.Settings ?? SettingsStore.Load();
         Diagnostics.StartupTrace.Mark("InitializeComponent"); InitializeComponent(); Diagnostics.StartupTrace.Mark("XAML initialized");
+        AppVersionLabel.Text = "NetEaseNEXT " + typeof(App).Assembly.GetName().Version!.ToString(3);
         _api = startup?.Api ?? new(_settings);
         if (startup != null) { _profileTask = startup.Profile; _profileSession = _api.Cookie; _profileExpires = DateTimeOffset.UtcNow.AddMinutes(5); }
         InitializeSidebarIcons(); InitializeTrackBatch(); InitializePagination(); InitializeDownloads();
@@ -64,11 +65,13 @@ public sealed partial class MainWindow : Window
         AppWindow.SetIcon(ShellAppearance.IconPath());
         AppWindow.Resize(new SizeInt32(1280, 900));
         if (AppWindow.Presenter is OverlappedPresenter presenter) presenter.PreferredMinimumWidth = 900;
+        InitializeWindowPreferences();
         AppWindow.Closing += (_, args) =>
         {
+            CaptureWindowPlacement(); FlushWindowPlacement();
             if (!_exiting && _settings.CloseToTray && _tray.IsAvailable) { args.Cancel = true; _dialog?.Hide(); HideWindow(); }
         };
-        AppWindow.Changed += (_, args) => { if (args.DidVisibilityChange || args.DidPresenterChange) UpdateVisibility(); };
+        AppWindow.Changed += (_, args) => { if (args.DidVisibilityChange || args.DidPresenterChange) UpdateVisibility(); if (args.DidPositionChange || args.DidSizeChange || args.DidPresenterChange) CaptureWindowPlacement(); };
         Activated += (_, _) => { UpdateVisibility(); if (!_hidden) { UpdateDownloadIndicator(); UpdateSongActions(); } }; Closed += (_, _) => Cleanup();
         Root.SizeChanged += (_, _) => UpdateLayout();
         CoverColumn.SizeChanged += (_, _) => { if (_view == "playing" && !_hidden) UpdateLayout(); };
@@ -175,7 +178,7 @@ public sealed partial class MainWindow : Window
             _lyricFollowTimer.Stop(); StopLocalMonitoring();
             if (_hasBeenVisible) _startup?.Cancel();
             SavePlaybackState(); _accountLoad?.Cancel(); _accountAvatarLoad?.Cancel(); _metadataWarmLoad?.Cancel();
-            _inboxTimer.Stop(); _inboxCheck?.Cancel(); _appearanceTimer.Stop(); _commentsLoad?.Cancel(); _playlistEditLoad?.Cancel(); _dialog?.Hide();
+            _inboxTimer.Stop(); _inboxCheck?.Cancel(); FlushAppearanceSettings(); _commentsLoad?.Cancel(); _playlistEditLoad?.Cancel(); _dialog?.Hide();
             ResetTrackGesture(); CancelCoverTransitions(); RestorePresenterTransition(); StopSettingsIconRotation();
             EndTrackBatch(); _playerNoticeTimer.Stop(); PlayerNotice.IsOpen = false; QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null;
             _songStatsLoad?.Cancel(); _qualityLoad?.Cancel();
@@ -212,14 +215,16 @@ public sealed partial class MainWindow : Window
     [DllImport("user32.dll")] private static extern bool ShowWindow(nint window, int command);
     private void HideWindow()
     {
+        CaptureWindowPlacement(); FlushWindowPlacement();
         Diagnostics.StartupTrace.Mark("Hide: release backdrop"); SystemBackdrop = null;
         Diagnostics.StartupTrace.Mark("Hide: native window"); ShowWindow(WinRT.Interop.WindowNative.GetWindowHandle(this), 0);
         Diagnostics.StartupTrace.Mark("Hide: update visibility"); UpdateVisibility();
     }
-    internal void RestoreWindow() { ShowWindow(WinRT.Interop.WindowNative.GetWindowHandle(this), 9); Activate(); UpdateVisibility(); ApplyAppearance(); if (!_sessionReady && !_runningSmokeTest) _ = InitializeSessionAsync(); }
+    internal void RestoreWindow() { ShowWindow(WinRT.Interop.WindowNative.GetWindowHandle(this), RestoreWindowCommand); Activate(); UpdateVisibility(); ApplyAppearance(); if (!_sessionReady && !_runningSmokeTest) _ = InitializeSessionAsync(); }
     private void ExitApp() { _exiting = true; Close(); }
     private void Cleanup()
     {
+        _windowPlacementTimer.Stop();
         StopLocalMonitoring();
         Windows.Networking.Connectivity.NetworkInformation.NetworkStatusChanged -= NetworkStatusChanged;
         _lyricFollowTimer.Stop();
@@ -230,7 +235,7 @@ public sealed partial class MainWindow : Window
         _playback.Changed -= Playback_Changed; _playback.Error -= ShowError;
         _songStatsLoad?.Cancel(); _qualityLoad?.Cancel();
         _startup?.Cancel(); _playback.Dispose(); _api.Dispose(); _tray.Dispose();
-        try { _settings.Save(); } catch (Exception ex) { Log.Write(ex); }
+        try { if (!_runningSmokeTest) _settings.Save(); } catch (Exception ex) { Log.Write(ex); }
     }
     private static T? FindDescendant<T>(DependencyObject parent) where T : DependencyObject
     {

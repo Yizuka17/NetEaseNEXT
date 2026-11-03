@@ -99,9 +99,13 @@ public sealed partial class MainWindow
         try
         {
             var lyricPath = track.IsLocal ? track.LocalPath : _playback.CurrentDownloadedPath;
-            var response = lyricPath is { Length: > 0 }
-                ? System.Text.Json.JsonSerializer.SerializeToElement(new { lrc = new { lyric = await Task.Run(() => File.Exists(Path.ChangeExtension(lyricPath, ".lrc")) ? File.ReadAllText(Path.ChangeExtension(lyricPath, ".lrc")) : AudioTags.Read(lyricPath).Lyrics, load.Token) } })
-                : await _api.CallCachedAsync("lyric", new { id = track.Id }, load.Token);
+            JsonElement response;
+            if (lyricPath is { Length: > 0 })
+            {
+                var local = await Task.Run(() => DownloadedLyrics.ReadLocal(lyricPath), load.Token);
+                response = JsonSerializer.SerializeToElement(new { lrc = new { lyric = local.Original }, tlyric = new { lyric = local.Translation } });
+            }
+            else response = await _api.CallCachedAsync("lyric", new { id = track.Id }, load.Token);
             load.Token.ThrowIfCancellationRequested();
             _lyrics = response.TryGetProperty("lrc", out var lrc) ? LyricLine.Parse(lrc.Text("lyric"), response.TryGetProperty("tlyric", out var translated) ? translated.Text("lyric") : "") : [];
             BindLyrics(_lyrics.Count > 0 ? _lyrics : new List<LyricLine> { new(TimeSpan.Zero, "暂无歌词") });
@@ -125,6 +129,7 @@ public sealed partial class MainWindow
     private void SetFullScreen(bool enabled)
     {
         if (_fullScreen == enabled) return;
+        if (enabled) CaptureWindowPlacement();
         SuppressPresenterTransition();
         _fullScreen = enabled; AppWindow.SetPresenter(enabled ? AppWindowPresenterKind.FullScreen : AppWindowPresenterKind.Overlapped);
         FullScreenIcon.Glyph = enabled ? "\uE73F" : "\uE740";

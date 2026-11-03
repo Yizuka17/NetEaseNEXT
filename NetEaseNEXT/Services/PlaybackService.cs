@@ -210,17 +210,32 @@ public sealed class PlaybackService : IDisposable
         _index = Queue.ToList().FindIndex(t => t.Id == Current?.Id); QueueRevision++; Changed?.Invoke(); WarmFollowing();
     }
     internal PlaybackSnapshot Capture() => new() { Queue = Queue.Take(10000).ToList(), OriginalQueue = _orderedQueue.Take(10000).ToList(), CurrentId = Current?.Id ?? 0, PositionSeconds = Position.TotalSeconds, Mode = Mode, Quality = CurrentQuality };
+    internal void ReleaseLocalFiles(IReadOnlySet<string> paths)
+    {
+        if (!(Current?.IsLocal == true && paths.Contains(Current.LocalPath)) && !(CurrentDownloadedPath is { } file && paths.Contains(file))) return;
+        _load?.Cancel(); _nextCacheLoad?.Cancel(); _audioCache.Stop(); _nextAudioCache.Stop(); DisposeNextPrepared();
+        _player.Pause(); _player.Source = null; _source?.Dispose(); _source = null; DeleteLocal(_localPath); _localPath = null; _cacheRequest = null; _audioCache.ActivePath = null;
+        Current = null; CurrentDownloadedPath = null; CurrentQuality = ""; _desiredPlaying = false; _restoredPosition = TimeSpan.Zero; _index = -1;
+        QueueRevision++; PublishSystemTrack(); UpdateTimeline(); Changed?.Invoke();
+    }
     internal void Restore(PlaybackSnapshot state)
     {
         _load?.Cancel(); _audioCache.Stop(); _nextAudioCache.Stop();
         DisposeNextPrepared();
         _player.Pause(); _player.Source = null; _source?.Dispose(); _source = null; DeleteLocal(_localPath); _localPath = null; _cacheRequest = null;
-        Queue = state.Queue.Where(t => t.Id > 0).Take(10000).ToArray();
-        _orderedQueue = state.OriginalQueue.Count > 0 ? state.OriginalQueue.Where(t => t.Id > 0).Take(10000).ToArray() : Queue;
+        static bool Restorable(Track track) => track.IsLocal ? track.Id != 0 && File.Exists(track.LocalPath) : track.Id > 0;
+        Queue = state.Queue.Where(Restorable).DistinctBy(t => t.Id).Take(10000).ToArray();
+        var present = Queue.Select(t => t.Id).ToHashSet();
+        _orderedQueue = state.OriginalQueue.Where(t => present.Contains(t.Id)).DistinctBy(t => t.Id).Take(10000).ToArray();
+        if (_orderedQueue.Count == 0) _orderedQueue = Queue;
         _mode = state.Mode is "Shuffle" or "One" or "Repeat" ? state.Mode : "Sequential";
-        Current = Queue.FirstOrDefault(t => t.Id == state.CurrentId); CurrentQuality = state.Quality;
+        Current = Queue.FirstOrDefault(t => t.Id == state.CurrentId);
+        if (Current == null && state.Queue.Any(t => t.Id == state.CurrentId && t.IsLocal)) Current = Queue.FirstOrDefault();
+        var downloaded = Current == null ? null : Current.IsLocal ? Downloads.FindPath(Current.LocalPath) : Downloads.Find(Current.Id);
+        CurrentDownloadedPath = Current?.IsLocal == false ? downloaded?.Path : null;
+        CurrentQuality = downloaded?.Level ?? (Current?.IsLocal == true ? "local" : state.Quality);
         _index = Queue.ToList().FindIndex(t => t.Id == Current?.Id);
-        _restoredPosition = TimeSpan.FromSeconds(Math.Clamp(double.IsFinite(state.PositionSeconds) ? state.PositionSeconds : 0, 0, Math.Max(0, (Current?.Duration ?? 0) / 1000d - 1)));
+        _restoredPosition = TimeSpan.FromSeconds(Math.Clamp(Current?.Id == state.CurrentId && double.IsFinite(state.PositionSeconds) ? state.PositionSeconds : 0, 0, Math.Max(0, (Current?.Duration ?? 0) / 1000d - 1)));
         _desiredPlaying = false; QueueRevision++; PublishSystemTrack(); UpdateTimeline(); Changed?.Invoke();
     }
     internal Task WarmAsync(IEnumerable<Track> tracks)
@@ -479,7 +494,6 @@ public sealed class PlaybackService : IDisposable
     }
     public async Task PreviousAsync()
     {
-        if (Position.TotalSeconds > 3) { Seek(TimeSpan.Zero); return; }
         if (Queue.Count == 0) return;
         var index = (_index - 1 + Queue.Count) % Queue.Count;
         if (await LoadAsync(Queue[index])) { _index = index; WarmFollowing(); }

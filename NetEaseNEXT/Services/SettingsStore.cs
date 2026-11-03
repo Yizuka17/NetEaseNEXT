@@ -12,6 +12,8 @@ public sealed class SettingsStore
     public Dictionary<string, long> InboxCounterSnapshots { get; set; } = [];
     public List<string> AcknowledgedInboxItems { get; set; } = [];
     public bool CloseToTray { get; set; } = true;
+    public bool RememberWindowBounds { get; set; } = true;
+    public WindowPlacement? WindowPlacement { get; set; }
     public string Backdrop { get; set; } = "Mica";
     public string Theme { get; set; } = "Default";
     public bool Animations { get; set; } = true;
@@ -23,18 +25,24 @@ public sealed class SettingsStore
     public string FontFamily { get; set; } = "Segoe UI";
     public double MicaTransparency { get; set; } = 65;
     public double AcrylicTransparency { get; set; } = 65;
+    public bool? MicaSystemMaterial { get; set; }
+    public bool? AcrylicSystemMaterial { get; set; }
+    internal bool UsesSystemMaterial(string kind) => kind == "Acrylic"
+        ? AcrylicSystemMaterial ?? AcrylicTransparency == AdjustableBackdrop.DefaultTransparency
+        : MicaSystemMaterial ?? MicaTransparency == AdjustableBackdrop.DefaultTransparency;
     public string CacheDirectory { get; set; } = Path.Combine(DataDirectory, "Cache");
     public string DownloadDirectory { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic), "NetEaseNEXT");
     public string AudioDeviceId { get; set; } = "";
-    public static SettingsStore Load()
+    public static SettingsStore Load() => LoadFrom(Path.Combine(DataDirectory, "settings.json"));
+    internal static SettingsStore LoadFrom(string path)
     {
-        try { return JsonSerializer.Deserialize<SettingsStore>(File.ReadAllText(Path.Combine(DataDirectory, "settings.json"))) ?? new(); }
+        try { return JsonSerializer.Deserialize<SettingsStore>(File.ReadAllText(path)) ?? new(); }
         catch { return new(); }
     }
-    public void Save()
+    public void Save() => SaveTo(Path.Combine(DataDirectory, "settings.json"));
+    internal void SaveTo(string path)
     {
-        Directory.CreateDirectory(DataDirectory);
-        var path = Path.Combine(DataDirectory, "settings.json");
+        Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(path))!);
         File.WriteAllText(path + ".tmp", JsonSerializer.Serialize(this));
         File.Move(path + ".tmp", path, true);
     }

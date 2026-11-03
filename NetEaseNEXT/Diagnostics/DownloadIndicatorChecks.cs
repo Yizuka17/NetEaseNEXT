@@ -145,7 +145,16 @@ public sealed partial class MainWindow
             check("A changed local file cannot reuse an obsolete playback identity", SourceSongId(recovered) == 0, null);
             _playback.Restore(new()); _restoringPlayback = true; _playback.Restore(new() { Queue = [online], OriginalQueue = [online], CurrentId = online.Id }); _restoringPlayback = false; UpdateDownloadIndicator();
             check("Online song entries recognize the highest valid downloaded version", DownloadCheck.Visibility == Visibility.Visible, null);
-            File.Delete(master); File.Delete(upgraded.FilePath); File.Delete(movedFile); UpdateDownloadIndicator();
+            // Media Foundation may release the previous source after Restore returns.
+            foreach (var path in new[] { master, upgraded.FilePath, movedFile })
+            {
+                for (var attempt = 0; ; attempt++)
+                {
+                    try { File.Delete(path); break; }
+                    catch (IOException) when (attempt < 20) { await Task.Delay(50); }
+                }
+            }
+            UpdateDownloadIndicator();
             check("Deleting all downloaded versions clears the check even if history says completed", DownloadCheck.Visibility == Visibility.Collapsed, null);
         }
         finally

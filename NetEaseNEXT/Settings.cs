@@ -57,7 +57,7 @@ public sealed partial class MainWindow
         FontCombo.SelectedItem = _settings.FontFamily;
         FontCombo.DropDownOpened += async (_, _) => await RefreshFontsAsync();
         _tray.FontsChanged += () => { _fontsLoaded = false; if (!_hidden && _view == "settings") _ = RefreshFontsAsync(); };
-        _appearanceTimer.Tick += (_, _) => { _appearanceTimer.Stop(); SaveSettings(); ApplyAppearance(); };
+        _appearanceTimer.Tick += (_, _) => FlushAppearanceSettings();
     }
     private bool _fontsLoaded, _loadingFonts;
     private async Task RefreshFontsAsync()
@@ -147,29 +147,55 @@ public sealed partial class MainWindow
     }
     private void Transparency_Changed(object sender, RangeBaseValueChangedEventArgs args)
     {
-        if (!_ready || _updating) return;
-        if (_settings.Backdrop == "Acrylic") _settings.AcrylicTransparency = args.NewValue; else _settings.MicaTransparency = args.NewValue;
-        TransparencyValue.Text = $"{args.NewValue:0}%";
+        if (!_ready || _updating || !TransparencySlider.IsEnabled) return;
+        if (_settings.Backdrop == "Acrylic") { _settings.AcrylicTransparency = args.NewValue; _settings.AcrylicSystemMaterial = false; }
+        else { _settings.MicaTransparency = args.NewValue; _settings.MicaSystemMaterial = false; }
+        ApplyMaterial(Root.ActualTheme);
         _appearanceTimer.Stop(); _appearanceTimer.Start();
+    }
+    private void FlushAppearanceSettings()
+    {
+        if (!_appearanceTimer.IsEnabled) return;
+        _appearanceTimer.Stop(); SaveSettings();
     }
     private void ApplyAppearance()
     {
+        FontHost.RequestedTheme = PreferredAppTheme;
         Root.RequestedTheme = PreferredAppTheme;
         ApplyFont();
-        var supported = _settings.Backdrop == "Acrylic" ? DesktopAcrylicController.IsSupported() : _settings.Backdrop is "Mica" or "MicaAlt" && MicaController.IsSupported();
-        var transparency = _settings.Backdrop == "Acrylic" ? _settings.AcrylicTransparency : _settings.MicaTransparency;
-        try { SystemBackdrop = supported ? new AdjustableBackdrop(_settings.Backdrop, transparency) : null; }
-        catch (Exception ex) { Log.Write(ex); SystemBackdrop = null; supported = false; }
         Root.Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
-        SolidLayer.Visibility = SystemBackdrop == null ? Visibility.Visible : Visibility.Collapsed;
-        _updating = true; TransparencySlider.Value = transparency; _updating = false;
-        TransparencySlider.IsEnabled = supported; TransparencyValue.Text = $"{transparency:0}%";
-        MaterialHint.Text = !supported && _settings.Backdrop != "Solid" ? "当前系统不支持此材质" : _settings.Backdrop.StartsWith("Mica") ? "Mica 取色自桌面壁纸" : "";
-        MaterialHint.Visibility = MaterialHint.Text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+        ApplyMaterial(PreferredAppTheme);
         AppWindow.TitleBar.ButtonBackgroundColor = Microsoft.UI.Colors.Transparent;
         AppWindow.TitleBar.ButtonInactiveBackgroundColor = Microsoft.UI.Colors.Transparent;
         AppWindow.TitleBar.ButtonForegroundColor = Root.ActualTheme == ElementTheme.Dark ? Microsoft.UI.Colors.White : Microsoft.UI.Colors.Black;
         UpdateAppIcon();
+    }
+    private void ApplyMaterial(ElementTheme theme)
+    {
+        var supported = _settings.Backdrop == "Acrylic" ? DesktopAcrylicController.IsSupported() : _settings.Backdrop is "Mica" or "MicaAlt" && MicaController.IsSupported();
+        var transparency = AdjustableBackdrop.Normalize(_settings.Backdrop == "Acrylic" ? _settings.AcrylicTransparency : _settings.MicaTransparency);
+        var systemDefaults = _settings.UsesSystemMaterial(_settings.Backdrop);
+        try
+        {
+            if (!supported) SystemBackdrop = null;
+            else if (SystemBackdrop is AdjustableBackdrop current && current.Kind == _settings.Backdrop) current.Update(transparency, systemDefaults, theme);
+            else SystemBackdrop = new AdjustableBackdrop(_settings.Backdrop, transparency, systemDefaults, theme);
+        }
+        catch (Exception ex) { Log.Write(ex); SystemBackdrop = null; supported = false; }
+        SolidLayer.Visibility = SystemBackdrop == null ? Visibility.Visible : Visibility.Collapsed;
+        _updating = true; TransparencySlider.Value = transparency; _updating = false;
+        var label = _settings.Backdrop.StartsWith("Mica") ? "壁纸融合度" : "透明度";
+        MaterialCaption.Text = label; Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(TransparencySlider, label);
+        TransparencySlider.IsEnabled = supported;
+        ResetMaterialButton.IsEnabled = supported && !systemDefaults;
+        TransparencyValue.Text = _settings.Backdrop == "Solid" ? "" : systemDefaults ? "系统默认" : $"{transparency:0}%";
+        MaterialHint.Text = !supported && _settings.Backdrop != "Solid" ? "当前系统不支持此材质，已使用纯色背景" : _settings.Backdrop.StartsWith("Mica") ? "Mica 从桌面壁纸取色，不是实时透视。" : _settings.Backdrop == "Acrylic" ? "窗口未激活或系统关闭透明效果时，会使用纯色背景。" : "";
+        MaterialHint.Visibility = MaterialHint.Text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+    }
+    private void ResetMaterial_Click(object sender, RoutedEventArgs args)
+    {
+        if (_settings.Backdrop == "Acrylic") _settings.AcrylicSystemMaterial = true; else _settings.MicaSystemMaterial = true;
+        _appearanceTimer.Stop(); SaveSettings(); ApplyMaterial(Root.ActualTheme);
     }
     private async void ChooseFolder_Click(object sender, RoutedEventArgs args)
     {

@@ -1,0 +1,5 @@
+GPU {"CardName":"VirtualBox Graphics Adapter (WDDM)","DriverVersion":"7.2.22.25245","DriverModel":"WDDM 1.2","FeatureLevels":"11_1,11_0,10_1,10_0,9_3,9_2,9_1","DDIversion":"11.1","D3DStatus":"Enabled","CurrentMode":"1024 x 768 (32 bit) (60Hz)"}
+TRANSPARENCY 1
+APPHASH 32FEAA12E2CA290DFD5FE9DBCACA6CD0613CAF067DDCD680CEFB3504294A559E
+REPORT {"mode":"--material-vm-check","pid":6588,"count":43,"failures":[]}
+VM TESTS-FINISHED

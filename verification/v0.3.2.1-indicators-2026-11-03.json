@@ -1,0 +1,145 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Local online information defaults to enabled for existing settings",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "WAV preserves original song identity and quality in custom metadata",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Existing untagged downloads still map by their valid catalog path",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Moving and renaming a newly downloaded file preserves its online identity",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Moved downloads can be matched from the online song again",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "FLAC custom fields preserve source identity without using ordinary comments",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A local playlist song shows real linked heart state and public counts",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Local comments target the original online song rather than the negative local ID",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Downloaded state appears as a lower-right check on the download icon",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Heart, comments and disabled quality controls have no grey backing",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Disabled action buttons also stay transparent",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The same download badge follows the controls onto the playback page",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Turning local online information off hides actions and makes no API request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Offline mode hides local online controls while keeping local playback and the badge",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Online information resumes after reconnecting",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Disabling the option cancels pending results and cannot restore hidden actions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Clicking an already downloaded song offers only higher quality upgrades",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "No higher available quality keeps the existing audio without downloading or rewriting it",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Successful upgrades keep the old version and register the higher actual quality",
+    "passed": true,
+    "detail": {
+      "Status": "\u5DF2\u5B8C\u6210",
+      "Error": ""
+    }
+  },
+  {
+    "name": "Concurrent playlist downloads with different ceilings fetch the same available audio only once",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The same song in different target folders keeps independent playlist files",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The highest downloaded tier does not offer a duplicate download",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A one-song playlist batch still offers target qualities for its destination folder",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unrelated local files never guess an online identity from their title",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A changed local file cannot reuse an obsolete playback identity",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Online song entries recognize the highest valid downloaded version",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Deleting all downloaded versions clears the check even if history says completed",
+    "passed": true,
+    "detail": null
+  }
+]

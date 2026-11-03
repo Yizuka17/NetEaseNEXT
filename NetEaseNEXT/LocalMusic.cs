@@ -27,13 +27,13 @@ public sealed partial class MainWindow
     {
         _localLibrary = await Task.Run(() => LocalLibraryStore.Load(_localLibraryPathOverride), ct); ct.ThrowIfCancellationRequested();
         await RegisterLocalDownloadSourcesAsync(_localLibrary.Tracks); ct.ThrowIfCancellationRequested();
-        UpdateLocalPlaylists(); LoadLocalTracks();
-        if (!_runningSmokeTest || _checkingLibraryWorkflow) { await RefreshLocalFoldersAsync(ct); StartLocalMonitoring(); }
+        LoadLocalTracks();
+        if (!_runningSmokeTest || _checkingLibraryWorkflow) { StartLocalMonitoring(); await RefreshLocalFoldersAsync(ct); }
     }
     private void UpdateLocalPlaylists()
     {
         var cards = new List<LocalPlaylistCard>();
-        var all = _localLibrary.Tracks.Where(t => File.Exists(t.LocalPath)).ToArray();
+        var all = LocalTracks(null).ToArray();
         cards.Add(new("", "全部歌曲", all.FirstOrDefault(t => t.Cover.Length > 0)?.Cover ?? "", all.Length + " 首"));
         foreach (var playlist in _localLibrary.Playlists)
         {
@@ -57,7 +57,7 @@ public sealed partial class MainWindow
     private IEnumerable<Track> LocalTracks(LocalPlaylist? playlist)
     {
         var paths = playlist?.Paths.ToHashSet(StringComparer.OrdinalIgnoreCase);
-        return _localLibrary.Tracks.Where(t => File.Exists(t.LocalPath) && (paths == null || paths.Contains(t.LocalPath)));
+        return _localLibrary.Tracks.Where(t => (paths == null || paths.Contains(t.LocalPath)) && !LocalMusicFiles.IsDownloadPartial(t.LocalPath) && File.Exists(t.LocalPath));
     }
     private void LoadLocalTracks()
     {
@@ -66,7 +66,25 @@ public sealed partial class MainWindow
         if (_view != "local-playlist") return;
         var playlist = _localLibrary.Playlists.FirstOrDefault(p => p.Id == _localPlaylistId);
         if (_localPlaylistId.Length > 0 && playlist == null) { _localPlaylistId = ""; }
-        Tracks.Clear(); foreach (var track in LocalTracks(playlist)) Tracks.Add(track);
+        var visible = LocalTracks(playlist).ToArray();
+        if (!Tracks.SequenceEqual(visible))
+        {
+            var paths = visible.Select(t => t.LocalPath).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            for (var i = Tracks.Count - 1; i >= 0; i--) if (!paths.Contains(Tracks[i].LocalPath)) Tracks.RemoveAt(i);
+            for (var i = 0; i < visible.Length; i++)
+            {
+                var track = visible[i];
+                if (i == Tracks.Count) { Tracks.Add(track); continue; }
+                if (!Tracks[i].LocalPath.Equals(track.LocalPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    var from = i + 1;
+                    while (from < Tracks.Count && !Tracks[from].LocalPath.Equals(track.LocalPath, StringComparison.OrdinalIgnoreCase)) from++;
+                    if (from == Tracks.Count) { Tracks.Insert(i, track); continue; }
+                    Tracks.Move(from, i);
+                }
+                if (!ReferenceEquals(Tracks[i], track)) Tracks[i] = track;
+            }
+        }
         TrackCount.Text = Tracks.Count + " 首"; _tracksMore = false;
         PageTitle.Text = "本地音乐";
         LocalPlaylistTitle.Text = playlist?.Name ?? "全部歌曲";
@@ -80,6 +98,7 @@ public sealed partial class MainWindow
         ImportLocalButton.IsEnabled = playlist?.FolderPath.Length is not > 0;
         ImportLocalButton.Visibility = playlist?.FolderPath.Length > 0 ? Visibility.Collapsed : Visibility.Visible;
         EmptyPanel.Visibility = Visibility.Collapsed;
+        UpdateTrackLocator();
     }
     private async void LocalPlaylist_Click(object sender, ItemClickEventArgs args)
     {
@@ -107,10 +126,23 @@ public sealed partial class MainWindow
         StopLocalMonitoring();
         if (_hidden || _exiting || !IsLocalView || (_runningSmokeTest && !_checkingLibraryWorkflow)) return;
         _localMonitorLoad = new(); var token = _localMonitorLoad.Token;
-        _localFolderMonitor = new(_localLibrary.Playlists, () => DispatcherQueue.TryEnqueue(async () =>
+        var pending = new HashSet<string>();
+        var scanning = false;
+        _localFolderMonitor = new(_localLibrary.Playlists, ids => DispatcherQueue.TryEnqueue(async () =>
         {
             if (token.IsCancellationRequested || _hidden || _exiting || !IsLocalView) return;
-            await RefreshLocalFoldersAsync(token);
+            pending.UnionWith(ids);
+            if (scanning) return;
+            scanning = true;
+            try
+            {
+                while (pending.Count > 0 && !token.IsCancellationRequested)
+                {
+                    var batch = new HashSet<string>(pending); pending.Clear();
+                    await RefreshLocalFoldersAsync(token, batch);
+                }
+            }
+            finally { scanning = false; }
         }));
     }
     private void ResumeLocalMonitoring()
@@ -118,14 +150,15 @@ public sealed partial class MainWindow
         StartLocalMonitoring();
         if (_localMonitorLoad != null) _ = RefreshLocalFoldersAsync(_localMonitorLoad.Token);
     }
-    private async Task RefreshLocalFoldersAsync(CancellationToken ct)
+    private async Task RefreshLocalFoldersAsync(CancellationToken ct, IReadOnlySet<string>? affected = null)
     {
         try
         {
             await _localRefreshGate.WaitAsync(ct);
             try
             {
-                foreach (var item in _localLibrary.Playlists.Where(p => p.FolderPath.Length > 0).ToArray())
+                var changed = false;
+                foreach (var item in _localLibrary.Playlists.Where(p => p.FolderPath.Length > 0 && (affected == null || affected.Contains(p.Id))).ToArray())
                 {
                     ct.ThrowIfCancellationRequested();
                     var root = item.FolderPath; var recursive = item.IncludeSubfolders;
@@ -136,24 +169,28 @@ public sealed partial class MainWindow
                         var scan = await Task.Run(() => LocalMusicFiles.Scan(snapshot, known, ct, _downloadedLibrary), ct);
                         ct.ThrowIfCancellationRequested();
                         var current = _localLibrary.Playlists.FirstOrDefault(p => p.Id == item.Id);
-                        if (current == null || current.FolderPath != root || current.IncludeSubfolders != recursive) continue;
+                        if (current == null || current.FolderPath != root || current.IncludeSubfolders != recursive || !current.ExcludedPaths.SequenceEqual(snapshot.ExcludedPaths)) continue;
+                        var paths = scan.Tracks.Select(t => t.LocalPath).ToList();
+                        var status = scan.Limited ? "仅显示前 10000 首，可缩小文件夹范围" : scan.Failed > 0 ? $"{scan.Failed} 个文件暂时无法读取，可稍后刷新" : "";
+                        if (current.FolderStatus == status && current.Paths.SequenceEqual(paths, StringComparer.OrdinalIgnoreCase)
+                            && current.FileStamps.Count == scan.Stamps.Count && current.FileStamps.All(p => scan.Stamps.TryGetValue(p.Key, out var stamp) && stamp == p.Value)) continue;
                         CommitLocal(() =>
                         {
                             var replacements = scan.Tracks.ToDictionary(t => t.LocalPath, StringComparer.OrdinalIgnoreCase);
                             _localLibrary.Tracks = _localLibrary.Tracks.Select(t => replacements.Remove(t.LocalPath, out var replacement) ? replacement : t).Concat(replacements.Values).ToList();
-                            current.Paths = scan.Tracks.Select(t => t.LocalPath).ToList(); current.FileStamps = scan.Stamps;
-                            current.FolderStatus = scan.Limited ? "仅显示前 10000 首，可缩小文件夹范围" : scan.Failed > 0 ? $"{scan.Failed} 个文件暂时无法读取，可稍后刷新" : "";
+                            current.Paths = paths; current.FileStamps = scan.Stamps; current.FolderStatus = status;
                         });
+                        changed = true;
                         await RegisterLocalDownloadSourcesAsync(scan.Tracks);
                     }
                     catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
                     {
                         var current = _localLibrary.Playlists.FirstOrDefault(p => p.Id == item.Id);
-                        if (current?.FolderPath == root) current.FolderStatus = "文件夹暂不可用，保留上次列表";
+                        if (current?.FolderPath == root && current.FolderStatus != "文件夹暂不可用，保留上次列表") { current.FolderStatus = "文件夹暂不可用，保留上次列表"; changed = true; }
                         Log.Write(ex);
                     }
                 }
-                if (!ct.IsCancellationRequested && IsLocalView) { UpdateLocalPlaylists(); LoadLocalTracks(); }
+                if (changed && !ct.IsCancellationRequested && IsLocalView) LoadLocalTracks();
             }
             finally { _localRefreshGate.Release(); }
         }
@@ -163,7 +200,13 @@ public sealed partial class MainWindow
     private async void RefreshLocal_Click(object sender, RoutedEventArgs args)
     {
         if (sender is Control control) control.IsEnabled = false;
-        try { await RefreshLocalFoldersAsync(_localMonitorLoad?.Token ?? CancellationToken.None); UpdateLocalPlaylists(); LoadLocalTracks(); StartLocalMonitoring(); }
+        try
+        {
+            var playlist = _view == "local-playlist" ? _localLibrary.Playlists.FirstOrDefault(p => p.Id == _localPlaylistId) : null;
+            IReadOnlySet<string>? affected = playlist != null ? new HashSet<string> { playlist.Id } : null;
+            await RefreshLocalFoldersAsync(_localMonitorLoad?.Token ?? CancellationToken.None, affected);
+            LoadLocalTracks(); StartLocalMonitoring();
+        }
         finally { if (sender is Control button) button.IsEnabled = true; }
     }
     private async void ImportLocalFiles_Click(object sender, RoutedEventArgs args)
@@ -184,7 +227,7 @@ public sealed partial class MainWindow
             var playlist = _view == "local-playlist" ? _localLibrary.Playlists.FirstOrDefault(p => p.Id == _localPlaylistId) : null;
             if (playlist?.FolderPath.Length > 0) throw new InvalidOperationException("请将歌曲放入绑定的文件夹，然后刷新");
             var known = _localLibrary.Tracks.Select(t => t.LocalPath).ToHashSet(StringComparer.OrdinalIgnoreCase);
-            var selected = paths.Select(Path.GetFullPath).Distinct(StringComparer.OrdinalIgnoreCase).Take(10000).ToArray();
+            var selected = paths.Where(LocalMusicFiles.IsAudioFile).Select(Path.GetFullPath).Distinct(StringComparer.OrdinalIgnoreCase).Take(10000).ToArray();
             var selection = selected.Where(p => !known.Contains(p)).Take(Math.Max(0, 10000 - known.Count)).ToArray();
             var result = await Task.Run(() =>
             {
@@ -257,10 +300,10 @@ public sealed partial class MainWindow
             {
                 var playlist = _localLibrary.Playlists.FirstOrDefault(p => p.Id == id);
                 if (playlist == null) { playlist = new() { Id = id }; _localLibrary.Playlists.Add(playlist); }
-                if (!string.Equals(playlist.FolderPath, folder, StringComparison.OrdinalIgnoreCase)) { playlist.FileStamps.Clear(); if (folder.Length > 0) playlist.Paths.Clear(); }
+                if (!string.Equals(playlist.FolderPath, folder, StringComparison.OrdinalIgnoreCase)) { playlist.FileStamps.Clear(); playlist.ExcludedPaths.Clear(); if (folder.Length > 0) playlist.Paths.Clear(); }
                 playlist.Name = name.Text.Trim(); playlist.CoverPath = cover; playlist.FolderPath = folder; playlist.IncludeSubfolders = recursive.IsChecked == true; playlist.FolderStatus = "";
             });
-            await RefreshLocalFoldersAsync(CancellationToken.None); UpdateLocalPlaylists(); LoadLocalTracks(); StartLocalMonitoring();
+            await RefreshLocalFoldersAsync(CancellationToken.None, new HashSet<string> { id }); LoadLocalTracks(); StartLocalMonitoring();
         }
         catch (Exception ex) { ShowError(ex.Message); }
         finally { _dialog = null; }
@@ -303,15 +346,31 @@ public sealed partial class MainWindow
         catch (Exception ex) { ShowError(ex.Message); }
         finally { _dialog = null; }
     }
-    private void ContextRemoveLocal_Click(object sender, RoutedEventArgs args) { if (sender is FrameworkElement { DataContext: Track track }) RemoveLocalTracks([track]); }
+    private async void ContextRemoveLocal_Click(object sender, RoutedEventArgs args) { if (sender is FrameworkElement { DataContext: Track track }) await ConfirmRemoveLocalTracksAsync([track]); }
     private void RemoveLocalTracks(IReadOnlyList<Track> tracks)
     {
         try
         {
             var paths = tracks.Select(t => t.LocalPath).ToHashSet(StringComparer.OrdinalIgnoreCase);
             var playlist = _localLibrary.Playlists.FirstOrDefault(p => p.Id == _localPlaylistId);
-            if (playlist?.FolderPath.Length > 0) throw new InvalidOperationException("文件夹歌单随目录同步；从歌单移除前请先取消文件夹绑定");
-            CommitLocal(() => { if (playlist != null) playlist.Paths.RemoveAll(paths.Contains); else { _localLibrary.Tracks.RemoveAll(t => paths.Contains(t.LocalPath)); foreach (var item in _localLibrary.Playlists) item.Paths.RemoveAll(paths.Contains); } });
+            CommitLocal(() =>
+            {
+                if (playlist != null)
+                {
+                    playlist.Paths.RemoveAll(paths.Contains);
+                    if (playlist.FolderPath.Length > 0) playlist.ExcludedPaths = playlist.ExcludedPaths.Concat(paths).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                }
+                else
+                {
+                    _localLibrary.Tracks.RemoveAll(t => paths.Contains(t.LocalPath));
+                    foreach (var item in _localLibrary.Playlists)
+                    {
+                        var excluded = item.Paths.Where(paths.Contains).ToArray();
+                        item.Paths.RemoveAll(paths.Contains);
+                        if (item.FolderPath.Length > 0) item.ExcludedPaths = item.ExcludedPaths.Concat(excluded).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                    }
+                }
+            });
             UpdateLocalPlaylists(); LoadLocalTracks(); ShowPlayerMessage("已从列表移除，原文件保留");
         }
         catch (Exception ex) { ShowError(ex.Message); }

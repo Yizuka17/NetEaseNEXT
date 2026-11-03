@@ -1,7 +1,7 @@
 [Setup]
 AppId={{F2431F11-C7B6-4E8C-80FC-C273231D908E}
 AppName=NetEaseNEXT
-AppVersion=0.2.0
+AppVersion=0.3.2
 AppPublisher=Yizuka17
 DefaultDirName={localappdata}\Programs\NetEaseNEXT
 DefaultGroupName=NetEaseNEXT
@@ -10,7 +10,7 @@ PrivilegesRequired=lowest
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 OutputDir=..\artifacts\installer
-OutputBaseFilename=NetEaseNEXT-0.2.0-Setup-x64
+OutputBaseFilename=NetEaseNEXT-0.3.2-Setup-x64
 SetupIconFile=..\NetEaseNEXT\Assets\AppIcon.ico
 UninstallDisplayIcon={app}\NetEaseNEXT.exe
 Compression=lzma2/fast

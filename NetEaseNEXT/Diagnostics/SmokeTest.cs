@@ -36,6 +36,34 @@ public sealed partial class MainWindow
         try
         {
             Check("XAML root loaded", Root.IsLoaded);
+            if (Environment.GetCommandLineArgs().Contains("--material-vm-check"))
+            {
+                await RunMaterialVmChecksAsync(Check); return;
+            }
+            if (Environment.GetCommandLineArgs().Contains("--local-folder-isolation-check"))
+            {
+                await RunLocalFolderIsolationChecksAsync(Check); return;
+            }
+            if (Environment.GetCommandLineArgs().Contains("--shell-preferences-check"))
+            {
+                await RunShellPreferencesChecksAsync(Check); return;
+            }
+            if (Environment.GetCommandLineArgs().Contains("--download-lyrics-check"))
+            {
+                await RunDownloadLyricsChecksAsync(Check); return;
+            }
+            if (Environment.GetCommandLineArgs().Contains("--shell-preferences-preview"))
+            {
+                await RunShellPreferencesPreviewAsync(Check); return;
+            }
+            if (Environment.GetCommandLineArgs().Contains("--previous-track-check"))
+            {
+                await RunPreviousTrackChecksAsync(Check); return;
+            }
+            if (Environment.GetCommandLineArgs().Contains("--local-actions-check"))
+            {
+                await RunLocalActionChecksAsync(Check); return;
+            }
             if (Environment.GetCommandLineArgs().Contains("--download-indicator-check"))
             {
                 await RunDownloadIndicatorChecksAsync(Check); return;

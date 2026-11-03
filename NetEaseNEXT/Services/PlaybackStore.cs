@@ -14,6 +14,7 @@ internal sealed class PlaybackSnapshot
     public string Mode { get; set; } = "Sequential";
     public long PlaylistId { get; set; }
     public string PlaylistName { get; set; } = "";
+    public string LocalPlaylistId { get; set; } = "";
     public string View { get; set; } = "discover";
 }
 

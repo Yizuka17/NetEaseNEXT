@@ -36,10 +36,11 @@ public sealed partial class MainWindow
             var state = await stateTask;
             if (_hidden || _exiting) return;
             _resumePlaylistId = state.PlaylistId; _resumePlaylistName = state.PlaylistName;
+            _localPlaylistId = state.LocalPlaylistId;
             _playback.Restore(state);
             _sessionReady = true;
             _playlistId = state.PlaylistId; _playlistName = state.PlaylistName;
-            var view = state.View == "playlist" && state.PlaylistId > 0 ? "playlist" : state.View == "playing" && _playback.Current != null ? "playing" : state.Queue.Count > 0 ? "queue" : "discover";
+            var view = state.View is "local" or "local-playlist" ? state.View : state.View == "playlist" && state.PlaylistId > 0 ? "playlist" : state.View == "playing" && _playback.Current != null ? "playing" : _playback.Queue.Count > 0 ? "queue" : "discover";
             await NavigateAsync(view);
             _ = _playback.WarmAsync(_playback.Queue);
             _ = account;
@@ -62,10 +63,14 @@ public sealed partial class MainWindow
         if (_runningSmokeTest || _restoringPlayback) return;
         try
         {
-            var state = _playback.Capture(); state.PlaylistId = _resumePlaylistId; state.PlaylistName = _resumePlaylistName;
-            state.View = _view is "playlist" or "playing" ? _view : _resumePlaylistId > 0 ? "playlist" : "queue";
-            PlaybackStore.Save(state);
+            PlaybackStore.Save(CapturePlaybackSnapshot());
         }
         catch (Exception ex) { Log.Write(ex); }
+    }
+    private PlaybackSnapshot CapturePlaybackSnapshot()
+    {
+        var state = _playback.Capture(); state.PlaylistId = _resumePlaylistId; state.PlaylistName = _resumePlaylistName; state.LocalPlaylistId = _localPlaylistId;
+        state.View = _view is "local" or "local-playlist" or "playing" ? _view : _playback.Current?.IsLocal == true ? "local-playlist" : _view == "playlist" || _resumePlaylistId > 0 ? "playlist" : "queue";
+        return state;
     }
 }

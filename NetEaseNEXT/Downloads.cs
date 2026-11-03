@@ -72,7 +72,7 @@ public sealed partial class MainWindow
         FailedDownloadsList.Visibility = failed ? Visibility.Visible : Visibility.Collapsed;
         var visible = VisibleDownloads.ToArray();
         DownloadEmpty.Text = failed ? "没有失败的下载" : "暂无下载任务"; DownloadEmpty.Visibility = visible.Length == 0 ? Visibility.Visible : Visibility.Collapsed;
-        DownloadSummary.Text = failed ? $"{visible.Length} 项失败" : $"{DownloadJobs.Count(j => j.Active)} 项进行中，{DownloadJobs.Count(j => j.Status == "已暂停")} 项已暂停，{DownloadJobs.Count(j => j.Finished)} 项已完成";
+        DownloadSummary.Text = failed ? $"{visible.Length} 项失败" : $"{DownloadJobs.Count(j => j.Active)} 项进行中，{DownloadJobs.Count(j => j.Status == "已暂停")} 项已暂停，{DownloadJobs.Count(j => j.Finished)} 项已完成，{FailedDownloads.Count} 项已失败";
         PauseAllDownloadsButton.Visibility = ResumeAllDownloadsButton.Visibility = CancelAllDownloadsButton.Visibility = failed ? Visibility.Collapsed : Visibility.Visible;
         RetryFailedDownloadsButton.Visibility = failed ? Visibility.Visible : Visibility.Collapsed;
         PauseAllDownloadsButton.IsEnabled = !_downloadBulkBusy && DownloadJobs.Any(j => j.Active);
@@ -188,10 +188,10 @@ public sealed partial class MainWindow
             job.Status = "下载中"; SaveDownloads();
             await TransferDownloadAsync(uri, partial, data.Number("size"), data.Text("md5"), job, ct, transport);
             job.Status = "写入信息";
-            var lyrics = await api.CallCachedAsync("lyric", new { id = job.Track.Id }, ct); var lyric = Object(lyrics, "lrc").Text("lyric");
+            var lyrics = await api.CallCachedAsync("lyric", new { id = job.Track.Id }, ct); var lyric = Object(lyrics, "lrc").Text("lyric"); var translatedLyric = Object(lyrics, "tlyric").Text("lyric");
             byte[]? cover = null;
             if (job.Track.Cover.Length > 0) { var image = await Artwork.GetFileAsync(job.Track.Cover, 1024, ct); cover = await File.ReadAllBytesAsync(image, ct); }
-            await Task.Run(() => AudioTags.Write(partial, job.Track.Title, job.Track.Artist, job.Track.Album, lyric, cover, job.Track.Id, job.ActualLevel, job.Track.ArtistId, job.Track.AlbumId), ct);
+            await Task.Run(() => AudioTags.Write(partial, job.Track.Title, job.Track.Artist, job.Track.Album, lyric, cover, job.Track.Id, job.ActualLevel, job.Track.ArtistId, job.Track.AlbumId, translatedLyric), ct);
             job.TagsReady = true; SaveDownloads();
             ct.ThrowIfCancellationRequested(); FinishTaggedDownload(job);
         }

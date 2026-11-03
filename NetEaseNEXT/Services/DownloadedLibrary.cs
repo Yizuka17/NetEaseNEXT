@@ -66,4 +66,8 @@ public sealed class DownloadedLibrary
             Save(next);
         }
     }
+    public void RemovePaths(IReadOnlySet<string> paths)
+    {
+        lock (_gate) { var next = _files.Where(f => !paths.Contains(f.Path)).ToList(); if (next.Count != _files.Count) Save(next); }
+    }
 }

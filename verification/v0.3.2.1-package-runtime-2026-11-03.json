@@ -1,0 +1,8 @@
+{
+  "Package": "NetEaseNEXT-0.3.2.1-x64.msix",
+  "Version": "0.3.2.1",
+  "Sha256": "EC233F54800BDAEEA212A1270B9421E59B8B81B2514117C368F315A954B99A1D",
+  "SignatureThumbprint": "548494EE74C33B2A77C73CC4E25CE0EEDD5E8733",
+  "ForbiddenPayloadCount": 0,
+  "Attachments": 9
+}

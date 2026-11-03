@@ -1,0 +1,66 @@
+{
+  "Url": "https://github.com/Yizuka17/NetEaseNEXT/releases/tag/v0.3.2",
+  "ReleaseId": 431827896,
+  "Tag": "v0.3.2",
+  "TagUnchanged": true,
+  "MainUnchanged": true,
+  "PublishedAtUnchanged": true,
+  "Package": "NetEaseNEXT-0.3.2.1-x64.msix",
+  "Sha256": "EC233F54800BDAEEA212A1270B9421E59B8B81B2514117C368F315A954B99A1D",
+  "Assets": [
+    {
+      "Name": "cleanup-legacy-shortcuts.ps1",
+      "Uploaded": true,
+      "SizeMatches": true,
+      "HashMatches": true
+    },
+    {
+      "Name": "install-msix.ps1",
+      "Uploaded": true,
+      "SizeMatches": true,
+      "HashMatches": true
+    },
+    {
+      "Name": "INSTALL.txt",
+      "Uploaded": true,
+      "SizeMatches": true,
+      "HashMatches": true
+    },
+    {
+      "Name": "msix-signature.ps1",
+      "Uploaded": true,
+      "SizeMatches": true,
+      "HashMatches": true
+    },
+    {
+      "Name": "NetEaseNEXT-0.3.2.1-x64.msix",
+      "Uploaded": true,
+      "SizeMatches": true,
+      "HashMatches": true
+    },
+    {
+      "Name": "NetEaseNEXT.cer",
+      "Uploaded": true,
+      "SizeMatches": true,
+      "HashMatches": true
+    },
+    {
+      "Name": "package-info.json",
+      "Uploaded": true,
+      "SizeMatches": true,
+      "HashMatches": true
+    },
+    {
+      "Name": "SHA256SUMS.txt",
+      "Uploaded": true,
+      "SizeMatches": true,
+      "HashMatches": true
+    },
+    {
+      "Name": "trust-msix-certificate.ps1",
+      "Uploaded": true,
+      "SizeMatches": true,
+      "HashMatches": true
+    }
+  ]
+}

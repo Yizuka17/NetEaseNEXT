@@ -1,0 +1,62 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A restored song past three seconds switches to the previous download in one command",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "One actual previous-button click switches songs after twelve seconds of playback",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A paused song past three seconds also switches directly to the previous song",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Previous still switches directly near the start of a song",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Previous on the first queue entry wraps to the last entry",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Shuffle previous follows the current queue order without reshuffling",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Explicit previous changes tracks even in single-song repeat mode",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A one-song queue restarts its only song without requiring a second click",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A missing previous file leaves the current song playing at its existing position",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "An empty queue ignores previous safely",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Previous regression fixtures never request a streaming audio URL",
+    "passed": true,
+    "detail": null
+  }
+]

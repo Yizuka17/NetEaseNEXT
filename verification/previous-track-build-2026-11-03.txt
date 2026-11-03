@@ -1,0 +1,18 @@
+  正在确定要还原的项目…
+  所有项目均是最新的，无法还原。
+  NetEaseNEXT.Api -> E:\NetEaseNEXT_Dev\NetEaseNEXT.Api\bin\x64\Release\net9.0\NetEaseNEXT.Api.dll
+  NetEaseNEXT -> E:\NetEaseNEXT_Dev\NetEaseNEXT\bin\x64\Release\net9.0-windows10.0.26100.0\win-x64\NetEaseNEXT.dll
+
+已成功生成。
+    0 个警告
+    0 个错误
+
+已用时间 00:00:18.38
+
+有可用的工作负载更新。有关详细信息，请运行 `dotnet workload list`。
+  NetEaseNEXT.Api -> E:\NetEaseNEXT_Dev\NetEaseNEXT.Api\bin\x64\Release\net9.0\NetEaseNEXT.Api.dll
+  NetEaseNEXT -> E:\NetEaseNEXT_Dev\NetEaseNEXT\bin\x64\Release\net9.0-windows10.0.26100.0\win-x64\NetEaseNEXT.dll
+  NetEaseNEXT -> E:\NetEaseNEXT_Dev\artifacts\win-x64\
+
+有可用的工作负载更新。有关详细信息，请运行 `dotnet workload list`。
+Portable app: E:\NetEaseNEXT_Dev\artifacts\win-x64\NetEaseNEXT.exe

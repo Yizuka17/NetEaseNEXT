@@ -1,0 +1,56 @@
+{
+  "MaterialRuntime": "Windows 11 26100, QEMU TCG, Microsoft Basic Display Adapter",
+  "FrameCount": 42,
+  "Reports": [
+    {
+      "mode": "--material-vm-check",
+      "pid": 5148,
+      "count": 43,
+      "failures": []
+    },
+    {
+      "mode": "--local-folder-isolation-check",
+      "pid": 5156,
+      "count": 8,
+      "failures": []
+    },
+    {
+      "mode": "--local-folder-isolation-check",
+      "pid": 1108,
+      "count": 8,
+      "failures": []
+    },
+    {
+      "mode": "--local-folder-isolation-check",
+      "pid": 5124,
+      "count": 8,
+      "failures": []
+    },
+    {
+      "mode": "--library-workflow-check",
+      "pid": 4032,
+      "count": 32,
+      "failures": []
+    },
+    {
+      "mode": "--download-lyrics-check",
+      "pid": 3604,
+      "count": 19,
+      "failures": []
+    },
+    {
+      "mode": "--shell-preferences-check",
+      "pid": 5864,
+      "count": 30,
+      "failures": []
+    },
+    {
+      "mode": "--material-vm-check",
+      "pid": 4788,
+      "count": 43,
+      "failures": []
+    }
+  ],
+  "GuestDllMatches": true,
+  "FinalAppSha256": "32FEAA12E2CA290DFD5FE9DBCACA6CD0613CAF067DDCD680CEFB3504294A559E"
+}

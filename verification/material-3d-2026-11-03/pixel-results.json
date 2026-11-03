@@ -1,0 +1,1196 @@
+{
+  "Acrylic-Dark": {
+    "samples": {
+      "system": {
+        "meanRGB": {
+          "title": [
+            27.68,
+            55.93,
+            75.87
+          ],
+          "sidebar": [
+            42.98,
+            43.94,
+            44.6
+          ],
+          "player": [
+            32.57,
+            57.95,
+            98.03
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 20.04,
+          "sidebar": 1.541,
+          "player": 26.541
+        }
+      },
+      "0": {
+        "meanRGB": {
+          "title": [
+            35.0,
+            35.0,
+            35.0
+          ],
+          "sidebar": [
+            32.28,
+            32.28,
+            32.28
+          ],
+          "player": [
+            43.03,
+            43.03,
+            43.03
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 3.0,
+          "sidebar": 0.281,
+          "player": 11.027
+        }
+      },
+      "25": {
+        "meanRGB": {
+          "title": [
+            51.61,
+            59.2,
+            64.56
+          ],
+          "sidebar": [
+            32.09,
+            32.34,
+            32.51
+          ],
+          "player": [
+            39.66,
+            45.05,
+            55.11
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 26.458,
+          "sidebar": 4.686,
+          "player": 14.608
+        }
+      },
+      "50": {
+        "meanRGB": {
+          "title": [
+            68.22,
+            83.17,
+            93.74
+          ],
+          "sidebar": [
+            31.9,
+            32.4,
+            32.75
+          ],
+          "player": [
+            35.0,
+            47.1,
+            67.15
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 49.711,
+          "sidebar": 9.079,
+          "player": 17.749
+        }
+      },
+      "65": {
+        "meanRGB": {
+          "title": [
+            78.16,
+            97.59,
+            111.39
+          ],
+          "sidebar": [
+            31.66,
+            32.33,
+            32.77
+          ],
+          "player": [
+            32.11,
+            48.32,
+            74.57
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 63.712,
+          "sidebar": 11.849,
+          "player": 20.111
+        }
+      },
+      "75": {
+        "meanRGB": {
+          "title": [
+            84.83,
+            107.25,
+            123.12
+          ],
+          "sidebar": [
+            31.72,
+            32.49,
+            33.01
+          ],
+          "player": [
+            30.13,
+            49.14,
+            79.53
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 73.066,
+          "sidebar": 13.444,
+          "player": 22.278
+        }
+      },
+      "100": {
+        "meanRGB": {
+          "title": [
+            101.42,
+            131.34,
+            152.51
+          ],
+          "sidebar": [
+            31.58,
+            32.56,
+            33.26
+          ],
+          "player": [
+            25.29,
+            51.04,
+            92.26
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 96.425,
+          "sidebar": 17.8,
+          "player": 28.671
+        }
+      }
+    },
+    "adjacent": {
+      "0-25": {
+        "title": 23.458,
+        "sidebar": 4.405,
+        "player": 5.939
+      },
+      "25-50": {
+        "title": 23.252,
+        "sidebar": 4.392,
+        "player": 6.317
+      },
+      "50-65": {
+        "title": 14.001,
+        "sidebar": 2.77,
+        "player": 3.882
+      },
+      "65-75": {
+        "title": 9.354,
+        "sidebar": 1.595,
+        "player": 2.606
+      },
+      "75-100": {
+        "title": 23.359,
+        "sidebar": 4.356,
+        "player": 6.576
+      }
+    }
+  },
+  "Acrylic-Light": {
+    "samples": {
+      "system": {
+        "meanRGB": {
+          "title": [
+            236.16,
+            243.85,
+            249.48
+          ],
+          "sidebar": [
+            218.58,
+            219.21,
+            219.63
+          ],
+          "player": [
+            243.0,
+            244.83,
+            247.79
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 6.197,
+          "sidebar": 29.86,
+          "player": 3.933
+        }
+      },
+      "0": {
+        "meanRGB": {
+          "title": [
+            243.0,
+            243.0,
+            243.0
+          ],
+          "sidebar": [
+            239.5,
+            239.5,
+            239.5
+          ],
+          "player": [
+            250.96,
+            250.96,
+            250.96
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 1.0,
+          "sidebar": 4.503,
+          "player": 6.963
+        }
+      },
+      "25": {
+        "meanRGB": {
+          "title": [
+            231.85,
+            235.25,
+            237.72
+          ],
+          "sidebar": [
+            209.08,
+            209.33,
+            209.5
+          ],
+          "player": [
+            241.08,
+            241.74,
+            242.87
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 9.061,
+          "sidebar": 34.695,
+          "player": 2.11
+        }
+      },
+      "50": {
+        "meanRGB": {
+          "title": [
+            219.69,
+            227.98,
+            233.87
+          ],
+          "sidebar": [
+            178.0,
+            178.51,
+            178.85
+          ],
+          "player": [
+            231.17,
+            233.1,
+            236.17
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 16.822,
+          "sidebar": 65.547,
+          "player": 10.52
+        }
+      },
+      "65": {
+        "meanRGB": {
+          "title": [
+            211.88,
+            223.73,
+            232.24
+          ],
+          "sidebar": [
+            159.61,
+            160.27,
+            160.7
+          ],
+          "player": [
+            225.03,
+            227.9,
+            232.49
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 21.382,
+          "sidebar": 83.804,
+          "player": 15.526
+        }
+      },
+      "75": {
+        "meanRGB": {
+          "title": [
+            206.52,
+            221.06,
+            231.36
+          ],
+          "sidebar": [
+            146.93,
+            147.68,
+            148.18
+          ],
+          "player": [
+            220.88,
+            224.5,
+            230.21
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 24.354,
+          "sidebar": 96.402,
+          "player": 18.8
+        }
+      },
+      "100": {
+        "meanRGB": {
+          "title": [
+            192.22,
+            214.39,
+            230.12
+          ],
+          "sidebar": [
+            116.48,
+            117.47,
+            118.18
+          ],
+          "player": [
+            210.23,
+            215.93,
+            225.16
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 31.753,
+          "sidebar": 126.622,
+          "player": 26.892
+        }
+      }
+    },
+    "adjacent": {
+      "0-25": {
+        "title": 8.061,
+        "sidebar": 30.192,
+        "player": 9.067
+      },
+      "25-50": {
+        "title": 7.762,
+        "sidebar": 30.852,
+        "player": 8.415
+      },
+      "50-65": {
+        "title": 4.56,
+        "sidebar": 18.257,
+        "player": 5.007
+      },
+      "65-75": {
+        "title": 2.972,
+        "sidebar": 12.598,
+        "player": 3.274
+      },
+      "75-100": {
+        "title": 7.399,
+        "sidebar": 30.22,
+        "player": 8.093
+      }
+    }
+  },
+  "Mica-Dark": {
+    "samples": {
+      "system": {
+        "meanRGB": {
+          "title": [
+            26.0,
+            33.54,
+            40.88
+          ],
+          "sidebar": [
+            26.0,
+            33.57,
+            40.96
+          ],
+          "player": [
+            38.0,
+            44.0,
+            55.6
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 5.472,
+          "sidebar": 5.511,
+          "player": 13.868
+        }
+      },
+      "0": {
+        "meanRGB": {
+          "title": [
+            34.78,
+            34.78,
+            34.78
+          ],
+          "sidebar": [
+            34.69,
+            34.69,
+            34.69
+          ],
+          "player": [
+            44.28,
+            44.28,
+            44.28
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 2.778,
+          "sidebar": 2.685,
+          "player": 12.28
+        }
+      },
+      "25": {
+        "meanRGB": {
+          "title": [
+            43.63,
+            52.15,
+            60.24
+          ],
+          "sidebar": [
+            43.84,
+            52.32,
+            60.38
+          ],
+          "player": [
+            45.05,
+            53.41,
+            65.74
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 20.009,
+          "sidebar": 20.183,
+          "player": 22.735
+        }
+      },
+      "50": {
+        "meanRGB": {
+          "title": [
+            52.0,
+            69.85,
+            86.42
+          ],
+          "sidebar": [
+            52.47,
+            70.27,
+            86.72
+          ],
+          "player": [
+            44.75,
+            62.07,
+            89.72
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 37.424,
+          "sidebar": 37.819,
+          "player": 33.513
+        }
+      },
+      "65": {
+        "meanRGB": {
+          "title": [
+            56.8,
+            80.53,
+            102.65
+          ],
+          "sidebar": [
+            57.4,
+            80.96,
+            102.99
+          ],
+          "player": [
+            44.0,
+            67.36,
+            104.93
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 47.995,
+          "sidebar": 48.448,
+          "player": 40.097
+        }
+      },
+      "75": {
+        "meanRGB": {
+          "title": [
+            59.91,
+            87.65,
+            113.53
+          ],
+          "sidebar": [
+            60.58,
+            88.21,
+            114.02
+          ],
+          "player": [
+            43.21,
+            70.97,
+            115.64
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 55.031,
+          "sidebar": 55.603,
+          "player": 44.61
+        }
+      },
+      "100": {
+        "meanRGB": {
+          "title": [
+            67.19,
+            105.67,
+            141.39
+          ],
+          "sidebar": [
+            68.13,
+            106.36,
+            142.08
+          ],
+          "player": [
+            40.29,
+            80.23,
+            144.21
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 72.75,
+          "sidebar": 73.522,
+          "player": 56.381
+        }
+      }
+    },
+    "adjacent": {
+      "0-25": {
+        "title": 17.23,
+        "sidebar": 17.497,
+        "player": 10.747
+      },
+      "25-50": {
+        "title": 17.415,
+        "sidebar": 17.637,
+        "player": 11.391
+      },
+      "50-65": {
+        "title": 10.57,
+        "sidebar": 10.629,
+        "player": 7.216
+      },
+      "65-75": {
+        "title": 7.036,
+        "sidebar": 7.154,
+        "player": 5.096
+      },
+      "75-100": {
+        "title": 17.719,
+        "sidebar": 17.919,
+        "player": 13.634
+      }
+    }
+  },
+  "Mica-Light": {
+    "samples": {
+      "system": {
+        "meanRGB": {
+          "title": [
+            238.87,
+            244.0,
+            249.0
+          ],
+          "sidebar": [
+            238.76,
+            244.0,
+            249.0
+          ],
+          "player": [
+            251.0,
+            251.13,
+            253.0
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 3.709,
+          "sidebar": 3.747,
+          "player": 8.712
+        }
+      },
+      "0": {
+        "meanRGB": {
+          "title": [
+            242.15,
+            242.15,
+            242.15
+          ],
+          "sidebar": [
+            242.41,
+            242.41,
+            242.41
+          ],
+          "player": [
+            251.0,
+            251.0,
+            251.0
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 1.846,
+          "sidebar": 1.594,
+          "player": 7.0
+        }
+      },
+      "25": {
+        "meanRGB": {
+          "title": [
+            230.17,
+            233.48,
+            236.5
+          ],
+          "sidebar": [
+            230.37,
+            233.64,
+            236.74
+          ],
+          "player": [
+            244.86,
+            245.72,
+            247.28
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 10.616,
+          "sidebar": 10.415,
+          "player": 1.955
+        }
+      },
+      "50": {
+        "meanRGB": {
+          "title": [
+            216.23,
+            224.91,
+            233.01
+          ],
+          "sidebar": [
+            216.63,
+            225.32,
+            233.51
+          ],
+          "player": [
+            238.2,
+            240.84,
+            245.11
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 19.281,
+          "sidebar": 18.845,
+          "player": 3.358
+        }
+      },
+      "65": {
+        "meanRGB": {
+          "title": [
+            207.02,
+            220.01,
+            232.11
+          ],
+          "sidebar": [
+            207.57,
+            220.51,
+            232.67
+          ],
+          "player": [
+            233.78,
+            237.96,
+            244.54
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 24.283,
+          "sidebar": 23.753,
+          "player": 5.735
+        }
+      },
+      "75": {
+        "meanRGB": {
+          "title": [
+            200.54,
+            216.86,
+            232.02
+          ],
+          "sidebar": [
+            201.17,
+            217.38,
+            232.56
+          ],
+          "player": [
+            230.6,
+            236.01,
+            244.49
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 27.527,
+          "sidebar": 26.963,
+          "player": 7.456
+        }
+      },
+      "100": {
+        "meanRGB": {
+          "title": [
+            183.1,
+            209.16,
+            233.48
+          ],
+          "sidebar": [
+            183.99,
+            209.92,
+            234.23
+          ],
+          "player": [
+            222.39,
+            231.22,
+            245.41
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 35.419,
+          "sidebar": 34.62,
+          "player": 11.957
+        }
+      }
+    },
+    "adjacent": {
+      "0-25": {
+        "title": 8.77,
+        "sidebar": 8.821,
+        "player": 5.045
+      },
+      "25-50": {
+        "title": 8.665,
+        "sidebar": 8.43,
+        "player": 4.575
+      },
+      "50-65": {
+        "title": 5.002,
+        "sidebar": 4.907,
+        "player": 2.622
+      },
+      "65-75": {
+        "title": 3.267,
+        "sidebar": 3.301,
+        "player": 1.728
+      },
+      "75-100": {
+        "title": 8.873,
+        "sidebar": 8.823,
+        "player": 4.638
+      }
+    }
+  },
+  "MicaAlt-Dark": {
+    "samples": {
+      "system": {
+        "meanRGB": {
+          "title": [
+            0.0,
+            12.31,
+            23.99
+          ],
+          "sidebar": [
+            0.0,
+            12.45,
+            24.0
+          ],
+          "player": [
+            13.0,
+            23.35,
+            41.09
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 19.9,
+          "sidebar": 19.852,
+          "player": 12.249
+        }
+      },
+      "0": {
+        "meanRGB": {
+          "title": [
+            33.0,
+            33.0,
+            33.0
+          ],
+          "sidebar": [
+            33.0,
+            33.0,
+            33.0
+          ],
+          "player": [
+            43.7,
+            43.7,
+            43.7
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 1.0,
+          "sidebar": 1.0,
+          "player": 11.696
+        }
+      },
+      "25": {
+        "meanRGB": {
+          "title": [
+            40.27,
+            47.61,
+            54.37
+          ],
+          "sidebar": [
+            40.38,
+            47.78,
+            54.68
+          ],
+          "player": [
+            43.95,
+            51.09,
+            61.49
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 15.416,
+          "sidebar": 15.614,
+          "player": 20.177
+        }
+      },
+      "50": {
+        "meanRGB": {
+          "title": [
+            46.73,
+            62.11,
+            76.35
+          ],
+          "sidebar": [
+            47.07,
+            62.38,
+            76.67
+          ],
+          "player": [
+            43.57,
+            58.34,
+            81.2
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 29.73,
+          "sidebar": 30.041,
+          "player": 29.033
+        }
+      },
+      "65": {
+        "meanRGB": {
+          "title": [
+            50.41,
+            70.79,
+            89.86
+          ],
+          "sidebar": [
+            50.91,
+            71.24,
+            90.08
+          ],
+          "player": [
+            42.9,
+            62.59,
+            94.41
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 38.352,
+          "sidebar": 38.744,
+          "player": 34.632
+        }
+      },
+      "75": {
+        "meanRGB": {
+          "title": [
+            52.82,
+            76.69,
+            98.84
+          ],
+          "sidebar": [
+            53.39,
+            77.08,
+            99.19
+          ],
+          "player": [
+            42.25,
+            65.47,
+            102.68
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 44.116,
+          "sidebar": 44.551,
+          "player": 38.135
+        }
+      },
+      "100": {
+        "meanRGB": {
+          "title": [
+            58.56,
+            91.29,
+            121.7
+          ],
+          "sidebar": [
+            59.29,
+            91.87,
+            122.29
+          ],
+          "player": [
+            39.94,
+            72.9,
+            125.94
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 58.517,
+          "sidebar": 59.15,
+          "player": 47.599
+        }
+      }
+    },
+    "adjacent": {
+      "0-25": {
+        "title": 14.416,
+        "sidebar": 14.614,
+        "player": 8.761
+      },
+      "25-50": {
+        "title": 14.314,
+        "sidebar": 14.427,
+        "player": 9.392
+      },
+      "50-65": {
+        "title": 8.621,
+        "sidebar": 8.702,
+        "player": 6.134
+      },
+      "65-75": {
+        "title": 5.764,
+        "sidebar": 5.807,
+        "player": 3.98
+      },
+      "75-100": {
+        "title": 14.401,
+        "sidebar": 14.6,
+        "player": 11.036
+      }
+    }
+  },
+  "MicaAlt-Light": {
+    "samples": {
+      "system": {
+        "meanRGB": {
+          "title": [
+            204.72,
+            221.19,
+            236.0
+          ],
+          "sidebar": [
+            204.76,
+            221.33,
+            236.0
+          ],
+          "player": [
+            241.0,
+            244.3,
+            249.0
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 14.03,
+          "sidebar": 13.971,
+          "player": 12.767
+        }
+      },
+      "0": {
+        "meanRGB": {
+          "title": [
+            243.0,
+            243.0,
+            243.0
+          ],
+          "sidebar": [
+            243.0,
+            243.0,
+            243.0
+          ],
+          "player": [
+            251.0,
+            251.0,
+            251.0
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 1.0,
+          "sidebar": 1.0,
+          "player": 7.0
+        }
+      },
+      "25": {
+        "meanRGB": {
+          "title": [
+            233.33,
+            235.89,
+            238.32
+          ],
+          "sidebar": [
+            233.49,
+            236.07,
+            238.45
+          ],
+          "player": [
+            246.44,
+            247.25,
+            248.27
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 8.153,
+          "sidebar": 7.999,
+          "player": 3.318
+        }
+      },
+      "50": {
+        "meanRGB": {
+          "title": [
+            222.16,
+            228.96,
+            235.2
+          ],
+          "sidebar": [
+            222.5,
+            229.26,
+            235.63
+          ],
+          "player": [
+            241.09,
+            243.09,
+            246.27
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 15.227,
+          "sidebar": 14.871,
+          "player": 2.117
+        }
+      },
+      "65": {
+        "meanRGB": {
+          "title": [
+            214.9,
+            224.89,
+            234.19
+          ],
+          "sidebar": [
+            215.32,
+            225.31,
+            234.73
+          ],
+          "player": [
+            237.68,
+            240.74,
+            245.67
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 19.341,
+          "sidebar": 18.881,
+          "player": 3.751
+        }
+      },
+      "75": {
+        "meanRGB": {
+          "title": [
+            209.78,
+            222.29,
+            233.86
+          ],
+          "sidebar": [
+            210.29,
+            222.72,
+            234.33
+          ],
+          "player": [
+            235.26,
+            239.16,
+            245.44
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 22.022,
+          "sidebar": 21.551,
+          "player": 5.006
+        }
+      },
+      "100": {
+        "meanRGB": {
+          "title": [
+            196.19,
+            215.94,
+            234.26
+          ],
+          "sidebar": [
+            196.89,
+            216.51,
+            234.81
+          ],
+          "player": [
+            228.7,
+            235.29,
+            245.65
+          ]
+        },
+        "distanceFromSolidFallback": {
+          "title": 28.536,
+          "sidebar": 27.933,
+          "player": 8.555
+        }
+      }
+    },
+    "adjacent": {
+      "0-25": {
+        "title": 7.153,
+        "sidebar": 6.999,
+        "player": 3.682
+      },
+      "25-50": {
+        "title": 7.074,
+        "sidebar": 6.873,
+        "player": 3.835
+      },
+      "50-65": {
+        "title": 4.114,
+        "sidebar": 4.009,
+        "player": 2.123
+      },
+      "65-75": {
+        "title": 2.682,
+        "sidebar": 2.671,
+        "player": 1.409
+      },
+      "75-100": {
+        "title": 6.806,
+        "sidebar": 6.769,
+        "player": 3.549
+      }
+    }
+  }
+}

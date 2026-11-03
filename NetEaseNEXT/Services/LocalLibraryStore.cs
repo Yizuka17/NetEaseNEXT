@@ -9,6 +9,7 @@ public sealed class LocalPlaylist
     public string Id { get; set; } = Guid.NewGuid().ToString("N");
     public string Name { get; set; } = "";
     public List<string> Paths { get; set; } = [];
+    public List<string> ExcludedPaths { get; set; } = [];
     public string CoverPath { get; set; } = "";
     public string FolderPath { get; set; } = "";
     public bool IncludeSubfolders { get; set; } = true;

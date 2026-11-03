@@ -123,19 +123,27 @@ public sealed partial class MainWindow
         _playback.Remove(track);
         if (_view == "queue") { Tracks.Clear(); foreach (var item in _playback.Queue) Tracks.Add(item); }
     }
+    private Track? CurrentTrackInView(Track? current)
+    {
+        if (current == null) return null;
+        if (_view != "local-playlist") return Tracks.FirstOrDefault(t => t.Id == current.Id);
+        var path = current.IsLocal ? current.LocalPath : _playback.CurrentDownloadedPath;
+        var exact = path == null ? null : Tracks.FirstOrDefault(t => string.Equals(t.LocalPath, path, StringComparison.OrdinalIgnoreCase));
+        return exact ?? (current.IsLocal ? null : Tracks.FirstOrDefault(t => t.SourceSongId == current.Id && t.HasValidLocalSource()));
+    }
     private void UpdateTrackLocator()
     {
-        var match = _playback.Current == null ? null : Tracks.FirstOrDefault(t => t.Id == _playback.Current.Id);
+        var match = CurrentTrackInView(_playback.Current);
         var belongs = match != null || _view == "playlist" && _playback.Current is { } current && _playlistTrackIds.Contains(current.Id);
-        TrackLocateButton.Visibility = !_hidden && (_view is "playlist" or "queue") && belongs ? Visibility.Visible : Visibility.Collapsed;
-        TrackLocateButton.IsEnabled = _trackLocateLoad == null && _pageLoad == null && !_playlistRemovals.Any(t => t.PlaylistId == _playlistId);
+        TrackLocateButton.Visibility = !_hidden && (_view is "playlist" or "queue" or "local-playlist") && belongs ? Visibility.Visible : Visibility.Collapsed;
+        TrackLocateButton.IsEnabled = _trackLocateLoad == null && _pageLoad == null && (_view != "playlist" || !_playlistRemovals.Any(t => t.PlaylistId == _playlistId));
         QueueLocateButton.Visibility = _playback.Current != null ? Visibility.Visible : Visibility.Collapsed;
     }
     private CancellationTokenSource? _trackLocateLoad;
     private async void LocateCurrent_Click(object sender, RoutedEventArgs args) => await LocateCurrentAsync(_api);
     private async Task LocateCurrentAsync(ApiClient api)
     {
-        if (_hidden || _trackLocateLoad != null || _pageLoad != null || _playlistRemovals.Any(t => t.PlaylistId == _playlistId) || _playback.Current is not { } current || _view is not ("playlist" or "queue")) return;
+        if (_hidden || _trackLocateLoad != null || _pageLoad != null || _view == "playlist" && _playlistRemovals.Any(t => t.PlaylistId == _playlistId) || _playback.Current is not { } current || _view is not ("playlist" or "queue" or "local-playlist")) return;
         using var load = new CancellationTokenSource(); _trackLocateLoad = load;
         var route = _route; var playlist = _playlistId; var ids = _playlistTrackIds; var session = _api.Cookie;
         var target = Array.IndexOf(ids, current.Id);
@@ -161,13 +169,14 @@ public sealed partial class MainWindow
                 _tracksMore = _offset < ids.Length;
             }
             if (!StillCurrent()) return;
-            var match = Tracks.FirstOrDefault(t => t.Id == current.Id);
+            var match = CurrentTrackInView(current);
             if (match == null) { ShowError("暂时无法定位这首歌曲，请重试"); return; }
             if (!ReferenceEquals(_batchList, TrackList)) TrackList.SelectedItem = match;
             // Newly appended virtualized rows need a layout frame before their
             // real heights replace ListView's scroll estimates.
             for (var attempt = 0; attempt < 5 && StillCurrent(); attempt++)
             {
+                if (!Tracks.Contains(match)) break;
                 Root.UpdateLayout(); TrackList.ScrollIntoView(match, ScrollIntoViewAlignment.Leading);
                 await Task.Delay(32, load.Token); Root.UpdateLayout();
                 if (TrackList.ContainerFromItem(match) is FrameworkElement row)

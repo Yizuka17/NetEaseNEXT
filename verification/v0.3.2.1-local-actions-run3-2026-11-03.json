@@ -1,0 +1,97 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Settings reads the current application version instead of the old 0.2 label",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Local playlist shows the current-song locator",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Local locator scrolls the actual row into view without a song-detail request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Local locating preserves multiselection",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Removal offers explicit file deletion with preservation selected by default",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Cancelling removal changes neither the playlist nor the audio",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Default removal keeps the file, download catalog and other playlist references",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Folder playlists also provide batch removal",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A retained file does not reappear after folder refresh or library reload",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Selecting file deletion makes the confirmation action explicit",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Deleting a playing local file releases playback and removes shared references",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Deletion affects only the selected path and preserves same-song copies in other folders",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Removed folder rows and their locator stay cleared after synchronization",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "An online song playing a download locates its original local file identity",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Mixed batch failures keep undeleted files and their playlist entries",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A failed library save prevents deleting the selected audio",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unrelated local playlists do not show a false current-song locator",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Hiding the window hides the local locator",
+    "passed": true,
+    "detail": null
+  }
+]
