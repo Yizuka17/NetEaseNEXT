@@ -1,0 +1,39 @@
+name: Android native C# player
+on:
+  push:
+    branches: [feature/android-native-csharp]
+    paths:
+      - "android-native/**"
+      - "NetEaseNEXT.Api/**"
+      - "NetEaseNEXT/Models/Music.cs"
+      - ".github/workflows/android-native-player.yml"
+  pull_request:
+    paths:
+      - "android-native/**"
+      - "NetEaseNEXT.Api/**"
+      - "NetEaseNEXT/Models/Music.cs"
+      - ".github/workflows/android-native-player.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Install Android workload
+        run: dotnet workload install android
+      - name: Install Uno template
+        run: dotnet new install Uno.Templates
+      - name: Build APK using local C# API project
+        run: bash android-native/build.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NetEaseNEXT-Android-native-CSharp
+          path: android-native/generated/**/bin/Debug/**/*.apk
+          if-no-files-found: error
+          retention-days: 14
