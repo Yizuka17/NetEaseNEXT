@@ -93,6 +93,10 @@ public sealed partial class MainPage : Page
     private async Task SignedInAsync(System.Text.Json.JsonElement profile)
     {
         AccountText.Text = profile.Text("nickname");
+        AccountAvatar.DisplayName = AccountText.Text;
+        if (Uri.TryCreate(profile.Text("avatarUrl"), UriKind.Absolute, out var avatar))
+            AccountAvatar.ProfilePicture = new BitmapImage(avatar);
+        LogoutButton.Visibility = Visibility.Visible;
         LoginPanel.Visibility = Visibility.Collapsed;
         LibraryPanel.Visibility = Visibility.Visible;
         StatusText.Text = "正在加载我的歌单…";
@@ -141,6 +145,7 @@ public sealed partial class MainPage : Page
                 ? new BitmapImage(cover) : null;
             PlayerPanel.Visibility = Visibility.Visible;
             StatusText.Text = "正在播放";
+            ToggleButton.Content = "暂停";
             _timer.Start();
             RefreshTimeline();
         }
@@ -162,6 +167,8 @@ public sealed partial class MainPage : Page
         PlayerPanel.Visibility = Visibility.Collapsed;
         LibraryPanel.Visibility = Visibility.Collapsed;
         LoginPanel.Visibility = Visibility.Visible;
+        LogoutButton.Visibility = Visibility.Collapsed;
+        AccountAvatar.ProfilePicture = null;
         QrImage.Visibility = Visibility.Collapsed;
         LoginStatusText.Text = "已退出登录。";
         StatusText.Text = "";
@@ -173,6 +180,7 @@ public sealed partial class MainPage : Page
         {
             _player.Toggle();
             StatusText.Text = _player.IsPlaying ? "正在播放" : "已暂停";
+            ToggleButton.Content = _player.IsPlaying ? "暂停" : "播放";
             RefreshTimeline();
         }
         catch (Exception ex) { StatusText.Text = "播放器错误：" + ex.Message; }

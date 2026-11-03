@@ -3,7 +3,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="$ROOT/android-native/generated/NetEaseNEXTMobile"
 rm -rf "$OUT"
-dotnet new unoapp -o "$OUT" -preset blank -platforms android -tfm net10.0 -renderer native -theme fluent
+dotnet new unoapp -o "$OUT" -preset blank -platforms android -tfm net10.0 -renderer skia -theme fluent -toolkit
 PROJECT="$(find "$OUT" -type f -name NetEaseNEXTMobile.csproj -print -quit)"
 test -n "$PROJECT"
 APP="$(dirname "$PROJECT")"
