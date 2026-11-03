@@ -26,13 +26,17 @@ assert api.is_file()
 relative = os.path.relpath(api, project.parent).replace(os.sep, "/")
 source = project.read_text("utf-8")
 assert "</Project>" in source
-source = source.replace("</Project>", '<ItemGroup><ProjectReference Include="' + escape(relative) + '" /></ItemGroup>\n</Project>')
+source = source.replace("</Project>", '<PropertyGroup><ApplicationId>com.yizuka17.neteasenext.androidpreview</ApplicationId></PropertyGroup>\n<ItemGroup><ProjectReference Include="' + escape(relative) + '" /></ItemGroup>\n</Project>')
 project.write_text(source, "utf-8")
 manifest = project.parent / "Platforms" / "Android" / "AndroidManifest.xml"
 android = "http://schemas.android.com/apk/res/android"
 ET.register_namespace("android", android)
 doc = ET.parse(manifest)
 root = doc.getroot()
+app = root.find("application")
+assert app is not None
+# Only audio CDNs may use HTTP; API credentials still use HTTPS.
+app.set("{" + android + "}usesCleartextTraffic", "true")
 key = "{" + android + "}name"
 if not any(e.get(key) == "android.permission.INTERNET" for e in root.findall("uses-permission")):
     root.insert(0, ET.Element("uses-permission", {key: "android.permission.INTERNET"}))
