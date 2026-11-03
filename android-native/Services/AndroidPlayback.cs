@@ -17,7 +17,8 @@ internal sealed class AndroidPlayback : IDisposable
         var next = new MediaPlayer();
         try
         {
-            next.SetAudioStreamType(Android.Media.Stream.Music);
+            using (var audio = new AudioAttributes.Builder().SetUsage(AudioUsageKind.Media).SetContentType(AudioContentType.Music).Build())
+                next.SetAudioAttributes(audio);
             next.SetDataSource(url);
             await Task.Run(() => next.Prepare());
             next.Start();
