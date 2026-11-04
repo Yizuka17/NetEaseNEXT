@@ -12,6 +12,30 @@ public sealed partial class MainWindow
     private int _activeLyricIndex = -1, _lyricScrollGeneration;
     private ScrollViewer? _lyricScroll;
     private bool _initialLyricCenter, _lyricCenterQueued, _centeringLyrics;
+    private bool _lyricScrollBarVisible;
+    private readonly DispatcherTimer _lyricScrollBarTimer = new() { Interval = TimeSpan.FromSeconds(2) };
+    private void RevealLyricScrollBar()
+    {
+        if (_hidden || _view != "playing") return;
+        // ListView uses a ScrollViewer internally. A programmatic ChangeView
+        // also wakes its native scrolling indicator, so keep the bar Hidden
+        // unless real pointer/keyboard input has just occurred. Hidden (unlike
+        // Disabled) leaves wheel, touch and keyboard scrolling enabled.
+        if (!_lyricScrollBarVisible)
+        {
+            ScrollViewer.SetVerticalScrollBarVisibility(LyricsList, ScrollBarVisibility.Auto);
+            _lyricScrollBarVisible = true;
+        }
+        _lyricScrollBarTimer.Stop();
+        _lyricScrollBarTimer.Start();
+    }
+    private void ConcealLyricScrollBar()
+    {
+        _lyricScrollBarTimer.Stop();
+        if (!_lyricScrollBarVisible) return;
+        ScrollViewer.SetVerticalScrollBarVisibility(LyricsList, ScrollBarVisibility.Hidden);
+        _lyricScrollBarVisible = false;
+    }
     private void BindLyrics(IEnumerable<LyricLine> lines)
     {
         ++_lyricScrollGeneration;
