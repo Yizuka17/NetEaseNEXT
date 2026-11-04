@@ -1,0 +1,86 @@
+{
+  "frames": 262,
+  "finished": true,
+  "stages": [
+    {
+      "time": -0.0,
+      "stage": "begin",
+      "run": "4f50a154615f42dbafca6715197dc379"
+    },
+    {
+      "time": 1.223,
+      "stage": "hover",
+      "run": "4f50a154615f42dbafca6715197dc379"
+    },
+    {
+      "time": 2.012,
+      "stage": "spring",
+      "run": "4f50a154615f42dbafca6715197dc379"
+    },
+    {
+      "time": 2.742,
+      "stage": "connected-open",
+      "run": "4f50a154615f42dbafca6715197dc379"
+    },
+    {
+      "time": 3.61,
+      "stage": "parallax-scroll",
+      "run": "4f50a154615f42dbafca6715197dc379"
+    },
+    {
+      "time": 5.235,
+      "stage": "connected-return",
+      "run": "4f50a154615f42dbafca6715197dc379"
+    },
+    {
+      "time": 6.252,
+      "stage": "different-cover",
+      "run": "4f50a154615f42dbafca6715197dc379"
+    },
+    {
+      "time": 7.263,
+      "stage": "player-spring",
+      "run": "4f50a154615f42dbafca6715197dc379"
+    },
+    {
+      "time": 7.883,
+      "stage": "queue-open",
+      "run": "4f50a154615f42dbafca6715197dc379"
+    },
+    {
+      "time": 8.945,
+      "stage": "queue-close",
+      "run": "4f50a154615f42dbafca6715197dc379"
+    },
+    {
+      "time": 9.593,
+      "stage": "page-forward",
+      "run": "4f50a154615f42dbafca6715197dc379"
+    },
+    {
+      "time": 10.262,
+      "stage": "theme-transition",
+      "run": "4f50a154615f42dbafca6715197dc379"
+    },
+    {
+      "time": 11.272,
+      "stage": "page-back",
+      "run": "4f50a154615f42dbafca6715197dc379"
+    },
+    {
+      "time": 11.958,
+      "stage": "downloads",
+      "run": "4f50a154615f42dbafca6715197dc379"
+    },
+    {
+      "time": 13.458,
+      "stage": "completion-vector",
+      "run": "4f50a154615f42dbafca6715197dc379"
+    },
+    {
+      "time": 14.233,
+      "stage": "end",
+      "run": "4f50a154615f42dbafca6715197dc379"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+APPHASH F6F7126FDD9264F4266E3D908FB60601ED310045C14F799411F59837B3B069C1
+START --local-motion-check
+MOTION {"enabled":true,"starts":1}
+SWITCH {"name":"Adjacent local playback consumes the prepared decoder","passed":true,"detail":{"switchMilliseconds":15.7151}}
+REPORT {"mode":"--local-motion-check","pid":3132,"count":42,"failures":[]}
+START --local-motion-check
+MOTION {"enabled":true,"starts":1}
+SWITCH {"name":"Adjacent local playback consumes the prepared decoder","passed":true,"detail":{"switchMilliseconds":15.4003}}
+REPORT {"mode":"--local-motion-check","pid":5288,"count":42,"failures":[]}
+START --local-motion-check
+MOTION {"enabled":true,"starts":1}
+SWITCH {"name":"Adjacent local playback consumes the prepared decoder","passed":true,"detail":{"switchMilliseconds":14.3019}}
+REPORT {"mode":"--local-motion-check","pid":5424,"count":42,"failures":[]}
+START --local-folder-isolation-check
+REPORT {"mode":"--local-folder-isolation-check","pid":6200,"count":8,"failures":[]}
+VM TESTS-FINISHED
+BEGIN df6d9df5134c49dda7fada79ac452843
+TRANSPARENCY 1
+APPHASH F6F7126FDD9264F4266E3D908FB60601ED310045C14F799411F59837B3B069C1
+START --local-motion-check --motion-tour
+TOUR {"stage":"begin","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"hover","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"spring","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"connected-open","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"parallax-scroll","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"connected-return","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"different-cover","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"player-spring","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"queue-open","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"queue-close","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"selection-before","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"selection-next","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"selection-following","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"directional-icons","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"page-forward","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"font-large","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"theme-transition","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"page-back","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"downloads","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"completion-vector","run":"df6d9df5134c49dda7fada79ac452843"}
+TOUR {"stage":"end","run":"df6d9df5134c49dda7fada79ac452843"}
+SWITCH {"name":"Adjacent local playback consumes the prepared decoder","passed":true,"detail":{"switchMilliseconds":14.4701}}
+REPORT {"mode":"--local-motion-check --motion-tour","pid":3020,"count":42,"failures":[]}
+VM TESTS-FINISHED

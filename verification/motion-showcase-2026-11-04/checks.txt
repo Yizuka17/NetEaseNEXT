@@ -1,0 +1,9 @@
+APPHASH 7C17580B37379536A4C296B0EFF6B9275E91906D5DF206385764623C0CFB2B11
+MOTION {"enabled":true,"starts":1}
+REPORT {"mode":"--local-motion-check","pid":2644,"count":28,"failures":[]}
+MOTION {"enabled":true,"starts":1}
+REPORT {"mode":"--local-motion-check","pid":7100,"count":28,"failures":[]}
+MOTION {"enabled":true,"starts":1}
+REPORT {"mode":"--local-motion-check","pid":2292,"count":28,"failures":[]}
+REPORT {"mode":"--local-folder-isolation-check","pid":2176,"count":8,"failures":[]}
+VM TESTS-FINISHED
