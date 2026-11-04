@@ -133,7 +133,14 @@ public sealed partial class MainWindow
             QueueList.SelectedItems.Clear();
             foreach (var track in _playback.Queue.Where(t => selected.Contains(t.Id))) QueueList.SelectedItems.Add(track);
         }
-        else QueueList.SelectedItem = _playback.Queue.FirstOrDefault(t => t.Id == _playback.Current?.Id);
+        else
+        {
+            var playingId = _playback.Current?.Id;
+            // MediaPlayer raises Changed for state changes as well as track switches.
+            // Avoid setting SelectedItem repeatedly when the playing row is unchanged.
+            if ((QueueList.SelectedItem as Track)?.Id != playingId)
+                QueueList.SelectedItem = _playback.Queue.FirstOrDefault(t => t.Id == playingId);
+        }
     }
     private void RefreshQueueTracks()
     {
