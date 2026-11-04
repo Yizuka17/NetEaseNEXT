@@ -116,6 +116,26 @@ public sealed partial class MainWindow
         // Layout/scroll refreshes must not consume a click's pending transition.
         if (!animate && state.DispatchQueued) return;
         var item = list.SelectedItem;
+        // WinUI can expose a new SelectedItem to LayoutUpdated BEFORE raising
+        // SelectionChanged for pointer/touch input. Never let a non-animated
+        // layout pass consume that transition, or the later event sees the
+        // destination as the starting position and has nothing left to animate.
+        if (!animate && item != null && state.Item != null && !ReferenceEquals(item, state.Item))
+        {
+            state.PendingItem = item;
+            if (!state.DispatchQueued)
+            {
+                state.DispatchQueued = true;
+                TraceSelection($"{list.Name} layout-before-selection selected={list.SelectedIndex} defer");
+                list.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
+                {
+                    state.DispatchQueued = false;
+                    TraceSelection($"{list.Name} layout-deferred selected={list.SelectedIndex}");
+                    UpdateSelectionIndicator(list, true);
+                });
+            }
+            return;
+        }
         // A pointer selection can briefly clear SelectedItem before selecting the
         // next row. Do not discard the old anchor during that intermediate state:
         // programmatic Previous/Next typically switches directly and never hits it.
