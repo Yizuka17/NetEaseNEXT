@@ -1,6 +1,7 @@
 using System.Numerics;
 using NetEaseNEXT.Services;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Hosting;
 using Microsoft.UI.Xaml.Media;
@@ -12,6 +13,8 @@ public sealed partial class MainWindow
     private sealed class SelectionMotionState
     {
         public object? Item;
+        public object? PendingItem;
+        public bool DispatchQueued;
         public double X, Y = double.NaN;
     }
     private readonly SelectionMotionState _trackSelectionMotion = new(), _queueSelectionMotion = new(), _sidebarSelectionMotion = new();
@@ -23,8 +26,27 @@ public sealed partial class MainWindow
         foreach (var list in new[] { TrackList, QueueList })
         {
             list.Resources["ListViewItemSelectionIndicatorVisualEnabled"] = false;
-            list.SelectionChanged += (_, _) => UpdateSelectionIndicators(true);
-            list.LayoutUpdated += (_, _) => UpdateSelectionIndicator(list, false);
+            list.SelectionChanged += (_, _) =>
+            {
+                var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
+                // Pointer/touch selection can run before ItemClick changes the playing track.
+                // Keep the previous visual position throughout this input event and commit
+                // the selection after the event has finished, rather than letting an
+                // intervening LayoutUpdated snap the marker to its destination.
+                state.PendingItem = list.SelectedItem;
+                if (state.DispatchQueued) return;
+                state.DispatchQueued = true;
+                list.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
+                {
+                    state.DispatchQueued = false;
+                    UpdateSelectionIndicator(list, true);
+                });
+            };
+            list.LayoutUpdated += (_, _) =>
+            {
+                var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
+                if (!state.DispatchQueued) UpdateSelectionIndicator(list, false);
+            };
             list.Loaded += (_, _) =>
             {
                 if (FindDescendant<ScrollViewer>(list) is { } scroll && _selectionScrollers.Add(scroll))
@@ -80,11 +102,52 @@ public sealed partial class MainWindow
     {
         var marker = list == TrackList ? TrackSelectionIndicator : QueueSelectionIndicator;
         var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
+        // Layout/scroll refreshes must not consume a click's pending transition.
+        if (!animate && state.DispatchQueued) return;
         var item = list.SelectedItem;
-        if (_hidden || !list.IsLoaded || list.ActualHeight <= 0 || ReferenceEquals(_batchList, list) ||
-            item == null || list.ContainerFromItem(item) is not ListViewItem row || !row.IsLoaded)
+        // WinUI can expose a new SelectedItem to LayoutUpdated BEFORE raising
+        // SelectionChanged for pointer/touch input. Never let a non-animated
+        // layout pass consume that transition, or the later event sees the
+        // destination as the starting position and has nothing left to animate.
+        if (!animate && item != null && state.Item != null && !ReferenceEquals(item, state.Item))
         {
-            marker.Visibility = Visibility.Collapsed; state.Item = null; state.Y = double.NaN; return;
+            state.PendingItem = item;
+            if (!state.DispatchQueued)
+            {
+                state.DispatchQueued = true;
+                list.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
+                {
+                    state.DispatchQueued = false;
+                    UpdateSelectionIndicator(list, true);
+                });
+            }
+            return;
+        }
+        // A pointer selection can briefly clear SelectedItem before selecting the
+        // next row. Do not discard the old anchor during that intermediate state:
+        // programmatic Previous/Next typically switches directly and never hits it.
+        if (item == null && !animate && state.Item != null)
+        {
+            if (!state.DispatchQueued)
+            {
+                state.DispatchQueued = true;
+                list.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
+                {
+                    state.DispatchQueued = false;
+                    UpdateSelectionIndicator(list, true);
+                });
+            }
+            return;
+        }
+        if (_hidden || !list.IsLoaded || list.ActualHeight <= 0 || ReferenceEquals(_batchList, list) || item == null)
+        {
+            marker.Visibility = Visibility.Collapsed; state.Item = null; state.PendingItem = null; state.Y = double.NaN; return;
+        }
+        // SelectionChanged can precede the realization of a virtualized row.
+        // Preserve the previous position until LayoutUpdated can animate to the new row.
+        if (list.ContainerFromItem(item) is not ListViewItem row || !row.IsLoaded)
+        {
+            return;
         }
         var bounds = row.TransformToVisual(list).TransformBounds(new(0, 0, row.ActualWidth, row.ActualHeight));
         var y = bounds.Y + (bounds.Height - marker.Height) / 2;
@@ -96,7 +159,9 @@ public sealed partial class MainWindow
         if (!changed && Math.Abs(y - state.Y) < .1 && marker.Visibility == Visibility.Visible) return;
         ElementCompositionPreview.SetIsTranslationEnabled(marker, true);
         var visual = ElementCompositionPreview.GetElementVisual(marker);
-        if (animate && changed && state.Item != null && PlayerAnimationEnabled && Math.Abs(y - state.Y) < list.ActualHeight)
+        var canAnimate = (animate || ReferenceEquals(state.PendingItem, item)) && changed && state.Item != null &&
+            double.IsFinite(state.Y) && PlayerAnimationEnabled && Math.Abs(y - state.Y) < list.ActualHeight;
+        if (canAnimate)
         {
             FluentMotion.MoveIndicator(marker, (float)state.Y, new(0, (float)y, 0), (float)marker.Height);
         }
@@ -104,6 +169,6 @@ public sealed partial class MainWindow
         {
             visual.StopAnimation("Translation"); visual.StopAnimation("Scale"); visual.Scale = Vector3.One; visual.Properties.InsertVector3("Translation", new(0, (float)y, 0));
         }
-        marker.Visibility = Visibility.Visible; state.Item = item; state.Y = y;
+        marker.Visibility = Visibility.Visible; state.Item = item; state.PendingItem = null; state.Y = y;
     }
 }
