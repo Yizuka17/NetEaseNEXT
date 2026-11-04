@@ -273,7 +273,7 @@ public sealed partial class MainWindow
         var coverButton = new Button { Content = "选择封面", MinHeight = 44 }; var clearCover = new Button { Content = "移除封面", MinHeight = 44 };
         var artworkActions = new StackPanel { Spacing = 8, VerticalAlignment = VerticalAlignment.Center }; artworkActions.Children.Add(coverButton); artworkActions.Children.Add(clearCover);
         var artwork = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 16 }; artwork.Children.Add(frame); artwork.Children.Add(artworkActions);
-        var folderText = new TextBlock { Text = folder.Length > 0 ? folder : "未绑定文件夹，可手动添加歌曲", TextWrapping = TextWrapping.Wrap, MaxLines = 3 };
+        var folderText = new TextBox { Header = "文件夹路径（可直接输入，或点击选择文件夹）", Text = folder, PlaceholderText = @"C:\Users\SANSH\Music\NetEaseNEXT-Motion-Test" };
         var choose = new Button { Content = "选择文件夹", MinHeight = 44 }; var unbind = new Button { Content = "取消绑定", MinHeight = 44, IsEnabled = folder.Length > 0 };
         var folders = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 }; folders.Children.Add(choose); folders.Children.Add(unbind);
         var recursive = new CheckBox { Content = "包含子文件夹", IsChecked = existing?.IncludeSubfolders ?? true, IsEnabled = folder.Length > 0 };
@@ -286,7 +286,7 @@ public sealed partial class MainWindow
             try { if (await PickLocalFolderAsync() is { } path) { folder = path; folderText.Text = folder; unbind.IsEnabled = recursive.IsEnabled = true; if (name.Text.Length == 0) name.Text = Path.GetFileName(path.TrimEnd(Path.DirectorySeparatorChar)); } }
             catch (Exception ex) { error.Text = ex.Message; error.Visibility = Visibility.Visible; }
         };
-        unbind.Click += (_, _) => { folder = ""; folderText.Text = "未绑定文件夹，可手动添加歌曲"; unbind.IsEnabled = recursive.IsEnabled = false; };
+        unbind.Click += (_, _) => { folder = ""; folderText.Text = ""; unbind.IsEnabled = recursive.IsEnabled = false; };
         coverButton.Click += async (_, _) =>
         {
             try
@@ -306,6 +306,13 @@ public sealed partial class MainWindow
         try
         {
             if (await ShowThemedDialogAsync(dialog) != ContentDialogResult.Primary) return;
+            folder = folderText.Text.Trim().Trim('"');
+            if (folder.Length > 0)
+            {
+                folder = Path.GetFullPath(folder);
+                if (!Directory.Exists(folder)) throw new DirectoryNotFoundException("文件夹不存在：" + folder);
+                recursive.IsChecked ??= true;
+            }
             var id = existing?.Id ?? Guid.NewGuid().ToString("N");
             CommitLocal(() =>
             {
