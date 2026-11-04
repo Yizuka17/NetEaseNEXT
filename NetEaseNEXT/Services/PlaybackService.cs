@@ -149,14 +149,32 @@ public sealed class PlaybackService : IDisposable
             try { if (!await pending) return; }
             finally { if (ReferenceEquals(_pendingPlayTask, pending)) _pendingPlayTask = null; }
         }
-        var queue = requestedContext ?? _orderedQueue.ToArray();
-        var index = Array.FindIndex(queue, t => t.Id == track.Id);
-        if (index < 0) { queue = [.. queue, track]; index = queue.Length - 1; }
-        else queue[index] = track;
-        _orderedQueue = queue;
-        if (requestedContext != null) Queue = Mode == "Shuffle" ? Shuffle(queue) : queue;
-        else { var effective = Queue.ToList(); var match = effective.FindIndex(t => t.Id == track.Id); if (match < 0) effective.Add(track); else effective[match] = track; Queue = effective.ToArray(); }
-        _index = Queue.ToList().FindIndex(t => t.Id == track.Id); QueueRevision++; Changed?.Invoke(); WarmFollowing();
+        if (requestedContext != null)
+        {
+            // An explicit context replaces the queue, e.g. Play All/double tap.
+            var queue = requestedContext;
+            var index = Array.FindIndex(queue, t => t.Id == track.Id);
+            if (index < 0) queue = [.. queue, track];
+            else queue[index] = track;
+            _orderedQueue = queue;
+            Queue = Mode == "Shuffle" ? Shuffle(queue) : queue;
+            QueueRevision++;
+        }
+        else
+        {
+            // Selecting a song already in the queue must not replace the whole
+            // ItemsSource array: doing so recycles ListView containers and loses
+            // the queue pane's scroll position on each direct song selection.
+            if (!_orderedQueue.Any(t => t.Id == track.Id))
+                _orderedQueue = [.. _orderedQueue, track];
+            if (!Queue.Any(t => t.Id == track.Id))
+            {
+                Queue = [.. Queue, track];
+                QueueRevision++;
+            }
+        }
+        _index = Queue.ToList().FindIndex(t => t.Id == track.Id);
+        Changed?.Invoke(); WarmFollowing();
     }
     public void AddNext(Track track) => InsertNext(track, prepare: true);
     public void AddNext(IEnumerable<Track> tracks)

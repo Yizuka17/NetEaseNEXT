@@ -143,10 +143,16 @@ public sealed partial class MainWindow
         {
             marker.Visibility = Visibility.Collapsed; state.Item = null; state.PendingItem = null; state.Y = double.NaN; return;
         }
-        // SelectionChanged can precede the realization of a virtualized row.
-        // Preserve the previous position until LayoutUpdated can animate to the new row.
+        // When the selected row is virtualized away, it has no visual position.
+        // Do not leave the marker stranded on the previously playing song.
+        // When the row comes back into view, place the indicator without a
+        // cross-viewport stretch animation.
         if (list.ContainerFromItem(item) is not ListViewItem row || !row.IsLoaded)
         {
+            marker.Visibility = Visibility.Collapsed;
+            state.Item = null;
+            state.PendingItem = null;
+            state.Y = double.NaN;
             return;
         }
         var bounds = row.TransformToVisual(list).TransformBounds(new(0, 0, row.ActualWidth, row.ActualHeight));
