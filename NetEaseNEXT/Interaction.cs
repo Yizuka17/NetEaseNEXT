@@ -129,7 +129,11 @@ public sealed partial class MainWindow
         if (_view != "local-playlist") return Tracks.FirstOrDefault(t => t.Id == current.Id);
         var path = current.IsLocal ? current.LocalPath : _playback.CurrentDownloadedPath;
         var exact = path == null ? null : Tracks.FirstOrDefault(t => string.Equals(t.LocalPath, path, StringComparison.OrdinalIgnoreCase));
-        return exact ?? (current.IsLocal ? null : Tracks.FirstOrDefault(t => t.SourceSongId == current.Id && t.HasValidLocalSource()));
+        // When playback identifies a specific downloaded file, never locate a
+        // different copy of the same song merely because its source ID matches.
+        // Source-ID fallback is only appropriate when no playback path is known.
+        if (exact != null || current.IsLocal || path != null) return exact;
+        return Tracks.FirstOrDefault(t => t.SourceSongId == current.Id && t.HasValidLocalSource());
     }
     private void UpdateTrackLocator()
     {
