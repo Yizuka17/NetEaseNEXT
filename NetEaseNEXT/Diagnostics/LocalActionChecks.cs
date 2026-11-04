@@ -102,7 +102,11 @@ public sealed partial class MainWindow
             var online = new Track(9001, "本地下载歌曲", "晚风电台", "回家的路", "", 8000);
             _restoringPlayback = true; await _playback.PlayAsync(online, [online]); _restoringPlayback = false; if (_playback.IsPlaying) _playback.Toggle();
             before = api.RequestCount; await LocateCurrentAsync(api);
-            check("An online song playing a download locates its original local file identity", TrackList.SelectedItem is Track found && found.Id < 0 && found.LocalPath == _playback.CurrentDownloadedPath && Visible(found) && api.RequestCount == before, null);
+            var located = TrackList.SelectedItem as Track;
+            var locatedPath = _playback.CurrentDownloadedPath;
+            var locatedVisible = located != null && Visible(located);
+            check("An online song playing a download locates its original local file identity", located is { Id: < 0 } && string.Equals(located.LocalPath, locatedPath, StringComparison.OrdinalIgnoreCase) && locatedVisible && api.RequestCount == before,
+                new { downloadedPath = locatedPath, selectedPath = located?.LocalPath, selectedId = located?.Id, visible = locatedVisible, requestsBefore = before, requestsAfter = api.RequestCount, candidates = Tracks.Select(t => new { t.Id, t.LocalPath, t.SourceSongId }).ToArray() });
             var ok = Tagged(Path.Combine(fixture, "可删除.wav"), 9201); var locked = Tagged(Path.Combine(fixture, "占用中.wav"), 9202);
             CommitLocal(() => { _localLibrary.Tracks.AddRange([ok, locked]); _localLibrary.Playlists.Single(p => p.Id == shared.Id).Paths.AddRange([ok.LocalPath, locked.LocalPath]); }); LoadLocalTracks();
             using (var held = new FileStream(locked.LocalPath, FileMode.Open, FileAccess.Read, FileShare.Read))
