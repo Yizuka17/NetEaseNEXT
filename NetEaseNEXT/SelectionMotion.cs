@@ -105,6 +105,22 @@ public sealed partial class MainWindow
         // Layout/scroll refreshes must not consume a click's pending transition.
         if (!animate && state.DispatchQueued) return;
         var item = list.SelectedItem;
+        // A pointer selection can briefly clear SelectedItem before selecting the
+        // next row. Do not discard the old anchor during that intermediate state:
+        // programmatic Previous/Next typically switches directly and never hits it.
+        if (item == null && !animate && state.Item != null)
+        {
+            if (!state.DispatchQueued)
+            {
+                state.DispatchQueued = true;
+                list.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
+                {
+                    state.DispatchQueued = false;
+                    UpdateSelectionIndicator(list, true);
+                });
+            }
+            return;
+        }
         if (_hidden || !list.IsLoaded || list.ActualHeight <= 0 || ReferenceEquals(_batchList, list) || item == null)
         {
             marker.Visibility = Visibility.Collapsed; state.Item = null; state.PendingItem = null; state.Y = double.NaN; return;
