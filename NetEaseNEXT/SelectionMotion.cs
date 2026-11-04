@@ -12,6 +12,7 @@ public sealed partial class MainWindow
     private sealed class SelectionMotionState
     {
         public object? Item;
+        public object? PendingItem;
         public double X, Y = double.NaN;
     }
     private readonly SelectionMotionState _trackSelectionMotion = new(), _queueSelectionMotion = new(), _sidebarSelectionMotion = new();
@@ -23,7 +24,12 @@ public sealed partial class MainWindow
         foreach (var list in new[] { TrackList, QueueList })
         {
             list.Resources["ListViewItemSelectionIndicatorVisualEnabled"] = false;
-            list.SelectionChanged += (_, _) => UpdateSelectionIndicators(true);
+            list.SelectionChanged += (_, _) =>
+            {
+                var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
+                if (!ReferenceEquals(list.SelectedItem, state.Item)) state.PendingItem = list.SelectedItem;
+                UpdateSelectionIndicators(true);
+            };
             list.LayoutUpdated += (_, _) => UpdateSelectionIndicator(list, false);
             list.Loaded += (_, _) =>
             {
@@ -81,11 +87,13 @@ public sealed partial class MainWindow
         var marker = list == TrackList ? TrackSelectionIndicator : QueueSelectionIndicator;
         var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
         var item = list.SelectedItem;
-        if (_hidden || !list.IsLoaded || list.ActualHeight <= 0 || ReferenceEquals(_batchList, list) ||
-            item == null || list.ContainerFromItem(item) is not ListViewItem row || !row.IsLoaded)
+        if (_hidden || !list.IsLoaded || list.ActualHeight <= 0 || ReferenceEquals(_batchList, list) || item == null)
         {
-            marker.Visibility = Visibility.Collapsed; state.Item = null; state.Y = double.NaN; return;
+            marker.Visibility = Visibility.Collapsed; state.Item = null; state.PendingItem = null; state.Y = double.NaN; return;
         }
+        // SelectionChanged can precede the realization of a virtualized row.
+        // Preserve the previous position until LayoutUpdated can animate to the new row.
+        if (list.ContainerFromItem(item) is not ListViewItem row || !row.IsLoaded) return;
         var bounds = row.TransformToVisual(list).TransformBounds(new(0, 0, row.ActualWidth, row.ActualHeight));
         var y = bounds.Y + (bounds.Height - marker.Height) / 2;
         if (bounds.Bottom <= 0 || bounds.Y >= list.ActualHeight || y < 0 || y + marker.Height > list.ActualHeight)
@@ -96,7 +104,8 @@ public sealed partial class MainWindow
         if (!changed && Math.Abs(y - state.Y) < .1 && marker.Visibility == Visibility.Visible) return;
         ElementCompositionPreview.SetIsTranslationEnabled(marker, true);
         var visual = ElementCompositionPreview.GetElementVisual(marker);
-        if (animate && changed && state.Item != null && PlayerAnimationEnabled && Math.Abs(y - state.Y) < list.ActualHeight)
+        if ((animate || ReferenceEquals(state.PendingItem, item)) && changed && state.Item != null &&
+            double.IsFinite(state.Y) && PlayerAnimationEnabled && Math.Abs(y - state.Y) < list.ActualHeight)
         {
             FluentMotion.MoveIndicator(marker, (float)state.Y, new(0, (float)y, 0), (float)marker.Height);
         }
@@ -104,6 +113,6 @@ public sealed partial class MainWindow
         {
             visual.StopAnimation("Translation"); visual.StopAnimation("Scale"); visual.Scale = Vector3.One; visual.Properties.InsertVector3("Translation", new(0, (float)y, 0));
         }
-        marker.Visibility = Visibility.Visible; state.Item = item; state.Y = y;
+        marker.Visibility = Visibility.Visible; state.Item = item; state.PendingItem = null; state.Y = y;
     }
 }
