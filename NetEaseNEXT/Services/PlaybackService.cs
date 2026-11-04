@@ -29,6 +29,7 @@ public sealed class PlaybackService : IDisposable
     private Prepared? _nextPrepared;
     private long _nextPreparedId;
     private string? _nextPreparedPath, _nextPreparedCookie, _nextPreparedQuality;
+    private long _nextPreparedLength, _nextPreparedModified;
     private Task _nextPreparationTask = Task.CompletedTask;
     internal Task NextPreparationTask => _nextPreparationTask;
     internal bool LastPlayUsedPreparedDecoder { get; private set; }
@@ -47,7 +48,11 @@ public sealed class PlaybackService : IDisposable
     {
         _background = background;
         if (background) { _audioCache.Stop(); _nextCacheLoad?.Cancel(); _nextAudioCache.Stop(); DisposeNextPrepared(); _urls.SuspendWarm(); }
-        else if (_cacheRequest is { } request) { _audioCache.Start(request.Uri, request.Path, request.Size, request.Md5); WarmFollowing(); }
+        else
+        {
+            if (_cacheRequest is { } request) _audioCache.Start(request.Uri, request.Path, request.Size, request.Md5);
+            WarmFollowing();
+        }
     }
     private CancellationTokenSource? _load;
     private bool _disposed, _desiredPlaying;
@@ -267,7 +272,22 @@ public sealed class PlaybackService : IDisposable
         try
         {
             var next = Queue[(_index + 1) % Queue.Count]; var level = _settings.Quality;
-            if (next.IsLocal || Downloads.Find(next.Id) != null) { DisposeNextPrepared(); NextPreparationStatus = "local"; return; }
+            var downloaded = next.IsLocal ? null : Downloads.Find(next.Id);
+            if (next.IsLocal || downloaded != null)
+            {
+                var file = new FileInfo(downloaded?.Path ?? next.LocalPath);
+                var length = file.Length; var modified = file.LastWriteTimeUtc.Ticks;
+                prepared = await PrepareAsync(new Uri(file.FullName), file.FullName, false, load.Token);
+                prepared.Player.Pause();
+                if (prepared.Player.PlaybackSession.CanSeek) prepared.Player.PlaybackSession.Position = TimeSpan.Zero;
+                load.Token.ThrowIfCancellationRequested();
+                if (_background || _disposed || level != _settings.Quality) return;
+                DisposeNextPrepared(); _nextPrepared = prepared; prepared = null;
+                _nextPreparedId = next.Id; _nextPreparedPath = file.FullName;
+                _nextPreparedCookie = _streamApi.Cookie; _nextPreparedQuality = level;
+                _nextPreparedLength = length; _nextPreparedModified = modified;
+                NextPreparationStatus = "ready local"; return;
+            }
             await _urls.WarmAsync(Neighbors(Current).Prepend(next), level);
             await _audioCache.Completion.WaitAsync(load.Token);
             if (_background || _disposed || level != _settings.Quality) return;
@@ -366,16 +386,36 @@ public sealed class PlaybackService : IDisposable
     private static void DeleteLocal(string? path) { if (path == null) return; try { File.Delete(path); } catch { } }
     private async Task<bool> UseLocalAudioAsync(Track track, string path, string level, bool downloaded, bool resume, CancellationToken ct)
     {
-        DisposeNextPrepared(); LastPlayUsedCache = LastPlayUsedPreparedDecoder = false;
+        LastPlayUsedCache = LastPlayUsedPreparedDecoder = false;
         if (!File.Exists(path)) throw new FileNotFoundException("本地音频文件已移动或删除");
-        var prepared = await PrepareAsync(new Uri(path), path, resume, ct);
-        var previousPlayer = _player; var previousSource = _source; var previousPath = _localPath;
-        previousPlayer.Pause(); Detach(previousPlayer);
-        _player = prepared.Player; _source = prepared.Source; _localPath = null;
-        _cacheRequest = null; _audioCache.ActivePath = null; Current = track; CurrentQuality = level; CurrentDownloadedPath = downloaded ? path : null; _restoredPosition = TimeSpan.Zero;
-        Attach(_player); if (!_desiredPlaying) _player.Pause(); _player.Volume = Math.Clamp(_settings.Volume, 0, 1);
-        previousPlayer.Source = null; previousSource?.Dispose(); previousPlayer.Dispose(); DeleteLocal(previousPath);
-        PublishSystemTrack(); UpdateTimeline(); Changed?.Invoke(); return true;
+        Prepared? prepared = null;
+        var file = new FileInfo(path);
+        if (!resume && _nextPrepared != null && _nextPreparedId == track.Id &&
+            string.Equals(_nextPreparedPath, file.FullName, StringComparison.OrdinalIgnoreCase) &&
+            _nextPreparedCookie == _streamApi.Cookie && _nextPreparedQuality == _settings.Quality &&
+            _nextPreparedLength == file.Length && _nextPreparedModified == file.LastWriteTimeUtc.Ticks)
+        {
+            prepared = _nextPrepared; _nextPrepared = null; _nextPreparedPath = null;
+            LastPlayUsedPreparedDecoder = true;
+        }
+        else DisposeNextPrepared();
+        try
+        {
+            prepared ??= await PrepareAsync(new Uri(path), path, resume, ct);
+            ct.ThrowIfCancellationRequested();
+            var previousPlayer = _player; var previousSource = _source; var previousPath = _localPath;
+            previousPlayer.Pause(); Detach(previousPlayer);
+            _player = prepared.Player; _source = prepared.Source; _localPath = null;
+            prepared = null;
+            _cacheRequest = null; _audioCache.ActivePath = null; Current = track; CurrentQuality = level; CurrentDownloadedPath = downloaded ? path : null; _restoredPosition = TimeSpan.Zero;
+            Attach(_player); if (_desiredPlaying) _player.Play(); else _player.Pause(); _player.Volume = Math.Clamp(_settings.Volume, 0, 1);
+            previousPlayer.Source = null; previousSource?.Dispose(); previousPlayer.Dispose(); DeleteLocal(previousPath);
+            PublishSystemTrack(); UpdateTimeline(); Changed?.Invoke(); return true;
+        }
+        finally
+        {
+            if (prepared != null) { prepared.Player.Source = null; prepared.Source.Dispose(); prepared.Player.Dispose(); }
+        }
     }
     private async Task<bool> LoadAsync(Track track, bool resume = false, bool autoplay = true, string? quality = null, IEnumerable<Track>? hints = null)
     {

@@ -15,12 +15,24 @@ public sealed partial class MainWindow
     private bool _pageInterrupted, _pageWasAppend;
     private async void Navigation_Changed(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {
-        if (!_ready || _selectingNav || _runningSmokeTest) return;
+        if (!_ready || _selectingNav || _runningSmokeTest && !_interactiveMotionPreview) return;
         if (args.IsSettingsSelected) await NavigateAsync("settings");
         else if (args.SelectedItem is NavigationViewItem item && item.Tag is string view) await NavigateAsync(view);
     }
-    private async Task NavigateAsync(string view, bool remember = true)
+    private async Task NavigateAsync(string view, bool remember = true, bool backward = false)
     {
+        StopDownloadCompletionMotion();
+        var expectedCover = _navigationCoverKey switch
+        {
+            "PlaylistCover" => view is "playlist" or "album" or "programs",
+            "ArtistCover" => view == "artist",
+            "OnlineCoverReturn" => view is "discover" or "library" or "saved-albums" or "albums" or "artists" or "radio",
+            "LocalPlaylistCover" => view == "local-playlist",
+            "LocalCoverReturn" => view == "local",
+            "PlayerCover" => view == "playing" || _view == "playing",
+            _ => false
+        };
+        if (!expectedCover) CancelCoverTransitions();
         _pageInterrupted = false;
         StopLocalMonitoring();
         _lyricFollowTimer.Stop();
@@ -33,6 +45,7 @@ public sealed partial class MainWindow
         _route = new(view, _playlistId, _artistId, _peerId, _playlistName, _query, _linkedResource, _localPlaylistId);
         BackButton.IsEnabled = _history.Count > 0 || _fullScreen;
         _view = view; _offset = 0; _socialCursor = -1;
+        ConfigureInterfaceMotion();
         if (view == "playlist") { _playlistTrackIds = []; _playlistTrackCount = 0; _resumePlaylistId = _playlistId; _resumePlaylistName = _playlistName; }
         SchedulePlaybackSave();
         if (view == "artist") _artistTab = "songs";
@@ -43,16 +56,25 @@ public sealed partial class MainWindow
         RestoreArtistContent();
         BrowsePanel.Visibility = CatalogPanel.Visibility = TracksPanel.Visibility = SettingsPanel.Visibility = PlayingPanel.Visibility = SocialPanel.Visibility = ArtistPanel.Visibility = DownloadsPanel.Visibility = LocalLibraryPanel.Visibility = Visibility.Collapsed;
         LocalToolbar.Visibility = view == "local-playlist" ? Visibility.Visible : Visibility.Collapsed;
+        if (view == "local-playlist") PrepareLocalPlaylistHeader(_localPlaylistId);
+        else Artwork.SetUri(LocalPlaylistCover, "");
         _tracksMore = _catalogMore = _socialMore = false;
         Nav.Visibility = view == "playing" ? Visibility.Collapsed : Visibility.Visible;
         UpdateWindowChrome();
-        MovePlayerControls(view == "playing"); QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null;
+        MovePlayerControls(view == "playing"); QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null; QueueGlyph.Opacity = 1;
         UpdateTimer();
         UpdateLayout();
-        PlaylistDetails.Visibility = PlaylistSubscribeButton.Visibility = PlaylistCommentsButton.Visibility = view == "playlist" ? Visibility.Visible : Visibility.Collapsed;
+        PlaylistDetails.Visibility = view is "playlist" or "album" or "programs" ? Visibility.Visible : Visibility.Collapsed;
+        PlaylistSubscribeButton.Visibility = PlaylistCommentsButton.Visibility = view == "playlist" ? Visibility.Visible : Visibility.Collapsed;
         CreatePlaylistButton.Visibility = view == "library" ? Visibility.Visible : Visibility.Collapsed;
-        if (view != "playlist") { Artwork.SetUri(PlaylistDetailCover, ""); PlaylistDescription.Text = ""; }
-        else { PlaylistDetailTitle.Text = _playlistName; PlaylistDescription.Text = PlaylistTags.Text = PlaylistCreator.Text = ""; }
+        if (view is not ("playlist" or "album" or "programs")) { Artwork.SetUri(PlaylistDetailCover, ""); PlaylistDescription.Text = ""; }
+        else { Artwork.SetUri(PlaylistDetailCover, _navigationCoverKey == "PlaylistCover" ? _navigationCoverUri ?? "" : ""); PlaylistDetailTitle.Text = _playlistName; PlaylistDescription.Text = PlaylistTags.Text = PlaylistCreator.Text = ""; }
+        ExpandDescriptionButton.Visibility = Visibility.Collapsed;
+        if (view == "artist")
+        {
+            Artwork.SetUri(ArtistCover, _navigationCoverKey == "ArtistCover" ? _navigationCoverUri ?? "" : "");
+            ArtistName.Text = _playlistName; ArtistAlias.Text = ArtistBio.Text = ArtistSongCount.Text = ArtistAlbumCount.Text = "";
+        }
         MessageCategory.Visibility = Visibility.Collapsed;
         EventToolbar.Visibility = view == "events" ? Visibility.Visible : Visibility.Collapsed;
         SearchBox.Visibility = view == "discover" ? Visibility.Visible : Visibility.Collapsed;
@@ -78,19 +100,24 @@ public sealed partial class MainWindow
             case "downloads": UpdateDownloadLists(); DownloadsPanel.Visibility = Visibility.Visible; break;
             case "playing": PlayingPanel.Visibility = Visibility.Visible; UpdateNowPlaying(); break;
             case "settings": SettingsPanel.Visibility = Visibility.Visible; break;
-            case "artist": ArtistPanel.Visibility = Visibility.Visible; break;
+            case "artist": ArtistPanel.Visibility = Visibility.Visible; HostArtistContent(TracksPanel); break;
             default: SocialPanel.Visibility = Visibility.Visible; break;
         }
-        if (_settings.Animations && new UISettings().AnimationsEnabled && !_hidden && view != "playing")
-        {
-            var visual = ElementCompositionPreview.GetElementVisual(PageBody); var animation = visual.Compositor.CreateScalarKeyFrameAnimation();
-            animation.InsertKeyFrame(0, .25f); animation.InsertKeyFrame(1, 1); animation.Duration = TimeSpan.FromMilliseconds(140); visual.StartAnimation("Opacity", animation);
-        }
+        AnimatePageEntrance(view != "playing" && _pendingCoverAnimation == null, backward);
         // Start from the cached bitmap as soon as the destination is laid out;
         // waiting for network data can expire the native connected animation.
-        if (_navigationCoverKey == "PlaylistCover" && view == "playlist") StartCoverTransition(PlaylistDetailCover);
+        if (_navigationCoverKey == "PlaylistCover" && view is "playlist" or "album" or "programs") StartCoverTransition(PlaylistDetailCover);
+        else if (_navigationCoverKey == "ArtistCover" && view == "artist") StartCoverTransition(ArtistCover);
+        else if (_navigationCoverKey == "LocalPlaylistCover" && view == "local-playlist") StartCoverTransition(LocalPlaylistCover);
         else if (_navigationCoverKey == "PlayerCover") StartCoverTransition(view == "playing" ? LargeCover : MiniCover);
+        else if (view == "local") CompleteLocalCoverReturn();
         await LoadPageAsync(false);
+        if (_view == view && _navigationCoverKey == "OnlineCoverReturn") CompleteOnlineCoverReturn();
+        if (_view == "settings" && view == "settings")
+        {
+            Root.UpdateLayout();
+            ConfigureSurfaceTransitions(SettingsPanel, PlayerAnimationEnabled);
+        }
     }
     private async Task LoadPageAsync(bool append)
     {
@@ -150,16 +177,25 @@ public sealed partial class MainWindow
                     else if (_view == "album")
                     {
                         var album = await _api.CallAsync("album", new { id = _playlistId }, load.Token);
+                        load.Token.ThrowIfCancellationRequested();
+                        if (album.TryGetProperty("album", out var metadata))
+                        {
+                            PlaylistDetailTitle.Text = FirstText(metadata.Text("name"), _playlistName);
+                            Artwork.SetUri(PlaylistDetailCover, metadata.Text("picUrl"));
+                            PlaylistDescription.Text = metadata.Text("description");
+                        }
                         page = album.GetProperty("songs").EnumerateArray().Select(Track.FromJson).ToList();
                     }
                     else
                     {
                         var programs = await _api.CallAsync("dj_program", new { rid = _playlistId, limit = 50, offset = _offset }, load.Token);
+                        load.Token.ThrowIfCancellationRequested();
                         foreach (var p in programs.GetProperty("programs").EnumerateArray())
                         {
                             var song = p.GetProperty("mainSong");
                             page.Add(new Track(song.Number("id"), p.Text("name"), p.TryGetProperty("dj", out var dj) ? dj.Text("nickname") : "", _playlistName, p.Text("coverUrl"), p.Number("duration")));
                         }
+                        if (!append && Artwork.GetUri(PlaylistDetailCover).Length == 0 && page.FirstOrDefault() is { } firstProgram) Artwork.SetUri(PlaylistDetailCover, firstProgram.Cover);
                     }
                     var limit = _view == "playlist" ? 10000 : 1000;
                     load.Token.ThrowIfCancellationRequested(); if (!append) Tracks.Clear(); foreach (var item in page.Take(limit - Tracks.Count)) Tracks.Add(item);
@@ -182,18 +218,21 @@ public sealed partial class MainWindow
     }
     private bool RequireLogin() { if (_api.HasSession) return true; ShowEmpty("请先登录", "登录"); return false; }
     private async void Search_Submitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args) { if (string.IsNullOrWhiteSpace(args.QueryText)) return; _query = args.QueryText.Trim(); await NavigateAsync("search"); }
-    private async void Playlist_Click(object sender, ItemClickEventArgs args)
+    private async void Playlist_Click(object sender, ItemClickEventArgs args) => await OpenOnlinePlaylistAsync((Playlist)args.ClickedItem);
+    private async Task OpenOnlinePlaylistAsync(Playlist item)
     {
-        var item = (Playlist)args.ClickedItem;
         if (PlaylistGrid.ContainerFromItem(item) is DependencyObject container && FindDescendant<Microsoft.UI.Xaml.Controls.Image>(container) is Image image && PlayerAnimationEnabled)
         {
             PrepareCoverTransition("PlaylistCover", image);
         }
         _playlistId = item.Id; _playlistName = item.Name; await NavigateAsync("playlist");
     }
-    private async void Catalog_Click(object sender, ItemClickEventArgs args)
+    private async void Catalog_Click(object sender, ItemClickEventArgs args) => await OpenCatalogCardAsync((CatalogItem)args.ClickedItem);
+    private async Task OpenCatalogCardAsync(CatalogItem item)
     {
-        await OpenCatalogItemAsync((CatalogItem)args.ClickedItem);
+        if (item.Kind != "mv" && CatalogGrid.ContainerFromItem(item) is DependencyObject container && FindDescendant<Image>(container) is { } image)
+            PrepareCoverTransition(item.Kind == "artist" ? "ArtistCover" : "PlaylistCover", image);
+        await OpenCatalogItemAsync(item);
     }
     private async Task OpenCatalogItemAsync(CatalogItem item)
     {
@@ -221,8 +260,20 @@ public sealed partial class MainWindow
     {
         if (_fullScreen) { SetFullScreen(false); return; }
         if (!_history.TryPop(out var route)) return;
+        if (_view == "local-playlist" && route.View == "local")
+        {
+            var id = _localPlaylistId;
+            PrepareCoverTransition("LocalCoverReturn", LocalPlaylistCover);
+            if (_pendingCoverAnimation != null) _returnLocalCoverId = id;
+        }
+        else if (_view is "playlist" or "album" or "programs" or "artist" && route.View is "discover" or "library" or "saved-albums" or "albums" or "artists" or "radio")
+        {
+            var id = _view == "artist" ? _artistId : _playlistId;
+            PrepareCoverTransition("OnlineCoverReturn", _view == "artist" ? ArtistCover : PlaylistDetailCover);
+            if (_pendingCoverAnimation != null) _returnOnlineCoverId = id;
+        }
         _playlistId = route.Id; _artistId = route.ArtistId; _peerId = route.PeerId; _playlistName = route.Name; _query = route.Query; _linkedResource = route.Source; _localPlaylistId = route.LocalId;
-        await NavigateAsync(route.View, false);
+        await NavigateAsync(route.View, false, true);
     }
     private async void Back_Click(object sender, RoutedEventArgs args) => await GoBackAsync();
     private async void Back_Key(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args) { args.Handled = true; await GoBackAsync(); }

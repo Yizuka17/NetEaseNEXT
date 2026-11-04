@@ -12,6 +12,11 @@ public sealed partial class MainWindow
     private readonly HashSet<NavigationViewItem> _boundSidebarIcons = [];
     private Storyboard? _settingsIconRotation;
     private RotateTransform? _settingsIconTransform;
+    private void BounceSidebarIcon(NavigationViewItem item)
+    {
+        if (ReferenceEquals(item, Nav.SettingsItem) || item.Icon is not { } icon) return;
+        BounceIcon(icon, true);
+    }
 
     private void InitializeSidebarIcons()
     {
@@ -39,6 +44,8 @@ public sealed partial class MainWindow
         Nav.Loaded += (_, _) => BindSettings();
         Nav.ItemInvoked += (_, args) =>
         {
+            var invoked = args.IsSettingsInvoked ? Nav.SettingsItem as NavigationViewItem : args.InvokedItemContainer as NavigationViewItem;
+            if (invoked != null) BounceSidebarIcon(invoked);
             if (args.IsSettingsInvoked) DispatcherQueue.TryEnqueue(() =>
             {
                 RotateSettingsIcon();

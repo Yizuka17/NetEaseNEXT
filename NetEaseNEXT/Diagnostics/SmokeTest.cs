@@ -36,6 +36,10 @@ public sealed partial class MainWindow
         try
         {
             Check("XAML root loaded", Root.IsLoaded);
+            if (Environment.GetCommandLineArgs().Contains("--local-motion-check"))
+            {
+                await RunLocalMotionChecksAsync(Check); return;
+            }
             if (Environment.GetCommandLineArgs().Contains("--material-vm-check"))
             {
                 await RunMaterialVmChecksAsync(Check); return;

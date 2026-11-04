@@ -39,8 +39,14 @@ public static class Artwork
     public static readonly DependencyProperty PreserveSourceProperty = DependencyProperty.RegisterAttached("PreserveSource", typeof(bool), typeof(Artwork), new PropertyMetadata(false));
     public static bool GetPreserveSource(DependencyObject obj) => (bool)obj.GetValue(PreserveSourceProperty);
     public static void SetPreserveSource(DependencyObject obj, bool value) => obj.SetValue(PreserveSourceProperty, value);
+    internal static void Seed(Image image, string uri, ImageSource source)
+    {
+        SetUri(image, uri);
+        image.Source = source;
+    }
     private sealed class State { public CancellationTokenSource? Load; public string? Error, Key; public bool Queued; }
     internal static object Inspect(Image image) => new { uri = GetUri(image), image.IsLoaded, suspended = _suspended, loading = States.TryGetValue(image, out var state) && state.Load != null, error = state?.Error, source = image.Source?.GetType().Name };
+    internal static bool IsReady(Image image) => image.Source != null && States.TryGetValue(image, out var state) && state.Key != null && state.Load == null;
     public static void Refresh(Image image) => QueueLoad(image);
     private static void QueueLoad(Image image)
     {
@@ -69,6 +75,12 @@ public static class Artwork
                 });
             };
         }
+        // A destination can become visible before the queued loader runs. Retire
+        // the previous request and bitmap in this turn, including recycled rows.
+        var state = States.GetOrCreateValue(image);
+        state.Load?.Cancel();
+        state.Key = null;
+        if (!GetPreserveSource(image) || string.IsNullOrWhiteSpace((string?)args.NewValue)) image.Source = null;
         QueueLoad(image);
     }
     private static async void Load(Image image)
@@ -86,7 +98,8 @@ public static class Artwork
             var size = (int)Math.Ceiling(GetSize(image) * (image.XamlRoot?.RasterizationScale ?? 1));
             var key = CacheDirectory + ":" + CacheIdentity(GetUri(image), size) + ":" + size;
             if (state.Key == key && image.Source != null) return;
-            if (!GetPreserveSource(image)) image.Source = null;
+            // Uri changes already clear stale pixels synchronously. A matching
+            // cover seeded by a connected animation can stay while it is decoded.
             if (Decoded.TryGetValue(key, out var cached))
             {
                 Decoded[key] = cached with { Used = ++_used }; Touch(cached.Path); image.Source = cached.Bitmap; state.Key = key; return;

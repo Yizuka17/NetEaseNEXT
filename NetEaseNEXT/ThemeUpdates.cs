@@ -32,7 +32,11 @@ public sealed partial class MainWindow
         FontHost.RequestedTheme = Root.RequestedTheme = PreferredAppTheme;
         RefreshThemeSurfaces();
     });
-    private void ApplyPopupTheme(FrameworkElement element) => element.RequestedTheme = Root.ActualTheme;
+    private void ApplyPopupTheme(FrameworkElement element)
+    {
+        element.RequestedTheme = Root.ActualTheme;
+        ApplyTextFont(element, new FontFamily(_settings.FontFamily));
+    }
     private async Task<ContentDialogResult> ShowThemedDialogAsync(ContentDialog dialog)
     {
         dialog.Resources["ContentDialogButtonHeight"] = 44d;

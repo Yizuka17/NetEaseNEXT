@@ -52,7 +52,7 @@ public sealed partial class MainWindow
         try
         {
             await NavigateAsync("settings");
-            check("Settings reads the current application version instead of the old 0.2 label", AppVersionLabel.Text == "NetEaseNEXT " + typeof(App).Assembly.GetName().Version!.ToString(3) && AppVersionLabel.Text == "NetEaseNEXT 0.3.2", null);
+            check("Settings reads the current application version instead of the old 0.2 label", AppVersionLabel.Text == "NetEaseNEXT " + typeof(App).Assembly.GetName().Version!.ToString(4) && !AppVersionLabel.Text.StartsWith("NetEaseNEXT 0.2"), null);
             await SaveLibraryImageAsync(Root, "local-actions-version.png");
             var tracks = new List<Track>();
             for (var i = 0; i < 150; i++) { var path = Path.Combine(fixture, $"song-{i:D3}.wav"); Wave(path); tracks.Add(new(-i - 1, $"本地歌曲 {i + 1:D3}", "晚风电台", "回家的路", "", 1000) { LocalPath = path }); }

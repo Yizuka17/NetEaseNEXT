@@ -23,6 +23,8 @@ public sealed class SettingsStore
     public string DownloadSource { get; set; } = "download";
     public bool LocalOnlineInfo { get; set; } = true;
     public string FontFamily { get; set; } = "Segoe UI";
+    public double TextFontSize { get; set; } = 14;
+    public int TextFontWeight { get; set; } = 400;
     public double MicaTransparency { get; set; } = 65;
     public double AcrylicTransparency { get; set; } = 65;
     public bool? MicaSystemMaterial { get; set; }

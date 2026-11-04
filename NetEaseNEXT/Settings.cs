@@ -53,6 +53,10 @@ public sealed partial class MainWindow
     private static string Tag(ComboBox combo) => (combo.SelectedItem as ComboBoxItem)?.Tag as string ?? "";
     private void InitializeFonts()
     {
+        _settings.TextFontSize = double.IsFinite(_settings.TextFontSize) ? Math.Clamp(_settings.TextFontSize, 12, 22) : 14;
+        _settings.TextFontWeight = _settings.TextFontWeight is 400 or 500 or 600 or 700 ? _settings.TextFontWeight : 400;
+        FontSizeBox.Value = _settings.TextFontSize;
+        SelectTag(FontWeightCombo, _settings.TextFontWeight.ToString());
         FontCombo.ItemsSource = new[] { _settings.FontFamily, "Segoe UI", "Microsoft YaHei UI" }.Distinct().ToArray();
         FontCombo.SelectedItem = _settings.FontFamily;
         FontCombo.DropDownOpened += async (_, _) => await RefreshFontsAsync();
@@ -111,6 +115,7 @@ public sealed partial class MainWindow
     {
         if (!_ready) return;
         _settings.CloseToTray = TrayToggle.IsOn; _settings.Animations = AnimationToggle.IsOn;
+        if (!_settings.Animations) StopInterfaceMotion();
         _settings.Backdrop = Tag(BackdropCombo); _settings.Theme = Tag(ThemeCombo);
         SaveSettings(); ApplyAppearance();
     }
@@ -122,14 +127,43 @@ public sealed partial class MainWindow
     }
     private void ApplyFont()
     {
-        if (_appliedFont == _settings.FontFamily) return;
         _appliedFont = _settings.FontFamily;
         var family = new FontFamily(_settings.FontFamily);
         Application.Current.Resources["ContentControlThemeFontFamily"] = family;
-        FontHost.FontFamily = family;
         ApplyTextFont(FontHost, family);
+        FontHost.FontFamily = family;
+        FontHost.FontSize = _settings.TextFontSize;
+        FontHost.FontWeight = new Windows.UI.Text.FontWeight { Weight = (ushort)_settings.TextFontWeight };
     }
-    private static void ApplyTextFont(DependencyObject element, FontFamily family)
+    private sealed class TextMetrics(double size, ushort weight)
+    {
+        public double Size = size, AppliedSize = size;
+        public ushort Weight = weight;
+    }
+    private readonly System.Runtime.CompilerServices.ConditionalWeakTable<DependencyObject, TextMetrics> _textMetrics = new();
+    private static object? TextStyleValue(Style? style, DependencyProperty property)
+    {
+        for (; style != null; style = style.BasedOn)
+            if (style.Setters.OfType<Setter>().FirstOrDefault(s => s.Property == property) is { } setter) return setter.Value;
+        return null;
+    }
+    private void SetTextBaseSize(TextBlock text, double size)
+    {
+        var metrics = _textMetrics.GetValue(text, _ => new TextMetrics(size, text.FontWeight.Weight));
+        metrics.Size = size; text.FontSize = metrics.AppliedSize = size * _settings.TextFontSize / 14;
+    }
+    private void FontSize_Changed(NumberBox sender, NumberBoxValueChangedEventArgs args)
+    {
+        if (!_ready || !double.IsFinite(args.NewValue)) return;
+        _settings.TextFontSize = Math.Clamp(args.NewValue, 12, 22); ApplyFont(); SaveSettings();
+    }
+    private void FontWeight_Changed(object sender, SelectionChangedEventArgs args)
+    {
+        if (!_ready || !int.TryParse(Tag(FontWeightCombo), out var weight)) return;
+        _settings.TextFontWeight = weight; ApplyFont(); SaveSettings();
+    }
+    private void Typography_Loaded(object sender, RoutedEventArgs args) => ApplyTextFont((DependencyObject)sender, new FontFamily(_settings.FontFamily));
+    private void ApplyTextFont(DependencyObject element, FontFamily family)
     {
         // Icon controls render private-use glyphs; their internal text must keep
         // the symbol font even when the user's content font changes.
@@ -141,7 +175,18 @@ public sealed partial class MainWindow
             symbol.FontFamily = IconFonts.FrameworkSymbols;
             return;
         }
-        if (element is TextBlock text) text.FontFamily = family;
+        if (element is TextBlock text)
+        {
+            var metrics = _textMetrics.GetValue(text, _ => new TextMetrics(
+                text.ReadLocalValue(TextBlock.FontSizeProperty) is double localSize ? localSize : TextStyleValue(text.Style, TextBlock.FontSizeProperty) is double styleSize ? styleSize : 14,
+                text.ReadLocalValue(TextBlock.FontWeightProperty) is Windows.UI.Text.FontWeight localWeight ? localWeight.Weight : TextStyleValue(text.Style, TextBlock.FontWeightProperty) is Windows.UI.Text.FontWeight styleWeight ? styleWeight.Weight : (ushort)400));
+            // Lyrics/player headings may change their base size responsively.
+            if (Math.Abs(text.FontSize - metrics.AppliedSize) > .01 && text.ReadLocalValue(TextBlock.FontSizeProperty) is double explicitSize)
+                metrics.Size = explicitSize;
+            text.FontFamily = family;
+            text.FontSize = metrics.AppliedSize = metrics.Size * _settings.TextFontSize / 14;
+            text.FontWeight = new Windows.UI.Text.FontWeight { Weight = (ushort)Math.Max(metrics.Weight, _settings.TextFontWeight) };
+        }
         else if (element is Control control) control.FontFamily = family;
         for (var index = 0; index < VisualTreeHelper.GetChildrenCount(element); index++) ApplyTextFont(VisualTreeHelper.GetChild(element, index), family);
     }
@@ -160,6 +205,7 @@ public sealed partial class MainWindow
     }
     private void ApplyAppearance()
     {
+        ConfigureInterfaceMotion();
         FontHost.RequestedTheme = PreferredAppTheme;
         Root.RequestedTheme = PreferredAppTheme;
         ApplyFont();

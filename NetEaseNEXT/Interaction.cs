@@ -134,6 +134,7 @@ public sealed partial class MainWindow
     private void UpdateTrackLocator()
     {
         var match = CurrentTrackInView(_playback.Current);
+        if (match != null && TrackList.SelectedItem == null && !ReferenceEquals(_batchList, TrackList)) TrackList.SelectedItem = match;
         var belongs = match != null || _view == "playlist" && _playback.Current is { } current && _playlistTrackIds.Contains(current.Id);
         TrackLocateButton.Visibility = !_hidden && (_view is "playlist" or "queue" or "local-playlist") && belongs ? Visibility.Visible : Visibility.Collapsed;
         TrackLocateButton.IsEnabled = _trackLocateLoad == null && _pageLoad == null && (_view != "playlist" || !_playlistRemovals.Any(t => t.PlaylistId == _playlistId));

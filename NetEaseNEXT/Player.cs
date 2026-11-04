@@ -25,15 +25,22 @@ public sealed partial class MainWindow
     private CancellationTokenSource? _qualityLoad;
     private static readonly (string Level, string Name)[] Qualities = AudioQuality.Levels;
     private void PlayPause_Click(object sender, RoutedEventArgs args) => _playback.Toggle();
-    private async void Previous_Click(object sender, RoutedEventArgs args) => await _playback.PreviousAsync();
-    private async void Next_Click(object sender, RoutedEventArgs args) => await _playback.NextAsync();
+    private async Task ChangeTransportAsync(Button button, bool previous)
+    {
+        BounceActionIcon(button);
+        if (previous) await _playback.PreviousAsync(); else await _playback.NextAsync();
+    }
+    private async void Previous_Click(object sender, RoutedEventArgs args) => await ChangeTransportAsync((Button)sender, true);
+    private async void Next_Click(object sender, RoutedEventArgs args) => await ChangeTransportAsync((Button)sender, false);
     private async void ShowPlaying_Click(object sender, RoutedEventArgs args) { if (_view != "playing") await NavigateAsync("playing"); else await GoBackAsync(); }
     private void ShowQueue_Click(object sender, RoutedEventArgs args)
     {
+        ConfigureInterfaceMotion();
         var open = QueuePane.Visibility != Visibility.Visible;
         if (!open && ReferenceEquals(_batchList, QueueList)) EndTrackBatch();
+        if (open) QueueList.ItemsSource = _playback.Queue;
         QueuePane.Visibility = open ? Visibility.Visible : Visibility.Collapsed;
-        QueueList.ItemsSource = open ? _playback.Queue : null;
+        QueueGlyph.Opacity = open ? .65 : 1;
         if (open && _playback.Current != null) { QueueList.SelectedItem = _playback.Queue.FirstOrDefault(t => t.Id == _playback.Current?.Id); if (QueueList.SelectedItem != null) QueueList.ScrollIntoView(QueueList.SelectedItem); }
     }
     private async void QueueTrack_Click(object sender, ItemClickEventArgs args) { if (!ReferenceEquals(_batchList, QueueList)) await _playback.PlayAsync((Track)args.ClickedItem); }
@@ -45,7 +52,8 @@ public sealed partial class MainWindow
         if (_hidden) return;
         UpdateModeIcon();
         PlayPauseIcon.Glyph = _playback.IsPlaying ? "\uE769" : "\uE768";
-        if (_displayedTrack != _playback.Current)
+        var trackChanged = _displayedTrack != _playback.Current;
+        if (trackChanged)
         {
             _displayedTrack = _playback.Current;
             if (_displayedTrack is Track track)
@@ -63,6 +71,11 @@ public sealed partial class MainWindow
         if (_view == "queue" && !Tracks.Select(t => t.Id).SequenceEqual(_playback.Queue.Select(t => t.Id)))
         {
             RefreshQueueTracks();
+        }
+        if (trackChanged)
+        {
+            if (!ReferenceEquals(_batchList, TrackList)) TrackList.SelectedItem = CurrentTrackInView(_displayedTrack);
+
         }
         UpdateTrackLocator(); UpdateProgress(); UpdateTimer();
         UpdateDownloadIndicator(); UpdateSongActions();

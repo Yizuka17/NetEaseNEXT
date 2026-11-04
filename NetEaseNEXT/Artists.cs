@@ -16,6 +16,8 @@ public sealed partial class MainWindow
     {
         destination ??= ArtistPanel;
         if (destination.Children.Contains(ArtistHeader)) return;
+        // Detach ParallaxView's scroll expression before moving its ancestor.
+        ArtistCoverParallax.Source = null;
         if (ReferenceEquals(CatalogGrid.Header, ArtistHeader)) CatalogGrid.Header = null;
         ArtistPanel.Children.Remove(ArtistHeader); ArtistBioBody.Children.Remove(ArtistHeader);
         ((Panel)TrackList.Header).Children.Remove(ArtistHeader);
@@ -41,6 +43,7 @@ public sealed partial class MainWindow
             ((Panel)TrackList.Header).Children.Remove(ArtistHeader); CatalogGrid.Header = ArtistHeader;
         }
         element.Visibility = Visibility.Visible;
+        ArtistCoverParallax.Source = ReferenceEquals(element, TracksPanel) ? TrackList : CatalogGrid;
     }
     private async Task LoadArtistAsync(CancellationToken ct)
     {

@@ -6,6 +6,7 @@ namespace NetEaseNEXT;
 public partial class App : Application
 {
     private MainWindow? _window;
+    private Window? _motionSample;
     private SingleInstance? _instance;
     public App()
     {
@@ -15,6 +16,12 @@ public partial class App : Application
     }
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
+        if (Environment.GetCommandLineArgs().Contains("--fluent-motion-sample"))
+        {
+            _motionSample = new Diagnostics.FluentMotionSample();
+            _motionSample.Closed += (_, _) => Exit();
+            _motionSample.Activate(); return;
+        }
         ApplicationIdentity.Initialize();
         if (!Environment.GetCommandLineArgs().Contains("--smoke-test"))
         {
@@ -22,7 +29,13 @@ public partial class App : Application
             if (!_instance.IsPrimary) { _instance.Dispose(); Exit(); return; }
         }
         StartupSession? startup = null;
-        if (!Environment.GetCommandLineArgs().Contains("--smoke-test") || Environment.GetCommandLineArgs().Contains("--startup-parallel-check"))
+        if (Environment.GetCommandLineArgs().Contains("--motion-release-check"))
+        {
+            var directory = Path.Combine(Path.GetTempPath(), "NetEaseNEXT-motion-api-" + Guid.NewGuid().ToString("N"));
+            var settings = SettingsStore.Load(); settings.Volume = 0; settings.CacheDirectory = directory;
+            startup = new(settings, MotionApiFixtures.Create(directory), () => new());
+        }
+        else if (!Environment.GetCommandLineArgs().Contains("--smoke-test") || Environment.GetCommandLineArgs().Contains("--startup-parallel-check"))
         {
             Diagnostics.StartupTrace.Mark("Load settings");
             var settings = SettingsStore.Load(); Diagnostics.StartupTrace.Mark("Settings loaded; decrypt session");

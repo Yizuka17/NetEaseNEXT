@@ -42,7 +42,7 @@ public sealed partial class MainWindow : Window
     {
         _startup = startup; _settings = startup?.Settings ?? SettingsStore.Load();
         Diagnostics.StartupTrace.Mark("InitializeComponent"); InitializeComponent(); Diagnostics.StartupTrace.Mark("XAML initialized");
-        AppVersionLabel.Text = "NetEaseNEXT " + typeof(App).Assembly.GetName().Version!.ToString(3);
+        AppVersionLabel.Text = "NetEaseNEXT " + typeof(App).Assembly.GetName().Version!.ToString(4);
         _api = startup?.Api ?? new(_settings);
         if (startup != null) { _profileTask = startup.Profile; _profileSession = _api.Cookie; _profileExpires = DateTimeOffset.UtcNow.AddMinutes(5); }
         InitializeSidebarIcons(); InitializeTrackBatch(); InitializePagination(); InitializeDownloads();
@@ -100,9 +100,11 @@ public sealed partial class MainWindow : Window
         LyricsList.AddHandler(UIElement.PointerPressedEvent, new PointerEventHandler((_, _) => SuspendLyrics()), true);
         LyricsList.KeyDown += (_, args) => { if (args.Key is Windows.System.VirtualKey.Up or Windows.System.VirtualKey.Down or Windows.System.VirtualKey.PageUp or Windows.System.VirtualKey.PageDown) SuspendLyrics(); };
         foreach (var host in new FrameworkElement[] { PlaylistGrid, CatalogGrid, TrackList, LyricsList, SocialList, QueueList, SettingsPanel }) AttachWheelFallback(host);
+        InitializeSelectionMotion();
         _ready = true;
         Root.Loaded += async (_, _) =>
         {
+            ApplyFont();
             Diagnostics.StartupTrace.Mark("Root loaded");
             if (Environment.GetCommandLineArgs().Contains("--smoke-test")) await RunSmokeTestAsync();
             else await InitializeSessionAsync();
@@ -127,7 +129,7 @@ public sealed partial class MainWindow : Window
         }
         CoverFrame.Width = CoverFrame.Height = width;
         CoverColumn.Spacing = Root.ActualHeight < 650 ? 6 : 12;
-        NowTitle.FontSize = Root.ActualHeight < 650 ? 22 : 26;
+        SetTextBaseSize(NowTitle, Root.ActualHeight < 650 ? 22 : 26);
         PlayerLayout.ColumnSpacing = Root.ActualWidth < 1000 ? 28 : 64;
         PlayerLayout.Padding = Root.ActualWidth < 1000 ? new Thickness(32, _fullScreen ? 16 : 48, 32, 24) : new Thickness(64, _fullScreen ? 24 : 48, 64, 32);
         QueuePane.MaxHeight = Math.Max(100, Root.ActualHeight - 180);
@@ -179,7 +181,7 @@ public sealed partial class MainWindow : Window
             if (_hasBeenVisible) _startup?.Cancel();
             SavePlaybackState(); _accountLoad?.Cancel(); _accountAvatarLoad?.Cancel(); _metadataWarmLoad?.Cancel();
             _inboxTimer.Stop(); _inboxCheck?.Cancel(); FlushAppearanceSettings(); _commentsLoad?.Cancel(); _playlistEditLoad?.Cancel(); _dialog?.Hide();
-            ResetTrackGesture(); CancelCoverTransitions(); RestorePresenterTransition(); StopSettingsIconRotation();
+            ResetTrackGesture(); StopInterfaceMotion(); RestorePresenterTransition(); StopSettingsIconRotation();
             EndTrackBatch(); _playerNoticeTimer.Stop(); PlayerNotice.IsOpen = false; QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null;
             _songStatsLoad?.Cancel(); _qualityLoad?.Cancel();
             if (_pageLoad != null) _pageInterrupted = true;

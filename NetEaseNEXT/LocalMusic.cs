@@ -25,7 +25,9 @@ public sealed partial class MainWindow
 
     private async Task LoadLocalLibraryAsync(CancellationToken ct)
     {
-        _localLibrary = await Task.Run(() => LocalLibraryStore.Load(_localLibraryPathOverride), ct); ct.ThrowIfCancellationRequested();
+        var library = await Task.Run(() => LocalLibraryStore.Load(_localLibraryPathOverride), ct);
+        ct.ThrowIfCancellationRequested();
+        _localLibrary = library;
         await RegisterLocalDownloadSourcesAsync(_localLibrary.Tracks); ct.ThrowIfCancellationRequested();
         LoadLocalTracks();
         if (!_runningSmokeTest || _checkingLibraryWorkflow) { StartLocalMonitoring(); await RefreshLocalFoldersAsync(ct); }
@@ -103,7 +105,16 @@ public sealed partial class MainWindow
     private async void LocalPlaylist_Click(object sender, ItemClickEventArgs args)
     {
         if (args.ClickedItem is not LocalPlaylistCard playlist) return;
-        _localPlaylistId = playlist.Id; await NavigateAsync("local-playlist");
+        await OpenLocalPlaylistAsync(playlist);
+    }
+    private async Task OpenLocalPlaylistAsync(LocalPlaylistCard playlist)
+    {
+        if (LocalPlaylistGrid.ContainerFromItem(playlist) is DependencyObject container &&
+            FindDescendant<Image>(container) is { } image)
+            PrepareCoverTransition("LocalPlaylistCover", image);
+        else CancelCoverTransitions();
+        _localPlaylistId = playlist.Id;
+        await NavigateAsync("local-playlist");
     }
     private void LocalCardMenu_Opening(object sender, object args)
     {

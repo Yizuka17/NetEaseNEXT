@@ -209,6 +209,7 @@ public sealed partial class MainWindow
         if (!unchanged && (!_runningSmokeTest || _checkingLibraryWorkflow)) _downloadedLibrary.Register(job);
         job.Progress = 100; job.Error = ""; job.Status = unchanged ? "无需升级" : "已完成";
         UpdateDownloadIndicator();
+        if (!unchanged) _ = PlayDownloadCompletionMotionAsync();
     }
     private void FinishTaggedDownload(DownloadJob job)
     {

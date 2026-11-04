@@ -1,0 +1,22 @@
+<Window x:Class="NetEaseNEXT.Diagnostics.FluentMotionSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="Fluent Motion 预览">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="24">
+        <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="80"/></Grid.RowDefinitions>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12">
+            <TextBlock Text="Fluent Motion" FontSize="32" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+            <TextBlock Text="点击下方图标，观察起跳与指示条的收尾。" Opacity=".65" TextWrapping="Wrap"/>
+        </StackPanel>
+        <Grid x:Name="DockHost" Grid.Row="1">
+        <NavigationView x:Name="Dock" PaneDisplayMode="Top" IsSettingsVisible="False" IsBackButtonVisible="Collapsed" IsPaneToggleButtonVisible="False" ItemInvoked="Invoked" HorizontalAlignment="Center">
+            <NavigationView.Resources><SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="Transparent"/></NavigationView.Resources>
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="发现" IsSelected="True"><NavigationViewItem.Icon><FontIcon Glyph="&#xE80F;" FontFamily="{StaticResource AppIconFontFamily}"/></NavigationViewItem.Icon></NavigationViewItem>
+                <NavigationViewItem Content="本地音乐"><NavigationViewItem.Icon><FontIcon Glyph="&#xE8B7;" FontFamily="{StaticResource AppIconFontFamily}"/></NavigationViewItem.Icon></NavigationViewItem>
+                <NavigationViewItem Content="下载"><NavigationViewItem.Icon><FontIcon Glyph="&#xE896;" FontFamily="{StaticResource AppIconFontFamily}"/></NavigationViewItem.Icon></NavigationViewItem>
+            </NavigationView.MenuItems>
+        </NavigationView>
+        <Border x:Name="Marker" Width="16" Height="3" CornerRadius="1.5" HorizontalAlignment="Left" VerticalAlignment="Top" Background="{ThemeResource AccentFillColorDefaultBrush}" IsHitTestVisible="False" Visibility="Collapsed"/>
+        </Grid>
+    </Grid>
+</Window>
