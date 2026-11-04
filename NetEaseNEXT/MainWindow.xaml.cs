@@ -96,9 +96,14 @@ public sealed partial class MainWindow : Window
         _playbackSaveTimer.Tick += (_, _) => SavePlaybackState();
         LyricsList.Loaded += (_, _) => QueueInitialLyricCenter();
         LyricsList.SizeChanged += (_, _) => { UpdateLyricPadding(); QueueInitialLyricCenter(); };
-        LyricsList.AddHandler(UIElement.PointerWheelChangedEvent, new PointerEventHandler((_, _) => SuspendLyrics()), true);
-        LyricsList.AddHandler(UIElement.PointerPressedEvent, new PointerEventHandler((_, _) => SuspendLyrics()), true);
-        LyricsList.KeyDown += (_, args) => { if (args.Key is Windows.System.VirtualKey.Up or Windows.System.VirtualKey.Down or Windows.System.VirtualKey.PageUp or Windows.System.VirtualKey.PageDown) SuspendLyrics(); };
+        _lyricScrollBarTimer.Tick += (_, _) => ConcealLyricScrollBar();
+        // Pointer activity temporarily enables the native overlay scrollbar.
+        // Automatic lyric-following ChangeView calls never enable it.
+        LyricsList.AddHandler(UIElement.PointerEnteredEvent, new PointerEventHandler((_, _) => RevealLyricScrollBar()), true);
+        LyricsList.AddHandler(UIElement.PointerMovedEvent, new PointerEventHandler((_, _) => RevealLyricScrollBar()), true);
+        LyricsList.AddHandler(UIElement.PointerWheelChangedEvent, new PointerEventHandler((_, _) => { RevealLyricScrollBar(); SuspendLyrics(); }), true);
+        LyricsList.AddHandler(UIElement.PointerPressedEvent, new PointerEventHandler((_, _) => { RevealLyricScrollBar(); SuspendLyrics(); }), true);
+        LyricsList.KeyDown += (_, args) => { if (args.Key is Windows.System.VirtualKey.Up or Windows.System.VirtualKey.Down or Windows.System.VirtualKey.PageUp or Windows.System.VirtualKey.PageDown) { RevealLyricScrollBar(); SuspendLyrics(); } };
         foreach (var host in new FrameworkElement[] { PlaylistGrid, CatalogGrid, TrackList, LyricsList, SocialList, QueueList, SettingsPanel }) AttachWheelFallback(host);
         InitializeSelectionMotion();
         _ready = true;
