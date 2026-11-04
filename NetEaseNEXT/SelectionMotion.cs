@@ -10,6 +10,15 @@ namespace NetEaseNEXT;
 
 public sealed partial class MainWindow
 {
+    private static void TraceSelection(string message)
+    {
+        try
+        {
+            Directory.CreateDirectory(SettingsStore.DataDirectory);
+            File.AppendAllText(Path.Combine(SettingsStore.DataDirectory, "selection-motion.log"), $"{DateTimeOffset.Now:HH:mm:ss.fff} {message}{Environment.NewLine}");
+        }
+        catch { /* Diagnostic logging must never affect playback. */ }
+    }
     private sealed class SelectionMotionState
     {
         public object? Item;
@@ -33,12 +42,14 @@ public sealed partial class MainWindow
                 // Keep the previous visual position throughout this input event and commit
                 // the selection after the event has finished, rather than letting an
                 // intervening LayoutUpdated snap the marker to its destination.
+                TraceSelection($"{list.Name} SelectionChanged selected={list.SelectedIndex} previous={state.Item != null} pending={state.DispatchQueued}");
                 state.PendingItem = list.SelectedItem;
                 if (state.DispatchQueued) return;
                 state.DispatchQueued = true;
                 list.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
                 {
                     state.DispatchQueued = false;
+                    TraceSelection($"{list.Name} deferred selected={list.SelectedIndex}");
                     UpdateSelectionIndicator(list, true);
                 });
             };
@@ -123,11 +134,16 @@ public sealed partial class MainWindow
         }
         if (_hidden || !list.IsLoaded || list.ActualHeight <= 0 || ReferenceEquals(_batchList, list) || item == null)
         {
+            TraceSelection($"{list.Name} reset animate={animate} hidden={_hidden} loaded={list.IsLoaded} selected={list.SelectedIndex} batch={ReferenceEquals(_batchList, list)}");
             marker.Visibility = Visibility.Collapsed; state.Item = null; state.PendingItem = null; state.Y = double.NaN; return;
         }
         // SelectionChanged can precede the realization of a virtualized row.
         // Preserve the previous position until LayoutUpdated can animate to the new row.
-        if (list.ContainerFromItem(item) is not ListViewItem row || !row.IsLoaded) return;
+        if (list.ContainerFromItem(item) is not ListViewItem row || !row.IsLoaded)
+        {
+            if (animate) TraceSelection($"{list.Name} missing-container selected={list.SelectedIndex}");
+            return;
+        }
         var bounds = row.TransformToVisual(list).TransformBounds(new(0, 0, row.ActualWidth, row.ActualHeight));
         var y = bounds.Y + (bounds.Height - marker.Height) / 2;
         if (bounds.Bottom <= 0 || bounds.Y >= list.ActualHeight || y < 0 || y + marker.Height > list.ActualHeight)
@@ -138,13 +154,18 @@ public sealed partial class MainWindow
         if (!changed && Math.Abs(y - state.Y) < .1 && marker.Visibility == Visibility.Visible) return;
         ElementCompositionPreview.SetIsTranslationEnabled(marker, true);
         var visual = ElementCompositionPreview.GetElementVisual(marker);
-        if ((animate || ReferenceEquals(state.PendingItem, item)) && changed && state.Item != null &&
-            double.IsFinite(state.Y) && PlayerAnimationEnabled && Math.Abs(y - state.Y) < list.ActualHeight)
+        var canAnimate = (animate || ReferenceEquals(state.PendingItem, item)) && changed && state.Item != null &&
+            double.IsFinite(state.Y) && PlayerAnimationEnabled && Math.Abs(y - state.Y) < list.ActualHeight;
+        if (animate || changed)
+            TraceSelection($"{list.Name} update selected={list.SelectedIndex} animate={animate} changed={changed} previous={state.Item != null} previousY={state.Y:F1} targetY={y:F1} enabled={PlayerAnimationEnabled} visible={marker.Visibility} canAnimate={canAnimate}");
+        if (canAnimate)
         {
+            TraceSelection($"{list.Name} START from={state.Y:F1} to={y:F1}");
             FluentMotion.MoveIndicator(marker, (float)state.Y, new(0, (float)y, 0), (float)marker.Height);
         }
         else
         {
+            if (animate || changed) TraceSelection($"{list.Name} SNAP to={y:F1}");
             visual.StopAnimation("Translation"); visual.StopAnimation("Scale"); visual.Scale = Vector3.One; visual.Properties.InsertVector3("Translation", new(0, (float)y, 0));
         }
         marker.Visibility = Visibility.Visible; state.Item = item; state.PendingItem = null; state.Y = y;
