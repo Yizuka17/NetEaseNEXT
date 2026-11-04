@@ -1,6 +1,7 @@
 using System.Numerics;
 using NetEaseNEXT.Services;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Hosting;
 using Microsoft.UI.Xaml.Media;
@@ -13,6 +14,7 @@ public sealed partial class MainWindow
     {
         public object? Item;
         public object? PendingItem;
+        public bool DispatchQueued;
         public double X, Y = double.NaN;
     }
     private readonly SelectionMotionState _trackSelectionMotion = new(), _queueSelectionMotion = new(), _sidebarSelectionMotion = new();
@@ -27,10 +29,24 @@ public sealed partial class MainWindow
             list.SelectionChanged += (_, _) =>
             {
                 var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
-                if (!ReferenceEquals(list.SelectedItem, state.Item)) state.PendingItem = list.SelectedItem;
-                UpdateSelectionIndicators(true);
+                // Pointer/touch selection can run before ItemClick changes the playing track.
+                // Keep the previous visual position throughout this input event and commit
+                // the selection after the event has finished, rather than letting an
+                // intervening LayoutUpdated snap the marker to its destination.
+                state.PendingItem = list.SelectedItem;
+                if (state.DispatchQueued) return;
+                state.DispatchQueued = true;
+                list.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
+                {
+                    state.DispatchQueued = false;
+                    UpdateSelectionIndicator(list, true);
+                });
             };
-            list.LayoutUpdated += (_, _) => UpdateSelectionIndicator(list, false);
+            list.LayoutUpdated += (_, _) =>
+            {
+                var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
+                if (!state.DispatchQueued) UpdateSelectionIndicator(list, false);
+            };
             list.Loaded += (_, _) =>
             {
                 if (FindDescendant<ScrollViewer>(list) is { } scroll && _selectionScrollers.Add(scroll))
