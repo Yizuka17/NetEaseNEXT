@@ -102,6 +102,8 @@ public sealed partial class MainWindow
     {
         var marker = list == TrackList ? TrackSelectionIndicator : QueueSelectionIndicator;
         var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
+        // Layout/scroll refreshes must not consume a click's pending transition.
+        if (!animate && state.DispatchQueued) return;
         var item = list.SelectedItem;
         if (_hidden || !list.IsLoaded || list.ActualHeight <= 0 || ReferenceEquals(_batchList, list) || item == null)
         {
