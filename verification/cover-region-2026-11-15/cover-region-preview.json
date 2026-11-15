@@ -1,176 +1,176 @@
 {
-  "frames": 369,
+  "frames": 368,
   "finished": true,
   "stages": [
     {
       "time": -0.0,
       "stage": "begin",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 1.264,
+      "time": 1.187,
       "stage": "hover",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 1.986,
+      "time": 1.988,
       "stage": "spring",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 2.718,
+      "time": 2.618,
       "stage": "connected-open",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 3.668,
+      "time": 3.68,
       "stage": "parallax-scroll",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 5.301,
+      "time": 5.313,
       "stage": "connected-return",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 6.345,
+      "time": 6.249,
       "stage": "different-cover",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 7.21,
+      "time": 7.2,
       "stage": "play-sink",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 7.828,
+      "time": 7.877,
       "stage": "queue-open",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 8.857,
+      "time": 8.827,
       "stage": "queue-close",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 9.748,
+      "time": 9.826,
       "stage": "selection-before",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 10.427,
+      "time": 10.473,
       "stage": "selection-next",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 11.347,
+      "time": 11.313,
       "stage": "previous-left",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 12.107,
+      "time": 12.08,
       "stage": "selection-following",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 13.581,
+      "time": 13.519,
       "stage": "directional-icons",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 14.185,
+      "time": 14.2,
       "stage": "page-forward",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 14.849,
+      "time": 14.949,
       "stage": "font-large",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 16.005,
+      "time": 15.988,
       "stage": "theme-transition",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 16.986,
+      "time": 16.967,
       "stage": "page-back",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 17.645,
+      "time": 17.623,
       "stage": "downloads",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 19.202,
+      "time": 19.185,
       "stage": "completion-vector",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 19.864,
+      "time": 19.916,
       "stage": "discover-cards",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 20.913,
+      "time": 20.885,
       "stage": "discover-detail",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 21.74,
+      "time": 21.691,
       "stage": "discover-return",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 22.45,
+      "time": 22.425,
       "stage": "saved-albums-cards",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 23.574,
+      "time": 23.553,
       "stage": "saved-albums-detail",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 24.323,
+      "time": 24.303,
       "stage": "saved-albums-return",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 25.136,
+      "time": 25.12,
       "stage": "radio-cards",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 26.186,
+      "time": 26.17,
       "stage": "radio-detail",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 26.949,
+      "time": 26.997,
       "stage": "radio-return",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 27.791,
+      "time": 27.734,
       "stage": "artists-cards",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 28.833,
+      "time": 28.858,
       "stage": "artists-detail",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 29.746,
+      "time": 29.687,
       "stage": "artists-return",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     },
     {
-      "time": 30.562,
+      "time": 30.474,
       "stage": "end",
-      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+      "run": "858ed21abbbf475eb7b84c47615e4785"
     }
   ]
 }

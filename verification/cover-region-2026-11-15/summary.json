@@ -1,12 +1,12 @@
 {
-  "version": "0.3.3.6",
-  "dllSha256": "B8AE7592D182785A1C47B5024EE7A8844E347419627E3C21AD533132B7313A19",
-  "uiChecks": 162,
-  "installedChecks": 80,
+  "version": "0.3.3.7",
+  "dllSha256": "B4A14F04CD4733A4107D2E277627815B7CFE7FDB2D3AE3EA6ADAB64828140F0A",
+  "uiChecks": 163,
+  "installedChecks": 81,
   "reports": [
     {
       "file": "review-local-motion-check.json",
-      "count": 80
+      "count": 81
     },
     {
       "file": "review-native-feature-check.json",
@@ -25,5 +25,5 @@
       "count": 14
     }
   ],
-  "nativeCaptureFrames": 369
+  "nativeCaptureFrames": 368
 }

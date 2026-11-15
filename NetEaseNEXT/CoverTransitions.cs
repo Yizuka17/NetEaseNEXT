@@ -28,10 +28,9 @@ public sealed partial class MainWindow
         if (!PlayerAnimationEnabled || source.XamlRoot == null || !Artwork.TrySnapshot(source, expectedUri ?? Artwork.GetUri(source), out var snapshot)) return;
         _navigationCoverSource = snapshot; _navigationCoverKey = key; _navigationCoverUri = Artwork.GetUri(source);
         var origin = RoundedCoverHost(source);
-        if (source == ArtistCover && key == "OnlineCoverReturn")
+        // Keep every source independent of bindings, virtualization and header
+        // reparenting until the connected animation completes.
         {
-            // The artist header moves between scrolling hosts. Keep the
-            // connected animation source independent of that reparenting.
             var point = origin.TransformToVisual(Root).TransformPoint(new(0, 0));
             _coverTransitionProxy = new Border { Child = new Image { Source = snapshot, Stretch = source.Stretch },
                 Width = origin.ActualWidth, Height = origin.ActualHeight, CornerRadius = (origin as Border)?.CornerRadius ?? new(10),

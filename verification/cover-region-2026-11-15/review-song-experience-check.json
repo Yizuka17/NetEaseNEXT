@@ -103,9 +103,9 @@
     "name": "Repeated shuffle play all chooses different first songs",
     "passed": true,
     "detail": [
-      -3,
-      -5,
       -1,
+      -5,
+      -3,
       -4,
       -2
     ]
@@ -129,10 +129,11 @@
     "name": "Online shuffle can start on an unloaded song and completes the queue",
     "passed": true,
     "detail": [
-      2,
-      5,
+      4,
       3,
-      1
+      5,
+      1,
+      2
     ]
   },
   {

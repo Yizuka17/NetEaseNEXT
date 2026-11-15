@@ -32,6 +32,13 @@ public sealed partial class MainWindow
         check("A recycled card updates to the new item's own bitmap", !Artwork.TrySnapshot(image, a, out _), null);
         image.ClearValue(FrameworkElement.DataContextProperty);
         await Wait(() => Artwork.IsReady(image) && Artwork.TrySnapshot(image, a, out _));
+        PrepareCoverTransition("LocalPlaylistCover", image, a);
+        var frozen = (_coverTransitionProxy?.Child as Image)?.Source;
+        image.DataContext = new LocalPlaylistCard("snapshot", "过渡源被回收", b, "");
+        check("Source recycling cannot clear the independent rounded animation snapshot", frozen != null && ReferenceEquals((_coverTransitionProxy?.Child as Image)?.Source, frozen) && _coverTransitionProxy!.CornerRadius.TopLeft > 0, null);
+        CancelCoverTransitions();
+        image.ClearValue(FrameworkElement.DataContextProperty);
+        await Wait(() => Artwork.IsReady(image) && Artwork.TrySnapshot(image, a, out _));
         PrepareCoverTransition("LocalPlaylistCover", image, b);
         check("A recycled card with the wrong image identity cannot prepare a transition", _pendingCoverAnimation == null, null);
         PrepareCoverTransition("LocalPlaylistCover", image, a);

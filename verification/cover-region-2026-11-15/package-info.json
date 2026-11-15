@@ -1,10 +1,10 @@
 {
-  "Package": "NetEaseNEXT-0.3.3.6-x64.msix",
-  "Version": "0.3.3.6",
+  "Package": "NetEaseNEXT-0.3.3.7-x64.msix",
+  "Version": "0.3.3.7",
   "Architecture": "x64",
   "Signed": true,
   "Subject": "CN=NetEaseNEXT Development",
   "Thumbprint": "548494EE74C33B2A77C73CC4E25CE0EEDD5E8733",
   "NotAfter": "2043-10-20T13:06:04.0000000+08:00",
-  "Sha256": "3112F65213FC454683934B73AA62F80637153E714DEB694A804EFD660E0BA844"
+  "Sha256": "9636C7591FBBC3CBE3419FC433185FAE98E75E3848DA12883D70C2DD46737392"
 }
