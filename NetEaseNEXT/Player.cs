@@ -81,7 +81,7 @@ public sealed partial class MainWindow
         }
         if (trackChanged)
         {
-            if (!ReferenceEquals(_batchList, TrackList)) TrackList.SelectedItem = CurrentTrackInView(_displayedTrack);
+            if (!ReferenceEquals(_batchList, TrackList)) SelectPlayingTrack(TrackList, CurrentTrackInView(_displayedTrack));
 
         }
         UpdateTrackLocator(); UpdateProgress(); UpdateTimer();
@@ -91,8 +91,9 @@ public sealed partial class MainWindow
     {
         if (_playback.Current is not Track track) return;
         NowTitle.Text = track.Title; NowArtist.Text = track.Subtitle;
-        if (LargeCover.Source == null) LargeCover.Source = MiniCover.Source;
-        if (Artwork.GetUri(LargeCover) == track.Cover) Artwork.Refresh(LargeCover); else Artwork.SetUri(LargeCover, track.Cover);
+        if (Artwork.TrySnapshot(MiniCover, track.Cover, out var snapshot)) Artwork.Seed(LargeCover, track.Cover, snapshot!);
+        else if (Artwork.GetUri(LargeCover) == track.Cover) Artwork.Refresh(LargeCover);
+        else Artwork.SetUri(LargeCover, track.Cover);
         _ = UpdateCoverBackgroundAsync(track);
     }
     private void UpdateTimer() { _timer.Interval = TimeSpan.FromMilliseconds(_view == "playing" ? 250 : 1000); if (!_hidden && _playback.IsPlaying) _timer.Start(); else _timer.Stop(); }

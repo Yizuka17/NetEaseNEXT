@@ -17,6 +17,8 @@ FluentMotion.Bounce(icon, new Vector3(6, 0, 0));
 
 只传图标本身，保持按钮命中区域和文字位置不动。正式界面的调用处会遵守应用和系统的动画开关；隐藏后停止动画并归零。具有 XAML 隐式属性过渡的图标使用单独容器，避免与 Composition 同时控制同一个元素。
 
-侧栏和歌曲行使用 `MoveIndicator`：前 1/3 时间将指示条伸展到新旧位置之间，后 2/3 收缩至目标。两处共用时长和曲线，按实际行高与间距计算伸展比例。歌曲指示条的父层通过 `GetScrollViewerManipulationPropertySet` 与 `scroll.Translation.Y` 表达式跟随原生滚动；指示条本身在内容坐标中运行关键帧，滚动时不逐帧重启动画。父层外部用固定视口裁剪。原歌曲位于视口之外或返回另一列表页面时，按歌曲索引选择顶部/底部入口，再执行相同的拉伸与收缩；虚拟化期间隐藏无效标记，关闭动画后直接定位。
+侧栏和歌曲行使用 `MoveIndicator`：前 1/3 时间将指示条伸展到新旧位置之间，后 2/3 收缩至目标。两处共用时长和曲线，按实际行高与间距计算伸展比例。歌曲指示条的父层通过 `GetScrollViewerManipulationPropertySet` 与 `scroll.Translation.Y` 表达式跟随原生滚动；指示条本身在内容坐标中运行关键帧，滚动时不逐帧重启动画。父层外部用固定视口裁剪。原歌曲位于视口之外或返回另一列表页面时，按歌曲索引选择歌曲行区域的顶部/底部入口（不含封面与操作区），再执行相同的拉伸与收缩；虚拟化期间隐藏无效标记，关闭动画后直接定位。
 
 [微软 Windows Motion 原则](https://learn.microsoft.com/en-us/windows/apps/design/signature-experiences/motion)；指示条参考原生 NavigationView 的伸展/收缩行为，未复制参考播放器源码或资源。
+
+封面连接动画以包含圆角的 Border 为源和目标，而不是只截取子 Image。返回动画仅注入匹配的位图，不重设卡片的 Uri 绑定；详情封面身份独立保存在路由中，关闭动画也能正确恢复播客封面。播放状态同步使用静默选择，不请求 BringIntoView；定位按钮和键盘导航仍可主动滚动。

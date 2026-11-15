@@ -136,6 +136,7 @@ public sealed partial class MainWindow
             _settings.Animations = true;
             await RunMotionRefinementChecksAsync(fixture, check);
             if (Environment.GetCommandLineArgs().Contains("--motion-release-check")) await RunReleaseMotionChecksAsync(check);
+            if (Environment.GetCommandLineArgs().Contains("--cover-region-check")) await RunCoverRegionChecksAsync(fixture, first, second, check);
             _localPlaylistId = first.Id; await NavigateAsync("local-playlist");
             await Wait(() => Artwork.IsReady(LocalPlaylistCover));
             await SaveLibraryImageAsync(Root, "local-motion-detail.png");

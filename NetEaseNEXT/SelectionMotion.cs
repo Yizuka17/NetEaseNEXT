@@ -20,6 +20,8 @@ public sealed partial class MainWindow
         public bool ScrollBound;
         public int Index = -1;
         public bool Offscreen;
+        public bool SilentSelection;
+        public int SelectionVersion;
     }
     private readonly SelectionMotionState _trackSelectionMotion = new(), _queueSelectionMotion = new(), _sidebarSelectionMotion = new();
     private readonly HashSet<ScrollViewer> _selectionScrollers = [];
@@ -30,8 +32,15 @@ public sealed partial class MainWindow
         foreach (var list in new[] { TrackList, QueueList })
         {
             var clip = list == TrackList ? TrackSelectionClip : QueueSelectionClip;
-            clip.SizeChanged += (_, _) => clip.Clip = new RectangleGeometry { Rect = new(0, 0, clip.ActualWidth, clip.ActualHeight) };
+            clip.SizeChanged += (_, _) => UpdateSelectionIndicator(list, false);
             list.Resources["ListViewItemSelectionIndicatorVisualEnabled"] = false;
+            list.BringIntoViewRequested += (_, args) =>
+            {
+                var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
+                if (state.SilentSelection) args.Handled = true;
+            };
+            list.AddHandler(UIElement.PointerPressedEvent, new Microsoft.UI.Xaml.Input.PointerEventHandler((_, _) => AllowSelectionReveal(list)), true);
+            list.AddHandler(UIElement.KeyDownEvent, new Microsoft.UI.Xaml.Input.KeyEventHandler((_, _) => AllowSelectionReveal(list)), true);
             list.SelectionChanged += (_, _) =>
             {
                 var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
@@ -59,6 +68,34 @@ public sealed partial class MainWindow
                     scroll.ViewChanged += (_, _) => UpdateSelectionIndicator(list, false);
             };
         }
+    }
+    private void AllowSelectionReveal(ListView list)
+    {
+        var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
+        state.SilentSelection = false; state.SelectionVersion++;
+    }
+    private void SelectPlayingTrack(ListView list, object? item)
+    {
+        if (ReferenceEquals(list.SelectedItem, item)) return;
+        var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
+        var scroll = FindDescendant<ScrollViewer>(list);
+        var x = scroll?.HorizontalOffset ?? 0; var y = scroll?.VerticalOffset ?? 0;
+        state.SilentSelection = true; var version = ++state.SelectionVersion;
+        list.SelectedItem = item;
+        list.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
+        {
+            if (version != state.SelectionVersion) return;
+            // Selection is bookkeeping, not a request to reveal the playing row.
+            if (scroll != null && (Math.Abs(scroll.VerticalOffset - y) > .5 || Math.Abs(scroll.HorizontalOffset - x) > .5))
+                scroll.ChangeView(x, y, null, true);
+            state.SilentSelection = false;
+        });
+    }
+    private static (double Top, double Bottom) SongRowBounds(ListView list, double offset)
+    {
+        if (list.ItemsPanelRoot is not { } panel) return (offset, offset + list.ActualHeight);
+        var bounds = panel.TransformToVisual(list).TransformBounds(new(0, 0, panel.ActualWidth, panel.ActualHeight));
+        return (bounds.Y + offset, bounds.Bottom + offset);
     }
     private void StopSelectionMotion()
     {
@@ -179,6 +216,14 @@ public sealed partial class MainWindow
         var viewportY = bounds.Y + (bounds.Height - marker.Height) / 2;
         var offset = state.Scroll?.VerticalOffset ?? 0;
         var y = viewportY + offset;
+        var rows = SongRowBounds(list, offset);
+        var first = Math.Max(offset, rows.Top);
+        var last = Math.Max(first, Math.Min(offset + list.ActualHeight, rows.Bottom) - marker.Height);
+        var clip = list == TrackList ? TrackSelectionClip : QueueSelectionClip;
+        var clipTop = Math.Clamp(rows.Top - offset, 0, list.ActualHeight);
+        var clipRect = new Windows.Foundation.Rect(0, clipTop, clip.ActualWidth, Math.Max(0, Math.Min(list.ActualHeight, rows.Bottom - offset) - clipTop));
+        if (clip.Clip is RectangleGeometry geometry) { if (geometry.Rect != clipRect) geometry.Rect = clipRect; }
+        else clip.Clip = new RectangleGeometry { Rect = clipRect };
         if (bounds.Bottom <= 0 || bounds.Y >= list.ActualHeight)
         {
             marker.Visibility = Visibility.Collapsed; state.Offscreen = true; return;
@@ -194,7 +239,13 @@ public sealed partial class MainWindow
         var entering = marker.Visibility != Visibility.Visible && !ReferenceEquals(item, state.Item);
         if (entering || state.Offscreen && changed || !double.IsFinite(previous) || previous < offset || previous > offset + list.ActualHeight)
         {
-            previous = previousIndex >= 0 && previousIndex > index ? offset + list.ActualHeight : offset - marker.Height;
+            previous = previousIndex >= 0 && previousIndex > index ? last : first;
+            visual.StopAnimation("Translation"); visual.StopAnimation("Scale"); visual.Scale = Vector3.One;
+            visual.Properties.InsertVector3("Translation", new(0, (float)previous, 0));
+        }
+        else if (previous < rows.Top || previous + marker.Height > rows.Bottom)
+        {
+            previous = Math.Clamp(previous, first, last);
             visual.StopAnimation("Translation"); visual.StopAnimation("Scale"); visual.Scale = Vector3.One;
             visual.Properties.InsertVector3("Translation", new(0, (float)previous, 0));
         }

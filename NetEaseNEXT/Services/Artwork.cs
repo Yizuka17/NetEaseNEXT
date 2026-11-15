@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Media;
 using Windows.Storage;
+using NetEaseNEXT.Models;
 
 namespace NetEaseNEXT.Services;
 
@@ -36,15 +37,33 @@ public static class Artwork
     public static void SetUri(DependencyObject obj, string value) => obj.SetValue(UriProperty, value);
     public static double GetSize(DependencyObject obj) => (double)obj.GetValue(SizeProperty);
     public static void SetSize(DependencyObject obj, double value) => obj.SetValue(SizeProperty, value);
-    public static readonly DependencyProperty PreserveSourceProperty = DependencyProperty.RegisterAttached("PreserveSource", typeof(bool), typeof(Artwork), new PropertyMetadata(false));
-    public static bool GetPreserveSource(DependencyObject obj) => (bool)obj.GetValue(PreserveSourceProperty);
-    public static void SetPreserveSource(DependencyObject obj, bool value) => obj.SetValue(PreserveSourceProperty, value);
     internal static void Seed(Image image, string uri, ImageSource source)
     {
-        SetUri(image, uri);
-        image.Source = source;
+        if (!MatchesContext(image, uri)) return;
+        if (!SameImage(GetUri(image), uri)) SetUri(image, uri);
+        else uri = GetUri(image); // Preserve bindings on a returning/recycled card.
+        Assign(image, States.GetOrCreateValue(image), uri, source);
     }
-    private sealed class State { public CancellationTokenSource? Load; public string? Error, Key; public bool Queued; }
+    private sealed class State { public CancellationTokenSource? Load; public string? Error, Key, SourceUri; public ImageSource? Snapshot; public bool Queued; }
+    internal static bool SameImage(string? first, string? second)
+    {
+        if (string.IsNullOrWhiteSpace(first) || string.IsNullOrWhiteSpace(second)) return false;
+        try { return CacheIdentity(first, 192) == CacheIdentity(second, 192); } catch { return false; }
+    }
+    internal static bool TrySnapshot(Image image, string expected, out ImageSource? source)
+    {
+        source = null;
+        if (!States.TryGetValue(image, out var state) || image.Source == null || !ReferenceEquals(state.Snapshot, image.Source) ||
+            !SameImage(state.SourceUri, GetUri(image)) || !SameImage(GetUri(image), expected)) return false;
+        source = image.Source; return true;
+    }
+    private static void Assign(Image image, State state, string uri, ImageSource source)
+    {
+        image.Source = source; state.Snapshot = source; state.SourceUri = uri;
+    }
+    private static string? BoundCover(Image image) => image.GetBindingExpression(UriProperty) == null ? null : image.DataContext switch
+    { Track t => t.Cover, Playlist p => p.Cover, CatalogItem c => c.Cover, LocalPlaylistCard c => c.Cover, _ => null };
+    internal static bool MatchesContext(Image image, string? uri) => BoundCover(image) is not { } cover || SameImage(cover, uri);
     internal static object Inspect(Image image) => new { uri = GetUri(image), image.IsLoaded, suspended = _suspended, loading = States.TryGetValue(image, out var state) && state.Load != null, error = state?.Error, source = image.Source?.GetType().Name };
     internal static bool IsReady(Image image) => image.Source != null && States.TryGetValue(image, out var state) && state.Key != null && state.Load == null;
     public static void Refresh(Image image) => QueueLoad(image);
@@ -61,6 +80,14 @@ public static class Artwork
         if (!States.TryGetValue(image, out _))
         {
             States.Add(image, new());
+            image.DataContextChanged += (_, _) =>
+            {
+                // Recycled cards can expose their new item before the binding
+                // engine replaces the old URI. Clear that bitmap in this turn.
+                if (BoundCover(image) is not { } cover || GetUri(image) == cover) return;
+                var state = States.GetOrCreateValue(image); state.Load?.Cancel();
+                state.Key = state.SourceUri = null; state.Snapshot = null; image.Source = null;
+            };
             image.Loaded += (_, _) => QueueLoad(image);
             image.Unloaded += (_, _) =>
             {
@@ -79,8 +106,8 @@ public static class Artwork
         // the previous request and bitmap in this turn, including recycled rows.
         var state = States.GetOrCreateValue(image);
         state.Load?.Cancel();
-        state.Key = null;
-        if (!GetPreserveSource(image) || string.IsNullOrWhiteSpace((string?)args.NewValue)) image.Source = null;
+        state.Key = state.SourceUri = null; state.Snapshot = null;
+        image.Source = null;
         QueueLoad(image);
     }
     private static async void Load(Image image)
@@ -95,19 +122,20 @@ public static class Artwork
         if (_suspended || !image.IsLoaded && image.XamlRoot == null || string.IsNullOrWhiteSpace(GetUri(image))) { state.Load = null; return; }
         try
         {
+            var uri = GetUri(image);
+            if (BoundCover(image) is { } expected && uri != expected) return;
             var size = (int)Math.Ceiling(GetSize(image) * (image.XamlRoot?.RasterizationScale ?? 1));
-            var key = CacheDirectory + ":" + CacheIdentity(GetUri(image), size) + ":" + size;
-            if (state.Key == key && image.Source != null) return;
+            var key = CacheDirectory + ":" + CacheIdentity(uri, size) + ":" + size;
+            if (state.Key == key && TrySnapshot(image, uri, out _)) return;
             // Uri changes already clear stale pixels synchronously. A matching
             // cover seeded by a connected animation can stay while it is decoded.
             if (Decoded.TryGetValue(key, out var cached))
             {
-                Decoded[key] = cached with { Used = ++_used }; Touch(cached.Path); image.Source = cached.Bitmap; state.Key = key; return;
+                Decoded[key] = cached with { Used = ++_used }; Touch(cached.Path); Assign(image, state, uri, cached.Bitmap); state.Key = key; return;
             }
             for (var attempt = 0; attempt < 2; attempt++)
             {
-                var url = GetUri(image);
-                var path = await Task.Run(() => GetFileAsync(url, Math.Clamp(size, 64, 1600), load.Token), load.Token);
+                var path = await Task.Run(() => GetFileAsync(uri, Math.Clamp(size, 64, 1600), load.Token), load.Token);
                 load.Token.ThrowIfCancellationRequested();
                 try
                 {
@@ -115,8 +143,8 @@ public static class Artwork
                     using var stream = await (await StorageFile.GetFileFromPathAsync(path)).OpenReadAsync();
                     await bitmap.SetSourceAsync(stream).AsTask(load.Token);
                     load.Token.ThrowIfCancellationRequested();
-                    if (_suspended || !image.IsLoaded && image.XamlRoot == null) return;
-                    image.Source = bitmap;
+                    if (_suspended || !image.IsLoaded && image.XamlRoot == null || !ReferenceEquals(state.Load, load) || GetUri(image) != uri) return;
+                    Assign(image, state, uri, bitmap);
                     state.Key = key;
                     Remember(key, bitmap, path); break;
                 }

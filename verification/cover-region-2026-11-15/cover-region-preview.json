@@ -1,0 +1,176 @@
+{
+  "frames": 369,
+  "finished": true,
+  "stages": [
+    {
+      "time": -0.0,
+      "stage": "begin",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 1.264,
+      "stage": "hover",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 1.986,
+      "stage": "spring",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 2.718,
+      "stage": "connected-open",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 3.668,
+      "stage": "parallax-scroll",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 5.301,
+      "stage": "connected-return",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 6.345,
+      "stage": "different-cover",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 7.21,
+      "stage": "play-sink",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 7.828,
+      "stage": "queue-open",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 8.857,
+      "stage": "queue-close",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 9.748,
+      "stage": "selection-before",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 10.427,
+      "stage": "selection-next",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 11.347,
+      "stage": "previous-left",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 12.107,
+      "stage": "selection-following",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 13.581,
+      "stage": "directional-icons",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 14.185,
+      "stage": "page-forward",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 14.849,
+      "stage": "font-large",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 16.005,
+      "stage": "theme-transition",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 16.986,
+      "stage": "page-back",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 17.645,
+      "stage": "downloads",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 19.202,
+      "stage": "completion-vector",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 19.864,
+      "stage": "discover-cards",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 20.913,
+      "stage": "discover-detail",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 21.74,
+      "stage": "discover-return",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 22.45,
+      "stage": "saved-albums-cards",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 23.574,
+      "stage": "saved-albums-detail",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 24.323,
+      "stage": "saved-albums-return",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 25.136,
+      "stage": "radio-cards",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 26.186,
+      "stage": "radio-detail",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 26.949,
+      "stage": "radio-return",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 27.791,
+      "stage": "artists-cards",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 28.833,
+      "stage": "artists-detail",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 29.746,
+      "stage": "artists-return",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    },
+    {
+      "time": 30.562,
+      "stage": "end",
+      "run": "68d57dd5daf246c8a2440e63c5bdde52"
+    }
+  ]
+}

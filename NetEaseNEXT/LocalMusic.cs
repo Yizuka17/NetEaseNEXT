@@ -111,7 +111,7 @@ public sealed partial class MainWindow
     {
         if (LocalPlaylistGrid.ContainerFromItem(playlist) is DependencyObject container &&
             FindDescendant<Image>(container) is { } image)
-            PrepareCoverTransition("LocalPlaylistCover", image);
+            PrepareCoverTransition("LocalPlaylistCover", image, playlist.Cover);
         else CancelCoverTransitions();
         _localPlaylistId = playlist.Id;
         await NavigateAsync("local-playlist");

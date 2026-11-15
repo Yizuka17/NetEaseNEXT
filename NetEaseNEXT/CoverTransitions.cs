@@ -15,20 +15,27 @@ public sealed partial class MainWindow
     private string? _returnLocalCoverId;
     private long? _returnOnlineCoverId;
     private int _coverAnimationStarts;
-    private Image? _coverTransitionProxy;
-    private void PrepareCoverTransition(string key, Image source)
+    private Border? _coverTransitionProxy;
+    private static FrameworkElement RoundedCoverHost(Image image)
+    {
+        for (DependencyObject? element = VisualTreeHelper.GetParent(image); element != null; element = VisualTreeHelper.GetParent(element))
+            if (element is Border border && border.CornerRadius.TopLeft > 0) return border;
+        return image;
+    }
+    private void PrepareCoverTransition(string key, Image source, string? expectedUri = null)
     {
         CancelCoverTransitions();
-        if (!PlayerAnimationEnabled || source.Source == null || source.XamlRoot == null) return;
-        _navigationCoverSource = source.Source; _navigationCoverKey = key; _navigationCoverUri = Artwork.GetUri(source);
-        var origin = source;
+        if (!PlayerAnimationEnabled || source.XamlRoot == null || !Artwork.TrySnapshot(source, expectedUri ?? Artwork.GetUri(source), out var snapshot)) return;
+        _navigationCoverSource = snapshot; _navigationCoverKey = key; _navigationCoverUri = Artwork.GetUri(source);
+        var origin = RoundedCoverHost(source);
         if (source == ArtistCover && key == "OnlineCoverReturn")
         {
             // The artist header moves between scrolling hosts. Keep the
             // connected animation source independent of that reparenting.
-            var point = source.TransformToVisual(Root).TransformPoint(new(0, 0));
-            _coverTransitionProxy = new Image { Source = source.Source, Width = source.ActualWidth, Height = source.ActualHeight,
-                Stretch = source.Stretch, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top,
+            var point = origin.TransformToVisual(Root).TransformPoint(new(0, 0));
+            _coverTransitionProxy = new Border { Child = new Image { Source = snapshot, Stretch = source.Stretch },
+                Width = origin.ActualWidth, Height = origin.ActualHeight, CornerRadius = (origin as Border)?.CornerRadius ?? new(10),
+                HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top,
                 Margin = new(point.X, point.Y, 0, 0), IsHitTestVisible = false };
             Grid.SetRowSpan(_coverTransitionProxy, 3); Canvas.SetZIndex(_coverTransitionProxy, 20);
             Root.Children.Add(_coverTransitionProxy); Root.UpdateLayout(); origin = _coverTransitionProxy;
@@ -40,12 +47,12 @@ public sealed partial class MainWindow
     {
         var animation = _pendingCoverAnimation;
         if (animation == null) return;
-        if (!PlayerAnimationEnabled) { CancelCoverTransitions(); return; }
+        if (!PlayerAnimationEnabled || !Artwork.SameImage(Artwork.GetUri(target), _navigationCoverUri) || !Artwork.MatchesContext(target, _navigationCoverUri)) { CancelCoverTransitions(); return; }
         if (_navigationCoverSource != null)
             Artwork.Seed(target, _navigationCoverUri ?? "", _navigationCoverSource);
         Root.UpdateLayout();
         _pendingCoverAnimation = null; _navigationCoverSource = null; _navigationCoverKey = null; _navigationCoverUri = null;
-        if (animation.TryStart(target))
+        if (animation.TryStart(RoundedCoverHost(target)))
         {
             _activeCoverAnimation = animation; _coverAnimationStarts++;
             animation.Completed += (_, _) => { if (ReferenceEquals(_activeCoverAnimation, animation)) { _activeCoverAnimation = null; RemoveCoverProxy(); } };

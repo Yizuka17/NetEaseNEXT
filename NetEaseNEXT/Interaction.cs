@@ -138,7 +138,7 @@ public sealed partial class MainWindow
     private void UpdateTrackLocator()
     {
         var match = CurrentTrackInView(_playback.Current);
-        if (match != null && TrackList.SelectedItem == null && !ReferenceEquals(_batchList, TrackList)) TrackList.SelectedItem = match;
+        if (match != null && TrackList.SelectedItem == null && !ReferenceEquals(_batchList, TrackList)) SelectPlayingTrack(TrackList, match);
         var belongs = match != null || _view == "programs" && _playback.Current != null && _playback.Current.PodcastId == _playlistId || _view == "playlist" && _playback.Current is { } current && _playlistTrackIds.Contains(current.Id);
         TrackLocateButton.Visibility = !_hidden && (_view is "playlist" or "programs" or "queue" or "local-playlist") && belongs ? Visibility.Visible : Visibility.Collapsed;
         TrackLocateButton.IsEnabled = _trackLocateLoad == null && _pageLoad == null && (_view != "playlist" || !_playlistRemovals.Any(t => t.PlaylistId == _playlistId));
@@ -185,6 +185,7 @@ public sealed partial class MainWindow
             if (!StillCurrent()) return;
             var match = CurrentTrackInView(current);
             if (match == null) { ShowError("暂时无法定位这首歌曲，请重试"); return; }
+            AllowSelectionReveal(TrackList);
             if (!ReferenceEquals(_batchList, TrackList)) TrackList.SelectedItem = match;
             // Newly appended virtualized rows need a layout frame before their
             // real heights replace ListView's scroll estimates.
@@ -214,6 +215,7 @@ public sealed partial class MainWindow
     }
     private void QueueLocate_Click(object sender, RoutedEventArgs args)
     {
+        AllowSelectionReveal(QueueList);
         var match = _playback.Current == null ? null : _playback.Queue.FirstOrDefault(t => t.Id == _playback.Current.Id);
         if (match == null) return;
         if (!ReferenceEquals(_batchList, QueueList)) QueueList.SelectedItem = match;

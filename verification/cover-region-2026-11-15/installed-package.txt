@@ -1,0 +1,12 @@
+Name        Version Status
+----        ------- ------
+NetEaseNEXT 0.3.3.6     Ok
+
+
+B8AE7592D182785A1C47B5024EE7A8844E347419627E3C21AD533132B7313A19
+{
+    "Count":  80,
+    "Failures":  [
+
+                 ]
+}

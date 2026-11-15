@@ -51,8 +51,9 @@ public sealed partial class MainWindow
             var grid = isPlaylist ? PlaylistGrid : CatalogGrid;
             check(source + " fixture loads its cards", isPlaylist ? Playlists.Count > 0 : Catalog.Count > 0, null);
             object item = isPlaylist ? Playlists[0] : Catalog[0];
+            var expected = isPlaylist ? ((Models.Playlist)item).Cover : ((Models.CatalogItem)item).Cover;
             grid.ScrollIntoView(item);
-            await Wait(() => grid.ContainerFromItem(item) is DependencyObject container && FindDescendant<Image>(container) is { } image && Artwork.IsReady(image));
+            await Wait(() => grid.ContainerFromItem(item) is DependencyObject container && FindDescendant<Image>(container) is { } image && Artwork.IsReady(image) && Artwork.TrySnapshot(image, expected, out _));
             var starts = _coverAnimationStarts;
             if (isPlaylist) await OpenOnlinePlaylistAsync((Models.Playlist)item);
             else await OpenCatalogCardAsync((Models.CatalogItem)item);

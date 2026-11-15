@@ -1,0 +1,29 @@
+{
+  "version": "0.3.3.6",
+  "dllSha256": "B8AE7592D182785A1C47B5024EE7A8844E347419627E3C21AD533132B7313A19",
+  "uiChecks": 162,
+  "installedChecks": 80,
+  "reports": [
+    {
+      "file": "review-local-motion-check.json",
+      "count": 80
+    },
+    {
+      "file": "review-native-feature-check.json",
+      "count": 22
+    },
+    {
+      "file": "review-previous-track-check.json",
+      "count": 12
+    },
+    {
+      "file": "review-song-experience-check.json",
+      "count": 34
+    },
+    {
+      "file": "review-track-locator-check.json",
+      "count": 14
+    }
+  ],
+  "nativeCaptureFrames": 369
+}

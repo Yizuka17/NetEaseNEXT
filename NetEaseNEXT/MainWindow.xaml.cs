@@ -33,7 +33,7 @@ public sealed partial class MainWindow : Window
     private bool _ready, _updating, _exiting, _hidden, _selectingNav, _fullScreen, _followLyrics = true;
     private bool _hasBeenVisible;
     private Track? _displayedTrack;
-    private sealed record Route(string View, long Id, long ArtistId, long PeerId, string Name, string Query, SocialItem? Source = null, string LocalId = "");
+    private sealed record Route(string View, long Id, long ArtistId, long PeerId, string Name, string Query, SocialItem? Source = null, string LocalId = "", string Cover = "");
     private readonly Stack<Route> _history = new();
     private Route? _route;
 
