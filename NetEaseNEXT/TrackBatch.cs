@@ -137,8 +137,7 @@ public sealed partial class MainWindow
         {
             var playingId = _playback.Current?.Id;
             // MediaPlayer raises Changed for state changes as well as track switches.
-            // Avoid setting SelectedItem repeatedly when the playing row is unchanged.
-            if ((QueueList.SelectedItem as Track)?.Id != playingId)
+            if ((_queueSelectionMotion.PlaybackItem as Track)?.Id != playingId || !_queueSelectionMotion.PlaybackSelection)
                 SelectPlayingTrack(QueueList, _playback.Queue.FirstOrDefault(t => t.Id == playingId));
         }
     }

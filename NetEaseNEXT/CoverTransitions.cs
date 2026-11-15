@@ -55,6 +55,9 @@ public sealed partial class MainWindow
         {
             _activeCoverAnimation = animation; _coverAnimationStarts++;
             animation.Completed += (_, _) => { if (ReferenceEquals(_activeCoverAnimation, animation)) { _activeCoverAnimation = null; RemoveCoverProxy(); } };
+            // ConnectedAnimation now owns its frozen visual. The source proxy
+            // must not remain painted at the old card position during flight.
+            if (_coverTransitionProxy != null) Root.Children.Remove(_coverTransitionProxy);
         }
         else { animation.Cancel(); RemoveCoverProxy(); }
     }

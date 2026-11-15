@@ -68,7 +68,7 @@ public sealed partial class MainWindow
         var timer = Stopwatch.StartNew(); await ChangeTransportAsync(NextButton, false); timer.Stop();
         check("Adjacent local playback consumes the prepared decoder", _playback.Current?.Id == tracks[1].Id && _playback.LastPlayUsedPreparedDecoder, new { switchMilliseconds = timer.Elapsed.TotalMilliseconds });
         Root.UpdateLayout(); UpdateSelectionIndicators(false);
-        check("The song list selection follows transport changes", (TrackList.SelectedItem as Track)?.Id == tracks[1].Id && TrackSelectionIndicator.Visibility == Visibility.Visible, null);
+        check("The song list marker follows transport changes without selecting its native row", (_trackSelectionMotion.PlaybackItem as Track)?.Id == tracks[1].Id && TrackList.SelectedItem == null && TrackSelectionIndicator.Visibility == Visibility.Visible, null);
         TrackList.SelectedItem = Tracks.First(t => t.Id == tracks[0].Id);
         TrackList.SelectedItem = Tracks.First(t => t.Id == tracks[2].Id);
         await Task.Delay(IndicatorMotionDuration + TimeSpan.FromMilliseconds(80));

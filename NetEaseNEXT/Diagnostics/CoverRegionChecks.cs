@@ -46,6 +46,12 @@ public sealed partial class MainWindow
         StartCoverTransition(LocalPlaylistCover);
         check("A stale connected snapshot cannot overwrite another cover URI", _pendingCoverAnimation == null && _coverAnimationStarts == starts && Artwork.GetUri(LocalPlaylistCover) == b, null);
         await OpenLocalPlaylistAsync(card); await Wait(() => Artwork.IsReady(LocalPlaylistCover) && _activeCoverAnimation == null);
+        await GoBackAsync(); await Wait(() => _activeCoverAnimation == null);
+        card = LocalPlaylistCards.First(c => c.Id == first.Id);
+        LocalPlaylistGrid.ScrollIntoView(card); await Task.Delay(60); Root.UpdateLayout();
+        await OpenLocalPlaylistAsync(card);
+        check("A flying local cover has no source proxy painted at the original position", _coverTransitionProxy == null || !Root.Children.Contains(_coverTransitionProxy), null);
+        await Wait(() => _activeCoverAnimation == null);
         Artwork.SetUri(LocalPlaylistCover, b);
         check("Detail artwork retires old pixels in the URI-change turn", LocalPlaylistCover.Source == null && !Artwork.TrySnapshot(LocalPlaylistCover, a, out _), null);
         await Wait(() => Artwork.IsReady(LocalPlaylistCover));
@@ -78,7 +84,7 @@ public sealed partial class MainWindow
             _playlistTrackIds = songs.Select(s => s.Id).ToArray();
             Root.UpdateLayout(); var scroll = FindDescendant<ScrollViewer>(TrackList)!; scroll.ChangeView(null, 0, null, true); await Task.Delay(100);
             _trackSelectionMotion.Item = null; _trackSelectionMotion.Y = double.NaN;
-            SelectPlayingTrack(TrackList, songs[1]); await Task.Delay(50); Root.UpdateLayout(); UpdateSelectionIndicators(true);
+            SelectPlayingTrack(TrackList, songs[0]); await Task.Delay(50); Root.UpdateLayout(); UpdateSelectionIndicators(true);
             var rows = SongRowBounds(TrackList, scroll.VerticalOffset);
             check("The indicator viewport starts below cover and playlist controls", rows.Top > PlaylistCoverFrame.ActualHeight && TrackSelectionClip.Clip is RectangleGeometry geometry && Math.Abs(geometry.Rect.Top - rows.Top) < 1, new { rows.Top });
             check("Cross-playlist entrance stays inside the song-row clip", TrackSelectionIndicator.Visibility == Visibility.Visible && TrackSelectionClip.Clip is RectangleGeometry { Rect.Top: > 100 }, null);
@@ -95,7 +101,18 @@ public sealed partial class MainWindow
             }
             finally { scroll.ViewChanged -= Scrolled; }
             await SaveLibraryImageAsync(Root, "shuffle-keeps-view.png");
-            _playback.Mode = "Sequential"; await _playback.PlayAsync(songs[120], songs); await Task.Delay(100);
+            _playback.Mode = "Sequential";
+            var revealRequests = 0;
+            void Reveal(UIElement sender, BringIntoViewRequestedEventArgs args) => revealRequests++;
+            TrackList.BringIntoViewRequested += Reveal;
+            try
+            {
+                await _playback.PlayAsync(songs[0], songs); await Task.Delay(100);
+                check("Visible playback updates only its marker without native row selection", TrackList.SelectedItem == null && ReferenceEquals(_trackSelectionMotion.PlaybackItem, songs[0]) && revealRequests == 0, new { revealRequests });
+                await _playback.PlayAsync(songs[120], songs); await Task.Delay(100);
+                check("Offscreen playback never selects or requests reveal of its native row", TrackList.SelectedItem == null && _trackSelectionMotion.PlaybackSelection && ReferenceEquals(_trackSelectionMotion.PlaybackItem, songs[120]) && revealRequests == 0, new { revealRequests });
+            }
+            finally { TrackList.BringIntoViewRequested -= Reveal; }
             await LocateCurrentAsync(_api);
             check("Explicit locate still reveals the playing row", TrackList.ContainerFromItem(songs[120]) is FrameworkElement row && row.TransformToVisual(TrackList).TransformPoint(new()).Y >= -1 && row.TransformToVisual(TrackList).TransformPoint(new()).Y < TrackList.ActualHeight, null);
         }

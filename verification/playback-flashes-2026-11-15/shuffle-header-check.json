@@ -1,0 +1,13 @@
+{
+  "frames": 935,
+  "largestChangedCoverPixelRatio": 0.0,
+  "pixelThreshold": 25,
+  "crop": [
+    262,
+    148,
+    424,
+    308
+  ],
+  "nativeCapture": "shuffle-native.mp4",
+  "note": "Sampled native frames retain the header cover at its original position while manually starting random playback. This is not an FPS benchmark."
+}

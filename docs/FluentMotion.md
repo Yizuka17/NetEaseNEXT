@@ -21,4 +21,6 @@ FluentMotion.Bounce(icon, new Vector3(6, 0, 0));
 
 [微软 Windows Motion 原则](https://learn.microsoft.com/en-us/windows/apps/design/signature-experiences/motion)；指示条参考原生 NavigationView 的伸展/收缩行为，未复制参考播放器源码或资源。
 
-封面连接动画以包含圆角的 Border 为源和目标，而不是只截取子 Image。返回动画仅注入匹配的位图，不重设卡片的 Uri 绑定；详情封面身份独立保存在路由中，关闭动画也能正确恢复播客封面。播放状态同步使用静默选择，不请求 BringIntoView；定位按钮和键盘导航仍可主动滚动。
+封面连接动画以包含圆角的 Border 为源和目标，而不是只截取子 Image。返回动画仅注入匹配的位图，不重设卡片的 Uri 绑定；详情封面身份独立保存在路由中，关闭动画也能正确恢复播客封面。动画接管独立快照后立即将临时源容器移出可视树，避免在原位置重复绘制。
+
+播放状态仅保存正在播放的条目并移动自定义指示条，不将歌曲赋给原生 SelectedItem，也没有滚动后再恢复的逻辑；原生选择仅用于用户选取、批量操作和显式定位。定位按钮和键盘导航仍可主动滚动。

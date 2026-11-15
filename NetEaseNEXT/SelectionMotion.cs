@@ -21,7 +21,8 @@ public sealed partial class MainWindow
         public int Index = -1;
         public bool Offscreen;
         public bool SilentSelection;
-        public int SelectionVersion;
+        public bool PlaybackSelection;
+        public object? PlaybackItem;
     }
     private readonly SelectionMotionState _trackSelectionMotion = new(), _queueSelectionMotion = new(), _sidebarSelectionMotion = new();
     private readonly HashSet<ScrollViewer> _selectionScrollers = [];
@@ -39,16 +40,15 @@ public sealed partial class MainWindow
                 var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
                 if (state.SilentSelection) args.Handled = true;
             };
-            list.AddHandler(UIElement.PointerPressedEvent, new Microsoft.UI.Xaml.Input.PointerEventHandler((_, _) => AllowSelectionReveal(list)), true);
-            list.AddHandler(UIElement.KeyDownEvent, new Microsoft.UI.Xaml.Input.KeyEventHandler((_, _) => AllowSelectionReveal(list)), true);
             list.SelectionChanged += (_, _) =>
             {
                 var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
+                if (!state.SilentSelection) { state.PlaybackSelection = false; state.PlaybackItem = null; }
                 // Pointer/touch selection can run before ItemClick changes the playing track.
                 // Keep the previous visual position throughout this input event and commit
                 // the selection after the event has finished, rather than letting an
                 // intervening LayoutUpdated snap the marker to its destination.
-                state.PendingItem = list.SelectedItem;
+                state.PendingItem = state.PlaybackSelection ? state.PlaybackItem : list.SelectedItem;
                 if (state.DispatchQueued) return;
                 state.DispatchQueued = true;
                 list.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
@@ -72,24 +72,19 @@ public sealed partial class MainWindow
     private void AllowSelectionReveal(ListView list)
     {
         var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
-        state.SilentSelection = false; state.SelectionVersion++;
+        state.SilentSelection = false;
+        state.PlaybackSelection = false; state.PlaybackItem = null;
     }
     private void SelectPlayingTrack(ListView list, object? item)
     {
-        if (ReferenceEquals(list.SelectedItem, item)) return;
         var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
-        var scroll = FindDescendant<ScrollViewer>(list);
-        var x = scroll?.HorizontalOffset ?? 0; var y = scroll?.VerticalOffset ?? 0;
-        state.SilentSelection = true; var version = ++state.SelectionVersion;
-        list.SelectedItem = item;
-        list.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
-        {
-            if (version != state.SelectionVersion) return;
-            // Selection is bookkeeping, not a request to reveal the playing row.
-            if (scroll != null && (Math.Abs(scroll.VerticalOffset - y) > .5 || Math.Abs(scroll.HorizontalOffset - x) > .5))
-                scroll.ChangeView(x, y, null, true);
-            state.SilentSelection = false;
-        });
+        state.PlaybackSelection = true; state.PlaybackItem = item;
+        // Playback only moves our marker. Native selection can implicitly reveal
+        // a row, so it belongs exclusively to user selection and explicit locate.
+        state.SilentSelection = true;
+        try { list.SelectedItem = null; }
+        finally { state.SilentSelection = false; }
+        UpdateSelectionIndicator(list, true);
     }
     private static (double Top, double Bottom) SongRowBounds(ListView list, double offset)
     {
@@ -164,7 +159,7 @@ public sealed partial class MainWindow
         var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
         // Layout/scroll refreshes must not consume a click's pending transition.
         if (!animate && state.DispatchQueued) return;
-        var item = list.SelectedItem;
+        var item = state.PlaybackSelection ? state.PlaybackItem : list.SelectedItem;
         // WinUI can expose a new SelectedItem to LayoutUpdated BEFORE raising
         // SelectionChanged for pointer/touch input. Never let a non-animated
         // layout pass consume that transition, or the later event sees the

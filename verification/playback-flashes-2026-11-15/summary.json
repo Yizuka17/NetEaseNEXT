@@ -1,0 +1,42 @@
+{
+  "version": "0.3.3.9",
+  "dllSha256": "8B55239043A8B5ED72C431F737A5D238C38A7E87820AE596019CBBA2525808CF",
+  "uiChecks": 166,
+  "installedChecks": 84,
+  "reports": [
+    {
+      "file": "review-local-motion-check.json",
+      "count": 84
+    },
+    {
+      "file": "review-native-feature-check.json",
+      "count": 22
+    },
+    {
+      "file": "review-previous-track-check.json",
+      "count": 12
+    },
+    {
+      "file": "review-song-experience-check.json",
+      "count": 34
+    },
+    {
+      "file": "review-track-locator-check.json",
+      "count": 14
+    }
+  ],
+  "nativeCoverFrames": 509,
+  "manualShuffle": {
+    "frames": 935,
+    "largestChangedCoverPixelRatio": 0.0,
+    "pixelThreshold": 25,
+    "crop": [
+      262,
+      148,
+      424,
+      308
+    ],
+    "nativeCapture": "shuffle-native.mp4",
+    "note": "Sampled native frames retain the header cover at its original position while manually starting random playback. This is not an FPS benchmark."
+  }
+}
