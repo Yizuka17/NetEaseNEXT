@@ -64,7 +64,7 @@ public sealed class PlaybackService : IDisposable
         get => _mode;
         set
         {
-            if (value is not ("Sequential" or "Repeat" or "One" or "Shuffle") || value == _mode) return;
+            if (value is not ("Sequential" or "Repeat" or "One" or "Shuffle" or "Reverse") || value == _mode) return;
             var wasShuffle = _mode == "Shuffle"; _mode = value;
             if (value == "Shuffle") Queue = Shuffle(_orderedQueue);
             else if (wasShuffle) Queue = _orderedQueue.ToArray();
@@ -119,7 +119,7 @@ public sealed class PlaybackService : IDisposable
     }
     private void Dispatch(Action action) { if (!_disposed) _dispatcher.TryEnqueue(() => { if (!_disposed) action(); }); }
     private void OnState(MediaPlaybackSession sender, object args) => Dispatch(() => { if (!ReferenceEquals(sender, _player.PlaybackSession)) return; UpdateTimeline(); Changed?.Invoke(); });
-    private void OnEnded(MediaPlayer sender, object args) => Dispatch(() => { if (!ReferenceEquals(sender, _player)) return; if (Mode == "One" && Current != null) _ = LoadAsync(Current); else _ = NextAsync(Mode != "Sequential"); });
+    private void OnEnded(MediaPlayer sender, object args) => Dispatch(() => { if (!ReferenceEquals(sender, _player)) return; if (Mode == "One" && Current != null) _ = LoadAsync(Current); else _ = NextAsync(Mode is not ("Sequential" or "Reverse")); });
     private void OnFailed(MediaPlayer sender, MediaPlayerFailedEventArgs args) => Dispatch(() =>
     {
         if (!ReferenceEquals(sender, _player)) return;
@@ -185,7 +185,7 @@ public sealed class PlaybackService : IDisposable
         List<Track> Insert(IEnumerable<Track> source)
         {
             var items = source.Where(t => !ids.Contains(t.Id)).ToList();
-            items.InsertRange(Math.Clamp(items.FindIndex(t => t.Id == Current?.Id) + 1, 0, items.Count), added);
+            items.InsertRange(Math.Clamp(items.FindIndex(t => t.Id == Current?.Id) + (Mode == "Reverse" ? 0 : 1), 0, items.Count), Mode == "Reverse" ? added.Reverse() : added);
             return items;
         }
         Queue = Insert(Queue).ToArray(); _orderedQueue = Insert(_orderedQueue);
@@ -198,10 +198,10 @@ public sealed class PlaybackService : IDisposable
         var queue = Queue.ToList();
         var current = Current == null ? -1 : queue.FindIndex(t => t.Id == Current.Id);
         for (var i = queue.Count - 1; i >= 0; i--) if (i != current && queue[i].Id == track.Id) { queue.RemoveAt(i); if (i < current) current--; }
-        queue.Insert(Math.Clamp(current + 1, 0, queue.Count), track);
-        Queue = queue.ToArray(); _index = current;
+        queue.Insert(Math.Clamp(current + (Mode == "Reverse" ? 0 : 1), 0, queue.Count), track);
+        Queue = queue.ToArray(); _index = queue.FindIndex(t => t.Id == Current?.Id);
         var original = _orderedQueue.Where(t => t.Id != track.Id || t.Id == Current?.Id).ToList();
-        original.Insert(Math.Clamp(original.FindIndex(t => t.Id == Current?.Id) + 1, 0, original.Count), track); _orderedQueue = original;
+        original.Insert(Math.Clamp(original.FindIndex(t => t.Id == Current?.Id) + (Mode == "Reverse" ? 0 : 1), 0, original.Count), track); _orderedQueue = original;
         QueueRevision++; Changed?.Invoke(); if (prepare) WarmFollowing();
     }
     public Task PlayNextAsync(Track track)
@@ -251,7 +251,7 @@ public sealed class PlaybackService : IDisposable
         var present = Queue.Select(t => t.Id).ToHashSet();
         _orderedQueue = state.OriginalQueue.Where(t => present.Contains(t.Id)).DistinctBy(t => t.Id).Take(10000).ToArray();
         if (_orderedQueue.Count == 0) _orderedQueue = Queue;
-        _mode = state.Mode is "Shuffle" or "One" or "Repeat" ? state.Mode : "Sequential";
+        _mode = state.Mode is "Shuffle" or "One" or "Repeat" or "Reverse" ? state.Mode : "Sequential";
         Current = Queue.FirstOrDefault(t => t.Id == state.CurrentId);
         if (Current == null && state.Queue.Any(t => t.Id == state.CurrentId && t.IsLocal)) Current = Queue.FirstOrDefault();
         var downloaded = Current == null ? null : Current.IsLocal ? Downloads.FindPath(Current.LocalPath) : Downloads.Find(Current.Id);
@@ -289,7 +289,7 @@ public sealed class PlaybackService : IDisposable
         Prepared? prepared = null;
         try
         {
-            var next = Queue[(_index + 1) % Queue.Count]; var level = _settings.Quality;
+            var next = Queue[(_index + (Mode == "Reverse" ? -1 : 1) + Queue.Count) % Queue.Count]; var level = _settings.Quality;
             var downloaded = next.IsLocal ? null : Downloads.Find(next.Id);
             if (next.IsLocal || downloaded != null)
             {
@@ -546,14 +546,15 @@ public sealed class PlaybackService : IDisposable
     public async Task NextAsync(bool wrap = true)
     {
         if (Queue.Count == 0) return;
-        if (_index + 1 >= Queue.Count && !wrap) { SetPlaying(false); return; }
-        var index = (_index + 1) % Queue.Count;
+        var step = Mode == "Reverse" ? -1 : 1;
+        if ((_index + step >= Queue.Count || _index + step < 0) && !wrap) { SetPlaying(false); return; }
+        var index = (_index + step + Queue.Count) % Queue.Count;
         if (await LoadAsync(Queue[index])) { _index = index; WarmFollowing(); }
     }
     public async Task PreviousAsync()
     {
         if (Queue.Count == 0) return;
-        var index = (_index - 1 + Queue.Count) % Queue.Count;
+        var index = (_index + (Mode == "Reverse" ? 1 : -1) + Queue.Count) % Queue.Count;
         if (await LoadAsync(Queue[index])) { _index = index; WarmFollowing(); }
     }
     private void SetPlaying(bool play) { _desiredPlaying = play; if (_source == null && play && Current is Track restored) { _ = LoadAsync(restored, resume: _restoredPosition > TimeSpan.Zero); return; } if (_source != null) { if (play) _player.Play(); else _player.Pause(); } UpdateTimeline(); Changed?.Invoke(); }

@@ -2267,5 +2267,43 @@
     },
     "crypto": "xeapi",
     "checkToken": true
+  },
+  {
+    "method": "album_sub",
+    "query": {
+      "id": 401,
+      "t": 1
+    },
+    "path": "/api/album/sub",
+    "data": {
+      "id": 401
+    },
+    "crypto": "weapi",
+    "checkToken": false
+  },
+  {
+    "method": "album_sub",
+    "query": {
+      "id": 401,
+      "t": 0
+    },
+    "path": "/api/album/unsub",
+    "data": {
+      "id": 401
+    },
+    "crypto": "weapi",
+    "checkToken": false
+  },
+  {
+    "method": "album_detail_dynamic",
+    "query": {
+      "id": 401
+    },
+    "path": "/api/album/detail/dynamic",
+    "data": {
+      "id": 401
+    },
+    "crypto": "weapi",
+    "checkToken": false
   }
 ]

@@ -58,7 +58,7 @@ public sealed class ApiClient : IDisposable
         }, timeout.Token);
         if (data.TryGetProperty("code", out var code) && int.TryParse(code.ToString(), out var status) && status is not (200 or 800 or 801 or 802 or 803))
             throw new MusicApiException(status, data.Text("msg") is { Length: > 0 } msg ? msg : $"接口返回 {status}，请稍后重试或登录。");
-        if (method is "like" or "playlist_tracks" or "song_order_update" or "playlist_delete" or "playlist_subscribe" or "playlist_create") await Task.Run(() => Cache.Clear(CacheDirectory));
+        if (method is "album_sub" or "like" or "playlist_tracks" or "song_order_update" or "playlist_delete" or "playlist_subscribe" or "playlist_create") await Task.Run(() => Cache.Clear(CacheDirectory));
         return data.Clone();
     }
     internal Task<JsonElement> RemovePlaylistTrackAsync(long playlistId, long ownerId, long accountId, long trackId)

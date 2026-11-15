@@ -20,6 +20,7 @@ namespace NetEaseNEXT;
 public sealed partial class MainWindow
 {
     private readonly CancellationTokenSource _downloads = new();
+    private long _previousPlayingTrackId;
     private int _maxQuality;
     private long _qualityTrack;
     private CancellationTokenSource? _qualityLoad;
@@ -41,7 +42,12 @@ public sealed partial class MainWindow
         if (open) QueueList.ItemsSource = _playback.Queue;
         QueuePane.Visibility = open ? Visibility.Visible : Visibility.Collapsed;
         QueueGlyph.Opacity = open ? .65 : 1;
-        if (open && _playback.Current != null) { QueueList.SelectedItem = _playback.Queue.FirstOrDefault(t => t.Id == _playback.Current?.Id); if (QueueList.SelectedItem != null) QueueList.ScrollIntoView(QueueList.SelectedItem); }
+        if (open && _playback.Current != null)
+        {
+            QueueList.SelectedItem = _playback.Queue.FirstOrDefault(t => t.Id == _playback.Current?.Id);
+            Root.UpdateLayout();
+            if (QueueList.SelectedItem != null) QueueList.ScrollIntoView(QueueList.SelectedItem);
+        }
     }
     private async void QueueTrack_Click(object sender, ItemClickEventArgs args) { if (!ReferenceEquals(_batchList, QueueList)) await _playback.PlayAsync((Track)args.ClickedItem); }
     private async void CurrentArtist_Click(object sender, RoutedEventArgs args) { if (_playback.Current is Track track) await OpenArtistAsync(track); }
@@ -55,6 +61,7 @@ public sealed partial class MainWindow
         var trackChanged = _displayedTrack != _playback.Current;
         if (trackChanged)
         {
+            _previousPlayingTrackId = _displayedTrack?.Id ?? 0;
             _displayedTrack = _playback.Current;
             if (_displayedTrack is Track track)
             {
@@ -165,14 +172,14 @@ public sealed partial class MainWindow
     }
     private void Mode_Click(object sender, RoutedEventArgs args)
     {
-        var modes = new[] { ("Sequential", "顺序播放", "\uE72A"), ("Repeat", "列表循环", "\uE8EE"), ("One", "单曲循环", "\uE8ED"), ("Shuffle", "随机播放", "\uE8B1") };
+        var modes = new[] { ("Sequential", "顺序播放", "\uE72A"), ("Reverse", "倒序播放", "\uE72B"), ("Repeat", "列表循环", "\uE8EE"), ("One", "单曲循环", "\uE8ED"), ("Shuffle", "随机播放", "\uE8B1") };
         var index = (Array.FindIndex(modes, m => m.Item1 == _playback.Mode) + 1) % modes.Length;
         var (mode, name, glyph) = modes[index]; _playback.Mode = mode; ModeIcon.Glyph = glyph;
         ToolTipService.SetToolTip(ModeButton, name); ShowPlayerMessage(name);
     }
     private void UpdateModeIcon()
     {
-        var (label, glyph) = _playback.Mode switch { "Repeat" => ("列表循环", "\uE8EE"), "One" => ("单曲循环", "\uE8ED"), "Shuffle" => ("随机播放", "\uE8B1"), _ => ("顺序播放", "\uE72A") };
+        var (label, glyph) = _playback.Mode switch { "Reverse" => ("倒序播放", "\uE72B"), "Repeat" => ("列表循环", "\uE8EE"), "One" => ("单曲循环", "\uE8ED"), "Shuffle" => ("随机播放", "\uE8B1"), _ => ("顺序播放", "\uE72A") };
         ModeIcon.Glyph = glyph; ToolTipService.SetToolTip(ModeButton, label);
     }
     private readonly DispatcherTimer _playerNoticeTimer = new() { Interval = TimeSpan.FromSeconds(2.5) };

@@ -17,6 +17,7 @@ public sealed class SettingsStore
     public string Backdrop { get; set; } = "Mica";
     public string Theme { get; set; } = "Default";
     public bool Animations { get; set; } = true;
+    public string CommentSort { get; set; } = "Hot";
     public double Volume { get; set; } = .65;
     public string Quality { get; set; } = "exhigh";
     public string DownloadQuality { get; set; } = "lossless";

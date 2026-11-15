@@ -5,7 +5,7 @@ namespace NetEaseNEXT.Api;
 public sealed record ApiRequest(string Path, Dictionary<string, object?> Data, string Crypto = "eapi", bool CheckToken = false);
 public static class ApiEndpoints
 {
-    public static readonly HashSet<string> Writes = ["like", "playlist_tracks", "song_order_update", "playlist_delete", "playlist_subscribe", "playlist_create", "resource_like", "comment", "comment_like", "send_text", "send_song", "send_album", "send_playlist", "msg_read_all", "share_resource"];
+    public static readonly HashSet<string> Writes = ["album_sub", "like", "playlist_tracks", "song_order_update", "playlist_delete", "playlist_subscribe", "playlist_create", "resource_like", "comment", "comment_like", "send_text", "send_song", "send_album", "send_playlist", "msg_read_all", "share_resource"];
     private static readonly string[] Prefixes = ["R_SO_4_", "R_MV_5_", "A_PL_0_", "R_AL_3_", "A_DJ_1_", "R_VI_62_", "A_EV_2_", "A_DR_14_"];
     public static ApiRequest Create(string method, JsonElement query)
     {
@@ -37,6 +37,8 @@ public static class ApiEndpoints
             case "artist_album": return R("/api/artist/albums/" + S("id"), Page(), "weapi");
             case "album": return R("/api/v1/album/" + S("id"), null, "weapi");
             case "album_sublist": return R("/api/album/sublist", Page(25), "weapi");
+            case "album_detail_dynamic": return R("/api/album/detail/dynamic", new { id = V("id") }, "weapi");
+            case "album_sub": return R("/api/album/" + (N("t") == 1 ? "sub" : "unsub"), new { id = V("id") }, "weapi");
             case "song_music_detail": return R("/api/song/music/detail/get", new { songId = V("id") });
             case "vip_info": return R("/api/music-vip-membership/front/vip/info", new { userId = V("uid", "") }, "weapi");
             case "event": return R("/api/v1/event/get", new { pagesize = V("pagesize", 20), lasttime = V("lasttime", -1) }, "weapi");

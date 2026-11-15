@@ -3,6 +3,12 @@ using System.Text.Json.Serialization;
 
 namespace NetEaseNEXT.Models;
 
+public sealed class SongArtist(long id, string name)
+{
+    public long Id { get; set; } = id;
+    public string Name { get; set; } = name;
+}
+
 public sealed class Track(long id, string title, string artist, string album, string cover, long duration)
 {
     public long Id { get; } = id;
@@ -11,6 +17,7 @@ public sealed class Track(long id, string title, string artist, string album, st
     public string Album { get; } = album;
     public string Cover { get; } = cover;
     public long Duration { get; } = duration;
+    public long PodcastId { get; set; }
     public string LocalPath { get; set; } = "";
     public long SourceSongId { get; set; }
     public string SourceLevel { get; set; } = "";
@@ -22,6 +29,7 @@ public sealed class Track(long id, string title, string artist, string album, st
     [JsonIgnore] public string Thumbnail => Cover.Length == 0 ? "" : Cover + (Cover.Contains('?') ? "&" : "?") + "param=192y192";
     [JsonInclude] public long ArtistId { get; private set; }
     [JsonInclude] public long AlbumId { get; private set; }
+    [JsonInclude] public SongArtist[] Artists { get; private set; } = [];
     internal void SetLocalSource(long id, string level, long size, long modified, long artistId = 0, long albumId = 0)
     {
         SourceSongId = id; SourceLevel = level; SourceFileSize = size; SourceModifiedUtcTicks = modified; ArtistId = artistId; AlbumId = albumId;
@@ -31,7 +39,7 @@ public sealed class Track(long id, string title, string artist, string album, st
         try { var file = new FileInfo(LocalPath); return IsLocal && SourceSongId > 0 && file.Exists && file.Length == SourceFileSize && file.LastWriteTimeUtc.Ticks == SourceModifiedUtcTicks; }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException) { return false; }
     }
-    internal Track OnlineSource(long id) => new(id, Title, Artist, Album, Cover, Duration) { ArtistId = ArtistId, AlbumId = AlbumId };
+    internal Track OnlineSource(long id) => new(id, Title, Artist, Album, Cover, Duration) { ArtistId = ArtistId, AlbumId = AlbumId, Artists = Artists };
     public override string ToString() => Title;
     public static Track FromJson(JsonElement song)
     {
@@ -41,7 +49,7 @@ public sealed class Track(long id, string title, string artist, string album, st
             string.Join(" / ", artists.EnumerateArray().Select(a => a.Text("name"))),
             album.Text("name"), album.Text("picUrl"),
             song.TryGetProperty("dt", out var dt) ? dt.GetInt64() : song.GetProperty("duration").GetInt64())
-        { ArtistId = artists.GetArrayLength() > 0 ? artists[0].Number("id") : 0, AlbumId = album.Number("id") };
+        { ArtistId = artists.GetArrayLength() > 0 ? artists[0].Number("id") : 0, AlbumId = album.Number("id"), Artists = artists.EnumerateArray().Select(a => new SongArtist(a.Number("id"), a.Text("name"))).ToArray() };
     }
 }
 public sealed class Playlist(long id, string name, string cover, string description)

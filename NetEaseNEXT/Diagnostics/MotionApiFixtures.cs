@@ -1,4 +1,5 @@
 using System.Text.Json;
+using NetEaseNEXT.Models;
 using NetEaseNEXT.Services;
 
 namespace NetEaseNEXT;
@@ -16,6 +17,8 @@ internal static class MotionApiFixtures
             object body = method switch
             {
                 "personalized" => new { code = 200, result = playlists },
+                "cloudsearch" => new { code = 200, result = new { songs = Enumerable.Range((int)p.Number("offset"), p.Number("offset") < 100 ? 50 : 0).Select(i => new { id = i + 1, name = "搜索歌曲 " + i, ar = new[] { new { id = 301, name = "测试歌手" } }, al = new { id = 401, name = "测试专辑", picUrl = cover }, dt = 60000 }).ToArray() } },
+                "album_detail_dynamic" => new { code = 200, isSub = false },
                 "user_playlist" => new { code = 200, playlist = playlists },
                 "playlist_detail" => new { code = 200, playlist = new { id = 101, name = "在线晴昼", coverImgUrl = cover, description = "", tags = Array.Empty<string>(), trackCount = 3, subscribedCount = 0, creator = new { userId = 42, nickname = "测试用户" }, trackIds = songs.Select(s => new { s.id }).ToArray() } },
                 "playlist_track_all" or "song_detail" => new { code = 200, songs, privileges = Array.Empty<object>() },

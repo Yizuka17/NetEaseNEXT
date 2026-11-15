@@ -113,7 +113,7 @@ public sealed partial class MainWindow
             check("Comment close and inline composer fit inside the rendered dialog", close.ActualWidth > 0 && send.ActualHeight > 0 && closePoint.X + close.ActualWidth <= dialog.ActualWidth && sendPoint.Y + send.ActualHeight <= dialog.ActualHeight, new { closePoint, sendPoint, dialog.ActualWidth, dialog.ActualHeight });
             check("Comment send has a 44 DIP touch target", send.ActualHeight >= 44, new { send.ActualHeight });
             check("Comments offer latest/popular sorting and an inline disabled send button", sort.Items.Count == 2 && !send.IsEnabled && dialog.PrimaryButtonText.Length == 0, null);
-            var reads = commentsApi.RequestCount; sort.SelectedIndex = 1; await Wait(() => commentsApi.RequestCount > reads);
+            var reads = commentsApi.RequestCount; sort.SelectedIndex = sort.SelectedIndex == 1 ? 0 : 1; await Wait(() => commentsApi.RequestCount > reads);
             input.Text = "发送成功后立即显示"; await Wait(() => send.IsEnabled); Invoke(send); await Wait(() => posted && input.Text.Length == 0 && send.IsEnabled == false);
             check("Successful comments stay visible during upstream read-after-write delay", list.Items.OfType<SocialItem>().Any(i => i.CommentId == 99 && i.Text == "发送成功后立即显示"), null);
             await SaveLibraryImageAsync(dialog, "native-comments-light.png"); _settings.Theme = "Dark"; ApplyAppearance(); await SaveLibraryImageAsync(dialog, "native-comments-dark.png");

@@ -36,7 +36,7 @@ public sealed partial class MainWindow
         _pageInterrupted = false;
         StopLocalMonitoring();
         _lyricFollowTimer.Stop();
-        _trackLocateLoad?.Cancel(); _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _coverLoad?.Cancel();
+        _playlistQueueLoad?.Cancel(); _trackLocateLoad?.Cancel(); _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _coverLoad?.Cancel();
         EndTrackBatch(); ResetTrackGesture();
         if (_fullScreen && view != "playing") SetFullScreen(false);
         if (view != _view && (view == "playing" || _view == "playing"))
@@ -66,6 +66,7 @@ public sealed partial class MainWindow
         UpdateLayout();
         PlaylistDetails.Visibility = view is "playlist" or "album" or "programs" ? Visibility.Visible : Visibility.Collapsed;
         PlaylistSubscribeButton.Visibility = PlaylistCommentsButton.Visibility = view == "playlist" ? Visibility.Visible : Visibility.Collapsed;
+        _albumSubscribed = _albumSubscribeKnown = false; UpdateAlbumSubscribe();
         CreatePlaylistButton.Visibility = view == "library" ? Visibility.Visible : Visibility.Collapsed;
         if (view is not ("playlist" or "album" or "programs")) { Artwork.SetUri(PlaylistDetailCover, ""); PlaylistDescription.Text = ""; }
         else { Artwork.SetUri(PlaylistDetailCover, _navigationCoverKey == "PlaylistCover" ? _navigationCoverUri ?? "" : ""); PlaylistDetailTitle.Text = _playlistName; PlaylistDescription.Text = PlaylistTags.Text = PlaylistCreator.Text = ""; }
@@ -185,16 +186,13 @@ public sealed partial class MainWindow
                             PlaylistDescription.Text = metadata.Text("description");
                         }
                         page = album.GetProperty("songs").EnumerateArray().Select(Track.FromJson).ToList();
+                        await LoadAlbumSubscriptionAsync(_api, _playlistId, load.Token);
                     }
                     else
                     {
                         var programs = await _api.CallAsync("dj_program", new { rid = _playlistId, limit = 50, offset = _offset }, load.Token);
                         load.Token.ThrowIfCancellationRequested();
-                        foreach (var p in programs.GetProperty("programs").EnumerateArray())
-                        {
-                            var song = p.GetProperty("mainSong");
-                            page.Add(new Track(song.Number("id"), p.Text("name"), p.TryGetProperty("dj", out var dj) ? dj.Text("nickname") : "", _playlistName, p.Text("coverUrl"), p.Number("duration")));
-                        }
+                        page = ParseProgramTracks(programs, _playlistName, _playlistId);
                         if (!append && Artwork.GetUri(PlaylistDetailCover).Length == 0 && page.FirstOrDefault() is { } firstProgram) Artwork.SetUri(PlaylistDetailCover, firstProgram.Cover);
                     }
                     var limit = _view == "playlist" ? 10000 : 1000;
@@ -214,7 +212,7 @@ public sealed partial class MainWindow
         }
         catch (OperationCanceledException) { }
         catch (Exception ex) { if (!load.IsCancellationRequested) { ShowError(ex.Message); if (Playlists.Count + Tracks.Count + Catalog.Count + SocialItems.Count == 0) ShowEmpty("加载失败"); } }
-        finally { if (ReferenceEquals(_pageLoad, load)) { SetBusy(false); _pageLoad = null; UpdateTrackLocator(); QueueAutoPage(); } }
+        finally { if (ReferenceEquals(_pageLoad, load)) { SetBusy(false); _pageLoad = null; UpdateTrackLocator(); UpdateAlbumSubscribe(); QueueAutoPage(); } }
     }
     private bool RequireLogin() { if (_api.HasSession) return true; ShowEmpty("请先登录", "登录"); return false; }
     private async void Search_Submitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args) { if (string.IsNullOrWhiteSpace(args.QueryText)) return; _query = args.QueryText.Trim(); await NavigateAsync("search"); }
@@ -245,12 +243,43 @@ public sealed partial class MainWindow
     {
         if (ReferenceEquals(_batchList, TrackList)) return;
         var track = (Track)args.ClickedItem;
+
         await ActivateTrackAsync(track);
     }
     private async void PlayAll_Click(object sender, RoutedEventArgs args)
+        => await PlayAllAsync();
+    private async Task PlayAllAsync(ApiClient? source = null)
     {
-        if (Tracks.FirstOrDefault() is not Track track) return;
-        try { await PlayContextImmediatelyAsync(track); }
+        if (Tracks.Count == 0) return;
+        try
+        {
+            if (_view == "playlist" && _playlistTrackIds.Length > 0)
+            {
+                var api = source ?? _api; var route = _route; var ids = _playlistTrackIds; var session = api.Cookie;
+                var start = _playback.Mode == "Shuffle" ? Random.Shared.Next(ids.Length) : _playback.Mode == "Reverse" ? ids.Length - 1 : 0;
+                var initial = Tracks.ToDictionary(t => t.Id);
+                var nearby = ids.Skip(Math.Max(0, start - 2)).Take(5).Where(id => !initial.ContainsKey(id)).ToArray();
+                if (nearby.Length > 0)
+                {
+                    _playlistQueueLoad?.Cancel(); using var load = new CancellationTokenSource(TimeSpan.FromSeconds(30)); _playlistQueueLoad = load;
+                    try
+                    {
+                        var details = await api.CallCachedAsync("song_detail", new { ids = string.Join(',', nearby) }, load.Token);
+                        load.Token.ThrowIfCancellationRequested();
+                        foreach (var song in details.GetProperty("songs").EnumerateArray().Select(Track.FromJson)) initial[song.Id] = song;
+                    }
+                    finally { if (ReferenceEquals(_playlistQueueLoad, load)) _playlistQueueLoad = null; }
+                }
+                if (_hidden || !ReferenceEquals(route, _route) || api.Cookie != session) return;
+                if (!initial.TryGetValue(ids[start], out var first)) { ShowError("暂时无法播放这首歌曲，请重试"); return; }
+                await PlayContextImmediatelyAsync(first, ids.Where(initial.ContainsKey).Select(id => initial[id]).ToList(), api);
+                return;
+            }
+            var context = await GetPlaybackContextAsync();
+            if (context.Count == 0 || _hidden) return;
+            var index = _playback.Mode == "Shuffle" ? Random.Shared.Next(context.Count) : _playback.Mode == "Reverse" ? context.Count - 1 : 0;
+            await _playback.PlayAsync(context[index], context);
+        }
         catch (OperationCanceledException) { }
         catch (Exception ex) { ShowError(ex.Message); }
     }
@@ -281,5 +310,5 @@ public sealed partial class MainWindow
     private async void ContextPlay_Click(object sender, RoutedEventArgs args) { if (((FrameworkElement)sender).DataContext is Track track) await _playback.PlayAsync(track); }
     private async void ContextArtist_Click(object sender, RoutedEventArgs args) { if (((FrameworkElement)sender).DataContext is Track track) await OpenArtistAsync(track); }
     private async void ContextAlbum_Click(object sender, RoutedEventArgs args) { if (((FrameworkElement)sender).DataContext is Track track && track.AlbumId > 0) { _playlistId = track.AlbumId; _playlistName = track.Album; await NavigateAsync("album"); } }
-    private async Task OpenArtistAsync(Track track) { if (track.ArtistId <= 0) return; _artistId = track.ArtistId; _playlistName = track.Artist; await NavigateAsync("artist"); }
+    private async Task OpenArtistAsync(Track track) => await ShowTrackArtistsAsync(track);
 }

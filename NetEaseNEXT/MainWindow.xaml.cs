@@ -185,12 +185,12 @@ public sealed partial class MainWindow : Window
             _lyricFollowTimer.Stop(); StopLocalMonitoring();
             if (_hasBeenVisible) _startup?.Cancel();
             SavePlaybackState(); _accountLoad?.Cancel(); _accountAvatarLoad?.Cancel(); _metadataWarmLoad?.Cancel();
-            _inboxTimer.Stop(); _inboxCheck?.Cancel(); FlushAppearanceSettings(); _commentsLoad?.Cancel(); _playlistEditLoad?.Cancel(); _dialog?.Hide();
+            _inboxTimer.Stop(); _inboxCheck?.Cancel(); FlushAppearanceSettings(); _songDetailLoad?.Cancel(); _commentsLoad?.Cancel(); _playlistEditLoad?.Cancel(); _dialog?.Hide();
             ResetTrackGesture(); StopInterfaceMotion(); RestorePresenterTransition(); StopSettingsIconRotation();
             EndTrackBatch(); _playerNoticeTimer.Stop(); PlayerNotice.IsOpen = false; QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null;
             _songStatsLoad?.Cancel(); _qualityLoad?.Cancel();
             if (_pageLoad != null) _pageInterrupted = true;
-            _trackLocateLoad?.Cancel(); _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _loginLoad?.Cancel(); _coverLoad?.Cancel();
+            _playlistQueueLoad?.Cancel(); _trackLocateLoad?.Cancel(); _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _loginLoad?.Cancel(); _coverLoad?.Cancel();
             // Keep completed UI data and decoded images. Hiding should stop work,
             // not force network requests, decoding and layout on every restore.
             if (_lyrics.Count == 0) _lyricId = 0;
@@ -237,7 +237,7 @@ public sealed partial class MainWindow : Window
         _lyricFollowTimer.Stop();
         SaveDownloads();
         SavePlaybackState(); _playbackSaveTimer.Stop(); _accountLoad?.Cancel(); _accountAvatarLoad?.Cancel(); _metadataWarmLoad?.Cancel();
-        _exiting = true; _trackLocateLoad?.Cancel(); _windowTransitionTimer.Stop(); CancelCoverTransitions(); _timer.Stop(); _playerNoticeTimer.Stop(); _appearanceTimer.Stop(); _inboxTimer.Stop(); _inboxCheck?.Cancel(); _readAllLoad?.Cancel(); _commentsLoad?.Cancel(); _playlistEditLoad?.Cancel(); _playlistQueueLoad?.Cancel(); _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _loginLoad?.Cancel(); _coverLoad?.Cancel(); _downloads.Cancel();
+        _exiting = true; _trackLocateLoad?.Cancel(); _windowTransitionTimer.Stop(); CancelCoverTransitions(); _timer.Stop(); _playerNoticeTimer.Stop(); _appearanceTimer.Stop(); _inboxTimer.Stop(); _inboxCheck?.Cancel(); _readAllLoad?.Cancel(); _songDetailLoad?.Cancel(); _commentsLoad?.Cancel(); _playlistEditLoad?.Cancel(); _playlistQueueLoad?.Cancel(); _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _loginLoad?.Cancel(); _coverLoad?.Cancel(); _downloads.Cancel();
         _themeSettings.ColorValuesChanged -= SystemColorsChanged;
         _playback.Changed -= Playback_Changed; _playback.Error -= ShowError;
         _songStatsLoad?.Cancel(); _qualityLoad?.Cancel();

@@ -1,0 +1,33 @@
+{
+  "version": "0.3.3.4",
+  "dllSha256": "E583502CC56F1A7A3369A764E2059FD7F272F08A8EE0DC27B7838445B5E9B42B",
+  "uiChecks": 147,
+  "apiChecks": 76,
+  "reports": [
+    {
+      "file": "review-local-motion-check.json",
+      "count": 65,
+      "passed": true
+    },
+    {
+      "file": "review-native-feature-check.json",
+      "count": 22,
+      "passed": true
+    },
+    {
+      "file": "review-previous-track-check.json",
+      "count": 12,
+      "passed": true
+    },
+    {
+      "file": "review-song-experience-check.json",
+      "count": 34,
+      "passed": true
+    },
+    {
+      "file": "review-track-locator-check.json",
+      "count": 14,
+      "passed": true
+    }
+  ]
+}

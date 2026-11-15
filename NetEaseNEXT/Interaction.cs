@@ -16,20 +16,22 @@ public sealed partial class MainWindow
     private async Task<List<Track>> GetPlaybackContextAsync()
     {
         var context = Tracks.ToList();
-        if (_view != "playlist") return context;
+        if (_view is not ("playlist" or "programs")) return context;
+        var view = _view;
         var id = _playlistId; _playlistQueueLoad?.Cancel();
         using var load = new CancellationTokenSource(TimeSpan.FromMinutes(2)); _playlistQueueLoad = load;
         try
         {
             var offset = context.Count;
-            while (offset % 100 == 0 && offset > 0)
+            var size = view == "programs" ? 50 : 100;
+            while (offset % size == 0 && offset > 0 && offset < 10000)
             {
-                var page = await _api.PlaylistTracksAsync(id, offset, load.Token);
+                var page = view == "programs" ? ParseProgramTracks(await _api.CallAsync("dj_program", new { rid = id, limit = 50, offset }, load.Token), _playlistName, id) : await _api.PlaylistTracksAsync(id, offset, load.Token);
                 load.Token.ThrowIfCancellationRequested(); context.AddRange(page); offset += page.Count;
-                if (page.Count < 100) break;
+                if (page.Count < size) break;
             }
             load.Token.ThrowIfCancellationRequested();
-            if (_view != "playlist" || _playlistId != id || _hidden) throw new OperationCanceledException();
+            if (_view != view || _playlistId != id || _hidden) throw new OperationCanceledException();
             return context.DistinctBy(t => t.Id).ToList();
         }
         finally { if (ReferenceEquals(_playlistQueueLoad, load)) _playlistQueueLoad = null; }
@@ -77,9 +79,9 @@ public sealed partial class MainWindow
         catch (OperationCanceledException) { }
         catch (Exception ex) { ShowError(ex.Message); }
     }
-    private async Task PlayContextImmediatelyAsync(Track track)
+    private async Task PlayContextImmediatelyAsync(Track track, List<Track>? preparedContext = null, ApiClient? source = null)
     {
-        var initial = Tracks.ToList(); var playlist = _view == "playlist" ? _playlistId : 0;
+        var initial = preparedContext ?? Tracks.ToList(); var playlist = _view == "playlist" ? _playlistId : 0;
         var trackIds = _playlistTrackIds.ToArray();
         _playlistQueueLoad?.Cancel();
         await _playback.PlayAsync(track, initial);
@@ -88,15 +90,13 @@ public sealed partial class MainWindow
         using var load = new CancellationTokenSource(TimeSpan.FromMinutes(2)); _playlistQueueLoad = load;
         try
         {
-            var complete = initial; var offset = complete.Count;
-            while (offset < trackIds.Length)
+            var complete = initial.ToDictionary(t => t.Id); var missing = trackIds.Where(id => !complete.ContainsKey(id)).ToArray();
+            foreach (var batch in missing.Chunk(500))
             {
-                var batch = trackIds.Skip(offset).Take(500).ToArray();
-                var details = await _api.CallCachedAsync("song_detail", new { ids = string.Join(',', batch) }, load.Token); load.Token.ThrowIfCancellationRequested();
-                var songs = details.GetProperty("songs").EnumerateArray().Select(Track.FromJson).ToDictionary(t => t.Id);
-                complete.AddRange(batch.Where(songs.ContainsKey).Select(id => songs[id])); offset += batch.Length;
+                var details = await (source ?? _api).CallCachedAsync("song_detail", new { ids = string.Join(',', batch) }, load.Token); load.Token.ThrowIfCancellationRequested();
+                foreach (var song in details.GetProperty("songs").EnumerateArray().Select(Track.FromJson)) complete[song.Id] = song;
             }
-            _playback.CompleteQueue(complete, revision);
+            _playback.CompleteQueue(trackIds.Where(complete.ContainsKey).Select(id => complete[id]), revision);
         }
         catch (OperationCanceledException) { }
         catch (Exception ex) { ShowError(ex.Message); }
@@ -139,8 +139,8 @@ public sealed partial class MainWindow
     {
         var match = CurrentTrackInView(_playback.Current);
         if (match != null && TrackList.SelectedItem == null && !ReferenceEquals(_batchList, TrackList)) TrackList.SelectedItem = match;
-        var belongs = match != null || _view == "playlist" && _playback.Current is { } current && _playlistTrackIds.Contains(current.Id);
-        TrackLocateButton.Visibility = !_hidden && (_view is "playlist" or "queue" or "local-playlist") && belongs ? Visibility.Visible : Visibility.Collapsed;
+        var belongs = match != null || _view == "programs" && _playback.Current != null && _playback.Current.PodcastId == _playlistId || _view == "playlist" && _playback.Current is { } current && _playlistTrackIds.Contains(current.Id);
+        TrackLocateButton.Visibility = !_hidden && (_view is "playlist" or "programs" or "queue" or "local-playlist") && belongs ? Visibility.Visible : Visibility.Collapsed;
         TrackLocateButton.IsEnabled = _trackLocateLoad == null && _pageLoad == null && (_view != "playlist" || !_playlistRemovals.Any(t => t.PlaylistId == _playlistId));
         QueueLocateButton.Visibility = _playback.Current != null ? Visibility.Visible : Visibility.Collapsed;
     }
@@ -148,7 +148,7 @@ public sealed partial class MainWindow
     private async void LocateCurrent_Click(object sender, RoutedEventArgs args) => await LocateCurrentAsync(_api);
     private async Task LocateCurrentAsync(ApiClient api)
     {
-        if (_hidden || _trackLocateLoad != null || _pageLoad != null || _view == "playlist" && _playlistRemovals.Any(t => t.PlaylistId == _playlistId) || _playback.Current is not { } current || _view is not ("playlist" or "queue" or "local-playlist")) return;
+        if (_hidden || _trackLocateLoad != null || _pageLoad != null || _view == "playlist" && _playlistRemovals.Any(t => t.PlaylistId == _playlistId) || _playback.Current is not { } current || _view is not ("playlist" or "programs" or "queue" or "local-playlist")) return;
         using var load = new CancellationTokenSource(); _trackLocateLoad = load;
         var route = _route; var playlist = _playlistId; var ids = _playlistTrackIds; var session = _api.Cookie;
         var target = Array.IndexOf(ids, current.Id);
@@ -157,6 +157,15 @@ public sealed partial class MainWindow
         UpdateTrackLocator();
         try
         {
+            while (CurrentTrackInView(current) == null && _view == "programs" && _tracksMore && StillCurrent())
+            {
+                var offset = _offset;
+                var result = await api.CallAsync("dj_program", new { rid = playlist, limit = 50, offset }, load.Token);
+                load.Token.ThrowIfCancellationRequested(); if (!StillCurrent() || offset != _offset) return;
+                var page = ParseProgramTracks(result, _playlistName, playlist);
+                var loaded = Tracks.Select(t => t.Id).ToHashSet(); foreach (var song in page) if (loaded.Add(song.Id)) Tracks.Add(song);
+                _offset += page.Count; _tracksMore = page.Count == 50 && _offset < 10000; TrackCount.Text = $"{Tracks.Count} 首";
+            }
             while (!Tracks.Any(t => t.Id == current.Id) && _view == "playlist" && target >= _offset && StillCurrent())
             {
                 SetBusy(true);

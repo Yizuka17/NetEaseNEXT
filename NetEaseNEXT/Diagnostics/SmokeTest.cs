@@ -36,6 +36,10 @@ public sealed partial class MainWindow
         try
         {
             Check("XAML root loaded", Root.IsLoaded);
+            if (Environment.GetCommandLineArgs().Contains("--song-experience-check"))
+            {
+                await RunSongExperienceChecksAsync(Check); return;
+            }
             if (Environment.GetCommandLineArgs().Contains("--local-motion-check"))
             {
                 await RunLocalMotionChecksAsync(Check); return;
@@ -607,7 +611,7 @@ public sealed partial class MainWindow
         {
             _settings.ReadInboxItems = oldReadItems; _settings.ReadInboxOffsets = oldReadOffsets; _settings.InboxCounterSnapshots = oldCounterSnapshots; _settings.AcknowledgedInboxItems = oldAcknowledged; _settings.Quality = oldQualitySetting; _settings.Volume = oldVolume; _settings.Backdrop = oldBackdrop; _settings.Theme = oldTheme; _settings.FontFamily = oldFont;
             Directory.CreateDirectory(SettingsStore.DataDirectory);
-            await File.WriteAllTextAsync(Path.Combine(SettingsStore.DataDirectory, "smoke-test.json"), JsonSerializer.Serialize(results, new JsonSerializerOptions { WriteIndented = true }));
+            await File.WriteAllTextAsync(Path.Combine(SettingsStore.DataDirectory, "smoke-test.json"), JsonSerializer.Serialize(results, new JsonSerializerOptions { WriteIndented = true, NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowNamedFloatingPointLiterals }));
             ExitApp();
         }
     }

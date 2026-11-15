@@ -20,7 +20,7 @@ public sealed partial class MainWindow
         var input = new TextBox { PlaceholderText = "评论", MaxLength = 1000, AcceptsReturn = true, TextWrapping = TextWrapping.Wrap, MinHeight = 44, MaxHeight = 100 };
         var error = new TextBlock { TextWrapping = TextWrapping.Wrap };
         var hint = new TextBlock { Text = source.CommentId > 0 ? "回复评论" : "", Opacity = .65, VerticalAlignment = VerticalAlignment.Center };
-        var sort = new ComboBox { ItemsSource = new[] { "最新", "最热" }, SelectedIndex = 0, MinWidth = 100, HorizontalAlignment = HorizontalAlignment.Left };
+        var sort = new ComboBox { ItemsSource = new[] { "最新", "最热" }, SelectedIndex = _settings.CommentSort == "Latest" ? 0 : 1, MinWidth = 100, HorizontalAlignment = HorizontalAlignment.Left };
         var send = new Button { Content = "发送", Style = (Style)Application.Current.Resources["AccentButtonStyle"], MinHeight = 44, MinWidth = 64, IsEnabled = false, VerticalAlignment = VerticalAlignment.Bottom };
         var close = new Button { Content = IconFonts.Create("\uE711"), Style = (Style)Application.Current.Resources["BareButtonStyle"] };
         Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(close, "关闭评论");
@@ -107,7 +107,7 @@ public sealed partial class MainWindow
         }
         list.Loaded += (_, _) => { if (FindDescendant<ScrollViewer>(list) is { } scroll) scroll.ViewChanged += (_, _) => AtBottom(); };
         list.AddHandler(UIElement.PointerWheelChangedEvent, new Microsoft.UI.Xaml.Input.PointerEventHandler((_, _) => AtBottom()), true);
-        retry.Click += async (_, _) => await Fetch(); sort.SelectionChanged += async (_, _) => await Fetch(true);
+        retry.Click += async (_, _) => await Fetch(); sort.SelectionChanged += async (_, _) => { _settings.CommentSort = sort.SelectedIndex == 0 ? "Latest" : "Hot"; _settings.Save(); await Fetch(true); };
         cancelReply.Click += (_, _) => { replyId = 0; hint.Text = ""; cancelReply.Visibility = Visibility.Collapsed; };
         input.TextChanged += (_, _) => send.IsEnabled = !sending && !string.IsNullOrWhiteSpace(input.Text);
         send.Click += async (_, _) =>

@@ -24,6 +24,7 @@ public sealed partial class MainWindow
         var track = _playback.Current;
         var localVisible = track?.IsLocal != true || OnlineSongId(track) > 0 && _localOnlineReady;
         HeartButton.Visibility = SongCommentsButton.Visibility = localVisible ? Visibility.Visible : Visibility.Collapsed;
+        SongInfoButton.IsEnabled = track != null;
         HeartButton.IsEnabled = !_heartWriting && track != null && OnlineSongId(track) > 0 && localVisible;
         SongCommentsButton.IsEnabled = track != null && OnlineSongId(track) > 0 && localVisible;
         RedCountText.Text = _redCount is long count ? CountText(count) : "—";
