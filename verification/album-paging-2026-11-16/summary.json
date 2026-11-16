@@ -1,0 +1,43 @@
+{
+  "version": "0.3.3.10",
+  "dllSha256": "E481A5938DD3F6813BF52BD02A50532C360F7DC9BA081BEC881CE6CD6937F5ED",
+  "uiChecks": 189,
+  "installedChecks": 107,
+  "reports": [
+    {
+      "file": "review-album-paging-check.json",
+      "count": 23
+    },
+    {
+      "file": "review-local-motion-check.json",
+      "count": 84
+    },
+    {
+      "file": "review-native-feature-check.json",
+      "count": 22
+    },
+    {
+      "file": "review-previous-track-check.json",
+      "count": 12
+    },
+    {
+      "file": "review-song-experience-check.json",
+      "count": 34
+    },
+    {
+      "file": "review-track-locator-check.json",
+      "count": 14
+    }
+  ],
+  "installedReports": [
+    {
+      "file": "installed-album-paging.json",
+      "count": 23
+    },
+    {
+      "file": "installed-motion-regression.json",
+      "count": 84
+    }
+  ],
+  "touchHardwareTested": false
+}

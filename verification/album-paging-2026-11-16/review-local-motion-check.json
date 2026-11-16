@@ -1,0 +1,442 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Local card starts a native connected cover animation",
+    "passed": true,
+    "detail": {
+      "enabled": true,
+      "starts": 1
+    }
+  },
+  {
+    "name": "The destination uses the clicked card\u0027s bitmap immediately",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Returning connects the same cover back to its realized card",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Opening another playlist immediately shows its own cover and title",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A direct route clears the previous image before asynchronous loading",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The replaced cover cannot be restored by an old request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A playlist without artwork never flashes the previous cover",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Empty artwork stays empty after the queued loader",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Rapid navigation keeps the latest cover 0",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Rapid navigation keeps the latest cover 1",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Rapid navigation keeps the latest cover 2",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Changing Artwork.Uri retires stale pixels synchronously",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Disabled animations still navigate and display the correct cover",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Disabled animations remove native collection transitions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Disabled animations stop cover parallax and retain static back icons",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Disabled page motion ends fully visible at its resting position",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Stopping motion clears feedback transforms and pending transitions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Player buttons receive pointer and keyboard feedback without changing their templates",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Local cards use native add, remove and reposition transitions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Queue opens with its content already bound",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Queue keeps content through the exit animation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A spring return can be interrupted without leaving a scaled player button",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Both playlist covers track the real scrolling list for subtle parallax",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Back buttons use native animated vector sources",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Settings surfaces use native brush transitions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A completion vector plays once and returns to its hidden resting state",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Disabled animations skip vector playback and queue opacity transitions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Programmatic navigation never bounces unrelated sidebar icons",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Font size and weight change live without scaling icon glyphs",
+    "passed": true,
+    "detail": {
+      "FontSize": 18
+    }
+  },
+  {
+    "name": "Repeated typography application cannot accumulate scaling",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Newly created rows receive the selected text metrics",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "New default text can return from a bold enlarged setting",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Typography settings survive saving and loading",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Back hover state reaches the animated icon itself",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Interrupted icon bounces return to their resting position",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The native decoder starts the local playback fixture",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Next local song is prepared without a network request",
+    "passed": true,
+    "detail": "ready local"
+  },
+  {
+    "name": "Adjacent local playback consumes the prepared decoder",
+    "passed": true,
+    "detail": {
+      "switchMilliseconds": 14.0196
+    }
+  },
+  {
+    "name": "The song list marker follows transport changes without selecting its native row",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Rapid row changes leave one indicator on the latest selection",
+    "passed": true,
+    "detail": {
+      "Y": 261,
+      "target": 261
+    }
+  },
+  {
+    "name": "Previous switches directly to the preceding song",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Back, account and settings never acquire spring transforms",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Search uses the native Find animated vector",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Transport feedback runs only on the requested icons, with a scale animation for play",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "All transport icons settle at the original position",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "discover fixture loads its cards",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "discover opens a matching detail cover with a connected animation",
+    "passed": true,
+    "detail": "playlist"
+  },
+  {
+    "name": "discover restores its card with the reverse connected animation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "library fixture loads its cards",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "library opens a matching detail cover with a connected animation",
+    "passed": true,
+    "detail": "playlist"
+  },
+  {
+    "name": "library restores its card with the reverse connected animation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "saved-albums fixture loads its cards",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "saved-albums opens a matching detail cover with a connected animation",
+    "passed": true,
+    "detail": "album"
+  },
+  {
+    "name": "saved-albums restores its card with the reverse connected animation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "radio fixture loads its cards",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "radio opens a matching detail cover with a connected animation",
+    "passed": true,
+    "detail": "programs"
+  },
+  {
+    "name": "radio restores its card with the reverse connected animation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "artists fixture loads its cards",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "artists opens a matching detail cover with a connected animation",
+    "passed": true,
+    "detail": "artist"
+  },
+  {
+    "name": "artists restores its card with the reverse connected animation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Online, local and radio cards share native collection transitions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song indicator runs both stretch and position animations",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song indicator finishes at normal height",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reduced motion removes every card collection transition",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Connected cover snapshots include the rounded frame",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Returning snapshots preserve the card URI binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A recycled card updates to the new item\u0027s own bitmap",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Source recycling cannot clear the independent rounded animation snapshot",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A recycled card with the wrong image identity cannot prepare a transition",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A stale connected snapshot cannot overwrite another cover URI",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A flying local cover has no source proxy painted at the original position",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Detail artwork retires old pixels in the URI-change turn",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Rapid image loads retain only the latest URI and matching bitmap",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Podcast headers keep the podcast cover with animations disabled",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "History retains the podcast cover independently of a connected snapshot",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "An unrealized podcast card cannot inherit another card\u0027s pending cover",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Canceled podcast routes cannot restore a previous cover",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The indicator viewport starts below cover and playlist controls",
+    "passed": true,
+    "detail": {
+      "Top": 319
+    }
+  },
+  {
+    "name": "Cross-playlist entrance stays inside the song-row clip",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Shuffle starts playback without changing route or scrolling to its row",
+    "passed": true,
+    "detail": {
+      "offset": 0,
+      "VerticalOffset": 0,
+      "furthest": 0
+    }
+  },
+  {
+    "name": "Visible playback updates only its marker without native row selection",
+    "passed": true,
+    "detail": {
+      "revealRequests": 0
+    }
+  },
+  {
+    "name": "Offscreen playback never selects or requests reveal of its native row",
+    "passed": true,
+    "detail": {
+      "revealRequests": 0
+    }
+  },
+  {
+    "name": "Explicit locate still reveals the playing row",
+    "passed": true,
+    "detail": null
+  }
+]

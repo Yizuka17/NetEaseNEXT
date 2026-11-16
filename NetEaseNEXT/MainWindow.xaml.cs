@@ -182,6 +182,7 @@ public sealed partial class MainWindow : Window
         _playback.SetBackgroundMode(hidden);
         if (hidden)
         {
+            SetBusy(false); ResetPageFooters();
             _lyricFollowTimer.Stop(); StopLocalMonitoring();
             if (_hasBeenVisible) _startup?.Cancel();
             SavePlaybackState(); _accountLoad?.Cancel(); _accountAvatarLoad?.Cancel(); _metadataWarmLoad?.Cancel();

@@ -47,6 +47,7 @@ public sealed partial class MainWindow
         var route = _route = new(view, _playlistId, _artistId, _peerId, _playlistName, _query, _linkedResource, _localPlaylistId, cover);
         BackButton.IsEnabled = _history.Count > 0 || _fullScreen;
         _view = view; _offset = 0; _socialCursor = -1;
+        ResetPageFooters(); ClearAlbumDetails();
         ConfigureInterfaceMotion();
         if (view == "playlist") { _playlistTrackIds = []; _playlistTrackCount = 0; _resumePlaylistId = _playlistId; _resumePlaylistName = _playlistName; }
         SchedulePlaybackSave();
@@ -60,7 +61,7 @@ public sealed partial class MainWindow
         LocalToolbar.Visibility = view == "local-playlist" ? Visibility.Visible : Visibility.Collapsed;
         if (view == "local-playlist") PrepareLocalPlaylistHeader(_localPlaylistId);
         else Artwork.SetUri(LocalPlaylistCover, "");
-        _tracksMore = _catalogMore = _socialMore = false;
+        _tracksMore = _catalogMore = _socialMore = _playlistsMore = false;
         Nav.Visibility = view == "playing" ? Visibility.Collapsed : Visibility.Visible;
         UpdateWindowChrome();
         MovePlayerControls(view == "playing"); QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null; QueueGlyph.Opacity = 1;
@@ -126,9 +127,12 @@ public sealed partial class MainWindow
     private async Task LoadPageAsync(bool append)
     {
         if (_hidden || _exiting) return;
+        var list = ActivePageList();
+        if (append && (_pageLoad != null || _trackLocateLoad != null || list == null || !HasMoreFor(list))) return;
         _pageInterrupted = false; _pageWasAppend = append;
         _pageLoad?.Cancel(); using var load = new CancellationTokenSource(); _pageLoad = load;
-        SetBusy(true); EmptyPanel.Visibility = Visibility.Collapsed;
+        SetBusy(!append); EmptyPanel.Visibility = Visibility.Collapsed;
+        if (append && list != null) _pageFooters[list].ShowLoading();
         try
         {
             if (_startup != null) await _startup.WaitForPageAsync(_view, load.Token);
@@ -143,8 +147,14 @@ public sealed partial class MainWindow
                     if (!RequireLogin()) break;
                     var accountId = _accountId > 0 ? _accountId : (await GetProfileAsync(load.Token))?.Number("userId") ?? 0;
                     if (accountId == 0) { ShowEmpty("请重新登录", "登录"); break; }
-                    var library = await _api.CallCachedAsync("user_playlist", new { uid = accountId, limit = 100 }, load.Token);
-                    load.Token.ThrowIfCancellationRequested(); foreach (var item in library.GetProperty("playlist").EnumerateArray()) Playlists.Add(Playlist.FromJson(item)); break;
+                    var library = await _api.CallCachedAsync("user_playlist", new { uid = accountId, limit = 100, offset = _offset }, load.Token);
+                    load.Token.ThrowIfCancellationRequested();
+                    var libraryPage = library.GetProperty("playlist"); var existingPlaylists = Playlists.Select(p => p.Id).ToHashSet();
+                    foreach (var item in libraryPage.EnumerateArray().Take(10000 - Playlists.Count))
+                        if (existingPlaylists.Add(item.Number("id"))) Playlists.Add(Playlist.FromJson(item));
+                    _offset += libraryPage.GetArrayLength();
+                    _playlistsMore = HasNextPage(library, libraryPage.GetArrayLength(), 100) && _offset < 10000;
+                    break;
                 case "artists": case "albums":
                     var data = _view switch
                     {
@@ -155,7 +165,7 @@ public sealed partial class MainWindow
                     load.Token.ThrowIfCancellationRequested();
                     var array = data.GetProperty(_view == "artists" ? "artists" : _view == "albums" ? "hotAlbums" : "djRadios");
                     foreach (var item in array.EnumerateArray()) Catalog.Add(_view == "artists" ? CatalogItem.Artist(item) : _view == "albums" ? CatalogItem.Album(item) : new CatalogItem(item.Number("id"), item.Text("name"), item.Text("picUrl"), "radio", item.TryGetProperty("dj", out var dj) ? dj.Text("nickname") : ""));
-                    _offset += array.GetArrayLength(); _catalogMore = array.GetArrayLength() == 48 && Catalog.Count < 1000; break;
+                    _offset += array.GetArrayLength(); _catalogMore = HasNextPage(data, array.GetArrayLength(), 48) && Catalog.Count < 1000; break;
                 case "saved-albums":
                     if (!RequireLogin()) break;
                     await LoadSavedAlbumsAsync(_api, load.Token);
@@ -166,11 +176,12 @@ public sealed partial class MainWindow
                     if (subscriptions.TryGetProperty("djRadios", out var radios))
                     {
                         foreach (var item in radios.EnumerateArray()) Catalog.Add(new CatalogItem(item.Number("id"), item.Text("name"), item.Text("picUrl"), "radio", Object(item, "dj").Text("nickname")));
-                        _offset += radios.GetArrayLength(); _catalogMore = Flag(subscriptions, "hasMore") || Flag(subscriptions, "more");
+                        _offset += radios.GetArrayLength(); _catalogMore = HasNextPage(subscriptions, radios.GetArrayLength(), 48) && Catalog.Count < 1000;
                     }
                     break;
                 case "search": case "playlist": case "album": case "programs":
                     var page = new List<Track>();
+                    JsonElement pageResponse = default;
                     if (_view == "search") page = await _api.SearchAsync(_query, _offset, load.Token);
                     else if (_view == "playlist")
                     {
@@ -184,9 +195,7 @@ public sealed partial class MainWindow
                         load.Token.ThrowIfCancellationRequested();
                         if (album.TryGetProperty("album", out var metadata))
                         {
-                            PlaylistDetailTitle.Text = FirstText(metadata.Text("name"), _playlistName);
-                            Artwork.SetUri(PlaylistDetailCover, metadata.Text("picUrl"));
-                            PlaylistDescription.Text = metadata.Text("description");
+                            ApplyAlbumDetails(metadata);
                         }
                         page = album.GetProperty("songs").EnumerateArray().Select(Track.FromJson).ToList();
                         await LoadAlbumSubscriptionAsync(_api, _playlistId, load.Token);
@@ -195,13 +204,15 @@ public sealed partial class MainWindow
                     {
                         var programs = await _api.CallAsync("dj_program", new { rid = _playlistId, limit = 50, offset = _offset }, load.Token);
                         load.Token.ThrowIfCancellationRequested();
+                        pageResponse = programs;
                         page = ParseProgramTracks(programs, _playlistName, _playlistId);
                         if (!append && Artwork.GetUri(PlaylistDetailCover).Length == 0 && page.FirstOrDefault() is { } firstProgram) Artwork.SetUri(PlaylistDetailCover, firstProgram.Cover);
                     }
-                    var limit = _view == "playlist" ? 10000 : 1000;
+                    var limit = _view == "playlist" ? 10000 : _view == "album" ? int.MaxValue : 1000;
                     load.Token.ThrowIfCancellationRequested(); if (!append) Tracks.Clear(); foreach (var item in page.Take(limit - Tracks.Count)) Tracks.Add(item);
                     _offset += page.Count;
-                    _tracksMore = _view != "album" && page.Count == (_view == "playlist" ? 100 : 50) && Tracks.Count < limit;
+                    _tracksMore = _view != "album" && HasNextPage(pageResponse, page.Count, _view == "playlist" ? 100 : 50) && Tracks.Count < limit &&
+                        (_view != "playlist" || _playlistTrackCount <= 0 || _offset < _playlistTrackCount);
                     TrackCount.Text = $"{(_view == "playlist" && _playlistTrackCount > 0 ? _playlistTrackCount : Tracks.Count)} 首"; break;
                 case "song": case "event-detail": await LoadLinkedResourceAsync(load.Token); break;
                 case "queue": foreach (var item in _playback.Queue) Tracks.Add(item); TrackCount.Text = $"{Tracks.Count} 首"; break;
@@ -214,8 +225,24 @@ public sealed partial class MainWindow
             if (!_hidden && Tracks.Count > 0 && _view is "playlist" or "album" or "search" or "artist" or "queue") { _ = _playback.WarmAsync(Tracks); WarmVisibleMetadata(); }
         }
         catch (OperationCanceledException) { }
-        catch (Exception ex) { if (!load.IsCancellationRequested) { ShowError(ex.Message); if (Playlists.Count + Tracks.Count + Catalog.Count + SocialItems.Count == 0) ShowEmpty("加载失败"); } }
-        finally { if (ReferenceEquals(_pageLoad, load)) { SetBusy(false); _pageLoad = null; UpdateTrackLocator(); UpdateAlbumSubscribe(); QueueAutoPage(); } }
+        catch (Exception ex)
+        {
+            if (!load.IsCancellationRequested)
+            {
+                if (append && list != null) { _pageFooters[list].ShowFailure(); Log.Write(ex); }
+                else { ShowError(ex.Message); if (Playlists.Count + Tracks.Count + Catalog.Count + SocialItems.Count == 0) ShowEmpty("加载失败"); }
+            }
+        }
+        finally
+        {
+            if (ReferenceEquals(_pageLoad, load))
+            {
+                _pageLoad = null;
+                SetBusy(false);
+                if (list != null && !_pageFooters[list].Failed) _pageFooters[list].Clear();
+                UpdateTrackLocator(); UpdateAlbumSubscribe(); QueueAutoPage();
+            }
+        }
     }
     private bool RequireLogin() { if (_api.HasSession) return true; ShowEmpty("请先登录", "登录"); return false; }
     private async void Search_Submitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args) { if (string.IsNullOrWhiteSpace(args.QueryText)) return; _query = args.QueryText.Trim(); await NavigateAsync("search"); }

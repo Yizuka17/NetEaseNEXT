@@ -86,7 +86,7 @@ public sealed partial class MainWindow
             {
                 button.IsEnabled = !_batchBusy && (button.Tag is "all" or "clear" or "done" || selected.Length > 0);
                 if (button.Tag is "all") button.Content = ReferenceEquals(_batchList, TrackList) && _view == "playlist" && Tracks.Count < _playlistTrackCount ? "全选已加载" : "全选";
-                if (button.Tag is "remove" && !ReferenceEquals(_batchList, QueueList) && _view == "playlist" && Busy.IsActive) button.IsEnabled = false;
+                if (button.Tag is "remove" && !ReferenceEquals(_batchList, QueueList) && _view == "playlist" && (Busy.IsActive || _pageLoad != null)) button.IsEnabled = false;
             }
         _batchList.IsEnabled = !_batchBusy;
     }

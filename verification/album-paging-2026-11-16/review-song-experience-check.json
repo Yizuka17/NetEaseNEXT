@@ -1,0 +1,193 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song information sits to the right of comments",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "All artist identities survive JSON playback persistence",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Multi-artist navigation presents every singer",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Choosing the second singer opens that artist ID",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song information displays all singers and the album action",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song album action opens its matching album",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Album subscription writes the selected album and updates the control",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Failed album subscription preserves the known state",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Album subscription can be removed",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Album writes use the serialized API write lane",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comments default to hottest and request hot sorting",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reopening comments remembers the latest sort selection",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comment sort persists across a settings reload",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reverse play all starts at the last song",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reverse next moves toward the start of the original list",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reverse previous moves toward the end",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Add next follows the reverse playback direction",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Batch add next preserves the requested order in reverse mode",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reverse playback mode survives restore",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Repeated shuffle play all chooses different first songs",
+    "passed": true,
+    "detail": [
+      -2,
+      -5,
+      -4,
+      -3
+    ]
+  },
+  {
+    "name": "Shuffle retains every song exactly once",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Plain local song information remains available without API requests",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reverse starts at the real end even when only the first page is loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Online shuffle can start on an unloaded song and completes the queue",
+    "passed": true,
+    "detail": [
+      1,
+      2,
+      5,
+      4,
+      3
+    ]
+  },
+  {
+    "name": "Podcast locator appears before the playing episode has loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Podcast locator pages to the playing episode",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A different podcast does not show a false locator",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song indicator binds the live scroll property set",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Virtualized selected songs leave no stranded indicator",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A cross-viewport selection stretches in from the previous direction",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Scrolling preserves the selected row content anchor",
+    "passed": true,
+    "detail": {
+      "contentY": 1553,
+      "target": 1553
+    }
+  },
+  {
+    "name": "Reduced motion skips cross-viewport stretch",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Queue indicator shares compositor scroll following and a fixed content anchor",
+    "passed": true,
+    "detail": {
+      "queueY": 2816,
+      "target": 2816,
+      "ActualHeight": 470,
+      "count": 160,
+      "VerticalOffset": 2361,
+      "selected": null
+    }
+  }
+]

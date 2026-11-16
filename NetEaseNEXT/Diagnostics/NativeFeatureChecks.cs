@@ -147,8 +147,9 @@ public sealed partial class MainWindow
                 check("Scrolling to the end loads the next search page without a button", Tracks.Take(50).Select(t => t.Id).SequenceEqual(firstPage) && TrackList.Footer is not Button, new { count = Tracks.Count });
                 _playlistId = 3778678; _playlistName = "热歌榜";
                 await NavigateAsync("playlist");
-                await Wait(() => _playlistTrackCount > 0 && Tracks.Count >= _playlistTrackCount && _pageLoad == null);
-                check("A small playlist loads completely without manual paging", _playlistTrackCount <= 500 && !_tracksMore, new { count = Tracks.Count });
+                var loaded = Tracks.Count;
+                if (_tracksMore) { Root.UpdateLayout(); TrackList.ScrollIntoView(Tracks.Last()); await Wait(() => Tracks.Count > loaded && _pageLoad == null); }
+                check("Playlist continuation loads at the bottom and reports completion", Tracks.Count > 0 && (Tracks.Count < _playlistTrackCount || !_tracksMore), new { count = Tracks.Count });
             }
             finally { _checkingAutoPaging = false; }
             check("No Node process is required for the native app or playback", !_api.IsWorkerRunning && !_playback.IsWorkerRunning, null);

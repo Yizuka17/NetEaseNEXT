@@ -29,7 +29,13 @@ public partial class App : Application
             if (!_instance.IsPrimary) { _instance.Dispose(); Exit(); return; }
         }
         StartupSession? startup = null;
-        if (Environment.GetCommandLineArgs().Contains("--motion-release-check"))
+        if (Environment.GetCommandLineArgs().Contains("--album-paging-check"))
+        {
+            var directory = Path.Combine(Path.GetTempPath(), "NetEaseNEXT-paging-api-" + Guid.NewGuid().ToString("N"));
+            var settings = SettingsStore.Load(); settings.Volume = 0; settings.CacheDirectory = directory;
+            startup = new(settings, AlbumPagingFixtures.Create(directory), () => new());
+        }
+        else if (Environment.GetCommandLineArgs().Contains("--motion-release-check"))
         {
             var directory = Path.Combine(Path.GetTempPath(), "NetEaseNEXT-motion-api-" + Guid.NewGuid().ToString("N"));
             var settings = SettingsStore.Load(); settings.Volume = 0; settings.CacheDirectory = directory;

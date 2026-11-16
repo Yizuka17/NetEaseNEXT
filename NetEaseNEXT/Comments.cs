@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using NetEaseNEXT.Models;
 using NetEaseNEXT.Services;
+using NetEaseNEXT.Controls;
 using System.Text.Json;
 
 namespace NetEaseNEXT;
@@ -37,9 +38,7 @@ public sealed partial class MainWindow
         var toolbar = new Grid(); toolbar.ColumnDefinitions.Add(new() { Width = new GridLength(1, GridUnitType.Star) }); toolbar.ColumnDefinitions.Add(new() { Width = GridLength.Auto }); toolbar.Children.Add(sort);
         var elements = new FrameworkElement[] { heading, toolbar, list, replyBar, composer, error };
         for (var row = 0; row < elements.Length; row++) { Grid.SetRow(elements[row], row); content.Children.Add(elements[row]); }
-        var progress = new ProgressRing { IsActive = false, Width = 24, Height = 24, Visibility = Visibility.Collapsed, Margin = new Thickness(8) };
-        var retry = new Button { Content = "重试", HorizontalAlignment = HorizontalAlignment.Center, Visibility = Visibility.Collapsed };
-        var footer = new StackPanel(); footer.Children.Add(progress); footer.Children.Add(retry); list.Footer = footer;
+        var footer = new PageLoadingFooter(); var retry = footer.Retry; list.Footer = footer;
         var dialog = new ContentDialog { XamlRoot = Root.XamlRoot, Content = content };
         var openSource = false;
         if (source.Kind == "notice" && SourceLinkLabel(source) is { Length: > 0 } sourceLabel)
@@ -82,7 +81,7 @@ public sealed partial class MainWindow
             if (reset) { generation++; fetch?.Cancel(); page = 1; cursor = "0"; more = true; }
             var version = generation; var requestPage = page;
             using var request = CancellationTokenSource.CreateLinkedTokenSource(load.Token); fetch = request;
-            loading = true; progress.IsActive = true; progress.Visibility = Visibility.Visible; retry.Visibility = Visibility.Collapsed;
+            loading = true; footer.ShowLoading();
             try
             {
                 var result = await api.CallAsync("comment_new", new { id = source.ResourceKey, type = source.ResourceType, threadId = source.ThreadId, pageNo = requestPage, pageSize = 20, sortType = sort.SelectedIndex == 1 ? 2 : 3, cursor }, request.Token);
@@ -98,15 +97,14 @@ public sealed partial class MainWindow
                 page++; more = Flag(data, "hasMore") && comments.Length > 0 && (requestPage == 1 || added > 0); error.Text = "";
             }
             catch (OperationCanceledException) { }
-            catch (Exception ex) { if (version == generation) { error.Text = ex.Message; retry.Visibility = Visibility.Visible; } }
-            finally { if (version == generation) { loading = false; progress.IsActive = false; progress.Visibility = Visibility.Collapsed; } if (ReferenceEquals(fetch, request)) fetch = null; }
+            catch (Exception ex) { if (version == generation) { error.Text = ex.Message; footer.ShowFailure(); } }
+            finally { if (version == generation) { loading = false; if (!footer.Failed) footer.Clear(); } if (ReferenceEquals(fetch, request)) fetch = null; }
         }
-        void AtBottom()
+        void AtBottom(bool fromInput)
         {
-            if (!loading && more && retry.Visibility != Visibility.Visible && FindDescendant<ScrollViewer>(list) is { } scroll && scroll.ScrollableHeight - scroll.VerticalOffset < 160) _ = Fetch();
+            if (!loading && more && (fromInput || !footer.Failed) && FindDescendant<ScrollViewer>(list) is { } scroll && scroll.ScrollableHeight - scroll.VerticalOffset < 160) _ = Fetch();
         }
-        list.Loaded += (_, _) => { if (FindDescendant<ScrollViewer>(list) is { } scroll) scroll.ViewChanged += (_, _) => AtBottom(); };
-        list.AddHandler(UIElement.PointerWheelChangedEvent, new Microsoft.UI.Xaml.Input.PointerEventHandler((_, _) => AtBottom()), true);
+        AttachPagingRequests(list, AtBottom);
         retry.Click += async (_, _) => await Fetch(); sort.SelectionChanged += async (_, _) => { _settings.CommentSort = sort.SelectedIndex == 0 ? "Latest" : "Hot"; _settings.Save(); await Fetch(true); };
         cancelReply.Click += (_, _) => { replyId = 0; hint.Text = ""; cancelReply.Visibility = Visibility.Collapsed; };
         input.TextChanged += (_, _) => send.IsEnabled = !sending && !string.IsNullOrWhiteSpace(input.Text);

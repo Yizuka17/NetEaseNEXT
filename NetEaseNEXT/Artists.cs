@@ -82,7 +82,7 @@ public sealed partial class MainWindow
             var result = await _api.CallAsync(_artistTab == "albums" ? "artist_album" : "artist_mv", new { id = _artistId, limit = 48, offset = _offset }, ct); ct.ThrowIfCancellationRequested();
             var array = result.GetProperty(_artistTab == "albums" ? "hotAlbums" : "mvs");
             foreach (var item in array.EnumerateArray()) Catalog.Add(_artistTab == "albums" ? CatalogItem.Album(item) : new CatalogItem(item.Number("id"), item.Text("name"), FirstText(item.Text("imgurl"), item.Text("cover")), "mv"));
-            _offset += array.GetArrayLength(); _catalogMore = array.GetArrayLength() == 48 && Catalog.Count < 1000;
+            _offset += array.GetArrayLength(); _catalogMore = HasNextPage(result, array.GetArrayLength(), 48) && Catalog.Count < 1000;
         }
         else
         {

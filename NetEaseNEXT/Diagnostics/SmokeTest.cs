@@ -36,6 +36,10 @@ public sealed partial class MainWindow
         try
         {
             Check("XAML root loaded", Root.IsLoaded);
+            if (Environment.GetCommandLineArgs().Contains("--album-paging-check"))
+            {
+                await RunAlbumPagingChecksAsync(Check); return;
+            }
             if (Environment.GetCommandLineArgs().Contains("--song-experience-check"))
             {
                 await RunSongExperienceChecksAsync(Check); return;
