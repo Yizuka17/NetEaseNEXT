@@ -22,11 +22,14 @@ public sealed partial class MainWindow
     private void UpdateSongActions()
     {
         var track = _playback.Current;
-        var localVisible = track?.IsLocal != true || OnlineSongId(track) > 0 && _localOnlineReady;
+        var localVisible = track?.IsLocal != true || OnlineSongId(track) > 0;
         HeartButton.Visibility = SongCommentsButton.Visibility = localVisible ? Visibility.Visible : Visibility.Collapsed;
         SongInfoButton.IsEnabled = track != null;
+        SongShareButton.IsEnabled = track != null && ShareForTrack(track) != null;
         HeartButton.IsEnabled = !_heartWriting && track != null && OnlineSongId(track) > 0 && localVisible;
-        SongCommentsButton.IsEnabled = track != null && OnlineSongId(track) > 0 && localVisible;
+        SongCommentsButton.IsEnabled = track != null && SongCommentsSource(track) != null && localVisible;
+        var commentLabel = track?.PodcastId > 0 ? "单集评论" : "歌曲评论";
+        AutomationProperties.SetName(SongCommentsButton, commentLabel); ToolTipService.SetToolTip(SongCommentsButton, commentLabel);
         RedCountText.Text = _redCount is long count ? CountText(count) : "—";
         HeartIcon.Glyph = _songLiked ? "\uEB52" : "\uEB51";
         if (_songLiked) HeartIcon.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 222, 65, 85)); else HeartIcon.ClearValue(FontIcon.ForegroundProperty);
@@ -63,7 +66,7 @@ public sealed partial class MainWindow
                 UpdateSongActions();
             }
             catch (OperationCanceledException) { }
-            catch { /* Unknown stays unknown; local controls remain hidden until reachable. */ }
+            catch { /* Counts remain unknown; supported actions keep their place. */ }
             if (client.HasSession && !load.IsCancellationRequested)
             {
                 try

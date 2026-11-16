@@ -63,7 +63,8 @@ public sealed partial class MainWindow
     }
     private SocialItem? SongCommentsSource(Track track)
     {
-        var id = OnlineSongId(track); if (id <= 0 || track.IsLocal && !_localOnlineReady) return null;
+        if (track.PodcastId > 0) return ProgramIdentity(track) is > 0 and var programId ? new() { Name = track.Title, Kind = "program", ResourceId = programId, ResourceKey = programId.ToString(), ResourceType = 4, ThreadId = "A_DJ_1_" + programId } : null;
+        var id = OnlineSongId(track); if (id <= 0) return null;
         return new() { Name = track.Title, Kind = "song", ResourceId = id, ResourceKey = id.ToString(), ResourceType = 0, ThreadId = "R_SO_4_" + id };
     }
     private async Task RegisterLocalDownloadSourcesAsync(IEnumerable<Track> tracks)

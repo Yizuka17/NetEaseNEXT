@@ -16,6 +16,7 @@ public sealed partial class MainWindow
     private async Task<List<Track>> GetPlaybackContextAsync()
     {
         var context = Tracks.ToList();
+        if (_view == "artist" && _artistTab == "songs") return await GetArtistPlaybackContextAsync(context);
         if (_view is not ("playlist" or "programs")) return context;
         var view = _view;
         var id = _playlistId; _playlistQueueLoad?.Cancel();
@@ -85,6 +86,12 @@ public sealed partial class MainWindow
         var trackIds = _playlistTrackIds.ToArray();
         _playlistQueueLoad?.Cancel();
         await _playback.PlayAsync(track, initial);
+        if (_view == "artist" && _artistTab == "songs" && _tracksMore && _playback.Current?.Id == track.Id)
+        {
+            var artistRevision = _playback.QueueRevision;
+            var complete = await GetArtistPlaybackContextAsync(initial);
+            _playback.CompleteQueue(complete, artistRevision); return;
+        }
         if (_playback.Current?.Id != track.Id || playlist == 0 || initial.Count == 0 || trackIds.Length <= initial.Count) return;
         var revision = _playback.QueueRevision;
         using var load = new CancellationTokenSource(TimeSpan.FromMinutes(2)); _playlistQueueLoad = load;

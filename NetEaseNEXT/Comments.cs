@@ -28,6 +28,9 @@ public sealed partial class MainWindow
         var title = new TextBlock { Text = "评论", FontSize = 24, FontWeight = Microsoft.UI.Text.FontWeights.SemiBold, VerticalAlignment = VerticalAlignment.Center };
         var heading = new Grid { ColumnSpacing = 12, HorizontalAlignment = HorizontalAlignment.Stretch };
         heading.ColumnDefinitions.Add(new() { Width = new GridLength(1, GridUnitType.Star) }); heading.ColumnDefinitions.Add(new() { Width = GridLength.Auto }); heading.Children.Add(title); Grid.SetColumn(close, 1); heading.Children.Add(close);
+        heading.RowDefinitions.Add(new() { Height = GridLength.Auto }); heading.RowDefinitions.Add(new() { Height = GridLength.Auto });
+        var resourceName = new TextBlock { Text = source.Name, FontSize = 12, Opacity = .65, TextWrapping = TextWrapping.Wrap, MaxLines = 2, Margin = new(0, 4, 0, 0), Visibility = source.Name.Length > 0 ? Visibility.Visible : Visibility.Collapsed };
+        Grid.SetRow(resourceName, 1); Grid.SetColumnSpan(resourceName, 2); heading.Children.Add(resourceName);
         var cancelReply = new Button { Content = "取消回复", Style = (Style)Application.Current.Resources["BareButtonStyle"], Visibility = source.CommentId > 0 ? Visibility.Visible : Visibility.Collapsed };
         var emoji = new Button { Content = IconFonts.Create("\uE899"), Style = (Style)Application.Current.Resources["BareButtonStyle"] };
         Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(emoji, "表情"); emoji.Click += (_, _) => ShowEmojiPicker(emoji, input);

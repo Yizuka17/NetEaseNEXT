@@ -51,7 +51,11 @@ public sealed partial class MainWindow
         ConfigureInterfaceMotion();
         if (view == "playlist") { _playlistTrackIds = []; _playlistTrackCount = 0; _resumePlaylistId = _playlistId; _resumePlaylistName = _playlistName; }
         SchedulePlaybackSave();
-        if (view == "artist") _artistTab = "songs";
+        if (view == "artist")
+        {
+            _artistTab = "songs"; _artistOrder = "hot"; _artistHeaderReady = false;
+            _changingArtistSort = true; ArtistSongSort.SelectedIndex = 0; _changingArtistSort = false;
+        }
         ResetInbox();
         Playlists.Clear(); Tracks.Clear(); Catalog.Clear(); SocialItems.Clear();
         _lyrics.Clear(); LyricsList.ItemsSource = null; _lyricId = 0; Artwork.SetUri(LargeCover, ""); BlurredCover.Source = null;
@@ -68,8 +72,9 @@ public sealed partial class MainWindow
         UpdateTimer();
         UpdateLayout();
         PlaylistDetails.Visibility = view is "playlist" or "album" or "programs" ? Visibility.Visible : Visibility.Collapsed;
-        PlaylistSubscribeButton.Visibility = PlaylistCommentsButton.Visibility = view == "playlist" ? Visibility.Visible : Visibility.Collapsed;
-        _albumSubscribed = _albumSubscribeKnown = false; UpdateAlbumSubscribe();
+        _playlistComments = _albumComments = _radioComments = 0;
+        _radioSubscribed = _radioSubscribeKnown = false; _radioSubscribers = 0;
+        _albumSubscribed = _albumSubscribeKnown = false; UpdateResourceActions();
         CreatePlaylistButton.Visibility = view == "library" ? Visibility.Visible : Visibility.Collapsed;
         if (view is not ("playlist" or "album" or "programs")) { Artwork.SetUri(PlaylistDetailCover, ""); PlaylistDescription.Text = ""; }
         else { Artwork.SetUri(PlaylistDetailCover, cover); PlaylistDetailTitle.Text = _playlistName; PlaylistDescription.Text = PlaylistTags.Text = PlaylistCreator.Text = ""; }
@@ -202,7 +207,9 @@ public sealed partial class MainWindow
                     }
                     else
                     {
-                        var programs = await _api.CallAsync("dj_program", new { rid = _playlistId, limit = 50, offset = _offset }, load.Token);
+                        var radioDetail = append ? Task.CompletedTask : LoadRadioDetailAsync(load.Token);
+                        var programPage = _api.CallAsync("dj_program", new { rid = _playlistId, limit = 50, offset = _offset }, load.Token);
+                        await Task.WhenAll(radioDetail, programPage); var programs = await programPage;
                         load.Token.ThrowIfCancellationRequested();
                         pageResponse = programs;
                         page = ParseProgramTracks(programs, _playlistName, _playlistId);
@@ -240,7 +247,7 @@ public sealed partial class MainWindow
                 _pageLoad = null;
                 SetBusy(false);
                 if (list != null && !_pageFooters[list].Failed) _pageFooters[list].Clear();
-                UpdateTrackLocator(); UpdateAlbumSubscribe(); QueueAutoPage();
+                UpdateTrackLocator(); UpdateResourceActions(); QueueAutoPage();
             }
         }
     }

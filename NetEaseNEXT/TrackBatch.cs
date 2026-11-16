@@ -45,7 +45,11 @@ public sealed partial class MainWindow
         batch.Tag = list; batch.IsEnabled = !_batchBusy;
         // Once selecting, keep the row menu focused on the batch entry point.
         foreach (var item in menu.Items.OfType<MenuFlyoutItem>().Where(i => !ReferenceEquals(i, batch)))
+        {
             item.IsEnabled = !ReferenceEquals(_batchList, list) && !_batchBusy;
+            if (item.Text == "评论") item.IsEnabled &= menu.Target?.DataContext is Track commentTrack && SongCommentsSource(commentTrack) != null;
+            if (item.Text == "分享") item.IsEnabled &= menu.Target?.DataContext is Track shareTrack && ShareForTrack(shareTrack) != null;
+        }
     }
     private void BeginTrackBatch(ListView list, Track track)
     {

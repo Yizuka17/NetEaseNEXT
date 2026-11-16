@@ -1,0 +1,120 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Album details show release date, company and type",
+    "passed": true,
+    "detail": "\u53D1\u884C\u65F6\u95F4\uFF1A2024-01-01\n\u4E13\u8F91\u7C7B\u578B\uFF1A\u4E13\u8F91 / \u5F55\u97F3\u5BA4\u7248\n\u53D1\u884C\u516C\u53F8\uFF1A\u6D4B\u8BD5\u5531\u7247"
+  },
+  {
+    "name": "Album details contain a link for each album artist",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A long album introduction can be expanded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The first album artist link opens its own artist page",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The second album artist link opens its own artist page",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A complete album has no continuation request or loading footer",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Sparse album metadata uses the singular artist and clears previous facts",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Appending uses an active native ring after the rows without the center overlay",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Repeated bottom gestures share one continuation request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Append preserves rows and route then removes the loading row",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Appending does not jump past the newly loaded songs",
+    "passed": true,
+    "detail": {
+      "heldOffset": 4410,
+      "offset": 4410
+    }
+  },
+  {
+    "name": "Continuing upward at an existing bottom loads the final search page",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Failed catalog continuation keeps existing albums and retries in its footer",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A failed page does not retry itself on layout",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A new bottom gesture can retry and finish the catalog",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The playlist library continues beyond its old first 100 playlists",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Podcast continuation uses the shared footer and stops at the server\u0027s final page",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist removal remains disabled during nonblocking continuation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist removal is available again after continuation finishes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Navigating during continuation cancels stale rows and clears every footer",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comments show the same native ring inside the bottom loading row",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Finishing comments removes the loading row",
+    "passed": true,
+    "detail": null
+  }
+]

@@ -18,6 +18,7 @@ public sealed class Track(long id, string title, string artist, string album, st
     public string Cover { get; } = cover;
     public long Duration { get; } = duration;
     public long PodcastId { get; set; }
+    public long ProgramId { get; set; }
     public string LocalPath { get; set; } = "";
     public long SourceSongId { get; set; }
     public string SourceLevel { get; set; } = "";

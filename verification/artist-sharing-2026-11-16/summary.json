@@ -1,0 +1,31 @@
+{
+  "version": "0.3.3.11",
+  "reports": {
+    "installed-artist-sharing.json": 35,
+    "installed-download-actions.json": 28,
+    "installed-motion-regression.json": 84,
+    "review-album-paging-check.json": 23,
+    "review-artist-sharing-check.json": 35,
+    "review-download-indicator-check.json": 28,
+    "review-local-motion-check.json": 84,
+    "review-native-feature-check.json": 22,
+    "review-previous-track-check.json": 12,
+    "review-song-experience-check.json": 34,
+    "review-track-locator-check.json": 14
+  },
+  "portableChecks": 252,
+  "installedChecks": 147,
+  "apiChecks": 89,
+  "realPublicReadChecks": 6,
+  "productionWritesPerformed": false,
+  "dllSha256": "ad3bd04931e7dc41e6d9b5e7eae66d8870a8cfb258b3a80cb660527e28b2f907",
+  "msixSha256": "ce2a96a33bdb5daf0a8c0d62866b2bb509493a2f4b8f9ca7f49ff7f91eed1792",
+  "installedStatus": "Ok",
+  "installedDllMatchesPublishAndMsix": true,
+  "windowsShare": "Native Windows share sheet opened with playlist?id=101 and canceled without sending",
+  "virtualMachine": "Windows 11, VirtualBoxSVGA 3D, installed MSIX; synthetic fixtures; secondary monitor",
+  "limitations": [
+    "Favorite/comment/share writes use synthetic fixtures, not a live account",
+    "No physical touch hardware validation"
+  ]
+}

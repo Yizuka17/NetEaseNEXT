@@ -36,6 +36,10 @@ public sealed partial class MainWindow
         try
         {
             Check("XAML root loaded", Root.IsLoaded);
+            if (Environment.GetCommandLineArgs().Contains("--artist-sharing-check"))
+            {
+                await RunArtistSharingChecksAsync(Check); return;
+            }
             if (Environment.GetCommandLineArgs().Contains("--album-paging-check"))
             {
                 await RunAlbumPagingChecksAsync(Check); return;
@@ -528,7 +532,7 @@ public sealed partial class MainWindow
             var artist = Catalog.First(); _artistId = artist.Id; _playlistName = artist.Name;
             await NavigateAsync("artist"); Check("Artist detail starts with top songs and profile", ArtistName.Text.Length > 0 && Tracks.Count > 0 && TracksPanel.Parent == ArtistContentHost);
             Root.UpdateLayout(); await Task.Delay(100); Root.UpdateLayout();
-            Check("Artist header scrolls with songs without consuming the viewport", ((Panel)TrackList.Header).Children.Contains(ArtistHeader) && TrackList.ActualHeight > 0);
+            Check("Artist header keeps a stable parent above the scrollable body", ReferenceEquals(ArtistHeader.Parent, ArtistPanel) && ReferenceEquals(TracksPanel.Parent, ArtistContentHost) && TrackList.ActualHeight > 0);
             TrackList.ScrollIntoView(Tracks[0]);
             coverWait.Restart(); var firstArtistCovers = new List<Image>();
             do

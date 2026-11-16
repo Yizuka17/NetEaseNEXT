@@ -182,6 +182,7 @@ public sealed partial class MainWindow : Window
         _playback.SetBackgroundMode(hidden);
         if (hidden)
         {
+            _resourceShareLoad?.Cancel();
             SetBusy(false); ResetPageFooters();
             _lyricFollowTimer.Stop(); StopLocalMonitoring();
             if (_hasBeenVisible) _startup?.Cancel();
@@ -232,6 +233,8 @@ public sealed partial class MainWindow : Window
     private void ExitApp() { _exiting = true; Close(); }
     private void Cleanup()
     {
+        _resourceShareLoad?.Cancel();
+        if (_shareManager != null) _shareManager.DataRequested -= RequestedShare;
         _windowPlacementTimer.Stop();
         StopLocalMonitoring();
         Windows.Networking.Connectivity.NetworkInformation.NetworkStatusChanged -= NetworkStatusChanged;

@@ -5,7 +5,7 @@ namespace NetEaseNEXT.Api;
 public sealed record ApiRequest(string Path, Dictionary<string, object?> Data, string Crypto = "eapi", bool CheckToken = false);
 public static class ApiEndpoints
 {
-    public static readonly HashSet<string> Writes = ["album_sub", "like", "playlist_tracks", "song_order_update", "playlist_delete", "playlist_subscribe", "playlist_create", "resource_like", "comment", "comment_like", "send_text", "send_song", "send_album", "send_playlist", "msg_read_all", "share_resource"];
+    public static readonly HashSet<string> Writes = ["album_sub", "dj_sub", "like", "playlist_tracks", "song_order_update", "playlist_delete", "playlist_subscribe", "playlist_create", "resource_like", "comment", "comment_like", "send_text", "send_song", "send_album", "send_playlist", "msg_read_all", "share_resource"];
     private static readonly string[] Prefixes = ["R_SO_4_", "R_MV_5_", "A_PL_0_", "R_AL_3_", "A_DJ_1_", "R_VI_62_", "A_EV_2_", "A_DR_14_"];
     public static ApiRequest Create(string method, JsonElement query)
     {
@@ -34,6 +34,7 @@ public static class ApiEndpoints
             case "likelist": return R("/api/song/like/get", new { uid = V("uid") });
             case "like": return R("/api/radio/like", new { alg = "itembased", trackId = V("id"), like = S("like") != "false", time = "3" }, "weapi");
             case "top_artists": return R("/api/artist/top", Page(50), "weapi");
+            case "artist_songs": return R("/api/v1/artist/songs", new { id = V("id"), private_cloud = "true", work_type = 1, order = S("order", "hot") == "time" ? "time" : "hot", offset = V("offset", 0), limit = V("limit", 100) });
             case "artist_album": return R("/api/artist/albums/" + S("id"), Page(), "weapi");
             case "album": return R("/api/v1/album/" + S("id"), null, "weapi");
             case "album_sublist": return R("/api/album/sublist", Page(25), "weapi");
@@ -53,6 +54,8 @@ public static class ApiEndpoints
             case "dj_recommend": return R("/api/djradio/recommend/v1", null, "weapi");
             case "dj_program": return R("/api/dj/program/byradio", new { radioId = V("rid"), limit = V("limit", 30), offset = V("offset", 0), asc = S("asc") is "true" or "1" }, "weapi");
             case "dj_sublist": return R("/api/djradio/get/subed", Page(), "weapi");
+            case "dj_detail": return R("/api/djradio/v2/get", new { id = V("rid") }, "weapi");
+            case "dj_sub": return R("/api/djradio/sub", new { id = V("rid"), sub = N("t") == 1 }, "weapi");
             case "playlist_tracks": return R("/api/playlist/manipulate/tracks", new { op = V("op"), pid = V("pid"), trackIds = ApiEncryption.Json(S("tracks").Split(',', StringSplitOptions.RemoveEmptyEntries)), imme = "true" });
             case "song_order_update": return R("/api/playlist/manipulate/tracks", new { pid = V("pid"), trackIds = V("ids"), op = "update" });
             case "playlist_create": return R("/api/playlist/create", new { name = V("name"), privacy = V("privacy", "0"), type = V("type", "NORMAL") }, "weapi");

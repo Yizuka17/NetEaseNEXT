@@ -21,7 +21,7 @@ public sealed partial class MainWindow
         var enabled = PlayerAnimationEnabled;
         if (_configuredMotionEnabled == enabled) return;
         _configuredMotionEnabled = enabled;
-        LocalCoverParallax.VerticalShift = PlaylistCoverParallax.VerticalShift = ArtistCoverParallax.VerticalShift = enabled ? 16 : 0;
+        LocalCoverParallax.VerticalShift = PlaylistCoverParallax.VerticalShift = enabled ? 16 : 0;
         QueueGlyph.OpacityTransition = enabled ? new ScalarTransition { Duration = TimeSpan.FromMilliseconds(120) } : null;
         ConfigureSurfaceTransitions(SettingsPanel, enabled);
         SetBackIconMotion(enabled);

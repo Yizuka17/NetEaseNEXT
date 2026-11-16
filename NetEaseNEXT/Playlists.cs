@@ -32,7 +32,7 @@ public sealed partial class MainWindow
         ApplyPlaylistOwnership(playlist.Number("specialType") != 5);
         if (_api.HasSession && _accountId == 0) _ = ResolvePlaylistOwnershipAsync(id, _api.Cookie, playlist.Number("specialType") != 5, ct);
         UpdatePlaylistSubscribe(); PlaylistCommentsButton.IsEnabled = true;
-        var comments = playlist.Number("commentCount"); PlaylistCommentsLabel.Text = comments > 0 ? "评论 (" + CountText(comments) + ")" : "评论";
+        _playlistComments = playlist.Number("commentCount"); UpdateResourceActions();
         Root.UpdateLayout();
     }
     private void ApplyPlaylistOwnership(bool canDelete)
@@ -54,9 +54,10 @@ public sealed partial class MainWindow
     }
     private void UpdatePlaylistSubscribe()
     {
-        PlaylistSubscribeLabel.Text = (_playlistSubscribed ? "已收藏" : "收藏") + (_playlistSubscribers > 0 ? " (" + CountText(_playlistSubscribers) + ")" : "");
-        PlaylistSubscribeIcon.Glyph = _playlistSubscribed ? "\uE735" : "\uE734";
-        PlaylistSubscribeButton.IsEnabled = !_playlistSubscribeWriting && (_accountId == 0 || _playlistOwner != _accountId);
+        var radio = _view == "programs"; var subscribed = radio ? _radioSubscribed : _playlistSubscribed; var count = radio ? _radioSubscribers : _playlistSubscribers;
+        PlaylistSubscribeLabel.Text = (subscribed ? "已收藏" : "收藏") + (count > 0 ? " (" + CountText(count) + ")" : "");
+        PlaylistSubscribeIcon.Glyph = subscribed ? "\uE735" : "\uE734";
+        PlaylistSubscribeButton.IsEnabled = _pageLoad == null && (radio ? !_radioSubscribeWriting : !_playlistSubscribeWriting && (_accountId == 0 || _playlistOwner != _accountId));
     }
     private void ExpandDescription_Click(object sender, RoutedEventArgs args)
     {
@@ -74,6 +75,7 @@ public sealed partial class MainWindow
     }
     private async void PlaylistSubscribe_Click(object sender, RoutedEventArgs args)
     {
+        if (_view == "programs") { await ToggleRadioSubscriptionAsync(); return; }
         if (_playlistSubscribeWriting || _view != "playlist") return;
         var id = _playlistId;
         if (!_api.HasSession) { await ShowLoginAsync(); if (!_api.HasSession || _view != "playlist" || _playlistId != id) return; }
@@ -92,7 +94,7 @@ public sealed partial class MainWindow
     }
     private async void PlaylistComments_Click(object sender, RoutedEventArgs args)
     {
-        if (_view == "playlist") await ShowCommentsAsync(new SocialItem { Name = _playlistName, Kind = "playlist", ResourceId = _playlistId, ResourceKey = _playlistId.ToString(), ResourceType = 2, ThreadId = "A_PL_0_" + _playlistId });
+        if (PageCommentsSource() is { } source) await ShowCommentsAsync(source);
     }
     private async void CreatePlaylist_Click(object sender, RoutedEventArgs args) => await CreatePlaylistAsync();
     private async Task CreatePlaylistAsync()

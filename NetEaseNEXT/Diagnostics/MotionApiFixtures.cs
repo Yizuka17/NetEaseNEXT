@@ -27,6 +27,8 @@ internal static class MotionApiFixtures
                 "dj_program" => new { code = 200, programs = songs.Select(s => new { name = s.name, coverUrl = cover, mainSong = s, duration = 60000, dj = new { nickname = "测试主播" } }).ToArray() },
                 "top_artists" => new { code = 200, artists = new[] { new { id = 301, name = "测试歌手", picUrl = cover } } },
                 "artists" => new { code = 200, artist = new { id = 301, name = "测试歌手", picUrl = cover, briefDesc = "", musicSize = 3, albumSize = 1 }, hotSongs = songs },
+                "artist_songs" => new { code = 200, songs, total = 3, more = false },
+                "dj_detail" => p.Number("rid") == 201 ? (object)new { code = 200, djRadio = new { id = 201, name = "午后电台", picUrl = radioCover, desc = "", subed = false, subCount = 1, commentCount = 0, dj = new { nickname = "测试主播" } } } : new { code = 200 },
                 "artist_album" => new { code = 200, hotAlbums = new[] { new { id = 401, name = "测试专辑", picUrl = cover } } },
                 "album_sublist" => new { code = 200, count = 1, hasMore = false, data = new[] { new { id = 401, name = "测试专辑", picUrl = cover, artists = new[] { new { name = "测试歌手" } } } } },
                 "album" => new { code = 200, album = new { id = 401, name = "测试专辑", picUrl = cover, description = "" }, songs },

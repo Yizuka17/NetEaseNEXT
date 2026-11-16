@@ -193,6 +193,9 @@ public sealed partial class MainWindow
     private bool PlayerAnimationEnabled => _settings.Animations && new Windows.UI.ViewManagement.UISettings().AnimationsEnabled && !_hidden;
     private void MovePlayerControls(bool toPage)
     {
+        if (ReferenceEquals(TransportControls.Parent, toPage ? PageTransportHost : FooterTransportHost) &&
+            ReferenceEquals(PlayerTools.Parent, toPage ? PageToolsHost : FooterToolsHost) &&
+            ReferenceEquals(SongActions.Parent, toPage ? PageSongActionsHost : FooterSongActionsHost)) return;
         (TransportControls.Parent as Microsoft.UI.Xaml.Controls.Panel)?.Children.Remove(TransportControls);
         (PlayerTools.Parent as Microsoft.UI.Xaml.Controls.Panel)?.Children.Remove(PlayerTools);
         (SongActions.Parent as Microsoft.UI.Xaml.Controls.Panel)?.Children.Remove(SongActions);

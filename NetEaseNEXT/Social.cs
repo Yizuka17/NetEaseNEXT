@@ -23,7 +23,7 @@ public sealed partial class MainWindow
     }
     private static string SharedDescription(JsonElement e)
     {
-        foreach (var key in new[] { "song", "album", "playlist", "program", "resource", "event" })
+        foreach (var key in new[] { "song", "album", "playlist", "program", "djRadio", "djradio", "resource", "event" })
         {
             var shared = Object(e, key);
             var text = FirstText(shared.Text("name"), shared.Text("title"), shared.Text("content"));

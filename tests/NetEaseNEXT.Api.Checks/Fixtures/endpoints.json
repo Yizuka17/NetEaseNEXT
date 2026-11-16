@@ -2305,5 +2305,131 @@
     },
     "crypto": "weapi",
     "checkToken": false
+  },
+  {
+    "method": "artist_songs",
+    "query": {
+      "id": 2116
+    },
+    "path": "/api/v1/artist/songs",
+    "data": {
+      "id": 2116,
+      "private_cloud": "true",
+      "work_type": 1,
+      "order": "hot",
+      "offset": 0,
+      "limit": 100
+    },
+    "crypto": "eapi",
+    "checkToken": false
+  },
+  {
+    "method": "artist_songs",
+    "query": {
+      "id": 2116,
+      "order": "time",
+      "offset": 100,
+      "limit": 100
+    },
+    "path": "/api/v1/artist/songs",
+    "data": {
+      "id": 2116,
+      "private_cloud": "true",
+      "work_type": 1,
+      "order": "time",
+      "offset": 100,
+      "limit": 100
+    },
+    "crypto": "eapi",
+    "checkToken": false
+  },
+  {
+    "method": "dj_detail",
+    "query": {
+      "rid": 201
+    },
+    "path": "/api/djradio/v2/get",
+    "data": {
+      "id": 201
+    },
+    "crypto": "weapi",
+    "checkToken": false
+  },
+  {
+    "method": "dj_sub",
+    "query": {
+      "rid": 201,
+      "t": 1
+    },
+    "path": "/api/djradio/sub",
+    "data": {
+      "id": 201,
+      "sub": true
+    },
+    "crypto": "weapi",
+    "checkToken": false
+  },
+  {
+    "method": "comment_new",
+    "query": {
+      "id": 401,
+      "type": 3,
+      "pageNo": 1,
+      "pageSize": 20,
+      "sortType": 2
+    },
+    "path": "/api/v2/resource/comments",
+    "data": {
+      "threadId": "R_AL_3_401",
+      "pageNo": 1,
+      "pageSize": 20,
+      "showInner": true,
+      "sortType": 2,
+      "cursor": "normalHot#0"
+    },
+    "crypto": "eapi",
+    "checkToken": false
+  },
+  {
+    "method": "comment_new",
+    "query": {
+      "id": 9001,
+      "type": 4,
+      "pageNo": 1,
+      "pageSize": 20,
+      "sortType": 2
+    },
+    "path": "/api/v2/resource/comments",
+    "data": {
+      "threadId": "A_DJ_1_9001",
+      "pageNo": 1,
+      "pageSize": 20,
+      "showInner": true,
+      "sortType": 2,
+      "cursor": "normalHot#0"
+    },
+    "crypto": "eapi",
+    "checkToken": false
+  },
+  {
+    "method": "comment_new",
+    "query": {
+      "id": 201,
+      "type": 7,
+      "pageNo": 1,
+      "pageSize": 20,
+      "sortType": 2
+    },
+    "path": "/api/v2/resource/comments",
+    "data": {
+      "threadId": "A_DR_14_201",
+      "pageNo": 1,
+      "pageSize": 20,
+      "showInner": true,
+      "sortType": 2,
+      "cursor": "normalHot#0"
+    },
+    "crypto": "eapi",
+    "checkToken": false
   }
 ]

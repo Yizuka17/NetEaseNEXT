@@ -33,6 +33,8 @@ internal static class AlbumPagingFixtures
                 "album" => new { code = 200, album = new { id = 401, name = "完整专辑", picUrl = cover, description = new string('曲', 160), publishTime = 1704038400000L, company = "测试唱片", type = "专辑", subType = "录音室版", artists = new[] { new { id = 301, name = "歌手甲" }, new { id = 302, name = "歌手乙" } } }, songs = Songs(0, 60) },
                 "album_detail_dynamic" => new { code = 200, isSub = false },
                 "artists" => new { code = 200, artist = new { id = p.Number("id"), name = p.Number("id") == 302 ? "歌手乙" : "歌手甲", picUrl = cover, musicSize = 3, albumSize = 50 }, hotSongs = Songs(0, 3) },
+                "artist_songs" => new { code = 200, songs = Songs(0, 3), total = 3, more = false },
+                "dj_detail" => new { code = 200, djRadio = new { id = 201, name = "播客", picUrl = cover, desc = "", subed = false, subCount = 1, commentCount = 0 } },
                 "cloudsearch" => new { code = 200, result = new { songs = Songs(offset, offset < 100 ? 50 : 3) } },
                 "playlist_detail" => new { code = 200, playlist = new { id = 101, name = "续页歌单", coverImgUrl = cover, trackCount = 115, trackIds = Enumerable.Range(1, 115).Select(id => new { id }).ToArray(), creator = new { userId = 42, nickname = "测试用户" } } },
                 "playlist_track_all" => new { code = 200, songs = Songs(offset, offset == 0 ? 100 : 15) },

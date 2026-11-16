@@ -14,7 +14,7 @@ public sealed partial class MainWindow
         AlbumSubscribeButton.Visibility = _view == "album" ? Visibility.Visible : Visibility.Collapsed;
         AlbumSubscribeButton.IsEnabled = !_albumSubscribeWriting && _pageLoad == null;
         AlbumSubscribeLabel.Text = _albumSubscribed ? "已收藏" : "收藏专辑";
-        AlbumSubscribeIcon.Glyph = _albumSubscribed ? "\uE73E" : "\uE8F4";
+        AlbumSubscribeIcon.Glyph = _albumSubscribed ? "\uE735" : "\uE734";
     }
     private async Task LoadAlbumSubscriptionAsync(ApiClient api, long id, CancellationToken token)
     {
@@ -27,6 +27,7 @@ public sealed partial class MainWindow
             token.ThrowIfCancellationRequested();
             if (_hidden || _view != "album" || _playlistId != id || api.Cookie != session) return;
             _albumSubscribed = Flag(state, "isSub"); _albumSubscriptionSession = session; _albumSubscribeKnown = true; UpdateAlbumSubscribe();
+            _albumComments = state.Number("commentCount"); UpdateResourceActions();
         }
         catch (OperationCanceledException) { throw; }
         catch (Exception ex) { if (_view == "album" && _playlistId == id && api.Cookie == session) ShowError("专辑收藏状态加载失败：" + ex.Message); }

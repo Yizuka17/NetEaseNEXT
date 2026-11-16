@@ -26,7 +26,7 @@ public sealed partial class MainWindow
     {
         ScrollViewer? bound = null;
         void Changed(object? sender, ScrollViewerViewChangedEventArgs args) => request(false);
-        void Manipulated(object sender, object args) => request(true);
+        void Manipulated(object? sender, object args) => request(true);
         void Bind()
         {
             var scroll = FindDescendant<ScrollViewer>(list);

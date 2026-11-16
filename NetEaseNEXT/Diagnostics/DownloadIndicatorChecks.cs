@@ -99,7 +99,7 @@ public sealed partial class MainWindow
             LocalOnlineInfoToggle.IsOn = true; await Wait(() => HeartButton.Visibility == Visibility.Visible);
             _connectionOverride = false; RefreshLocalOnlineContext(); var beforeOffline = infoApi.RequestCount; await LoadSongEngagementAsync(recovered, infoApi);
             check("Offline mode hides local online controls while keeping local playback and the badge", HeartButton.Visibility == Visibility.Collapsed && SongCommentsButton.Visibility == Visibility.Collapsed && DownloadCheck.Visibility == Visibility.Visible && infoApi.RequestCount == beforeOffline, null);
-            _connectionOverride = true; RefreshLocalOnlineContext(); await Wait(() => HeartButton.Visibility == Visibility.Visible);
+            _connectionOverride = true; RefreshLocalOnlineContext(); await LoadSongEngagementAsync(recovered, infoApi); await Wait(() => HeartButton.Visibility == Visibility.Visible);
             check("Online information resumes after reconnecting", _localOnlineReady && _redCount == 1234, null);
             using var slowApi = new ApiClient(async (method, p, ct) => { await Task.Delay(30000, ct); return JsonSerializer.SerializeToElement(new { code = 200, data = new { count = 999 } }); }, Path.Combine(fixture, "slow"));
             var pending = LoadSongEngagementAsync(recovered, slowApi); LocalOnlineInfoToggle.IsOn = false; await pending;

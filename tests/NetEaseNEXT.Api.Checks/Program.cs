@@ -61,6 +61,22 @@ using (var legacyApi = new NativeApi(legacyHandler))
     try { await legacyApi.CallAsync("song_download_legacy", new { id = 42L, br = 1 }); Check("Direct source rejects an unknown bitrate", false); }
     catch (ArgumentException) { Check("Direct source rejects an unknown bitrate", true); }
 }
+if (args.Contains("--artist-read"))
+{
+    using var api = new NativeApi(); using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(45));
+    foreach (var order in new[] { "hot", "time" })
+    {
+        var page = await api.CallAsync("artist_songs", new { id = 2116, order, limit = 3, offset = 0 }, cancellation: timeout.Token);
+        Check("Public artist songs support " + order + " ordering", page.TryGetProperty("songs", out var songs) && songs.GetArrayLength() > 0);
+    }
+    var next = await api.CallAsync("artist_songs", new { id = 2116, order = "hot", limit = 3, offset = 3 }, cancellation: timeout.Token);
+    Check("Public artist songs expose continuation pages", next.GetProperty("songs").GetArrayLength() > 0);
+    foreach (var (type, id) in new[] { (3, 32311L), (7, 336355127L), (4, 794062371L) })
+    {
+        var comments = await api.CallAsync("comment_new", new { id, type, sortType = 2, pageNo = 1, pageSize = 1 }, cancellation: timeout.Token);
+        Check("Public comments respond for resource type " + type, comments.TryGetProperty("data", out var data) && data.TryGetProperty("comments", out _));
+    }
+}
 if (args.Contains("--network"))
 {
     using var api = new NativeApi();
