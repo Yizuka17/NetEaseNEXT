@@ -1,0 +1,209 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Artist songs start with a paged complete catalog in hot order",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The song tab no longer advertises a fixed hot 50",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Switching artist albums keeps the avatar anchored",
+    "passed": true,
+    "detail": {
+      "X": 233,
+      "Y": 125,
+      "originX": 233,
+      "originY": 125,
+      "sourceSame": true,
+      "parentSame": true,
+      "unloaded": 0
+    }
+  },
+  {
+    "name": "Switching artist bio keeps the avatar anchored",
+    "passed": true,
+    "detail": {
+      "X": 233,
+      "Y": 125,
+      "originX": 233,
+      "originY": 125,
+      "sourceSame": true,
+      "parentSame": true,
+      "unloaded": 0
+    }
+  },
+  {
+    "name": "Switching artist mvs keeps the avatar anchored",
+    "passed": true,
+    "detail": {
+      "X": 233,
+      "Y": 125,
+      "originX": 233,
+      "originY": 125,
+      "sourceSame": true,
+      "parentSame": true,
+      "unloaded": 0
+    }
+  },
+  {
+    "name": "Switching artist songs keeps the avatar anchored",
+    "passed": true,
+    "detail": {
+      "X": 233,
+      "Y": 125,
+      "originX": 233,
+      "originY": 125,
+      "sourceSame": true,
+      "parentSame": true,
+      "unloaded": 0
+    }
+  },
+  {
+    "name": "Tab switches reuse the existing artist metadata",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Play-all context includes every artist song without replacing displayed rows",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Time sorting requests the full catalog in server order",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Artist songs continue beyond the old 50 and stop after their final page",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Changing sort cancels stale continuation rows",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Album comments and favorite actions are visible together",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comment requests preserve resource type 3",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comments identify the selected resource 3",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Saved album uses the same checked collection glyph as playlists",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Podcast episodes retain program IDs separately from audio song IDs",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Whole podcast comments use radio type 7",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Episode comments use program type 4",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comment requests preserve resource type 7",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comments identify the selected resource 7",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comment requests preserve resource type 4",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Comments identify the selected resource 4",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Podcast collection reuses the playlist saved icon and writes the radio ID",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Podcast sharing distinguishes the whole radio from its episode",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Windows share data contains the selected resource title and public link",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Supported buttons keep their place while details are pending",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Canceled detail requests cannot hide the new page\u0027s actions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Ordinary page switches do not unmount player action buttons",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Refreshing linked local metadata does not hide heart and comment buttons",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Sharing a downloaded source exposes its online ID rather than its local path",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The explicit local-online-info switch still hides network actions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Sharing previews the selected resource before a write",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Confirming a share posts the captured whole-radio resource",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A rejected share keeps the preview open for retry",
+    "passed": true,
+    "detail": null
+  }
+]
