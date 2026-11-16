@@ -1,0 +1,23 @@
+{
+  "version": "0.3.3.13",
+  "installedChecks": 36,
+  "installedStatus": "Ok",
+  "dllSha256": "6e6a3939348378db47bdde6da450785b2f7db09ae1e96755e1b309e10dbc1a90",
+  "msixSha256": "1e22f5392ddb9d2a59a988b2cf40e2985f44bf1a761a9fda13ba1568bff1877e",
+  "installedPublishAndMsixDllMatch": true,
+  "shareGlyphMeasuredBounds": {
+    "ActualWidth": 16,
+    "ActualHeight": 18,
+    "naturalWidth": 16,
+    "naturalHeight": 18
+  },
+  "apiSourceUnchanged": true,
+  "apiChecksBaselineVersion": "0.3.3.12",
+  "apiChecks": 89,
+  "fullRegressionBaselineVersion": "0.3.3.11",
+  "baselinePortableChecks": 252,
+  "baselineInstalledChecks": 147,
+  "windowsShare": "Opened native Windows share sheet with correct resource link and closed without sending",
+  "visualReview": "Actual installed button and menu captured; header glyph renders at its full natural 16 x 18 size",
+  "productionWritesPerformed": false
+}

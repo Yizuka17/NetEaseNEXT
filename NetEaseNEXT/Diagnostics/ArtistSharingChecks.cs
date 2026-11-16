@@ -76,6 +76,10 @@ public sealed partial class MainWindow
 
             await Page("album", 401);
             check("Album comments and favorite actions are visible together", PlaylistCommentsButton.Visibility == Visibility.Visible && AlbumSubscribeButton.Visibility == Visibility.Visible && ResourceShareButton.Visibility == Visibility.Visible, null);
+            var shareGlyph = Descendants<FontIcon>(ResourceShareButton).Single();
+            var naturalShareGlyph = new FontIcon { Glyph = shareGlyph.Glyph, FontFamily = shareGlyph.FontFamily, FontSize = shareGlyph.FontSize, IsTextScaleFactorEnabled = false };
+            naturalShareGlyph.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+            check("The share glyph has room for its natural measured size", shareGlyph.ActualWidth + .1 >= naturalShareGlyph.DesiredSize.Width && shareGlyph.ActualHeight + .1 >= naturalShareGlyph.DesiredSize.Height, new { shareGlyph.ActualWidth, shareGlyph.ActualHeight, naturalWidth = naturalShareGlyph.DesiredSize.Width, naturalHeight = naturalShareGlyph.DesiredSize.Height });
             await Comment(PageCommentsSource()!, 3, "R_AL_3_401");
             await ToggleAlbumSubscriptionAsync(_api); var savedGlyph = AlbumSubscribeIcon.Glyph;
             check("Saved album uses the same checked collection glyph as playlists", _albumSubscribed && savedGlyph == "\uE735", null);

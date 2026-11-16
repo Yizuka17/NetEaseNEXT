@@ -72,7 +72,7 @@ public sealed partial class MainWindow
         if (resource == null) { ShowPlayerMessage("暂无可分享的在线来源"); return; }
         var menu = new MenuFlyout();
         var copy = new MenuFlyoutItem { Text = "复制链接", Icon = new SymbolIcon(Symbol.Copy) }; copy.Click += (_, _) => CopyResourceLink(resource); menu.Items.Add(copy);
-        var system = new MenuFlyoutItem { Text = "系统分享", Icon = new SymbolIcon(Symbol.Share) }; system.Click += (_, _) => ShowWindowsShare(resource); menu.Items.Add(system);
+        var system = new MenuFlyoutItem { Text = "系统分享", Icon = IconFonts.Create("\uE72D") }; system.Click += (_, _) => ShowWindowsShare(resource); menu.Items.Add(system);
         if (resource.CanPublish)
         {
             var publish = new MenuFlyoutItem { Text = "分享到动态", Icon = new SymbolIcon(Symbol.Send) }; publish.Click += async (_, _) => await PublishResourceAsync(resource); menu.Items.Add(publish);
