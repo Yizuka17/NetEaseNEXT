@@ -1,0 +1,18 @@
+{
+  "version": "0.3.3.12",
+  "installedChecks": 35,
+  "installedStatus": "Ok",
+  "dllSha256": "e5cc3feb0b822efff135ab94ee4327273d2268f13bd065eed5c6cb95dd63dc32",
+  "msixSha256": "8b1bc2595ab68262aa32fe0e282d6d3e8c401464a2373c5d104194ee725037e6",
+  "installedPublishAndMsixDllMatch": true,
+  "apiSourceUnchanged": true,
+  "apiChecks": 89,
+  "realPublicReadChecks": 6,
+  "baselineRegressionVersion": "0.3.3.11",
+  "baselinePortableChecks": 252,
+  "baselineInstalledChecks": 147,
+  "baselineApiChecks": 89,
+  "windowsShare": "Opened the native Windows share sheet for playlist?id=101, verified the link and invoked its close button without sending",
+  "visualReview": "Native Share icon on resource details and four context menus; Copy, Share and Send icons in the action menu",
+  "productionWritesPerformed": false
+}
