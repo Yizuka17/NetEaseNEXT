@@ -101,6 +101,7 @@ public sealed partial class MainWindow
             _localPlaylistId = shared.Id; await NavigateAsync("local-playlist");
             var online = new Track(9001, "本地下载歌曲", "晚风电台", "回家的路", "", 8000);
             _restoringPlayback = true; await _playback.PlayAsync(online, [online]); _restoringPlayback = false; if (_playback.IsPlaying) _playback.Toggle();
+            await Wait(() => _songCreditsLoad == null);
             before = api.RequestCount; await LocateCurrentAsync(api);
             var located = TrackList.SelectedItem as Track;
             var locatedPath = _playback.CurrentDownloadedPath;

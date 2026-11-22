@@ -25,7 +25,7 @@ public sealed partial class MainWindow
         var localVisible = track?.IsLocal != true || OnlineSongId(track) > 0;
         HeartButton.Visibility = SongCommentsButton.Visibility = localVisible ? Visibility.Visible : Visibility.Collapsed;
         SongInfoButton.IsEnabled = track != null;
-        SongShareButton.IsEnabled = track != null && ShareForTrack(track) != null;
+        SongShareButton.IsEnabled = track != null && CanShareTrack(track);
         HeartButton.IsEnabled = !_heartWriting && track != null && OnlineSongId(track) > 0 && localVisible;
         SongCommentsButton.IsEnabled = track != null && SongCommentsSource(track) != null && localVisible;
         var commentLabel = track?.PodcastId > 0 ? "单集评论" : "歌曲评论";

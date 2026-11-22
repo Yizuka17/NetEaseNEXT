@@ -22,6 +22,12 @@ public sealed partial class MainWindow
     private readonly CancellationTokenSource _downloads = new();
     private long _previousPlayingTrackId;
     private int _maxQuality;
+    private int _queueReleaseVersion;
+    private async Task ReleaseClosedQueueAsync(int version)
+    {
+        await Task.Delay(150);
+        if (!_hidden && !_exiting && version == _queueReleaseVersion && QueuePane.Visibility == Visibility.Collapsed) QueueList.ItemsSource = null;
+    }
     private long _qualityTrack;
     private CancellationTokenSource? _qualityLoad;
     private static readonly (string Level, string Name)[] Qualities = AudioQuality.Levels;
@@ -38,9 +44,12 @@ public sealed partial class MainWindow
     {
         ConfigureInterfaceMotion();
         var open = QueuePane.Visibility != Visibility.Visible;
+        var version = ++_queueReleaseVersion;
         if (!open && ReferenceEquals(_batchList, QueueList)) EndTrackBatch();
         if (open) QueueList.ItemsSource = _playback.Queue;
+        else CloseRowContextMenu();
         QueuePane.Visibility = open ? Visibility.Visible : Visibility.Collapsed;
+        if (!open) _ = ReleaseClosedQueueAsync(version);
         QueueGlyph.Opacity = open ? .65 : 1;
         if (open && _playback.Current != null)
         {
@@ -65,7 +74,7 @@ public sealed partial class MainWindow
             _displayedTrack = _playback.Current;
             if (_displayedTrack is Track track)
             {
-                MiniTitle.Text = track.Title; MiniArtist.Text = track.Subtitle; Artwork.SetUri(MiniCover, track.Cover);
+                MiniTitle.Text = track.Title; Artwork.SetUri(MiniCover, track.Cover); RefreshSongCredits();
                 _lyricFollowTimer.Stop(); _followLyrics = true; FollowLyricsButton.Visibility = Visibility.Collapsed;
                 _qualityTrack = 0;
                 if (!_restoringPlayback) { _ = LoadQualityAsync(track); _ = LoadSongEngagementAsync(track); }
@@ -90,7 +99,7 @@ public sealed partial class MainWindow
     private void UpdateNowPlaying()
     {
         if (_playback.Current is not Track track) return;
-        NowTitle.Text = track.Title; NowArtist.Text = track.Subtitle;
+        NowTitle.Text = track.Title; RefreshSongCredits();
         if (Artwork.TrySnapshot(MiniCover, track.Cover, out var snapshot)) Artwork.Seed(LargeCover, track.Cover, snapshot!);
         else if (Artwork.GetUri(LargeCover) == track.Cover) Artwork.Refresh(LargeCover);
         else Artwork.SetUri(LargeCover, track.Cover);

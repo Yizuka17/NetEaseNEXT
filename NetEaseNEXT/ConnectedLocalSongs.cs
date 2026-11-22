@@ -58,7 +58,7 @@ public sealed partial class MainWindow
         _songStatsLoad?.Cancel(); _songStatsTask = Task.CompletedTask; _songStatsTrack = 0;
         _localOnlineReady = false; _redCount = null; _songLiked = _songLikeKnown = false;
         if (_hidden) return;
-        UpdateSongActions(); UpdateDownloadIndicator();
+        UpdateSongActions(); UpdateDownloadIndicator(); RefreshSongCredits(true);
         if (OnlineSongId(track) > 0) _ = LoadSongEngagementAsync(track);
     }
     private SocialItem? SongCommentsSource(Track track)

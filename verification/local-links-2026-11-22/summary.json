@@ -1,0 +1,63 @@
+{
+  "version": "0.3.3.14",
+  "verified_date": "2026-11-22",
+  "publish_installed_dll_sha256": "e42299430ea8f4beb01c5aaddafade4f3c249c51d7442b47ff4f39767b044725",
+  "msix_signature": "Valid",
+  "native_suites": [
+    {
+      "report": "review-artist-sharing-check.json",
+      "passed": 36,
+      "metrics": 0
+    },
+    {
+      "report": "review-download-indicator-check.json",
+      "passed": 28,
+      "metrics": 0
+    },
+    {
+      "report": "review-library-check.json",
+      "passed": 41,
+      "metrics": 15
+    },
+    {
+      "report": "review-local-actions-check.json",
+      "passed": 20,
+      "metrics": 0
+    },
+    {
+      "report": "review-local-links-check.json",
+      "passed": 28,
+      "metrics": 0
+    },
+    {
+      "report": "review-local-motion-check.json",
+      "passed": 84,
+      "metrics": 0
+    },
+    {
+      "report": "review-song-experience-check.json",
+      "passed": 34,
+      "metrics": 0
+    },
+    {
+      "report": "review-theme-batch-check.json",
+      "passed": 40,
+      "metrics": 0
+    },
+    {
+      "report": "review-track-locator-check.json",
+      "passed": 14,
+      "metrics": 0
+    }
+  ],
+  "native_assertions": 325,
+  "installed_assertions": 28,
+  "api_contracts": 83,
+  "manual": {
+    "native_keyboard_context_menu": "Shift+F10 opens fresh local row menu with icons",
+    "file_location": "Opened exact local playlist A folder containing matching audio; Explorer did not visibly select the item",
+    "file_share": "Windows share sheet displayed actual WAV filename and size; canceled without sending",
+    "song_information": "Individual singer/album text links, bare top-right close cross"
+  },
+  "environment": "Windows 11 VirtualBox 3D guest; isolated synthetic API and audio fixtures; no real account writes; no physical touch test"
+}

@@ -55,13 +55,13 @@ public sealed partial class MainWindow
             var watch = Stopwatch.StartNew();
             while (TrackList.ContainerFromItem(first) == null && watch.Elapsed < TimeSpan.FromSeconds(5)) { await Task.Delay(20); Root.UpdateLayout(); }
             var row = FindTrackContextHost((DependencyObject)TrackList.ContainerFromItem(first))!;
-            var menu = (MenuFlyout)row.ContextFlyout;
+            var menu = CreateTrackMenu(first, TrackList);
             async Task SetMenuAsync(bool open)
             {
                 var completed = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
                 EventHandler<object> changed = (_, _) => completed.TrySetResult();
                 if (open) menu.Opened += changed; else menu.Closed += changed;
-                try { if (open) menu.ShowAt(row); else menu.Hide(); await completed.Task.WaitAsync(TimeSpan.FromSeconds(5)); }
+                try { if (open) ShowRowContextMenu(menu, row); else menu.Hide(); await completed.Task.WaitAsync(TimeSpan.FromSeconds(5)); }
                 finally { if (open) menu.Opened -= changed; else menu.Closed -= changed; }
             }
             await SetMenuAsync(true);
@@ -87,6 +87,8 @@ public sealed partial class MainWindow
             check("Queue and favorite buttons have different glyphs", FindDescendant<FontIcon>(QueueButton)!.Glyph == "\uE8FD" && FindDescendant<FontIcon>(PlayerTools.Children.OfType<Button>().First())!.Glyph == "\uE8F4", null);
             await SaveLibraryImageAsync(QueuePane, "library-queue.png");
             ShowQueue_Click(QueueButton, new());
+            watch.Restart();
+            while (QueueList.ItemsSource != null && watch.Elapsed < TimeSpan.FromSeconds(3)) { await Task.Delay(30); Root.UpdateLayout(); }
             check("The queue button closes and releases queue bindings", QueuePane.Visibility == Visibility.Collapsed && QueueList.ItemsSource == null, null);
             await CheckTransportInkAsync(check, results, "footer");
             await SaveLibraryImageAsync(PlayerFooter, "library-footer-light.png");
@@ -126,7 +128,7 @@ public sealed partial class MainWindow
 
     private static FrameworkElement? FindTrackContextHost(DependencyObject? parent)
     {
-        if (parent is FrameworkElement { ContextFlyout: MenuFlyout } element) return element;
+        if (parent is ListViewItem { ContentTemplateRoot: FrameworkElement element }) return element;
         if (parent == null) return null;
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
             if (FindTrackContextHost(VisualTreeHelper.GetChild(parent, i)) is { } found) return found;

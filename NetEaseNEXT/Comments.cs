@@ -23,7 +23,7 @@ public sealed partial class MainWindow
         var hint = new TextBlock { Text = source.CommentId > 0 ? "回复评论" : "", Opacity = .65, VerticalAlignment = VerticalAlignment.Center };
         var sort = new ComboBox { ItemsSource = new[] { "最新", "最热" }, SelectedIndex = _settings.CommentSort == "Latest" ? 0 : 1, MinWidth = 100, HorizontalAlignment = HorizontalAlignment.Left };
         var send = new Button { Content = "发送", Style = (Style)Application.Current.Resources["AccentButtonStyle"], MinHeight = 44, MinWidth = 64, IsEnabled = false, VerticalAlignment = VerticalAlignment.Bottom };
-        var close = new Button { Content = IconFonts.Create("\uE711"), Style = (Style)Application.Current.Resources["BareButtonStyle"] };
+        var close = new Button { Content = IconFonts.Create("\uE711"), Style = (Style)Application.Current.Resources["BareButtonStyle"], UseSystemFocusVisuals = false };
         Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(close, "关闭评论");
         var title = new TextBlock { Text = "评论", FontSize = 24, FontWeight = Microsoft.UI.Text.FontWeights.SemiBold, VerticalAlignment = VerticalAlignment.Center };
         var heading = new Grid { ColumnSpacing = 12, HorizontalAlignment = HorizontalAlignment.Stretch };

@@ -9,6 +9,11 @@ internal static class IconFonts
     internal const string Source = "ms-appx:///Assets/Fonts/NetEaseNEXTIcons.ttf#NetEaseNEXT Icons";
     internal static FontFamily Symbols => (FontFamily)Application.Current.Resources["AppIconFontFamily"];
     internal static FontFamily FrameworkSymbols => (FontFamily)Application.Current.Resources["SymbolThemeFontFamily"];
+    internal static FontIcon Action(string glyph) => new()
+    {
+        Glyph = glyph, FontFamily = Symbols, FontSize = 16, IsTextScaleFactorEnabled = false,
+        VerticalAlignment = VerticalAlignment.Center
+    };
     internal static FontIcon Create(string glyph) => new()
     {
         Glyph = glyph, FontFamily = Symbols, FontSize = 20, Width = 20, Height = 20,

@@ -133,7 +133,13 @@ public sealed partial class MainWindow
     private Track? CurrentTrackInView(Track? current)
     {
         if (current == null) return null;
-        if (_view != "local-playlist") return Tracks.FirstOrDefault(t => t.Id == current.Id);
+        if (_view != "local-playlist")
+        {
+            var exactId = Tracks.FirstOrDefault(t => t.Id == current.Id);
+            if (exactId != null || _view == "queue") return exactId;
+            var sourceId = SourceSongId(current);
+            return sourceId > 0 ? Tracks.FirstOrDefault(t => !t.IsLocal && t.Id == sourceId) : null;
+        }
         var path = current.IsLocal ? current.LocalPath : _playback.CurrentDownloadedPath;
         var exact = path == null ? null : Tracks.FirstOrDefault(t => string.Equals(t.LocalPath, path, StringComparison.OrdinalIgnoreCase));
         // When playback identifies a specific downloaded file, never locate a
@@ -147,7 +153,7 @@ public sealed partial class MainWindow
         var match = CurrentTrackInView(_playback.Current);
         if (match != null && TrackList.SelectedItem == null && !ReferenceEquals(_batchList, TrackList) &&
             (!_trackSelectionMotion.PlaybackSelection || !ReferenceEquals(_trackSelectionMotion.PlaybackItem, match))) SelectPlayingTrack(TrackList, match);
-        var belongs = match != null || _view == "programs" && _playback.Current != null && _playback.Current.PodcastId == _playlistId || _view == "playlist" && _playback.Current is { } current && _playlistTrackIds.Contains(current.Id);
+        var belongs = match != null || _view == "programs" && _playback.Current != null && _playback.Current.PodcastId == _playlistId || _view == "playlist" && _playback.Current is { } current && _playlistTrackIds.Contains(SourceSongId(current));
         TrackLocateButton.Visibility = !_hidden && (_view is "playlist" or "programs" or "queue" or "local-playlist") && belongs ? Visibility.Visible : Visibility.Collapsed;
         TrackLocateButton.IsEnabled = _trackLocateLoad == null && _pageLoad == null && (_view != "playlist" || !_playlistRemovals.Any(t => t.PlaylistId == _playlistId));
         QueueLocateButton.Visibility = _playback.Current != null ? Visibility.Visible : Visibility.Collapsed;
@@ -159,7 +165,8 @@ public sealed partial class MainWindow
         if (_hidden || _trackLocateLoad != null || _pageLoad != null || _view == "playlist" && _playlistRemovals.Any(t => t.PlaylistId == _playlistId) || _playback.Current is not { } current || _view is not ("playlist" or "programs" or "queue" or "local-playlist")) return;
         using var load = new CancellationTokenSource(); _trackLocateLoad = load;
         var route = _route; var playlist = _playlistId; var ids = _playlistTrackIds; var session = _api.Cookie;
-        var target = Array.IndexOf(ids, current.Id);
+        var sourceId = SourceSongId(current);
+        var target = Array.IndexOf(ids, sourceId);
         bool StillCurrent() => !_hidden && !load.IsCancellationRequested && ReferenceEquals(route, _route) && _playlistId == playlist &&
             ReferenceEquals(ids, _playlistTrackIds) && _playback.Current?.Id == current.Id && _api.Cookie == session;
         UpdateTrackLocator();
@@ -174,7 +181,7 @@ public sealed partial class MainWindow
                 var loaded = Tracks.Select(t => t.Id).ToHashSet(); foreach (var song in page) if (loaded.Add(song.Id)) Tracks.Add(song);
                 _offset += page.Count; _tracksMore = page.Count == 50 && _offset < 10000; TrackCount.Text = $"{Tracks.Count} 首";
             }
-            while (!Tracks.Any(t => t.Id == current.Id) && _view == "playlist" && target >= _offset && StillCurrent())
+            while (CurrentTrackInView(current) == null && _view == "playlist" && target >= _offset && StillCurrent())
             {
                 SetBusy(true);
                 var offset = _offset;

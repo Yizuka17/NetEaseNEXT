@@ -11,12 +11,9 @@ public sealed partial class MainWindow
     private sealed record PlaylistTrackRemoval(long PlaylistId, long TrackId, string Session);
     private readonly HashSet<(long PlaylistId, long TrackId)> _playlistRemovals = [];
     private bool OwnsDisplayedPlaylist => _view == "playlist" && _playlistId > 0 && _accountId > 0 && _playlistOwner == _accountId;
-    private void TrackContext_Opening(object sender, object args)
+    private void UpdateTrackContextActions(MenuFlyout menu, Track? track)
     {
-        if (sender is not MenuFlyout menu) return;
-        PrepareBatchMenu(menu, TrackList);
         var remove = menu.Items.OfType<MenuFlyoutItem>().First(i => i.Text == "从歌单移除");
-        var track = menu.Target?.DataContext as Track;
         var local = menu.Items.OfType<MenuFlyoutItem>().FirstOrDefault(i => i.Text == "从本地列表移除");
         if (local != null) local.Visibility = IsLocalView && track?.IsLocal == true ? Visibility.Visible : Visibility.Collapsed;
         if (track != null)
@@ -26,9 +23,9 @@ public sealed partial class MainWindow
                 if (item.Text is "下载" or "升级音质" or "本地文件")
                 {
                     var downloaded = DownloadForTrack(track); item.Text = downloaded != null ? "升级音质" : track.IsLocal ? "本地文件" : "下载";
-                    item.IsEnabled = !track.IsLocal || SourceSongId(track) > 0; item.Icon = downloaded != null ? Services.IconFonts.Create("\uE73E") : null;
+                    item.IsEnabled &= !track.IsLocal || SourceSongId(track) > 0; item.Icon = Services.IconFonts.Action(downloaded != null ? "\uE73E" : "\uE896");
                 }
-                if (item.Text is "歌手" or "专辑") item.Visibility = !track.IsLocal || OnlineSongId(track) > 0 && (item.Text == "歌手" ? track.ArtistId : track.AlbumId) > 0 ? Visibility.Visible : Visibility.Collapsed;
+                if (item.Text is "歌手" or "专辑") item.Visibility = !track.IsLocal || OnlineSongId(track) > 0 ? Visibility.Visible : Visibility.Collapsed;
             }
         }
         remove.Visibility = OwnsDisplayedPlaylist && _api.HasSession && track != null ? Visibility.Visible : Visibility.Collapsed;

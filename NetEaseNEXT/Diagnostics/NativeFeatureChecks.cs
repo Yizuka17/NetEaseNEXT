@@ -22,6 +22,7 @@ public sealed partial class MainWindow
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++) foreach (var child in Descendants<T>(VisualTreeHelper.GetChild(root, i))) yield return child;
     }
     private static void Invoke(Button button) => ((IInvokeProvider)new ButtonAutomationPeer(button).GetPattern(PatternInterface.Invoke)).Invoke();
+    private static void Invoke(HyperlinkButton button) => ((IInvokeProvider)new HyperlinkButtonAutomationPeer(button).GetPattern(PatternInterface.Invoke)).Invoke();
     private async Task RunNativeFeatureChecksAsync(Action<string, bool, object?> check)
     {
         RestoreWindow(); _sessionReady = true; _settings.Theme = "Light"; _settings.Backdrop = "Solid"; ApplyAppearance(); _playback.SetVolume(0);

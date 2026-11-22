@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml.Controls;
 using NetEaseNEXT.Models;
 using NetEaseNEXT.Services;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.Storage;
 
 namespace NetEaseNEXT;
 
@@ -16,7 +17,8 @@ public sealed partial class MainWindow
     }
     private CancellationTokenSource? _resourceShareLoad;
     private DataTransferManager? _shareManager;
-    private ShareResource? _pendingShare;
+    private sealed record ShareSelection(ShareResource? Resource, StorageFile? File, string Name);
+    private ShareSelection? _pendingShare;
     [ComImport, Guid("3A3DCD6C-3EAB-43DC-BCDE-45671CE800C8"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     private interface IShareWindow
     {
@@ -41,6 +43,28 @@ public sealed partial class MainWindow
         package.Properties.Title = resource.Name; package.SetWebLink(resource.Link); package.SetText(resource.Name + "\n" + resource.Link.AbsoluteUri);
         return package;
     }
+    private string? ShareFilePath(Track track)
+    {
+        var path = track.IsLocal ? track.LocalPath : _playback.Current?.Id == track.Id && _playback.CurrentDownloadedPath is { } playing ? playing : DownloadForTrack(track)?.Path;
+        return !string.IsNullOrEmpty(path) && File.Exists(path) ? Path.GetFullPath(path) : null;
+    }
+    private bool CanShareTrack(Track track) => ShareForTrack(track) != null || ShareFilePath(track) != null;
+    private static DataPackage ShareFilePackage(StorageFile file, string title)
+    {
+        var package = new DataPackage { RequestedOperation = DataPackageOperation.Copy };
+        package.Properties.Title = string.IsNullOrWhiteSpace(title) ? file.DisplayName : title; package.SetStorageItems(new IStorageItem[] { file }, true);
+        return package;
+    }
+    private async Task ShowFileShareAsync(string path, string title)
+    {
+        try
+        {
+            var file = await StorageFile.GetFileFromPathAsync(path);
+            if (!_hidden && !_exiting) ShowWindowsShare(new ShareSelection(null, file, title));
+        }
+        catch (FileNotFoundException) { ShowPlayerMessage("文件已不存在，请刷新后重试", InfoBarSeverity.Warning); }
+        catch (Exception ex) { ShowError(ex.Message); }
+    }
     private void CopyResourceLink(ShareResource resource)
     {
         try { Clipboard.SetContent(SharePackage(resource)); Clipboard.Flush(); ShowPlayerMessage("已复制链接", InfoBarSeverity.Success); }
@@ -48,10 +72,12 @@ public sealed partial class MainWindow
     }
     private void RequestedShare(DataTransferManager sender, DataRequestedEventArgs args)
     {
-        if (_pendingShare is { } resource) args.Request.Data = SharePackage(resource);
+        if (_pendingShare?.File is { } file) args.Request.Data = ShareFilePackage(file, _pendingShare.Name);
+        else if (_pendingShare?.Resource is { } resource) args.Request.Data = SharePackage(resource);
         else args.Request.FailWithDisplayText("请选择要分享的内容");
     }
-    private void ShowWindowsShare(ShareResource resource)
+    private void ShowWindowsShare(ShareResource resource) => ShowWindowsShare(new ShareSelection(resource, null, resource.Name));
+    private void ShowWindowsShare(ShareSelection selection)
     {
         try
         {
@@ -63,24 +89,40 @@ public sealed partial class MainWindow
                 finally { Marshal.Release(pointer); }
                 _shareManager.DataRequested += RequestedShare;
             }
-            _pendingShare = resource; interop.ShowShareUIForWindow(window);
+            _pendingShare = selection; interop.ShowShareUIForWindow(window);
         }
-        catch (Exception ex) { Log.Write(ex); ShowPlayerMessage("暂时无法打开系统分享，可使用复制链接", InfoBarSeverity.Warning); }
+        catch (Exception ex) { Log.Write(ex); ShowPlayerMessage(selection.File != null ? "暂时无法打开文件分享" : "暂时无法打开系统分享，可使用复制链接", InfoBarSeverity.Warning); }
     }
-    private void ShowResourceShare(FrameworkElement anchor, ShareResource? resource)
+    private MenuFlyout ResourceShareMenu(ShareResource? resource, string? filePath = null, string? title = null)
     {
-        if (resource == null) { ShowPlayerMessage("暂无可分享的在线来源"); return; }
         var menu = new MenuFlyout();
-        var copy = new MenuFlyoutItem { Text = "复制链接", Icon = new SymbolIcon(Symbol.Copy) }; copy.Click += (_, _) => CopyResourceLink(resource); menu.Items.Add(copy);
-        var system = new MenuFlyoutItem { Text = "系统分享", Icon = IconFonts.Create("\uE72D") }; system.Click += (_, _) => ShowWindowsShare(resource); menu.Items.Add(system);
-        if (resource.CanPublish)
+        if (resource != null)
+        {
+            var copy = new MenuFlyoutItem { Text = "复制链接", Icon = new SymbolIcon(Symbol.Copy) }; copy.Click += (_, _) => CopyResourceLink(resource); menu.Items.Add(copy);
+            var system = new MenuFlyoutItem { Text = "系统分享", Icon = IconFonts.Create("\uE72D") }; system.Click += (_, _) => ShowWindowsShare(resource); menu.Items.Add(system);
+        }
+        if (filePath != null)
+        {
+            var file = new MenuFlyoutItem { Text = "分享文件", Icon = IconFonts.Action("\uE72D") };
+            ToolTipService.SetToolTip(file, Path.GetFileName(filePath));
+            file.Click += async (_, _) => await ShowFileShareAsync(filePath, title ?? resource?.Name ?? Path.GetFileNameWithoutExtension(filePath)); menu.Items.Add(file);
+        }
+        if (resource?.CanPublish == true)
         {
             var publish = new MenuFlyoutItem { Text = "分享到动态", Icon = new SymbolIcon(Symbol.Send) }; publish.Click += async (_, _) => await PublishResourceAsync(resource); menu.Items.Add(publish);
         }
+        return menu;
+    }
+    private void ShowResourceShare(FrameworkElement anchor, ShareResource? resource, string? filePath = null, string? title = null)
+    {
+        var menu = ResourceShareMenu(resource, filePath, title);
+        if (menu.Items.Count == 0) { ShowPlayerMessage("暂无可分享的内容"); return; }
         ShowThemedFlyout(menu, anchor);
     }
     private void ShareCurrent_Click(object sender, RoutedEventArgs args)
-        => ShowResourceShare((FrameworkElement)sender, _playback.Current is { } track ? ShareForTrack(track) : null);
+    {
+        if (_playback.Current is { } track) ShowResourceShare((FrameworkElement)sender, ShareForTrack(track), ShareFilePath(track), track.Title);
+    }
     private void ResourceShare_Click(object sender, RoutedEventArgs args) => ShowResourceShare((FrameworkElement)sender, ShareForPage());
     private void ContextShare_Click(object sender, RoutedEventArgs args)
     {
@@ -99,7 +141,8 @@ public sealed partial class MainWindow
             CatalogItem item => CatalogGrid.ContainerFromItem(item) as FrameworkElement,
             _ => null
         };
-        ShowResourceShare(anchor ?? Root, resource);
+        var sharedTrack = element.DataContext as Track;
+        ShowResourceShare(anchor ?? Root, resource, sharedTrack == null ? null : ShareFilePath(sharedTrack), sharedTrack?.Title);
     }
     private async Task PublishResourceAsync(ShareResource resource)
     {

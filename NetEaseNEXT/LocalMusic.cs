@@ -97,6 +97,8 @@ public sealed partial class MainWindow
         LocalFolderStatus.Text = playlist?.FolderStatus ?? "";
         LocalFolderStatus.Visibility = LocalFolderStatus.Text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
         EditLocalPlaylistButton.Visibility = DeleteLocalPlaylistButton.Visibility = playlist != null ? Visibility.Visible : Visibility.Collapsed;
+        OpenLocalPlaylistFolderButton.Visibility = playlist?.FolderPath.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+        OpenLocalPlaylistFolderButton.IsEnabled = playlist?.FolderPath.Length > 0 && Directory.Exists(playlist.FolderPath);
         ImportLocalButton.IsEnabled = playlist?.FolderPath.Length is not > 0;
         ImportLocalButton.Visibility = playlist?.FolderPath.Length > 0 ? Visibility.Collapsed : Visibility.Visible;
         EmptyPanel.Visibility = Visibility.Collapsed;
@@ -119,7 +121,17 @@ public sealed partial class MainWindow
     private void LocalCardMenu_Opening(object sender, object args)
     {
         if (sender is MenuFlyout menu)
-            foreach (var item in menu.Items.OfType<MenuFlyoutItem>()) item.IsEnabled = item.DataContext is LocalPlaylistCard { Id.Length: > 0 };
+            foreach (var item in menu.Items.OfType<MenuFlyoutItem>())
+            {
+                item.IsEnabled = item.DataContext is LocalPlaylistCard { Id.Length: > 0 };
+                if (item.Text == "打开文件夹")
+                {
+                    var id = (item.DataContext as LocalPlaylistCard)?.Id;
+                    var path = _localLibrary.Playlists.FirstOrDefault(p => p.Id == id)?.FolderPath;
+                    item.Visibility = !string.IsNullOrEmpty(path) ? Visibility.Visible : Visibility.Collapsed;
+                    item.IsEnabled &= !string.IsNullOrEmpty(path) && Directory.Exists(path);
+                }
+            }
     }
     private void CommitLocal(Action change)
     {

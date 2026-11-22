@@ -29,7 +29,14 @@ public partial class App : Application
             if (!_instance.IsPrimary) { _instance.Dispose(); Exit(); return; }
         }
         StartupSession? startup = null;
-        if (Environment.GetCommandLineArgs().Contains("--artist-sharing-check"))
+        if (Environment.GetCommandLineArgs().Contains("--local-links-check"))
+        {
+            var directory = Path.Combine(Path.GetTempPath(), "NetEaseNEXT-local-links-api-" + Guid.NewGuid().ToString("N"));
+            var settings = SettingsStore.Load(); settings.Volume = 0; settings.LocalOnlineInfo = true; settings.CacheDirectory = directory;
+            var state = Environment.GetCommandLineArgs().Contains("--local-links-preview") ? LocalLinkFixtures.PreparePreview(directory) : new PlaybackSnapshot();
+            startup = new(settings, LocalLinkFixtures.Create(directory), () => state);
+        }
+        else if (Environment.GetCommandLineArgs().Contains("--artist-sharing-check"))
         {
             var directory = Path.Combine(Path.GetTempPath(), "NetEaseNEXT-artist-sharing-api-" + Guid.NewGuid().ToString("N"));
             var settings = SettingsStore.Load(); settings.Volume = 0; settings.CacheDirectory = directory;
@@ -56,6 +63,7 @@ public partial class App : Application
             Diagnostics.StartupTrace.Mark("Startup requests scheduled before window construction");
         }
         Diagnostics.StartupTrace.Mark("Create window"); _window = new MainWindow(startup); Diagnostics.StartupTrace.Mark("Window created");
+        if (Environment.GetCommandLineArgs().Contains("--local-links-preview")) _window.UseLocalLinkPreview();
         _instance?.Listen(() => _window.DispatcherQueue.TryEnqueue(_window.RestoreWindow));
         _window.Closed += (_, _) => _instance?.Dispose();
         Diagnostics.StartupTrace.Mark("Activate window"); _window.Activate(); Diagnostics.StartupTrace.Mark("Window activated");

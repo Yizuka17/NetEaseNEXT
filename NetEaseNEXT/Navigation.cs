@@ -21,6 +21,8 @@ public sealed partial class MainWindow
     }
     private async Task NavigateAsync(string view, bool remember = true, bool backward = false, string cover = "")
     {
+        CloseRowContextMenu();
+        _songDetailLoad?.Cancel();
         StopDownloadCompletionMotion();
         var expectedCover = _navigationCoverKey switch
         {
@@ -348,6 +350,6 @@ public sealed partial class MainWindow
     private async void Search_Key(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args) { args.Handled = true; await NavigateAsync("discover"); SearchBox.Focus(FocusState.Programmatic); }
     private async void ContextPlay_Click(object sender, RoutedEventArgs args) { if (((FrameworkElement)sender).DataContext is Track track) await _playback.PlayAsync(track); }
     private async void ContextArtist_Click(object sender, RoutedEventArgs args) { if (((FrameworkElement)sender).DataContext is Track track) await OpenArtistAsync(track); }
-    private async void ContextAlbum_Click(object sender, RoutedEventArgs args) { if (((FrameworkElement)sender).DataContext is Track track && track.AlbumId > 0) { _playlistId = track.AlbumId; _playlistName = track.Album; await NavigateAsync("album"); } }
+    private async void ContextAlbum_Click(object sender, RoutedEventArgs args) { if (((FrameworkElement)sender).DataContext is Track track) await OpenTrackAlbumAsync(track); }
     private async Task OpenArtistAsync(Track track) => await ShowTrackArtistsAsync(track);
 }

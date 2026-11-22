@@ -106,8 +106,8 @@ public sealed partial class MainWindow
             Root.UpdateLayout(); TrackList.ScrollIntoView(third);
             await WaitFor(() => TrackList.ContainerFromItem(third) != null);
             var host = FindTrackContextHost((DependencyObject)TrackList.ContainerFromItem(third))!;
-            var menu = (MenuFlyout)host.ContextFlyout;
-            menu.ShowAt(host); await WaitFor(() => menu.IsOpen);
+            var menu = CreateTrackMenu(third, TrackList);
+            ShowRowContextMenu(menu, host); await WaitFor(() => menu.IsOpen);
             foreach (var theme in new[] { "Dark", "Light" })
             {
                 _settings.Theme = theme; ApplyAppearance(); await Task.Delay(80);
@@ -153,7 +153,7 @@ public sealed partial class MainWindow
             ShowQueue_Click(QueueButton, new()); Root.UpdateLayout();
             await WaitFor(() => QueueList.ContainerFromItem(third) != null);
             var queueHost = FindTrackContextHost((DependencyObject)QueueList.ContainerFromItem(third))!;
-            var queueMenu = (MenuFlyout)queueHost.ContextFlyout; queueMenu.ShowAt(queueHost); await WaitFor(() => queueMenu.IsOpen);
+            var queueMenu = CreateTrackMenu(third, QueueList); ShowRowContextMenu(queueMenu, queueHost); await WaitFor(() => queueMenu.IsOpen);
             ContextBatch_Click(queueMenu.Items.OfType<MenuFlyoutItem>().First(i => i.Text == "多选"), new()); queueMenu.Hide();
             check("Queue holding menu enters native multiselect", queueHost.IsHoldingEnabled && ReferenceEquals(_batchList, QueueList) && QueueList.SelectedItems.Contains(third), null);
             QueueList.SelectedItems.Add(second);
@@ -166,6 +166,7 @@ public sealed partial class MainWindow
             var removed = _playback.Remove(SelectedBatchTracks());
             check("Queue batch removal keeps the playing song", removed == 3 && _playback.Queue.Count == 1 && _playback.Current?.Id == 123, null);
             ShowQueue_Click(QueueButton, new());
+            await WaitFor(() => QueueList.ItemsSource == null);
             check("Closing queue restores single-click playback", _batchList == null && QueueList.SelectionMode == ListViewSelectionMode.Single && QueueList.IsItemClickEnabled && QueueList.ItemsSource == null, null);
             BeginTrackBatch(TrackList, first); TrackList.SelectedItems.Clear();
             check("Empty selection disables batch writes", ((Panel)TrackBatchHost.Content).Children.OfType<Button>().Where(b => b.Tag is "next" or "favorite" or "download" or "remove").All(b => !b.IsEnabled), null);

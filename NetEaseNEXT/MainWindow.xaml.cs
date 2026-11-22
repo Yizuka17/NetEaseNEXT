@@ -182,6 +182,8 @@ public sealed partial class MainWindow : Window
         _playback.SetBackgroundMode(hidden);
         if (hidden)
         {
+            CloseRowContextMenu();
+            _songCreditsLoad?.Cancel(); _songCreditsLoad = null; _pendingShare = null;
             _resourceShareLoad?.Cancel();
             SetBusy(false); ResetPageFooters();
             _lyricFollowTimer.Stop(); StopLocalMonitoring();
@@ -204,7 +206,7 @@ public sealed partial class MainWindow : Window
             if (!_followLyrics && _view == "playing") _lyricFollowTimer.Start();
             Artwork.ResumeTree(Root);
             if (IsLocalView && (!_runningSmokeTest || _checkingLibraryWorkflow)) ResumeLocalMonitoring();
-            Playback_Changed();
+            Playback_Changed(); RefreshSongCredits();
             if (_sessionReady || _runningSmokeTest)
             {
                 if (_api.HasSession) _ = UpdateAccountAsync();
@@ -235,6 +237,8 @@ public sealed partial class MainWindow : Window
     {
         _resourceShareLoad?.Cancel();
         if (_shareManager != null) _shareManager.DataRequested -= RequestedShare;
+        CloseRowContextMenu();
+        _songCreditsLoad?.Cancel(); _pendingShare = null;
         _windowPlacementTimer.Stop();
         StopLocalMonitoring();
         Windows.Networking.Connectivity.NetworkInformation.NetworkStatusChanged -= NetworkStatusChanged;

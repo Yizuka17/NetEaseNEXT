@@ -35,20 +35,18 @@ public sealed partial class MainWindow
         if ((sender as FrameworkElement)?.Tag is not ListView list || (sender as FrameworkElement)?.DataContext is not Track track) return;
         BeginTrackBatch(list, track);
     }
-    private void QueueContext_Opening(object sender, object args)
-    {
-        if (sender is MenuFlyout menu) PrepareBatchMenu(menu, QueueList);
-    }
     private void PrepareBatchMenu(MenuFlyout menu, ListView list)
     {
         var batch = menu.Items.OfType<MenuFlyoutItem>().First(i => i.Text == "多选");
-        batch.Tag = list; batch.IsEnabled = !_batchBusy;
+        var track = batch.DataContext as Track;
+        batch.Tag = list; batch.IsEnabled = track != null && !_batchBusy;
         // Once selecting, keep the row menu focused on the batch entry point.
         foreach (var item in menu.Items.OfType<MenuFlyoutItem>().Where(i => !ReferenceEquals(i, batch)))
         {
-            item.IsEnabled = !ReferenceEquals(_batchList, list) && !_batchBusy;
-            if (item.Text == "评论") item.IsEnabled &= menu.Target?.DataContext is Track commentTrack && SongCommentsSource(commentTrack) != null;
-            if (item.Text == "分享") item.IsEnabled &= menu.Target?.DataContext is Track shareTrack && ShareForTrack(shareTrack) != null;
+            item.IsEnabled = track != null && !ReferenceEquals(_batchList, list) && !_batchBusy;
+            if (item.Text == "评论") item.IsEnabled &= track != null && SongCommentsSource(track) != null;
+            if (item.Text == "分享") item.IsEnabled &= track != null && CanShareTrack(track);
+            if (item.Text == "打开文件位置") item.IsEnabled &= track != null && ShareFilePath(track) != null;
         }
     }
     private void BeginTrackBatch(ListView list, Track track)
