@@ -74,6 +74,10 @@ public sealed partial class MainWindow : Window
         AppWindow.Changed += (_, args) => { if (args.DidVisibilityChange || args.DidPresenterChange) UpdateVisibility(); if (args.DidPositionChange || args.DidSizeChange || args.DidPresenterChange) CaptureWindowPlacement(); };
         Activated += (_, _) => { UpdateVisibility(); if (!_hidden) { UpdateDownloadIndicator(); UpdateSongActions(); } }; Closed += (_, _) => Cleanup();
         Root.SizeChanged += (_, _) => UpdateLayout();
+        QueueButton.Flyout = null;
+        QueueSurface.Opened += (_, _) => { Popup_Opened(null, EventArgs.Empty); PositionQueuePopup(); };
+        QueueSurface.Closed += (_, _) => { _queueSurfaceOpen = false; QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null; QueueGlyph.Opacity = 1; if (ReferenceEquals(_batchList, QueueList)) EndTrackBatch(); };
+        QueuePane.SizeChanged += (_, _) => PositionQueuePopup();
         CoverColumn.SizeChanged += (_, _) => { if (_view == "playing" && !_hidden) UpdateLayout(); };
         SettingsPanel.SizeChanged += (_, _) => SettingsContent.Width = Math.Max(0, Math.Min(760, SettingsPanel.ActualWidth - 24));
         Nav.PaneOpened += (_, _) => UpdateCompactAccount(); Nav.PaneClosed += (_, _) => UpdateCompactAccount();
@@ -137,7 +141,8 @@ public sealed partial class MainWindow : Window
         SetTextBaseSize(NowTitle, Root.ActualHeight < 650 ? 22 : 26);
         PlayerLayout.ColumnSpacing = Root.ActualWidth < 1000 ? 28 : 64;
         PlayerLayout.Padding = Root.ActualWidth < 1000 ? new Thickness(32, _fullScreen ? 16 : 48, 32, 24) : new Thickness(64, _fullScreen ? 24 : 48, 64, 32);
-        QueuePane.MaxHeight = Math.Max(100, Root.ActualHeight - 180);
+        QueuePane.MaxHeight = Math.Max(100, Root.ActualHeight - PlayerFooter.ActualHeight - TitleRow.ActualHeight - 32);
+        PositionQueuePopup();
         QueueList.MaxHeight = Math.Max(60, Root.ActualHeight - 260);
         RedCountText.Visibility = Root.ActualWidth < 1100 && _view != "playing" ? Visibility.Collapsed : Visibility.Visible;
         UpdateLyricPadding();
@@ -191,7 +196,7 @@ public sealed partial class MainWindow : Window
             SavePlaybackState(); _accountLoad?.Cancel(); _accountAvatarLoad?.Cancel(); _metadataWarmLoad?.Cancel();
             _inboxTimer.Stop(); _inboxCheck?.Cancel(); FlushAppearanceSettings(); _songDetailLoad?.Cancel(); _commentsLoad?.Cancel(); _playlistEditLoad?.Cancel(); _dialog?.Hide();
             ResetTrackGesture(); StopInterfaceMotion(); RestorePresenterTransition(); StopSettingsIconRotation();
-            EndTrackBatch(); _playerNoticeTimer.Stop(); PlayerNotice.IsOpen = false; QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null;
+            EndTrackBatch(); _playerNoticeTimer.Stop(); PlayerNotice.IsOpen = false; QueueSurface.Hide(); _queueSurfaceOpen = false; QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null;
             _songStatsLoad?.Cancel(); _qualityLoad?.Cancel();
             if (_pageLoad != null) _pageInterrupted = true;
             _playlistQueueLoad?.Cancel(); _trackLocateLoad?.Cancel(); _pageLoad?.Cancel(); _lyricsLoad?.Cancel(); _loginLoad?.Cancel(); _coverLoad?.Cancel();
@@ -256,6 +261,13 @@ public sealed partial class MainWindow : Window
     {
         if (parent is T match) return match;
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++) if (FindDescendant<T>(VisualTreeHelper.GetChild(parent, i)) is T child) return child;
+        return null;
+    }
+    private static T? FindDescendant<T>(DependencyObject parent, Func<T, bool> matches) where T : DependencyObject
+    {
+        if (parent is T element && matches(element)) return element;
+        for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            if (FindDescendant(VisualTreeHelper.GetChild(parent, i), matches) is T child) return child;
         return null;
     }
     private static void AttachWheelFallback(FrameworkElement host)

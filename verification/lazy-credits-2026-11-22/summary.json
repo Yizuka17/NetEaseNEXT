@@ -1,7 +1,7 @@
 {
-  "version": "0.3.3.15",
+  "version": "0.3.3.18",
   "date": "2026-11-22",
-  "publish_msix_installed_dll_sha256": "3a1289652bcadfffd39c0d53b633f67f0dffcddfdc60b9d97694eb9f30fa4243",
+  "publish_msix_installed_dll_sha256": "d1ef6031c9889f5abbc5554b6508ce1eb0f537d50033fd2bfc93f5b0c17a901c",
   "signature": "Valid",
   "installed_status": "Ok",
   "suites": [
@@ -27,7 +27,7 @@
     },
     {
       "report": "review-local-links-check.json",
-      "passed": 39,
+      "passed": 42,
       "measurements": 0
     },
     {
@@ -51,8 +51,8 @@
       "measurements": 0
     }
   ],
-  "native_assertions": 336,
-  "installed_assertions": 39,
+  "native_assertions": 339,
+  "installed_assertions": 42,
   "api_contracts": 83,
   "manual": {
     "hover": "Moved real guest pointer over a singer name and away; neither frame has an underline",
@@ -60,6 +60,6 @@
     "online_file_share": "Native online song context menu offers file sharing; Windows share sheet displays actual WAV name and size; closed without sending",
     "materials": "Native dialog popup follows Mica, Mica Alt, Acrylic and Solid; menu and comments observed in the installed package"
   },
-  "floating_opacity": "Same selected native material and controller parameters; overlay adds 12% of remaining solid blend. In-window queue inherits the main backdrop with the same overlay.",
+  "floating_opacity": "Same selected native material and controller parameters; overlay adds 12% of remaining solid blend. Queue and in-place dialogs use native Flyout backdrops with the same overlay and wait for native close before removal.",
   "environment": "Windows 11 3D VM; synthetic API and audio; no real account writes or sends; no physical touch test"
 }

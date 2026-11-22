@@ -70,7 +70,7 @@ public sealed partial class MainWindow
         _tracksMore = _catalogMore = _socialMore = _playlistsMore = false;
         Nav.Visibility = view == "playing" ? Visibility.Collapsed : Visibility.Visible;
         UpdateWindowChrome();
-        MovePlayerControls(view == "playing"); QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null; QueueGlyph.Opacity = 1;
+        MovePlayerControls(view == "playing"); QueueSurface.Hide(); _queueSurfaceOpen = false; QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null; QueueGlyph.Opacity = 1;
         UpdateTimer();
         UpdateLayout();
         PlaylistDetails.Visibility = view is "playlist" or "album" or "programs" ? Visibility.Visible : Visibility.Collapsed;

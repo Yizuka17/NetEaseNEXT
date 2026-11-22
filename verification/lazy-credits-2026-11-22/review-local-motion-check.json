@@ -198,7 +198,7 @@
     "name": "Adjacent local playback consumes the prepared decoder",
     "passed": true,
     "detail": {
-      "switchMilliseconds": 15.2634
+      "switchMilliseconds": 14.1756
     }
   },
   {

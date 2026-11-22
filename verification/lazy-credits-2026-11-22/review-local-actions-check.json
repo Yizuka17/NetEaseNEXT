@@ -73,21 +73,21 @@
     "name": "An online song playing a download locates its original local file identity",
     "passed": true,
     "detail": {
-      "downloadedPath": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-actions-fd39d99a90bd4012bd4bf8da2359de16\\\u6B63\u5728\u64AD\u653E.wav",
-      "selectedPath": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-actions-fd39d99a90bd4012bd4bf8da2359de16\\\u6B63\u5728\u64AD\u653E.wav",
-      "selectedId": -404143813306854334,
+      "downloadedPath": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-actions-775a53fd9a0b4e659977c692cbb6ac25\\\u6B63\u5728\u64AD\u653E.wav",
+      "selectedPath": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-actions-775a53fd9a0b4e659977c692cbb6ac25\\\u6B63\u5728\u64AD\u653E.wav",
+      "selectedId": -8636393814632935269,
       "visible": true,
       "requestsBefore": 0,
       "requestsAfter": 0,
       "candidates": [
         {
-          "Id": -404143813306854334,
-          "LocalPath": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-actions-fd39d99a90bd4012bd4bf8da2359de16\\\u6B63\u5728\u64AD\u653E.wav",
+          "Id": -8636393814632935269,
+          "LocalPath": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-actions-775a53fd9a0b4e659977c692cbb6ac25\\\u6B63\u5728\u64AD\u653E.wav",
           "SourceSongId": 9001
         },
         {
-          "Id": -6861375168071521927,
-          "LocalPath": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-actions-fd39d99a90bd4012bd4bf8da2359de16\\\u6B4C\u5355\u4E59\\\u540C\u66F2.wav",
+          "Id": -82971242088609733,
+          "LocalPath": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-actions-775a53fd9a0b4e659977c692cbb6ac25\\\u6B4C\u5355\u4E59\\\u540C\u66F2.wav",
           "SourceSongId": 9001
         }
       ]
@@ -97,8 +97,8 @@
     "name": "Local locator does not select a different copy when the playing download is absent",
     "passed": true,
     "detail": {
-      "playingPath": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-actions-fd39d99a90bd4012bd4bf8da2359de16\\\u6B63\u5728\u64AD\u653E.wav",
-      "availableCopy": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-actions-fd39d99a90bd4012bd4bf8da2359de16\\\u6B4C\u5355\u4E59\\\u540C\u66F2.wav",
+      "playingPath": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-actions-775a53fd9a0b4e659977c692cbb6ac25\\\u6B63\u5728\u64AD\u653E.wav",
+      "availableCopy": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-actions-775a53fd9a0b4e659977c692cbb6ac25\\\u6B4C\u5355\u4E59\\\u540C\u66F2.wav",
       "locatorVisible": "Collapsed"
     }
   },

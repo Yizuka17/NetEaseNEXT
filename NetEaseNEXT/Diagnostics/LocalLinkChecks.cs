@@ -108,16 +108,21 @@ public sealed partial class MainWindow
             check("Song information uses labeled name links without framed actions", Descendants<TextBlock>(_dialog!).Any(t => t.Inlines.OfType<Run>().Any(r => r.Text == "歌手：") && t.Inlines.OfType<Hyperlink>().Count() == 2) && Descendants<TextBlock>(_dialog!).Any(t => t.Inlines.OfType<Run>().Any(r => r.Text == "专辑：") && t.Inlines.OfType<Hyperlink>().Count() == 1), null);
             check("Song information closes with a bare top-right cross", close.Style == (Style)Application.Current.Resources["BareButtonStyle"] && !close.UseSystemFocusVisuals && close.ActualWidth >= 44 && _dialog!.CloseButtonText.Length == 0 && close.TransformToVisual(_dialog).TransformPoint(new()).X > 200, null);
             _settings.Backdrop = "Mica"; ApplyAppearance(); await Task.Delay(300); ApplyFloatingMaterials();
-            var nativePopup = VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Single(p => p.Child is ContentDialog);
-            check("Dialog uses the same native Mica kind as its window with a denser overlay", nativePopup.SystemBackdrop is AdjustableBackdrop { Kind: "Mica" } && _dialog!.Background is SolidColorBrush { Color.A: > 0 and < 255 }, null);
+            await Wait(() => _dialogSurfaceReady && _dialogSurface?.SystemBackdrop is AdjustableBackdrop { NativeProfileReady: true });
+            var nativePopup = _dialogSurface!;
+            check("Dialog uses the same native Mica kind as its window with a denser overlay", nativePopup.SystemBackdrop is AdjustableBackdrop { Kind: "Mica", NativeProfileReady: true } && _dialog!.Background is SolidColorBrush { Color.A: > 0 and < 255 }, null);
             foreach (var material in new[] { "MicaAlt", "Acrylic", "Solid" })
             {
                 _settings.Backdrop = material; ApplyAppearance(); await Task.Delay(150); ApplyFloatingMaterials();
-                check("Open dialog follows material " + material, material == "Solid" ? nativePopup.SystemBackdrop == null && _dialog!.Background is SolidColorBrush { Color.A: 255 } : nativePopup.SystemBackdrop is AdjustableBackdrop selected && selected.Kind == material && _dialog!.Background is SolidColorBrush { Color.A: > 0 and < 255 }, null);
+                if (material != "Solid") await Wait(() => nativePopup.SystemBackdrop is AdjustableBackdrop { NativeProfileReady: true });
+                check("Open dialog follows material " + material, material == "Solid" ? nativePopup.SystemBackdrop is AdjustableBackdrop { Kind: "Solid", NativeProfileReady: false } && _dialog!.Background is SolidColorBrush { Color.A: 255 } : nativePopup.SystemBackdrop is AdjustableBackdrop selected && selected.Kind == material && selected.NativeProfileReady && _dialog!.Background is SolidColorBrush { Color.A: > 0 and < 255 }, null);
             }
             _settings.Backdrop = "Mica"; ApplyAppearance(); await Task.Delay(150); ApplyFloatingMaterials();
             await SaveLibraryImageAsync(_dialog!, "song-information-name-links.png");
+            var closedBackdrop = (AdjustableBackdrop)nativePopup.SystemBackdrop;
             InvokeCredit(_dialog!, "歌手乙"); await info;
+            await Wait(() => !closedBackdrop.NativeProfileReady);
+            check("Closing the dialog disconnects and releases its native material controller", _dialogSurface == null && !closedBackdrop.NativeProfileReady, null);
             check("An information-panel artist name opens that exact artist even with no detected internet profile", _view == "artist" && _artistId == 302 && _dialog == null, null); _connectionOverride = true;
             info = ShowSongDetailsAsync(a, _api); await Wait(() => _dialog is { IsLoaded: true } && CreditLinks(_dialog).Length == 3);
             InvokeCredit(_dialog!, "测试专辑"); await info;
@@ -144,6 +149,15 @@ public sealed partial class MainWindow
             var onlineChoices = ResourceShareMenu(ShareForTrack(savedOnline), recovered, savedOnline.Title);
             check("A bound downloaded song in an online playlist offers file sharing", onlineChoices.Items.OfType<MenuFlyoutItem>().Any(i => i.Text == "分享文件"), null);
             _localLibrary = loadedLibrary;
+            ShowQueue_Click(QueueButton, new()); Root.UpdateLayout();
+            await Task.Delay(250);
+            check("Queue is a native popup with the same selected material", _queueSurfaceOpen && QueueSurface.SystemBackdrop is AdjustableBackdrop { Kind: "Mica", NativeProfileReady: true } && QueuePane.ActualWidth > 0, null);
+            ShowQueue_Click(QueueButton, new()); await Wait(() => !_queueSurfaceOpen);
+            var legacy = LocalLinkFixtures.Audio(Path.Combine(fixture, "legacy"), "旧下载", 138, "");
+            _localLibrary.Tracks.Add(legacy); _localLibrary.Save();
+            var legacyOnline = Track.FromJson(JsonSerializer.SerializeToElement(LocalLinkFixtures.Song(138)));
+            var legacyReads = _api.RequestCount;
+            check("Verified older downloads can share files without a known quality label", await FindShareFileAsync(legacyOnline, CancellationToken.None) == legacy.LocalPath && _api.RequestCount == legacyReads, null);
             var online = Track.FromJson(JsonSerializer.SerializeToElement(LocalLinkFixtures.Song(137)));
             check("Sharing a local song chooses its exact file rather than a higher-quality other copy", ShareFilePath(a) == a.LocalPath && ShareFilePath(online) == b.LocalPath, null);
             var package = ShareFilePackage(await StorageFile.GetFileFromPathAsync(ShareFilePath(a)!), a.Title);

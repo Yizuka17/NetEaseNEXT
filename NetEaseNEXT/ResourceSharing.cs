@@ -78,7 +78,9 @@ public sealed partial class MainWindow
         }, token);
         token.ThrowIfCancellationRequested();
         if (sources.Count > 0) await Task.Run(() => _downloadedLibrary.RegisterLocalSources(sources), token);
-        return ShareFilePath(track);
+        // File sharing does not require a known audio quality. Older tagged
+        // files can have a verified song ID without an entry in the quality index.
+        return ShareFilePath(track) ?? sources.Where(t => t.HasValidLocalSource()).OrderByDescending(t => Services.AudioQuality.Rank(t.SourceLevel)).FirstOrDefault()?.LocalPath;
     }
     private async Task ShowTrackShareAsync(FrameworkElement anchor, Track track)
     {

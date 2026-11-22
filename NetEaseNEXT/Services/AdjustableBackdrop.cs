@@ -18,6 +18,7 @@ public sealed class AdjustableBackdrop(string kind, double transparency, bool sy
     internal (Color Tint, Color Fallback)? AppliedColors => _mica != null ? (_mica.TintColor, _mica.FallbackColor) : _acrylic != null ? (_acrylic.TintColor, _acrylic.FallbackColor) : null;
     private MicaController? _mica;
     private DesktopAcrylicController? _acrylic;
+    private ICompositionSupportsSystemBackdrop? _target;
     private SystemBackdropConfiguration? _xamlConfiguration;
     private SystemBackdropConfiguration? _configuration;
     private (Color Tint, Color Fallback, float TintOpacity, float LuminosityOpacity)? _native;
@@ -28,9 +29,17 @@ public sealed class AdjustableBackdrop(string kind, double transparency, bool sy
     protected override void OnTargetConnected(ICompositionSupportsSystemBackdrop target, XamlRoot root)
     {
         base.OnTargetConnected(target, root);
+        _target = target;
         _xamlConfiguration = GetDefaultSystemBackdropConfiguration(target, root);
         _configuration = new SystemBackdropConfiguration { Theme = BackdropTheme };
         CopyWindowState();
+        CreateController(target);
+        if (kind != "Solid") RefreshNativeProfile();
+    }
+
+    private void CreateController(ICompositionSupportsSystemBackdrop target)
+    {
+        if (kind == "Solid") return;
         if (kind == "Acrylic")
         {
             _acrylic = new DesktopAcrylicController();
@@ -43,7 +52,18 @@ public sealed class AdjustableBackdrop(string kind, double transparency, bool sy
             _mica.SetSystemBackdropConfiguration(_configuration);
             _mica.AddSystemBackdropTarget(target);
         }
-        RefreshNativeProfile();
+    }
+
+    internal void UpdateMaterial(string newKind, double value, bool useSystem, ElementTheme newTheme)
+    {
+        if (kind == newKind) { Update(value, useSystem, newTheme); return; }
+        kind = newKind; transparency = Normalize(value); systemDefaults = useSystem; theme = newTheme;
+        if (_configuration != null) _configuration.Theme = BackdropTheme;
+        if (_target is not { } target) return;
+        _mica?.RemoveSystemBackdropTarget(target); _mica?.Dispose(); _mica = null;
+        _acrylic?.RemoveSystemBackdropTarget(target); _acrylic?.Dispose(); _acrylic = null;
+        _presetTimer?.Stop(); _native = null;
+        if (kind != "Solid") { CreateController(target); RefreshNativeProfile(); }
     }
 
     internal static double Normalize(double value) => double.IsFinite(value) ? Math.Clamp(value, 0, 100) : DefaultTransparency;
@@ -140,6 +160,7 @@ public sealed class AdjustableBackdrop(string kind, double transparency, bool sy
         _native = null;
         _xamlConfiguration = null;
         _configuration = null;
+        _target = null;
         _mica?.RemoveSystemBackdropTarget(target); _mica?.Dispose(); _mica = null;
         _acrylic?.RemoveSystemBackdropTarget(target); _acrylic?.Dispose(); _acrylic = null;
     }

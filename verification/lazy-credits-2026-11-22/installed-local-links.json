@@ -43,7 +43,7 @@
     "name": "The online locator pages to the verified source ID of a local song",
     "passed": true,
     "detail": {
-      "localId": -5850157266176449300,
+      "localId": -4089910744606580131,
       "sourceId": 137,
       "selectedId": 137,
       "_offset": 137
@@ -80,10 +80,10 @@
     "detail": {
       "source": 137,
       "target": {
-        "Id": -7673809784248962987,
+        "Id": -9168974960687891962,
         "IsLocal": true,
-        "LocalPath": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-link-check-211365b817ae4d6088a98fe55b0c8956\\B\\\u5408\u4F5C\u6B4C\u66F2.wav",
-        "file": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-link-check-211365b817ae4d6088a98fe55b0c8956\\B\\\u5408\u4F5C\u6B4C\u66F2.wav"
+        "LocalPath": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-link-check-5c05c5e443bf4165a049371a98a3a093\\B\\\u5408\u4F5C\u6B4C\u66F2.wav",
+        "file": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-link-check-5c05c5e443bf4165a049371a98a3a093\\B\\\u5408\u4F5C\u6B4C\u66F2.wav"
       },
       "anchor": "Track",
       "items": [
@@ -92,91 +92,91 @@
           "IsEnabled": true,
           "visibility": "Visible",
           "icon": true,
-          "context": -7673809784248962987
+          "context": -9168974960687891962
         },
         {
           "Text": "\u64AD\u653E",
           "IsEnabled": true,
           "visibility": "Visible",
           "icon": true,
-          "context": -7673809784248962987
+          "context": -9168974960687891962
         },
         {
           "Text": "\u6DFB\u52A0\u81F3\u4E0B\u4E00\u9996\u64AD\u653E",
           "IsEnabled": true,
           "visibility": "Visible",
           "icon": true,
-          "context": -7673809784248962987
+          "context": -9168974960687891962
         },
         {
           "Text": "\u6B4C\u624B",
           "IsEnabled": true,
           "visibility": "Visible",
           "icon": true,
-          "context": -7673809784248962987
+          "context": -9168974960687891962
         },
         {
           "Text": "\u4E13\u8F91",
           "IsEnabled": true,
           "visibility": "Visible",
           "icon": true,
-          "context": -7673809784248962987
+          "context": -9168974960687891962
         },
         {
           "Text": "\u8BC4\u8BBA",
           "IsEnabled": true,
           "visibility": "Visible",
           "icon": true,
-          "context": -7673809784248962987
+          "context": -9168974960687891962
         },
         {
           "Text": "\u6B4C\u66F2\u4FE1\u606F",
           "IsEnabled": true,
           "visibility": "Visible",
           "icon": true,
-          "context": -7673809784248962987
+          "context": -9168974960687891962
         },
         {
           "Text": "\u6253\u5F00\u6587\u4EF6\u4F4D\u7F6E",
           "IsEnabled": true,
           "visibility": "Visible",
           "icon": true,
-          "context": -7673809784248962987
+          "context": -9168974960687891962
         },
         {
           "Text": "\u5206\u4EAB",
           "IsEnabled": true,
           "visibility": "Visible",
           "icon": true,
-          "context": -7673809784248962987
+          "context": -9168974960687891962
         },
         {
           "Text": "\u6536\u85CF\u5230\u6B4C\u5355",
           "IsEnabled": true,
           "visibility": "Visible",
           "icon": true,
-          "context": -7673809784248962987
+          "context": -9168974960687891962
         },
         {
           "Text": "\u5347\u7EA7\u97F3\u8D28",
           "IsEnabled": true,
           "visibility": "Visible",
           "icon": true,
-          "context": -7673809784248962987
+          "context": -9168974960687891962
         },
         {
           "Text": "\u4ECE\u6B4C\u5355\u79FB\u9664",
           "IsEnabled": true,
           "visibility": "Collapsed",
           "icon": true,
-          "context": -7673809784248962987
+          "context": -9168974960687891962
         },
         {
           "Text": "\u4ECE\u672C\u5730\u5217\u8868\u79FB\u9664",
           "IsEnabled": true,
           "visibility": "Visible",
           "icon": true,
-          "context": -7673809784248962987
+          "context": -9168974960687891962
         }
       ]
     }
@@ -217,6 +217,11 @@
     "detail": null
   },
   {
+    "name": "Closing the dialog disconnects and releases its native material controller",
+    "passed": true,
+    "detail": null
+  },
+  {
     "name": "An information-panel artist name opens that exact artist even with no detected internet profile",
     "passed": true,
     "detail": null
@@ -248,6 +253,16 @@
   },
   {
     "name": "A bound downloaded song in an online playlist offers file sharing",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Queue is a native popup with the same selected material",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Verified older downloads can share files without a known quality label",
     "passed": true,
     "detail": null
   },

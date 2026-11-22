@@ -23,10 +23,29 @@ public sealed partial class MainWindow
     private long _previousPlayingTrackId;
     private int _maxQuality;
     private int _queueReleaseVersion;
+    private bool _queueSurfaceOpen;
     private async Task ReleaseClosedQueueAsync(int version)
     {
         await Task.Delay(150);
-        if (!_hidden && !_exiting && version == _queueReleaseVersion && QueuePane.Visibility == Visibility.Collapsed) QueueList.ItemsSource = null;
+        if (!_hidden && !_exiting && version == _queueReleaseVersion && QueuePane.Visibility == Visibility.Collapsed) { QueueSurface.Hide(); _queueSurfaceOpen = false; QueueList.ItemsSource = null; }
+    }
+    private void PositionQueuePopup()
+    {
+        if (!_queueSurfaceOpen) return;
+        var popup = VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).FirstOrDefault(p => p.Child is FlyoutPresenter presenter && ReferenceEquals(presenter.Content, QueuePane));
+        if (popup == null) return;
+        popup.HorizontalOffset = Math.Max(8, Root.ActualWidth - QueuePane.ActualWidth - 16);
+        popup.VerticalOffset = Math.Max(TitleRow.ActualHeight + 8, Root.ActualHeight - PlayerFooter.ActualHeight - QueuePane.ActualHeight - 16);
+    }
+    private Style FloatingPresenterStyle(double maxWidth, double maxHeight)
+    {
+        var style = new Style(typeof(FlyoutPresenter)) { BasedOn = (Style)Application.Current.Resources["DefaultFlyoutPresenterStyle"] };
+        style.Setters.Add(new Setter(Control.PaddingProperty, new Thickness(0)));
+        style.Setters.Add(new Setter(Control.BorderThicknessProperty, new Thickness(0)));
+        style.Setters.Add(new Setter(Control.BackgroundProperty, new SolidColorBrush(Microsoft.UI.Colors.Transparent)));
+        style.Setters.Add(new Setter(FrameworkElement.MaxWidthProperty, maxWidth));
+        style.Setters.Add(new Setter(FrameworkElement.MaxHeightProperty, maxHeight));
+        return style;
     }
     private long _qualityTrack;
     private CancellationTokenSource? _qualityLoad;
@@ -49,6 +68,14 @@ public sealed partial class MainWindow
         if (open) QueueList.ItemsSource = _playback.Queue;
         else CloseRowContextMenu();
         QueuePane.Visibility = open ? Visibility.Visible : Visibility.Collapsed;
+        if (open)
+        {
+            QueueSurface.SystemBackdrop = FloatingBackdrop(QueueSurface.SystemBackdrop);
+            QueueSurface.FlyoutPresenterStyle = FloatingPresenterStyle(400, QueuePane.MaxHeight);
+            _queueSurfaceOpen = true;
+            QueueSurface.ShowAt(Root, new FlyoutShowOptions { Position = new(Root.ActualWidth - 16, Root.ActualHeight - PlayerFooter.ActualHeight - 16), Placement = FlyoutPlacementMode.TopEdgeAlignedRight });
+            QueuePane.UpdateLayout(); PositionQueuePopup();
+        }
         if (!open) _ = ReleaseClosedQueueAsync(version);
         QueueGlyph.Opacity = open ? .65 : 1;
         if (open && _playback.Current != null)
@@ -174,7 +201,7 @@ public sealed partial class MainWindow
     {
         if (_dialog != null) return;
         if (_batchList != null) { EndTrackBatch(); args.Handled = true; return; }
-        if (QueuePane.Visibility == Visibility.Visible) { QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null; }
+        if (QueuePane.Visibility == Visibility.Visible) { QueueSurface.Hide(); _queueSurfaceOpen = false; QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null; }
         else if (_fullScreen) SetFullScreen(false);
         else if (_view == "playing") await GoBackAsync();
         else return;

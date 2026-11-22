@@ -13,7 +13,7 @@
     "name": "Locator reaches songs beyond the old 1000-row limit",
     "passed": true,
     "detail": {
-      "elapsedMs": 396,
+      "elapsedMs": 404,
       "count": 1251
     }
   },

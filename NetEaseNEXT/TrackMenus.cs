@@ -31,6 +31,7 @@ public sealed partial class MainWindow
     private void ShowRowContextMenu(MenuFlyout menu, FrameworkElement anchor, Windows.Foundation.Point? position = null)
     {
         CloseRowContextMenu(); _rowContextMenu = menu;
+        menu.SystemBackdrop = FloatingBackdrop(menu.SystemBackdrop);
         menu.Opened += Popup_Opened; menu.Closed += Closed;
         void Closed(object? sender, object args)
         {
