@@ -25,7 +25,7 @@ public sealed partial class MainWindow
                     var downloaded = DownloadForTrack(track); item.Text = downloaded != null ? "升级音质" : track.IsLocal ? "本地文件" : "下载";
                     item.IsEnabled &= !track.IsLocal || SourceSongId(track) > 0; item.Icon = Services.IconFonts.Action(downloaded != null ? "\uE73E" : "\uE896");
                 }
-                if (item.Text is "歌手" or "专辑") item.Visibility = !track.IsLocal || OnlineSongId(track) > 0 ? Visibility.Visible : Visibility.Collapsed;
+                if (item.Text is "歌手" or "专辑") item.Visibility = CreditSourceId(track) > 0 ? Visibility.Visible : Visibility.Collapsed;
             }
         }
         remove.Visibility = OwnsDisplayedPlaylist && _api.HasSession && track != null ? Visibility.Visible : Visibility.Collapsed;

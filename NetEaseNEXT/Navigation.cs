@@ -22,7 +22,7 @@ public sealed partial class MainWindow
     private async Task NavigateAsync(string view, bool remember = true, bool backward = false, string cover = "")
     {
         CloseRowContextMenu();
-        _songDetailLoad?.Cancel();
+        _songDetailLoad?.Cancel(); _songCreditsLoad?.Cancel(); _resourceShareLoad?.Cancel();
         StopDownloadCompletionMotion();
         var expectedCover = _navigationCoverKey switch
         {

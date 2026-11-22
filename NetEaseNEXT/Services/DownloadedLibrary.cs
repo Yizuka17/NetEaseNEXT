@@ -40,6 +40,10 @@ public sealed class DownloadedLibrary
     {
         lock (_gate) return _files.FirstOrDefault(f => string.Equals(f.Path, path, StringComparison.OrdinalIgnoreCase) && IsAvailable(f));
     }
+    internal string[] KnownPaths(long songId)
+    {
+        lock (_gate) return _files.Where(f => f.SongId == songId).Select(f => f.Path).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+    }
     public void RegisterLocalSources(IEnumerable<Track> tracks)
     {
         var entries = tracks.Where(t => t.HasValidLocalSource() && AudioQuality.Rank(t.SourceLevel) >= 0).Select(t => new DownloadedFile(t.SourceSongId, Path.GetFullPath(t.LocalPath), t.SourceLevel, t.SourceFileSize, t.SourceModifiedUtcTicks, t.ArtistId, t.AlbumId)).ToArray();

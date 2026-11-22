@@ -12,7 +12,7 @@ public sealed partial class MainWindow
 
     private async Task<Track> ResolveSongDetailsAsync(Track track, ApiClient api, CancellationToken token)
     {
-        var id = OnlineSongId(track);
+        var id = CreditSourceId(track);
         if (id <= 0) return track;
         var result = await api.CallCachedAsync("song_detail", new { ids = id.ToString() }, token);
         token.ThrowIfCancellationRequested();
@@ -36,7 +36,7 @@ public sealed partial class MainWindow
 
     private async Task ShowTrackArtistsAsync(Track track)
     {
-        if (_dialog != null || _hidden || OnlineSongId(track) <= 0) return;
+        if (_dialog != null || _hidden || CreditSourceId(track) <= 0) return;
         _songDetailLoad?.Cancel();
         using var load = new CancellationTokenSource(); _songDetailLoad = load; var route = _route;
         try
@@ -86,33 +86,23 @@ public sealed partial class MainWindow
         var dialog = new ContentDialog { XamlRoot = Root.XamlRoot, Content = body };
         Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(dialog, "歌曲信息");
         close.Click += (_, _) => dialog.Hide();
-        long albumId = 0; string albumName = ""; SongArtist? selectedArtist = null;
+        long albumId = 0; string albumName = ""; bool albumSelected = false; SongArtist? selectedArtist = null;
         void Render(Track detail)
         {
             content.Children.Clear();
             content.Children.Add(new TextBlock { Text = detail.Title, FontSize = 22, TextWrapping = TextWrapping.Wrap });
-            var online = OnlineSongId(track) > 0;
-            var artists = new Controls.WrapPanel { Spacing = 4 };
-            artists.Children.Add(new TextBlock { Text = "歌手：", VerticalAlignment = VerticalAlignment.Center });
+            var online = CreditSourceId(track) > 0;
+            var artists = new TextBlock { TextWrapping = TextWrapping.Wrap };
+            artists.Inlines.Add(new Microsoft.UI.Xaml.Documents.Run { Text = "歌手：" });
             foreach (var artist in TrackArtists(detail))
             {
-                if (artists.Children.Count > 1) artists.Children.Add(new TextBlock { Text = "/", Opacity = .6, VerticalAlignment = VerticalAlignment.Center });
-                if (online && artist.Id > 0)
-                {
-                    var link = new HyperlinkButton { Content = artist.Name, Padding = new(0), MinHeight = 32 };
-                    link.Click += (_, _) => { selectedArtist = artist; dialog.Hide(); }; artists.Children.Add(link);
-                }
-                else artists.Children.Add(new TextBlock { Text = artist.Name, VerticalAlignment = VerticalAlignment.Center });
+                if (artists.Inlines.Count > 1) artists.Inlines.Add(new Microsoft.UI.Xaml.Documents.Run { Text = " / " });
+                CreditName(artists, artist.Name, online ? () => { selectedArtist = artist; dialog.Hide(); return Task.CompletedTask; } : null);
             }
             content.Children.Add(artists);
-            var album = new Controls.WrapPanel { Spacing = 4 };
-            album.Children.Add(new TextBlock { Text = "专辑：", VerticalAlignment = VerticalAlignment.Center });
-            if (online && detail.AlbumId > 0)
-            {
-                var link = new HyperlinkButton { Content = detail.Album, Padding = new(0), MinHeight = 32 };
-                link.Click += (_, _) => { albumId = detail.AlbumId; albumName = detail.Album; dialog.Hide(); }; album.Children.Add(link);
-            }
-            else album.Children.Add(new TextBlock { Text = detail.Album, VerticalAlignment = VerticalAlignment.Center });
+            var album = new TextBlock { TextWrapping = TextWrapping.Wrap };
+            album.Inlines.Add(new Microsoft.UI.Xaml.Documents.Run { Text = "专辑：" });
+            CreditName(album, detail.Album, online && detail.Album.Length > 0 ? () => { albumId = detail.AlbumId; albumName = detail.Album; albumSelected = true; dialog.Hide(); return Task.CompletedTask; } : null);
             content.Children.Add(album);
             content.Children.Add(new TextBlock { Text = "时长  " + detail.DurationText + "\n音质  " + (_playback.Current?.Id == track.Id ? AudioQuality.Name(_playback.CurrentQuality) : AudioQuality.Name(track.SourceLevel)), TextWrapping = TextWrapping.Wrap });
             if (track.IsLocal) content.Children.Add(new TextBlock { Text = track.LocalPath, TextWrapping = TextWrapping.Wrap, IsTextSelectionEnabled = true });
@@ -123,12 +113,17 @@ public sealed partial class MainWindow
             catch (OperationCanceledException) { }
             catch (Exception ex) { if (!load.IsCancellationRequested && !_hidden) { Render(track); content.Children.Add(new TextBlock { Text = "网络信息加载失败：" + ex.Message, TextWrapping = TextWrapping.Wrap }); } }
         }
-        _dialog = dialog;
-        var showing = ShowThemedDialogAsync(dialog); var fetching = Fetch();
+        Render(track); _dialog = dialog;
+        var showing = ShowThemedDialogAsync(dialog); var fetching = CreditSourceId(track) > 0 ? Fetch() : Task.CompletedTask;
         try { await showing; }
         finally { load.Cancel(); await fetching; if (ReferenceEquals(_dialog, dialog)) _dialog = null; if (ReferenceEquals(_songDetailLoad, load)) _songDetailLoad = null; }
         if (_hidden) return;
         if (albumId > 0) { _playlistId = albumId; _playlistName = albumName; await NavigateAsync("album"); }
-        else if (selectedArtist != null) await NavigateToArtistAsync(selectedArtist);
+        else if (albumSelected) await OpenTrackCreditAsync(track);
+        else if (selectedArtist != null)
+        {
+            if (selectedArtist.Id > 0) await NavigateToArtistAsync(selectedArtist);
+            else await OpenTrackCreditAsync(track, selectedArtist);
+        }
     }
 }

@@ -45,8 +45,52 @@ public sealed partial class MainWindow
     }
     private string? ShareFilePath(Track track)
     {
-        var path = track.IsLocal ? track.LocalPath : _playback.Current?.Id == track.Id && _playback.CurrentDownloadedPath is { } playing ? playing : DownloadForTrack(track)?.Path;
+        var path = track.IsLocal ? track.LocalPath : _playback.Current?.Id == track.Id && _playback.CurrentDownloadedPath is { Length: > 0 } playing && File.Exists(playing) ? playing : DownloadForTrack(track)?.Path;
         return !string.IsNullOrEmpty(path) && File.Exists(path) ? Path.GetFullPath(path) : null;
+    }
+    private async Task<string?> FindShareFileAsync(Track track, CancellationToken token)
+    {
+        var known = ShareFilePath(track);
+        if (known != null || track.IsLocal || track.Id <= 0) return known;
+        // A saved folder binding may predate the download index, or have been
+        // retagged. Repair only this song's known paths when sharing is requested.
+        var sources = await Task.Run(() =>
+        {
+            LocalLibraryStore saved;
+            try { saved = LocalLibraryStore.Load(_localLibraryPathOverride); }
+            catch (Exception ex) { Log.Write(ex); saved = new(); }
+            var candidates = saved.Tracks.Concat(_localLibrary.Tracks).Where(t => t.SourceSongId == track.Id).Select(t => t.LocalPath)
+                .Concat(_downloadedLibrary.KnownPaths(track.Id)).Distinct(StringComparer.OrdinalIgnoreCase);
+            var matches = new List<Track>();
+            foreach (var path in candidates)
+            {
+                token.ThrowIfCancellationRequested();
+                try
+                {
+                    // Read the embedded source again: a replaced file must not
+                    // inherit a stale association based on its filename.
+                    var local = LocalMusicFiles.Read(path, embeddedSourceOnly: true);
+                    if (local.HasValidLocalSource() && local.SourceSongId == track.Id) matches.Add(local);
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or TagLib.CorruptFileException or TagLib.UnsupportedFormatException) { }
+            }
+            return matches;
+        }, token);
+        token.ThrowIfCancellationRequested();
+        if (sources.Count > 0) await Task.Run(() => _downloadedLibrary.RegisterLocalSources(sources), token);
+        return ShareFilePath(track);
+    }
+    private async Task ShowTrackShareAsync(FrameworkElement anchor, Track track)
+    {
+        _resourceShareLoad?.Cancel(); using var load = new CancellationTokenSource(); _resourceShareLoad = load; var route = _route;
+        try
+        {
+            var path = await FindShareFileAsync(track, load.Token);
+            if (!load.IsCancellationRequested && !_hidden && ReferenceEquals(route, _route)) ShowResourceShare(anchor, ShareForTrack(track), path, track.Title);
+        }
+        catch (OperationCanceledException) { }
+        catch (Exception ex) { ShowError(ex.Message); }
+        finally { if (ReferenceEquals(_resourceShareLoad, load)) _resourceShareLoad = null; }
     }
     private bool CanShareTrack(Track track) => ShareForTrack(track) != null || ShareFilePath(track) != null;
     private static DataPackage ShareFilePackage(StorageFile file, string title)
@@ -119,12 +163,12 @@ public sealed partial class MainWindow
         if (menu.Items.Count == 0) { ShowPlayerMessage("暂无可分享的内容"); return; }
         ShowThemedFlyout(menu, anchor);
     }
-    private void ShareCurrent_Click(object sender, RoutedEventArgs args)
+    private async void ShareCurrent_Click(object sender, RoutedEventArgs args)
     {
-        if (_playback.Current is { } track) ShowResourceShare((FrameworkElement)sender, ShareForTrack(track), ShareFilePath(track), track.Title);
+        if (_playback.Current is { } track) await ShowTrackShareAsync((FrameworkElement)sender, track);
     }
     private void ResourceShare_Click(object sender, RoutedEventArgs args) => ShowResourceShare((FrameworkElement)sender, ShareForPage());
-    private void ContextShare_Click(object sender, RoutedEventArgs args)
+    private async void ContextShare_Click(object sender, RoutedEventArgs args)
     {
         if (sender is not FrameworkElement element) return;
         var resource = element.DataContext switch
@@ -142,7 +186,8 @@ public sealed partial class MainWindow
             _ => null
         };
         var sharedTrack = element.DataContext as Track;
-        ShowResourceShare(anchor ?? Root, resource, sharedTrack == null ? null : ShareFilePath(sharedTrack), sharedTrack?.Title);
+        if (sharedTrack != null) await ShowTrackShareAsync(anchor ?? Root, sharedTrack);
+        else ShowResourceShare(anchor ?? Root, resource);
     }
     private async Task PublishResourceAsync(ShareResource resource)
     {

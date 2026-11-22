@@ -47,10 +47,10 @@ public sealed partial class MainWindow
             Invoke(Descendants<HyperlinkButton>(_dialog!).Single(b => b.Content as string == "歌手乙")); await artistsTask;
             check("Choosing the second singer opens that artist ID", _view == "artist" && _artistId == 302, null);
 
-            var info = ShowSongDetailsAsync(song, api); await Wait(() => _dialog is { IsLoaded: true } && Descendants<HyperlinkButton>(_dialog).Any(b => b.Content as string == "测试专辑"));
-            check("Song information displays all singers and the album action", Descendants<HyperlinkButton>(_dialog!).Any(b => b.Content as string == "歌手乙"), null);
+            var info = ShowSongDetailsAsync(song, api); await Wait(() => _dialog is { IsLoaded: true } && CreditLinks(_dialog).Any(l => CreditText(l) == "测试专辑"));
+            check("Song information displays all singers and the album action", CreditLinks(_dialog!).Any(l => CreditText(l) == "歌手乙"), null);
             await SaveLibraryImageAsync(_dialog!, "song-details.png");
-            Invoke(Descendants<HyperlinkButton>(_dialog!).Single(b => b.Content as string == "测试专辑")); await info;
+            InvokeCredit(_dialog!, "测试专辑"); await info;
             check("Song album action opens its matching album", _view == "album" && _playlistId == 401, null);
             await LoadAlbumSubscriptionAsync(api, 401, CancellationToken.None);
             await ToggleAlbumSubscriptionAsync(api);

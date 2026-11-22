@@ -17,11 +17,19 @@ namespace NetEaseNEXT;
 
 public sealed partial class MainWindow
 {
+    private static Hyperlink[] CreditLinks(DependencyObject host) => Descendants<TextBlock>(host).SelectMany(t => t.Inlines.OfType<Hyperlink>()).ToArray();
+    private static string CreditText(Hyperlink link) => string.Concat(link.Inlines.OfType<Run>().Select(r => r.Text));
+    private static void InvokeCredit(DependencyObject host, string name)
+    {
+        var text = Descendants<TextBlock>(host).Single(t => t.Inlines.OfType<Hyperlink>().Any(l => CreditText(l) == name));
+        var peer = FrameworkElementAutomationPeer.CreatePeerForElement(text) ?? new TextBlockAutomationPeer(text);
+        ((IInvokeProvider)peer.GetChildren().Single(p => p.GetName() == name).GetPattern(PatternInterface.Invoke)).Invoke();
+    }
     private async Task RunLocalLinkChecksAsync(Action<string, bool, object?> check)
     {
         _sessionReady = true; RestoreWindow(); _playback.SetVolume(0); _accountLoad?.Cancel(); _inboxCheck?.Cancel();
         var oldCatalog = _downloadedLibrary; var oldPlaybackCatalog = _playback.Downloads; var oldInfo = SongInfoApiOverride;
-        var oldOnline = _settings.LocalOnlineInfo; var oldTheme = _settings.Theme;
+        var oldOnline = _settings.LocalOnlineInfo; var oldTheme = _settings.Theme; var oldBackdrop = _settings.Backdrop;
         var fixture = Path.Combine(Path.GetTempPath(), "NetEaseNEXT-local-link-check-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(fixture); _checkingLibraryWorkflow = true; _connectionOverride = true; _settings.LocalOnlineInfo = true;
         _localLibraryPathOverride = Path.Combine(fixture, "library.bin");
@@ -52,12 +60,19 @@ public sealed partial class MainWindow
             var one = new LocalPlaylist { Id = "a", Name = "本地歌单 A", Paths = [a.LocalPath, plain.LocalPath] };
             var two = new LocalPlaylist { Id = "b", Name = "本地歌单 B", Paths = [b.LocalPath], FolderPath = Path.GetDirectoryName(b.LocalPath)! };
             _localLibrary = new() { StoragePath = _localLibraryPathOverride, Tracks = [a, b, plain], Playlists = [one, two] }; _localLibrary.Save();
-            _localPlaylistId = "a"; await NavigateAsync("local-playlist"); StopLocalMonitoring(); Current(a);
+            _localPlaylistId = "a"; await NavigateAsync("local-playlist"); StopLocalMonitoring();
+            var metadataReads = LocalLinkFixtures.Calls.Count(c => c.Method == "song_detail"); Current(a);
+            await Task.Delay(250); RefreshSongCredits();
+            check("Playback and idle credit rendering never fetch song metadata", LocalLinkFixtures.Calls.Count(c => c.Method == "song_detail") == metadataReads && _songCreditsLoad == null, null);
             await Wait(() => _songCreditsLoad == null && MiniArtist.Inlines.OfType<Hyperlink>().Count() == 3);
             check("Downloaded local playback resolves both artist names and its album", MiniArtist.Inlines.OfType<Hyperlink>().Select(LinkName).SequenceEqual(new[] { "歌手甲", "歌手乙", "测试专辑" }), null);
+            check("Every inline credit disables native underline styling", MiniArtist.Inlines.OfType<Hyperlink>().All(l => l.UnderlineStyle == UnderlineStyle.None), null);
             check("The footer artist links are outside the open-player button", !Descendants<TextBlock>(OpenPlayerButton).Contains(MiniArtist), null);
             check("Local playlist actions all carry complete glyphs", new[] { ImportLocalButton, EditLocalPlaylistButton, DeleteLocalPlaylistButton }.All(button => Descendants<FontIcon>(button).Any(icon => icon.ActualWidth > 0 && icon.ActualHeight >= 16)), null);
             await SaveLibraryImageAsync(Root, "local-linked-actions.png");
+            Click(MiniArtist, "歌手乙"); await Wait(() => _view == "artist" && _artistId == 302 && _pageLoad == null);
+            check("First click resolves an uncached local singer directly without a chooser", _dialog == null && LocalLinkFixtures.Calls.Count(c => c.Method == "song_detail") > metadataReads && LocalLinkFixtures.Calls.First(c => c.Method == "song_detail").Query.Text("ids") == "137", null);
+            _localPlaylistId = "a"; await NavigateAsync("local-playlist"); StopLocalMonitoring(); Current(a);
 
             await Page("playlist");
             check("Opening an online playlist does not load or jump to an unloaded local source", Tracks.Count == 100 && _offset == 100 && TrackLocateButton.Visibility == Visibility.Visible && _playback.Current?.Id == a.Id, null);
@@ -87,15 +102,25 @@ public sealed partial class MainWindow
             await Wait(() => _view == "album" && _playlistId == 401 && _pageLoad == null); menu.Hide();
             check("A linked local row resolves its album even before album IDs are cached", _view == "album" && _playlistId == 401, null);
 
-            var info = ShowSongDetailsAsync(a, _api); await Wait(() => _dialog is { IsLoaded: true } && Descendants<HyperlinkButton>(_dialog).Count() == 3);
+            _connectionOverride = false; // Profile detection must not disable an explicit linked-song jump.
+            var info = ShowSongDetailsAsync(a, _api); await Wait(() => _dialog is { IsLoaded: true } && CreditLinks(_dialog).Length == 3);
             var close = Descendants<Button>(_dialog!).Single(button => AutomationProperties.GetName(button) == "关闭歌曲信息");
-            check("Song information uses labeled name links without framed actions", Descendants<TextBlock>(_dialog!).Any(t => t.Text == "歌手：") && Descendants<TextBlock>(_dialog!).Any(t => t.Text == "专辑：") && Descendants<HyperlinkButton>(_dialog!).Select(b => b.Content as string).SequenceEqual(new[] { "歌手甲", "歌手乙", "测试专辑" }), null);
+            check("Song information uses labeled name links without framed actions", Descendants<TextBlock>(_dialog!).Any(t => t.Inlines.OfType<Run>().Any(r => r.Text == "歌手：") && t.Inlines.OfType<Hyperlink>().Count() == 2) && Descendants<TextBlock>(_dialog!).Any(t => t.Inlines.OfType<Run>().Any(r => r.Text == "专辑：") && t.Inlines.OfType<Hyperlink>().Count() == 1), null);
             check("Song information closes with a bare top-right cross", close.Style == (Style)Application.Current.Resources["BareButtonStyle"] && !close.UseSystemFocusVisuals && close.ActualWidth >= 44 && _dialog!.CloseButtonText.Length == 0 && close.TransformToVisual(_dialog).TransformPoint(new()).X > 200, null);
+            _settings.Backdrop = "Mica"; ApplyAppearance(); await Task.Delay(300); ApplyFloatingMaterials();
+            var nativePopup = VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Single(p => p.Child is ContentDialog);
+            check("Dialog uses the same native Mica kind as its window with a denser overlay", nativePopup.SystemBackdrop is AdjustableBackdrop { Kind: "Mica" } && _dialog!.Background is SolidColorBrush { Color.A: > 0 and < 255 }, null);
+            foreach (var material in new[] { "MicaAlt", "Acrylic", "Solid" })
+            {
+                _settings.Backdrop = material; ApplyAppearance(); await Task.Delay(150); ApplyFloatingMaterials();
+                check("Open dialog follows material " + material, material == "Solid" ? nativePopup.SystemBackdrop == null && _dialog!.Background is SolidColorBrush { Color.A: 255 } : nativePopup.SystemBackdrop is AdjustableBackdrop selected && selected.Kind == material && _dialog!.Background is SolidColorBrush { Color.A: > 0 and < 255 }, null);
+            }
+            _settings.Backdrop = "Mica"; ApplyAppearance(); await Task.Delay(150); ApplyFloatingMaterials();
             await SaveLibraryImageAsync(_dialog!, "song-information-name-links.png");
-            Invoke(Descendants<HyperlinkButton>(_dialog!).Single(link => link.Content as string == "歌手乙")); await info;
-            check("An information-panel artist name opens that exact artist", _view == "artist" && _artistId == 302 && _dialog == null, null);
-            info = ShowSongDetailsAsync(a, _api); await Wait(() => _dialog is { IsLoaded: true } && Descendants<HyperlinkButton>(_dialog).Count() == 3);
-            Invoke(Descendants<HyperlinkButton>(_dialog!).Single(link => link.Content as string == "测试专辑")); await info;
+            InvokeCredit(_dialog!, "歌手乙"); await info;
+            check("An information-panel artist name opens that exact artist even with no detected internet profile", _view == "artist" && _artistId == 302 && _dialog == null, null); _connectionOverride = true;
+            info = ShowSongDetailsAsync(a, _api); await Wait(() => _dialog is { IsLoaded: true } && CreditLinks(_dialog).Length == 3);
+            InvokeCredit(_dialog!, "测试专辑"); await info;
             check("An information-panel album name opens that exact album", _view == "album" && _playlistId == 401, null);
 
             Current(a); await Page("playing"); await Wait(() => NowArtist.Inlines.OfType<Hyperlink>().Count() == 3);
@@ -107,6 +132,18 @@ public sealed partial class MainWindow
             await Wait(() => _view == "artist" && _artistId == 301 && _pageLoad == null);
             check("Footer artist names also navigate directly without a chooser", _dialog == null && _artistId == 301, null);
 
+            // Drop the in-memory catalog and library: an online-first startup
+            // must recover this source from the saved binding only on demand.
+            var loadedLibrary = _localLibrary;
+            _localLibrary = new(); _downloadedLibrary = new(Path.Combine(fixture, "cold-index.json")); _playback.Downloads = _downloadedLibrary;
+            var beforeShareReads = _api.RequestCount;
+            var savedOnline = Track.FromJson(JsonSerializer.SerializeToElement(LocalLinkFixtures.Song(137)));
+            check("An online song initially has no file when its saved binding is not loaded", ShareFilePath(savedOnline) == null, null);
+            var recovered = await FindShareFileAsync(savedOnline, CancellationToken.None);
+            check("Click-time sharing recovers an online song's saved local folder binding without requests", recovered == b.LocalPath && _api.RequestCount == beforeShareReads, null);
+            var onlineChoices = ResourceShareMenu(ShareForTrack(savedOnline), recovered, savedOnline.Title);
+            check("A bound downloaded song in an online playlist offers file sharing", onlineChoices.Items.OfType<MenuFlyoutItem>().Any(i => i.Text == "分享文件"), null);
+            _localLibrary = loadedLibrary;
             var online = Track.FromJson(JsonSerializer.SerializeToElement(LocalLinkFixtures.Song(137)));
             check("Sharing a local song chooses its exact file rather than a higher-quality other copy", ShareFilePath(a) == a.LocalPath && ShareFilePath(online) == b.LocalPath, null);
             var package = ShareFilePackage(await StorageFile.GetFileFromPathAsync(ShareFilePath(a)!), a.Title);
@@ -133,6 +170,12 @@ public sealed partial class MainWindow
             await File.WriteAllBytesAsync(a.LocalPath, originalBytes.Concat(new byte[] { 1 }).ToArray());
             RefreshSongCredits(true); await Page("playlist"); UpdateTrackLocator();
             check("Changed audio cannot retain an obsolete online locator or artist link", SourceSongId(a) == 0 && CurrentTrackInView(a) == null && TrackLocateButton.Visibility == Visibility.Collapsed && !MiniArtist.Inlines.OfType<Hyperlink>().Any(), null);
+            var unresolved = LocalLinkFixtures.Audio(Path.Combine(fixture, "C"), "合作歌曲", 998);
+            Current(unresolved); await Page("playing"); LocalLinkFixtures.Hold("song_detail");
+            var lazy = OpenTrackCreditAsync(unresolved, new SongArtist(0, "歌手乙"));
+            await Wait(() => LocalLinkFixtures.GateMethod.Length == 0);
+            await Page("queue"); await lazy;
+            check("Leaving the page cancels a click-time credit request without navigation", _view == "queue" && _songCreditsLoad == null && LocalLinkFixtures.Canceled > 0, null); LocalLinkFixtures.Release();
             Current(online); LocalLinkFixtures.Hold("song_detail");
             info = ShowSongDetailsAsync(new Track(999, "等待中的歌曲", "", "", "", 1000), _api);
             await Wait(() => _dialog is { IsLoaded: true } && LocalLinkFixtures.GateMethod.Length == 0);
@@ -142,7 +185,7 @@ public sealed partial class MainWindow
         finally
         {
             LocalLinkFixtures.Release(); _dialog?.Hide(); _songCreditsLoad?.Cancel(); StopLocalMonitoring(); _playback.Restore(new());
-            _downloadedLibrary = oldCatalog; _playback.Downloads = oldPlaybackCatalog; SongInfoApiOverride = oldInfo; _settings.LocalOnlineInfo = oldOnline; _settings.Theme = oldTheme;
+            _downloadedLibrary = oldCatalog; _playback.Downloads = oldPlaybackCatalog; SongInfoApiOverride = oldInfo; _settings.LocalOnlineInfo = oldOnline; _settings.Theme = oldTheme; _settings.Backdrop = oldBackdrop;
             _connectionOverride = null; _checkingLibraryWorkflow = false; _localLibraryPathOverride = null;
             Directory.Delete(fixture, true);
         }

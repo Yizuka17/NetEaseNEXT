@@ -35,7 +35,46 @@ public sealed partial class MainWindow
     private void ApplyPopupTheme(FrameworkElement element)
     {
         element.RequestedTheme = Root.ActualTheme;
+        ApplyPopupMaterial(element);
         ApplyTextFont(element, new FontFamily(_settings.FontFamily));
+    }
+    private Brush FloatingBackground()
+    {
+        var solid = (SolidColorBrush)SolidLayer.Background;
+        if (_settings.Backdrop == "Solid" || SystemBackdrop == null) return solid;
+        var color = solid.Color;
+        var blend = 1 - (1 - ((SystemBackdrop as Services.AdjustableBackdrop)?.SolidBlend ?? 0)) * .88;
+        color.A = (byte)Math.Clamp(Math.Round(blend * 255), 0, 255);
+        return new SolidColorBrush(color);
+    }
+    private SystemBackdrop? FloatingBackdrop(SystemBackdrop? current)
+    {
+        if (_settings.Backdrop == "Solid" || SystemBackdrop == null) return null;
+        var value = _settings.Backdrop == "Acrylic" ? _settings.AcrylicTransparency : _settings.MicaTransparency;
+        var defaults = _settings.UsesSystemMaterial(_settings.Backdrop);
+        if (current is Services.AdjustableBackdrop backdrop && backdrop.Kind == _settings.Backdrop)
+        { backdrop.Update(value, defaults, Root.ActualTheme); return backdrop; }
+        return new Services.AdjustableBackdrop(_settings.Backdrop, value, defaults, Root.ActualTheme);
+    }
+    private void ApplyPopupMaterial(DependencyObject element, Brush? brush = null)
+    {
+        brush ??= FloatingBackground();
+        if (element is ContentDialog dialog) dialog.Background = brush;
+        else if (element is MenuFlyoutPresenter menu) { menu.SystemBackdrop = FloatingBackdrop(menu.SystemBackdrop); menu.Background = brush; }
+        else if (element is FlyoutPresenter flyout) flyout.Background = brush;
+        else if (element is Border { Name: "PopupBorder" } border) border.Background = brush;
+        for (var i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++) ApplyPopupMaterial(VisualTreeHelper.GetChild(element, i), brush);
+    }
+    private void ApplyFloatingMaterials()
+    {
+        QueuePane.Background = FloatingBackground();
+        if (_dialog != null) ApplyPopupMaterial(_dialog);
+        if (Root.XamlRoot != null)
+            foreach (var popup in VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot))
+            {
+                if (popup.Child is FrameworkElement and not MenuFlyoutPresenter and not Microsoft.UI.Xaml.Shapes.Shape) popup.SystemBackdrop = FloatingBackdrop(popup.SystemBackdrop);
+                if (popup.Child != null) ApplyPopupMaterial(popup.Child);
+            }
     }
     private async Task<ContentDialogResult> ShowThemedDialogAsync(ContentDialog dialog)
     {
@@ -51,13 +90,16 @@ public sealed partial class MainWindow
         dialog.SecondaryButtonStyle = TouchStyle(dialog.SecondaryButtonStyle);
         dialog.CloseButtonStyle = TouchStyle(dialog.CloseButtonStyle);
         ApplyPopupTheme(dialog);
+        dialog.Opened += DialogMaterialOpened;
         try { return await dialog.ShowAsync(); }
-        finally { dialog.ClearValue(FrameworkElement.RequestedThemeProperty); }
+        finally { dialog.Opened -= DialogMaterialOpened; dialog.ClearValue(FrameworkElement.RequestedThemeProperty); }
     }
+    private void DialogMaterialOpened(ContentDialog sender, ContentDialogOpenedEventArgs args) => ApplyFloatingMaterials();
     private void Popup_Opened(object? sender, object args)
     {
         foreach (var popup in VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot))
             if (popup.Child is FrameworkElement child) ApplyPopupTheme(child);
+        ApplyFloatingMaterials();
     }
     private void ShowThemedFlyout(FlyoutBase flyout, FrameworkElement anchor)
     {

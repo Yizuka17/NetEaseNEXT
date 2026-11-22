@@ -1,0 +1,65 @@
+{
+  "version": "0.3.3.15",
+  "date": "2026-11-22",
+  "publish_msix_installed_dll_sha256": "3a1289652bcadfffd39c0d53b633f67f0dffcddfdc60b9d97694eb9f30fa4243",
+  "signature": "Valid",
+  "installed_status": "Ok",
+  "suites": [
+    {
+      "report": "review-artist-sharing-check.json",
+      "passed": 36,
+      "measurements": 0
+    },
+    {
+      "report": "review-download-indicator-check.json",
+      "passed": 28,
+      "measurements": 0
+    },
+    {
+      "report": "review-library-check.json",
+      "passed": 41,
+      "measurements": 15
+    },
+    {
+      "report": "review-local-actions-check.json",
+      "passed": 20,
+      "measurements": 0
+    },
+    {
+      "report": "review-local-links-check.json",
+      "passed": 39,
+      "measurements": 0
+    },
+    {
+      "report": "review-local-motion-check.json",
+      "passed": 84,
+      "measurements": 0
+    },
+    {
+      "report": "review-song-experience-check.json",
+      "passed": 34,
+      "measurements": 0
+    },
+    {
+      "report": "review-theme-batch-check.json",
+      "passed": 40,
+      "measurements": 0
+    },
+    {
+      "report": "review-track-locator-check.json",
+      "passed": 14,
+      "measurements": 0
+    }
+  ],
+  "native_assertions": 336,
+  "installed_assertions": 39,
+  "api_contracts": 83,
+  "manual": {
+    "hover": "Moved real guest pointer over a singer name and away; neither frame has an underline",
+    "information": "Actual installed dialog renders labels and name hyperlinks in the same TextBlock baseline",
+    "online_file_share": "Native online song context menu offers file sharing; Windows share sheet displays actual WAV name and size; closed without sending",
+    "materials": "Native dialog popup follows Mica, Mica Alt, Acrylic and Solid; menu and comments observed in the installed package"
+  },
+  "floating_opacity": "Same selected native material and controller parameters; overlay adds 12% of remaining solid blend. In-window queue inherits the main backdrop with the same overlay.",
+  "environment": "Windows 11 3D VM; synthetic API and audio; no real account writes or sends; no physical touch test"
+}

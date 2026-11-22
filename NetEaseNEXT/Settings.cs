@@ -187,7 +187,11 @@ public sealed partial class MainWindow
             text.FontSize = metrics.AppliedSize = metrics.Size * _settings.TextFontSize / 14;
             text.FontWeight = new Windows.UI.Text.FontWeight { Weight = (ushort)Math.Max(metrics.Weight, _settings.TextFontWeight) };
         }
-        else if (element is Control control) control.FontFamily = family;
+        else if (element is Control control)
+        {
+            control.FontFamily = family;
+            if (control is ComboBox combo) { combo.DropDownOpened -= Popup_Opened; combo.DropDownOpened += Popup_Opened; }
+        }
         for (var index = 0; index < VisualTreeHelper.GetChildrenCount(element); index++) ApplyTextFont(VisualTreeHelper.GetChild(element, index), family);
     }
     private void Transparency_Changed(object sender, RangeBaseValueChangedEventArgs args)
@@ -244,6 +248,7 @@ public sealed partial class MainWindow
         TransparencyValue.Text = !supported ? "" : atDefault ? $"{AdjustableBackdrop.DefaultTransparency:0}%（系统默认）" : $"{transparency:0}%";
         MaterialHint.Text = !supported && _settings.Backdrop != "Solid" ? "当前系统不支持此材质，已使用纯色背景" : _settings.Backdrop.StartsWith("Mica") ? "Mica 从桌面壁纸取色，不是实时透视。" : _settings.Backdrop == "Acrylic" ? "窗口未激活或系统关闭透明效果时，会使用纯色背景。" : "";
         MaterialHint.Visibility = MaterialHint.Text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+        ApplyFloatingMaterials();
     }
     private void ResetMaterial_Click(object sender, RoutedEventArgs args)
     {

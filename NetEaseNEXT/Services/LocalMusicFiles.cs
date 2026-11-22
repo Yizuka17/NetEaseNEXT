@@ -17,7 +17,7 @@ internal static class LocalMusicFiles
         if (!File.Exists(path)) File.WriteAllBytes(path, bytes);
         return path;
     }
-    internal static Track Read(string path, DownloadedLibrary? downloads = null)
+    internal static Track Read(string path, DownloadedLibrary? downloads = null, bool embeddedSourceOnly = false)
     {
         path = Path.GetFullPath(path);
         var info = AudioTags.Read(path);
@@ -25,7 +25,7 @@ internal static class LocalMusicFiles
         var id = -Math.Max(1, BitConverter.ToInt64(hash, 0) & long.MaxValue);
         var cover = info.Cover is { Length: > 0 } ? new Uri(StoreCover(info.Cover)).AbsoluteUri : "";
         var track = new Track(id, info.Title, info.Artist, info.Album, cover, info.Duration) { LocalPath = path };
-        var origin = (downloads ?? DownloadedLibrary.Shared).FindPath(path); var file = new FileInfo(path);
+        var origin = embeddedSourceOnly ? null : (downloads ?? DownloadedLibrary.Shared).FindPath(path); var file = new FileInfo(path);
         track.SetLocalSource(origin?.SongId ?? info.SongId, origin?.Level ?? info.Level, file.Length, file.LastWriteTimeUtc.Ticks, origin?.ArtistId ?? info.ArtistId, origin?.AlbumId ?? info.AlbumId);
         return track;
     }
