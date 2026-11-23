@@ -11,12 +11,13 @@ internal static class LocalLinkFixtures
     internal static string GateMethod = "";
     internal static TaskCompletionSource<bool>? Gate;
     internal static int Canceled;
+    internal static int CommentFailures;
     internal static void Hold(string method) { GateMethod = method; Gate = new(TaskCreationOptions.RunContinuationsAsynchronously); }
     internal static void Release() => Gate?.TrySetResult(true);
     internal static object Song(long id) => new { id, name = id == 137 ? "合作歌曲" : "歌曲 " + id, ar = id == 137 ? new[] { new { id = 301, name = "歌手甲" }, new { id = 302, name = "歌手乙" } } : new[] { new { id = 301, name = "歌手甲" } }, al = new { id = 401, name = "测试专辑", picUrl = "" }, dt = 4000 };
     internal static ApiClient Create(string directory)
     {
-        Calls.Clear(); GateMethod = ""; Gate = null; Canceled = 0;
+        Calls.Clear(); GateMethod = ""; Gate = null; Canceled = 0; CommentFailures = 0;
         var cover = new Uri(LocalMusicFiles.StoreCover(File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.png")))).AbsoluteUri;
         var playlist = new { id = 101, name = "在线歌单", picUrl = cover, coverImgUrl = cover, trackCount = 165 };
         return new ApiClient(async (method, p, ct) =>
@@ -28,6 +29,8 @@ internal static class LocalLinkFixtures
                 try { await Gate.Task.WaitAsync(ct); } catch (OperationCanceledException) { Interlocked.Increment(ref Canceled); throw; }
             }
             await Task.Delay(25, ct);
+            if (method == "comment_new" && Interlocked.CompareExchange(ref CommentFailures, 0, 1) == 1)
+                throw new IOException("fixture comments unavailable");
             object body = method switch
             {
                 "login_status" => new { code = 200, data = new { profile = new { userId = 42, nickname = "测试用户", avatarUrl = "" } } },

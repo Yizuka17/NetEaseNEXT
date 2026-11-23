@@ -23,7 +23,7 @@ public sealed partial class MainWindow
         void Add(string text, string glyph, RoutedEventHandler action)
         {
             var item = new MenuFlyoutItem { Text = text, Icon = IconFonts.Action(glyph), DataContext = card };
-            item.Click += (sender, args) => { if (!_hidden && ReferenceEquals(route, _route)) action(sender, args); }; menu.Items.Add(item);
+            item.Click += (sender, args) => RunRowMenuAction(menu, sender, args, action, () => ReferenceEquals(route, _route)); menu.Items.Add(item);
         }
         if (card is LocalPlaylistCard)
         {

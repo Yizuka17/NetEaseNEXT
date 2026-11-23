@@ -55,6 +55,9 @@ public sealed partial class MainWindow
         PlayerBackButton.Visibility = player && !_fullScreen ? Visibility.Visible : Visibility.Collapsed;
         PlayerDragArea.Visibility = player && !_fullScreen ? Visibility.Visible : Visibility.Collapsed;
         if (AppWindow.Presenter is OverlappedPresenter presenter) presenter.SetBorderAndTitleBar(true, true);
+        // DWMWCP_DEFAULT: DWM owns normal, snapped and maximized window corners.
+        var cornerPreference = 0;
+        DwmSetWindowAttribute(WinRT.Interop.WindowNative.GetWindowHandle(this), 33, ref cornerPreference, sizeof(int));
         if (_fullScreen)
         {
             SetTitleBar(null);

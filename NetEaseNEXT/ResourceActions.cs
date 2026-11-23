@@ -31,7 +31,12 @@ public sealed partial class MainWindow
     }
     private async void ContextComments_Click(object sender, RoutedEventArgs args)
     {
-        if ((sender as FrameworkElement)?.DataContext is Track track && SongCommentsSource(track) is { } source) await ShowCommentsAsync(source);
+        try
+        {
+            if ((sender as FrameworkElement)?.DataContext is Track track && SongCommentsSource(track) is { } source) await ShowCommentsAsync(source);
+        }
+        catch (OperationCanceledException) { }
+        catch (Exception ex) { Log.Write(ex); ShowError(ex.Message); }
     }
     private async Task LoadRadioDetailAsync(CancellationToken token)
     {

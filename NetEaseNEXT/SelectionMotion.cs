@@ -89,8 +89,10 @@ public sealed partial class MainWindow
     private static (double Top, double Bottom) SongRowBounds(ListView list, double offset)
     {
         if (list.ItemsPanelRoot is not { } panel) return (offset, offset + list.ActualHeight);
-        var bounds = panel.TransformToVisual(list).TransformBounds(new(0, 0, panel.ActualWidth, panel.ActualHeight));
-        return (bounds.Y + offset, bounds.Bottom + offset);
+        var scroll = FindDescendant<ScrollViewer>(list);
+        if (scroll?.Content is not FrameworkElement content) return (offset, offset + list.ActualHeight);
+        var bounds = panel.TransformToVisual(content).TransformBounds(new(0, 0, panel.ActualWidth, panel.ActualHeight));
+        return (bounds.Y, bounds.Bottom);
     }
     private void StopSelectionMotion()
     {
@@ -207,10 +209,13 @@ public sealed partial class MainWindow
         {
             marker.Visibility = Visibility.Collapsed; state.Offscreen = true; return;
         }
-        var bounds = row.TransformToVisual(list).TransformBounds(new(0, 0, row.ActualWidth, row.ActualHeight));
-        var viewportY = bounds.Y + (bounds.Height - marker.Height) / 2;
+        if (state.Scroll?.Content is not FrameworkElement content) return;
+        // TransformToVisual(list) can already contain a compositor scroll transform
+        // from a different frame than VerticalOffset. Keep the anchor entirely in
+        // content coordinates; only the live scroll expression moves its layer.
+        var bounds = row.TransformToVisual(content).TransformBounds(new(0, 0, row.ActualWidth, row.ActualHeight));
         var offset = state.Scroll?.VerticalOffset ?? 0;
-        var y = viewportY + offset;
+        var y = bounds.Y + (bounds.Height - marker.Height) / 2;
         var rows = SongRowBounds(list, offset);
         var first = Math.Max(offset, rows.Top);
         var last = Math.Max(first, Math.Min(offset + list.ActualHeight, rows.Bottom) - marker.Height);
@@ -219,7 +224,7 @@ public sealed partial class MainWindow
         var clipRect = new Windows.Foundation.Rect(0, clipTop, clip.ActualWidth, Math.Max(0, Math.Min(list.ActualHeight, rows.Bottom - offset) - clipTop));
         if (clip.Clip is RectangleGeometry geometry) { if (geometry.Rect != clipRect) geometry.Rect = clipRect; }
         else clip.Clip = new RectangleGeometry { Rect = clipRect };
-        if (bounds.Bottom <= 0 || bounds.Y >= list.ActualHeight)
+        if (bounds.Bottom <= offset || bounds.Y >= offset + list.ActualHeight)
         {
             marker.Visibility = Visibility.Collapsed; state.Offscreen = true; return;
         }

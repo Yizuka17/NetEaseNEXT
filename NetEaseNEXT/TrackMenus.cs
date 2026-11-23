@@ -11,6 +11,20 @@ namespace NetEaseNEXT;
 public sealed partial class MainWindow
 {
     private MenuFlyout? _rowContextMenu;
+    private Task _rowContextClosed = Task.CompletedTask;
+    private async void RunRowMenuAction(MenuFlyout menu, object sender, RoutedEventArgs args, RoutedEventHandler action, Func<bool> current)
+    {
+        try
+        {
+            var closed = ReferenceEquals(_rowContextMenu, menu) ? _rowContextClosed : Task.CompletedTask;
+            menu.Hide();
+            // A menu command can open a new native popup. Let the originating
+            // popup finish unloading before creating the next surface.
+            await closed;
+            if (!_hidden && current()) action(sender, args);
+        }
+        catch (Exception ex) { Log.Write(ex); ShowError(ex.Message); }
+    }
     private void RowContextCanceled(UIElement sender, RoutedEventArgs args) => CloseRowContextMenu();
     private void CloseRowContextMenu()
     {
@@ -31,12 +45,15 @@ public sealed partial class MainWindow
     private void ShowRowContextMenu(MenuFlyout menu, FrameworkElement anchor, Windows.Foundation.Point? position = null)
     {
         CloseRowContextMenu(); _rowContextMenu = menu;
+        var closed = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        _rowContextClosed = closed.Task;
         menu.SystemBackdrop = FloatingBackdrop(menu.SystemBackdrop);
         menu.Opened += Popup_Opened; menu.Closed += Closed;
         void Closed(object? sender, object args)
         {
             menu.Opened -= Popup_Opened; menu.Closed -= Closed;
             if (ReferenceEquals(_rowContextMenu, menu)) _rowContextMenu = null;
+            closed.TrySetResult();
         }
         if (position is { } point) menu.ShowAt(anchor, point); else menu.ShowAt(anchor);
     }
@@ -46,7 +63,7 @@ public sealed partial class MainWindow
         void Add(string text, string glyph, RoutedEventHandler action, Visibility visibility = Visibility.Visible)
         {
             var item = new MenuFlyoutItem { Text = text, Icon = IconFonts.Action(glyph), DataContext = track, Visibility = visibility };
-            item.Click += (sender, args) => { if (!_hidden && ReferenceEquals(route, _route)) action(sender, args); };
+            item.Click += (sender, args) => RunRowMenuAction(menu, sender, args, action, () => ReferenceEquals(route, _route));
             menu.Items.Add(item);
         }
         Add("多选", "\uE739", ContextBatch_Click); Add("播放", "\uE768", ContextPlay_Click); Add("添加至下一首播放", "\uE710", ContextNext_Click);
