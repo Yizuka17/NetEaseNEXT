@@ -1,0 +1,325 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Main window still supports Mica",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Main window still supports MicaAlt",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Main window still supports Acrylic",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Main window still supports Solid",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Existing main material and both transparency preferences are not rewritten on load",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Font selector remains open after opening",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Refreshing fonts defers list replacement until the selector closes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Closing applies the pending fonts and preserves the selected family",
+    "passed": true,
+    "detail": {
+      "count": 78
+    }
+  },
+  {
+    "name": "Opening again neither rescans fonts nor closes the selector",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Built-in text editing context menu has native acrylic",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "account-Light has an attached native acrylic controller and translucent content",
+    "passed": true,
+    "detail": {
+      "main": "Mica",
+      "theme": "Light",
+      "Kind": "Acrylic",
+      "AppliedProfile": {},
+      "AppliedColors": {}
+    }
+  },
+  {
+    "name": "account-Light releases its material on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "song-context-Light has an attached native acrylic controller and translucent content",
+    "passed": true,
+    "detail": {
+      "main": "Mica",
+      "theme": "Light",
+      "Kind": "Acrylic",
+      "AppliedProfile": {},
+      "AppliedColors": {}
+    }
+  },
+  {
+    "name": "song-context-Light releases its material on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "playlist-context-Light has an attached native acrylic controller and translucent content",
+    "passed": true,
+    "detail": {
+      "main": "Mica",
+      "theme": "Light",
+      "Kind": "Acrylic",
+      "AppliedProfile": {},
+      "AppliedColors": {}
+    }
+  },
+  {
+    "name": "playlist-context-Light releases its material on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "quality-Light has an attached native acrylic controller and translucent content",
+    "passed": true,
+    "detail": {
+      "main": "Mica",
+      "theme": "Light",
+      "Kind": "Acrylic",
+      "AppliedProfile": {},
+      "AppliedColors": {}
+    }
+  },
+  {
+    "name": "quality-Light releases its material on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "share-Light has an attached native acrylic controller and translucent content",
+    "passed": true,
+    "detail": {
+      "main": "Mica",
+      "theme": "Light",
+      "Kind": "Acrylic",
+      "AppliedProfile": {},
+      "AppliedColors": {}
+    }
+  },
+  {
+    "name": "share-Light releases its material on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "volume-Light has an attached native acrylic controller and translucent content",
+    "passed": true,
+    "detail": {
+      "main": "Mica",
+      "theme": "Light",
+      "Kind": "Acrylic",
+      "AppliedProfile": {},
+      "AppliedColors": {}
+    }
+  },
+  {
+    "name": "volume-Light releases its material on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "emoji-Light has an attached native acrylic controller and translucent content",
+    "passed": true,
+    "detail": {
+      "main": "Mica",
+      "theme": "Light",
+      "Kind": "Acrylic",
+      "AppliedProfile": {},
+      "AppliedColors": {}
+    }
+  },
+  {
+    "name": "emoji-Light releases its material on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "description-Light has an attached native acrylic controller and translucent content",
+    "passed": true,
+    "detail": {
+      "main": "Mica",
+      "theme": "Light",
+      "Kind": "Acrylic",
+      "AppliedProfile": {},
+      "AppliedColors": {}
+    }
+  },
+  {
+    "name": "description-Light releases its material on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light secondary surfaces never change the main material selection",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "account-Dark has an attached native acrylic controller and translucent content",
+    "passed": true,
+    "detail": {
+      "main": "Mica",
+      "theme": "Dark",
+      "Kind": "Acrylic",
+      "AppliedProfile": {},
+      "AppliedColors": {}
+    }
+  },
+  {
+    "name": "account-Dark releases its material on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "song-context-Dark has an attached native acrylic controller and translucent content",
+    "passed": true,
+    "detail": {
+      "main": "Mica",
+      "theme": "Dark",
+      "Kind": "Acrylic",
+      "AppliedProfile": {},
+      "AppliedColors": {}
+    }
+  },
+  {
+    "name": "song-context-Dark releases its material on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "playlist-context-Dark has an attached native acrylic controller and translucent content",
+    "passed": true,
+    "detail": {
+      "main": "Mica",
+      "theme": "Dark",
+      "Kind": "Acrylic",
+      "AppliedProfile": {},
+      "AppliedColors": {}
+    }
+  },
+  {
+    "name": "playlist-context-Dark releases its material on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "quality-Dark has an attached native acrylic controller and translucent content",
+    "passed": true,
+    "detail": {
+      "main": "Mica",
+      "theme": "Dark",
+      "Kind": "Acrylic",
+      "AppliedProfile": {},
+      "AppliedColors": {}
+    }
+  },
+  {
+    "name": "quality-Dark releases its material on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "share-Dark has an attached native acrylic controller and translucent content",
+    "passed": true,
+    "detail": {
+      "main": "Mica",
+      "theme": "Dark",
+      "Kind": "Acrylic",
+      "AppliedProfile": {},
+      "AppliedColors": {}
+    }
+  },
+  {
+    "name": "share-Dark releases its material on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "volume-Dark has an attached native acrylic controller and translucent content",
+    "passed": true,
+    "detail": {
+      "main": "Mica",
+      "theme": "Dark",
+      "Kind": "Acrylic",
+      "AppliedProfile": {},
+      "AppliedColors": {}
+    }
+  },
+  {
+    "name": "volume-Dark releases its material on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "emoji-Dark has an attached native acrylic controller and translucent content",
+    "passed": true,
+    "detail": {
+      "main": "Mica",
+      "theme": "Dark",
+      "Kind": "Acrylic",
+      "AppliedProfile": {},
+      "AppliedColors": {}
+    }
+  },
+  {
+    "name": "emoji-Dark releases its material on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "description-Dark has an attached native acrylic controller and translucent content",
+    "passed": true,
+    "detail": {
+      "main": "Mica",
+      "theme": "Dark",
+      "Kind": "Acrylic",
+      "AppliedProfile": {},
+      "AppliedColors": {}
+    }
+  },
+  {
+    "name": "description-Dark releases its material on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark secondary surfaces never change the main material selection",
+    "passed": true,
+    "detail": null
+  }
+]

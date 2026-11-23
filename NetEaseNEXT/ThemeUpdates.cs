@@ -33,12 +33,21 @@ public sealed partial class MainWindow
         FontHost.RequestedTheme = Root.RequestedTheme = PreferredAppTheme;
         RefreshThemeSurfaces();
     });
+    private void NativeContextFlyoutOpening(object? sender, object args)
+    {
+        if (sender is FlyoutBase flyout)
+        {
+            PrepareFlyoutTheme(flyout);
+            flyout.SystemBackdrop = FloatingWindowBackdrop(flyout.SystemBackdrop);
+        }
+    }
     private void ApplyPopupTheme(FrameworkElement element)
     {
         element.RequestedTheme = Root.ActualTheme;
         ApplyPopupMaterial(element);
         ApplyTextFont(element, new FontFamily(_settings.FontFamily));
     }
+    private FlyoutBase? _activeFlyout;
     private bool _dialogSurfaceReady;
     private int _dialogPickerDepth;
     private double _floatingRasterScale;
@@ -75,6 +84,21 @@ public sealed partial class MainWindow
             TintOpacity = opacity
         };
     }
+    private Brush FloatingWindowTint()
+    {
+        if (new AccessibilitySettings().HighContrast) return (Brush)Application.Current.Resources["SystemControlBackgroundChromeMediumLowBrush"];
+        var dark = Root.ActualTheme == ElementTheme.Dark;
+        var value = _settings.UsesSystemMaterial("Acrylic") ? Services.AdjustableBackdrop.DefaultTransparency : Services.AdjustableBackdrop.Normalize(_settings.AcrylicTransparency);
+        var blend = Math.Max(0, 1 - value / Services.AdjustableBackdrop.DefaultTransparency);
+        var alpha = (byte)Math.Round(24 + 231 * blend);
+        return new SolidColorBrush(Windows.UI.Color.FromArgb(alpha, (byte)(dark ? 44 : 249), (byte)(dark ? 44 : 249), (byte)(dark ? 44 : 249)));
+    }
+    private SystemBackdrop FloatingWindowBackdrop(SystemBackdrop? current)
+    {
+        if (current is Services.AdjustableBackdrop backdrop)
+        { backdrop.UpdateMaterial("Acrylic", _settings.AcrylicTransparency, _settings.UsesSystemMaterial("Acrylic"), Root.ActualTheme); return backdrop; }
+        return new Services.AdjustableBackdrop("Acrylic", _settings.AcrylicTransparency, _settings.UsesSystemMaterial("Acrylic"), Root.ActualTheme, transient: true);
+    }
     private void ApplySelectorMaterial(ComboBox combo, Brush? brush = null)
     {
         combo.Resources["ComboBoxDropDownBackground"] = brush ?? FloatingBackground();
@@ -84,13 +108,14 @@ public sealed partial class MainWindow
     {
         brush ??= FloatingBackground();
         if (element is ContentDialog dialog) { dialog.Background = brush; dialog.BorderThickness = FloatingStroke; }
-        else if (element is MenuFlyoutPresenter menu) { menu.SystemBackdrop = null; menu.Background = brush; menu.BorderThickness = FloatingStroke; }
+        else if (element is MenuFlyoutPresenter menu) { menu.Background = FloatingWindowTint(); menu.BorderThickness = FloatingStroke; }
         else if (element is FlyoutPresenter flyout)
         {
             var wrapper = ReferenceEquals(flyout.Content, QueuePane);
-            flyout.Background = wrapper ? new SolidColorBrush(Microsoft.UI.Colors.Transparent) : brush;
+            flyout.Background = wrapper ? new SolidColorBrush(Microsoft.UI.Colors.Transparent) : FloatingWindowTint();
             flyout.BorderThickness = wrapper ? new Thickness(0) : FloatingStroke;
         }
+        else if (element is CommandBar commands) { commands.Background = FloatingWindowTint(); commands.BorderThickness = FloatingStroke; }
         else if (element is ComboBox combo) ApplySelectorMaterial(combo, brush);
         else if (element is Border { Name: "PopupBorder" } border) { border.Background = brush; border.BorderThickness = FloatingStroke; }
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++) ApplyPopupMaterial(VisualTreeHelper.GetChild(element, i), brush);
@@ -98,7 +123,8 @@ public sealed partial class MainWindow
     private void ApplyFloatingMaterials()
     {
         var brush = FloatingBackground();
-        QueuePane.Background = brush;
+        QueuePane.Background = FloatingWindowTint();
+        if (_queueSurfaceOpen) QueueSurface.SystemBackdrop = FloatingWindowBackdrop(QueueSurface.SystemBackdrop);
         QueuePane.BorderThickness = FloatingStroke;
         ApplyPopupMaterial(FontHost, brush);
         if (_dialog != null) ApplyPopupMaterial(_dialog, brush);
@@ -169,22 +195,32 @@ public sealed partial class MainWindow
     }
     private void ShowThemedFlyout(FlyoutBase flyout, FrameworkElement anchor)
     {
+        _activeFlyout?.Hide(); _activeFlyout = flyout;
         PrepareFlyoutTheme(flyout);
-        flyout.SystemBackdrop = null;
+        flyout.SystemBackdrop = FloatingWindowBackdrop(flyout.SystemBackdrop);
         flyout.Opened += Popup_Opened;
         flyout.Closed += Closed;
-        void Closed(object? sender, object args) { flyout.Opened -= Popup_Opened; flyout.Closed -= Closed; }
+        void Closed(object? sender, object args) { flyout.Opened -= Popup_Opened; flyout.Closed -= Closed; if (ReferenceEquals(_activeFlyout, flyout)) _activeFlyout = null; }
         flyout.ShowAt(anchor);
     }
     private void PrepareFlyoutTheme(FlyoutBase flyout)
     {
+        flyout.ShouldConstrainToRootBounds = false;
         if (flyout is MenuFlyout menu)
         {
             var style = new Style(typeof(MenuFlyoutPresenter)) { BasedOn = (Style)Application.Current.Resources["DefaultMenuFlyoutPresenterStyle"] };
             style.Setters.Add(new Setter(FrameworkElement.RequestedThemeProperty, Root.ActualTheme));
-            style.Setters.Add(new Setter(Control.BackgroundProperty, FloatingBackground()));
+            style.Setters.Add(new Setter(Control.BackgroundProperty, FloatingWindowTint()));
             style.Setters.Add(new Setter(Control.BorderThicknessProperty, FloatingStroke));
             menu.MenuFlyoutPresenterStyle = style;
+        }
+        else if (flyout is Flyout plain)
+        {
+            var style = new Style(typeof(FlyoutPresenter)) { BasedOn = (Style)Application.Current.Resources["DefaultFlyoutPresenterStyle"] };
+            style.Setters.Add(new Setter(FrameworkElement.RequestedThemeProperty, Root.ActualTheme));
+            style.Setters.Add(new Setter(Control.BackgroundProperty, FloatingWindowTint()));
+            style.Setters.Add(new Setter(Control.BorderThicknessProperty, FloatingStroke));
+            plain.FlyoutPresenterStyle = style;
         }
         flyout.AreOpenCloseAnimationsEnabled = PlayerAnimationEnabled;
     }

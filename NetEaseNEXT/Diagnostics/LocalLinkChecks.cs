@@ -109,7 +109,7 @@ public sealed partial class MainWindow
             check("Song information closes with a bare top-right cross", close.Style == (Style)Application.Current.Resources["BareButtonStyle"] && !close.UseSystemFocusVisuals && close.ActualWidth >= 44 && _dialog!.CloseButtonText.Length == 0 && close.TransformToVisual(_dialog).TransformPoint(new()).X > 200, null);
             _settings.Backdrop = "Mica"; ApplyAppearance(); await Task.Delay(150); ApplyFloatingMaterials();
             await Wait(() => _dialogSurfaceReady);
-            check("Legacy material preference migrates to unified acrylic", _settings.Backdrop == "Acrylic" && SystemBackdrop is AdjustableBackdrop { Kind: "Acrylic" } && _dialog!.Background is AcrylicBrush, null);
+            check("Main Mica choice is preserved while dialogs stay acrylic", _settings.Backdrop == "Mica" && SystemBackdrop is AdjustableBackdrop { Kind: "Mica" } && _dialog!.Background is AcrylicBrush, null);
             var originalTransparency = _settings.AcrylicTransparency; var originalDefault = _settings.AcrylicSystemMaterial;
             foreach (var value in new[] { 0d, 65d, 100d })
             {
@@ -148,7 +148,7 @@ public sealed partial class MainWindow
             _localLibrary = loadedLibrary;
             ShowQueue_Click(QueueButton, new()); Root.UpdateLayout();
             await Task.Delay(250);
-            check("Queue is a native popup with unified in-app acrylic", _queueSurfaceOpen && QueueSurface.SystemBackdrop == null && QueuePane.Background is AcrylicBrush && QueuePane.ActualWidth > 0, null);
+            check("Queue uses independent native acrylic", _queueSurfaceOpen && QueueSurface.SystemBackdrop is AdjustableBackdrop { Kind: "Acrylic", NativeProfileReady: true } && QueuePane.Background is SolidColorBrush { Color.A: < 255 } && QueuePane.ActualWidth > 0, null);
             ShowQueue_Click(QueueButton, new()); await Wait(() => !_queueSurfaceOpen);
             var legacy = LocalLinkFixtures.Audio(Path.Combine(fixture, "legacy"), "旧下载", 138, "");
             _localLibrary.Tracks.Add(legacy); _localLibrary.Save();

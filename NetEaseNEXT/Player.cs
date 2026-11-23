@@ -71,7 +71,7 @@ public sealed partial class MainWindow
         QueuePane.Visibility = open ? Visibility.Visible : Visibility.Collapsed;
         if (open)
         {
-            QueueSurface.SystemBackdrop = null;
+            QueueSurface.SystemBackdrop = FloatingWindowBackdrop(QueueSurface.SystemBackdrop);
             ApplyFloatingMaterials();
             QueueSurface.FlyoutPresenterStyle = FloatingPresenterStyle(400, QueuePane.MaxHeight);
             _queueSurfaceOpen = true;

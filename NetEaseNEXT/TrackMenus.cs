@@ -48,7 +48,7 @@ public sealed partial class MainWindow
         var closed = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         _rowContextClosed = closed.Task;
         PrepareFlyoutTheme(menu);
-        menu.SystemBackdrop = null;
+        menu.SystemBackdrop = FloatingWindowBackdrop(menu.SystemBackdrop);
         menu.Opened += Popup_Opened; menu.Closed += Closed;
         void Closed(object? sender, object args)
         {

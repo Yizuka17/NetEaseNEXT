@@ -7,7 +7,7 @@ using Windows.UI;
 
 namespace NetEaseNEXT.Services;
 
-public sealed class AdjustableBackdrop(string kind, double transparency, bool systemDefaults, ElementTheme theme) : SystemBackdrop
+public sealed class AdjustableBackdrop(string kind, double transparency, bool systemDefaults, ElementTheme theme, bool transient = false) : SystemBackdrop
 {
     internal const double DefaultTransparency = 65;
     internal string Kind => kind;
@@ -143,7 +143,7 @@ public sealed class AdjustableBackdrop(string kind, double transparency, bool sy
     private void CopyWindowState()
     {
         if (_configuration is not { } active || _xamlConfiguration is not { } xaml) return;
-        active.IsInputActive = xaml.IsInputActive;
+        active.IsInputActive = transient || xaml.IsInputActive;
         active.HighContrastBackgroundColor = xaml.HighContrastBackgroundColor;
         active.IsHighContrast = xaml.IsHighContrast;
     }

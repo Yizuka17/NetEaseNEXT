@@ -50,6 +50,8 @@ public sealed partial class MainWindow
                 await Wait(() => menu.Items.OfType<MenuFlyoutItem>().Any(i => i.IsLoaded));
                 var presenter = VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Select(p => p.Child).OfType<MenuFlyoutPresenter>().Single();
                 check(theme + " menu and comments share actual stroke width color and system corners", presenter.BorderThickness == dialogStroke && ((SolidColorBrush)presenter.BorderBrush).Color == dialogColor && presenter.CornerRadius == actualBorder.CornerRadius, new { dialogStroke.Left, color = dialogColor.ToString(), radius = presenter.CornerRadius.TopLeft });
+                await Wait(() => menu.SystemBackdrop is AdjustableBackdrop { NativeProfileReady: true });
+                check(theme + " right-click menu has a live native acrylic controller", menu.SystemBackdrop is AdjustableBackdrop { Kind: "Acrylic" } && presenter.Background is SolidColorBrush { Color.A: < 255 }, null);
                 menu.Hide(); await _rowContextClosed;
 
                 var info = ShowSongDetailsAsync(Tracks[0], _api); await Ready();
@@ -85,7 +87,7 @@ public sealed partial class MainWindow
                 _settings.AcrylicTransparency = savedTransparency; _settings.AcrylicSystemMaterial = savedDefault; ApplyMaterial(Root.ActualTheme);
                 await NavigateAsync("playlist");
                 ShowQueue_Click(QueueButton, new()); await Task.Delay(200);
-                check(theme + " playback queue uses the same acrylic material", QueuePane.Background is AcrylicBrush && QueuePane.BorderThickness == FloatingStroke && QueueSurface.SystemBackdrop == null, null);
+                check(theme + " playback queue uses the same acrylic material", QueuePane.Background is SolidColorBrush { Color.A: < 255 } && QueuePane.BorderThickness == FloatingStroke && QueueSurface.SystemBackdrop is AdjustableBackdrop { Kind: "Acrylic", NativeProfileReady: true }, null);
                 await SaveLibraryImageAsync(Root, "acrylic-queue-" + theme + ".png");
                 ShowQueue_Click(QueueButton, new()); await Task.Delay(300);
 

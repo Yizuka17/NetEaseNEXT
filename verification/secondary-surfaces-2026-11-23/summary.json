@@ -1,0 +1,36 @@
+{
+  "version": "0.3.3.24",
+  "dllSha256": "F31BF9C3778EE4FE6856C2A57951D30C046078A612296C0B24ACBE3966B575F7",
+  "checks": {
+    "installed-local-links.json": 42,
+    "installed-secondary-surfaces.json": 45,
+    "installed-light-dismiss-check.json": 40,
+    "installed-surface-check.json": 27
+  },
+  "installedTotal": 154,
+  "apiContractChecks": 83,
+  "nativeDesktopImages": [
+    "account-Dark.png",
+    "account-Light.png",
+    "description-Dark.png",
+    "description-Light.png",
+    "emoji-Dark.png",
+    "emoji-Light.png",
+    "font-refresh-open.png",
+    "font-reopen.png",
+    "playlist-context-Dark.png",
+    "playlist-context-Light.png",
+    "quality-Dark.png",
+    "quality-Light.png",
+    "share-Dark.png",
+    "share-Light.png",
+    "song-context-Dark.png",
+    "song-context-Light.png",
+    "text-edit-context.png",
+    "volume-Dark.png",
+    "volume-Light.png"
+  ],
+  "renderedMarkerChecks": 13,
+  "maximumMarkerCenterError": 0.5,
+  "environment": "Windows 11 VirtualBox 3D, 1280x960, 100% scaling, synthetic account and music fixtures"
+}

@@ -70,10 +70,14 @@ public sealed partial class MainWindow
                 }
             var rootBounds = new FrameworkElementAutomationPeer(capture).GetBoundingRectangle();
             var rowBounds = new ListViewItemAutomationPeer(row).GetBoundingRectangle();
-            var expected = (rowBounds.Y + rowBounds.Height / 2 - rootBounds.Y) * bitmap.PixelHeight / rootBounds.Height;
+            // UIA clips accessible bounds at the viewport edge. Compare the
+            // rendered marker against the full row in capture coordinates,
+            // independently of the production content/scroll expression.
+            var fullRowBounds = row.TransformToVisual(capture).TransformBounds(new(0, 0, row.ActualWidth, row.ActualHeight));
+            var expected = (fullRowBounds.Y + fullRowBounds.Height / 2) * bitmap.PixelHeight / capture.ActualHeight;
             var center = (top + bottom + 1) / 2d;
             await SaveLibraryImageAsync(capture, "indicator-" + label + ".png");
-            check(label + " rendered marker stays centered on its accessible song row", bottom >= top && Math.Abs(center - expected) <= 2, new { top, bottom, center, expected, rootBounds, rowBounds, state.Y, scroll = state.Scroll?.VerticalOffset });
+            check(label + " rendered marker stays centered on its full song row", bottom >= top && Math.Abs(center - expected) <= 2, new { top, bottom, center, expected, rootBounds, rowBounds, fullRowBounds, state.Y, scroll = state.Scroll?.VerticalOffset });
         }
         try
         {

@@ -36,9 +36,9 @@ public sealed partial class MainWindow
             File.Move(target + ".tmp", target);
             await Task.Delay(1500);
         }
-        foreach (var kind in new[] { "Acrylic" })
+        foreach (var kind in new[] { "Acrylic", "Mica", "MicaAlt" })
         {
-            _settings.Backdrop = kind; ApplyAppearance();
+            SelectTag(BackdropCombo, kind);
             if (SystemBackdrop is not AdjustableBackdrop backdrop)
             {
                 check(kind + " is unsupported and falls back to a solid theme background", !TransparencySlider.IsEnabled && SolidLayer.Visibility == Visibility.Visible, null);

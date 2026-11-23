@@ -82,7 +82,7 @@ public sealed partial class MainWindow : Window
         SettingsPanel.SizeChanged += (_, _) => SettingsContent.Width = Math.Max(0, Math.Min(760, SettingsPanel.ActualWidth - 24));
         Nav.PaneOpened += (_, _) => UpdateCompactAccount(); Nav.PaneClosed += (_, _) => UpdateCompactAccount();
         TrayToggle.IsOn = _settings.CloseToTray; AnimationToggle.IsOn = _settings.Animations;
-        SelectTag(ThemeCombo, _settings.Theme);
+        SelectTag(BackdropCombo, _settings.Backdrop); SelectTag(ThemeCombo, _settings.Theme);
         CachePath.Text = _settings.CacheDirectory; DownloadPath.Text = _settings.DownloadDirectory;
         SelectTag(DownloadSourceCombo, _settings.DownloadSource); LocalOnlineInfoToggle.IsOn = _settings.LocalOnlineInfo;
         Diagnostics.StartupTrace.Mark("Initialize fonts"); InitializeFonts(); Diagnostics.StartupTrace.Mark("Apply appearance"); ApplyAppearance(); Diagnostics.StartupTrace.Mark("Appearance applied");
@@ -188,7 +188,7 @@ public sealed partial class MainWindow : Window
         _playback.SetBackgroundMode(hidden);
         if (hidden)
         {
-            CloseRowContextMenu();
+            _activeFlyout?.Hide(); CloseRowContextMenu();
             _songCreditsLoad?.Cancel(); _songCreditsLoad = null; _pendingShare = null;
             _resourceShareLoad?.Cancel();
             SetBusy(false); ResetPageFooters();
@@ -244,7 +244,7 @@ public sealed partial class MainWindow : Window
         if (Root.XamlRoot != null) Root.XamlRoot.Changed -= FloatingRootChanged;
         _resourceShareLoad?.Cancel();
         if (_shareManager != null) _shareManager.DataRequested -= RequestedShare;
-        CloseRowContextMenu();
+        _activeFlyout?.Hide(); CloseRowContextMenu();
         _songCreditsLoad?.Cancel(); _pendingShare = null;
         _windowPlacementTimer.Stop();
         StopLocalMonitoring();

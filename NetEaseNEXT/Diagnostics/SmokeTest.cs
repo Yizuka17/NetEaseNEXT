@@ -36,6 +36,10 @@ public sealed partial class MainWindow
         try
         {
             Check("XAML root loaded", Root.IsLoaded);
+            if (Environment.GetCommandLineArgs().Contains("--secondary-surfaces-check"))
+            {
+                await RunSecondarySurfacesChecksAsync(Check); return;
+            }
             if (Environment.GetCommandLineArgs().Contains("--light-dismiss-check"))
             {
                 await RunLightDismissChecksAsync(Check); return;
@@ -484,7 +488,7 @@ public sealed partial class MainWindow
             AppWindow.Resize(new Windows.Graphics.SizeInt32(1280, 900)); await Task.Delay(150); Root.UpdateLayout();
             if (Environment.GetCommandLineArgs().Contains("--inspect-layout")) await Task.Delay(TimeSpan.FromSeconds(25));
             _settings.Backdrop = "Solid"; _settings.Theme = "Dark"; ApplyAppearance();
-            Check("Legacy material is normalized to acrylic", _settings.Backdrop == "Acrylic" && (SystemBackdrop is AdjustableBackdrop { Kind: "Acrylic" } || SolidLayer.Visibility == Visibility.Visible));
+            Check("Solid backdrop", SystemBackdrop == null && SolidLayer.Visibility == Visibility.Visible);
             _settings.Backdrop = "Mica"; ApplyAppearance();
             Check("Mica supported or fallback", SystemBackdrop != null || MaterialHint.Text.Contains("不支持"));
             await NavigateAsync("queue");
