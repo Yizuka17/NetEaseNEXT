@@ -132,7 +132,7 @@ public sealed partial class MainWindow
             finally { sending = false; send.IsEnabled = !string.IsNullOrWhiteSpace(input.Text); sort.IsEnabled = true; input.IsReadOnly = false; }
         };
         dialog.Opened += async (_, _) => await Fetch(true); dialog.Closed += (_, _) => load.Cancel();
-        try { await ShowThemedDialogAsync(dialog); }
+        try { await ShowThemedDialogAsync(dialog, lightDismiss: false); }
         finally { Root.SizeChanged -= Resized; load.Cancel(); fetch?.Cancel(); if (ReferenceEquals(_commentsLoad, load)) _commentsLoad = null; _dialog = null; }
         if (openSource) await OpenMessageSourceAsync(source);
     }

@@ -36,6 +36,10 @@ public sealed partial class MainWindow
         try
         {
             Check("XAML root loaded", Root.IsLoaded);
+            if (Environment.GetCommandLineArgs().Contains("--light-dismiss-check"))
+            {
+                await RunLightDismissChecksAsync(Check); return;
+            }
             if (Environment.GetCommandLineArgs().Contains("--surface-regression-check"))
             {
                 await RunSurfaceRegressionChecksAsync(Check); return;

@@ -1,0 +1,83 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light dialog template uses the configured single border",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light comments ignore native outside-dismiss requests",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light menu and comments share actual stroke width and color",
+    "passed": true,
+    "detail": {
+      "Left": 0.5,
+      "color": "#0F000000"
+    }
+  },
+  {
+    "name": "Light information outside-dismiss releases the dialog and material",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light outside dismiss cancels a form without invoking Save",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark dialog template uses the configured single border",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark comments ignore native outside-dismiss requests",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark menu and comments share actual stroke width and color",
+    "passed": true,
+    "detail": {
+      "Left": 0.5,
+      "color": "#33000000"
+    }
+  },
+  {
+    "name": "Dark information outside-dismiss releases the dialog and material",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark outside dismiss cancels a form without invoking Save",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Outside-dismiss cancels unfinished information requests",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Outside dismiss never removes a song or deletes its checked audio file",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Opening a nested quality picker keeps its parent dialog open",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Outside dismiss cancels download options without enqueuing",
+    "passed": true,
+    "detail": null
+  }
+]

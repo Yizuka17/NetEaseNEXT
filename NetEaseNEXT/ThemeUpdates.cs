@@ -63,7 +63,13 @@ public sealed partial class MainWindow
         brush ??= FloatingBackground();
         if (element is ContentDialog dialog) { dialog.Background = brush; dialog.BorderThickness = new Thickness(new AccessibilitySettings().HighContrast ? 2 : .5); }
         else if (element is MenuFlyoutPresenter menu) { menu.SystemBackdrop = FloatingBackdrop(menu.SystemBackdrop); menu.Background = brush; menu.BorderThickness = new Thickness(new AccessibilitySettings().HighContrast ? 2 : .5); }
-        else if (element is FlyoutPresenter flyout) flyout.Background = ReferenceEquals(flyout.Content, _dialogSurface?.Content) || ReferenceEquals(flyout.Content, QueuePane) ? new SolidColorBrush(Microsoft.UI.Colors.Transparent) : brush;
+        else if (element is FlyoutPresenter flyout)
+        {
+            var wrapper = ReferenceEquals(flyout.Content, _dialogSurface?.Content) || ReferenceEquals(flyout.Content, QueuePane);
+            flyout.Background = wrapper ? new SolidColorBrush(Microsoft.UI.Colors.Transparent) : brush;
+            // Hosted dialogs and the queue already paint their single outline.
+            flyout.BorderThickness = wrapper ? new Thickness(0) : new Thickness(new AccessibilitySettings().HighContrast ? 2 : .5);
+        }
 
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++) ApplyPopupMaterial(VisualTreeHelper.GetChild(element, i), brush);
     }
@@ -81,7 +87,7 @@ public sealed partial class MainWindow
                 if (popup.Child != null) ApplyPopupMaterial(popup.Child);
             }
     }
-    private async Task<ContentDialogResult> ShowThemedDialogAsync(ContentDialog dialog)
+    private async Task<ContentDialogResult> ShowThemedDialogAsync(ContentDialog dialog, bool lightDismiss = true)
     {
         dialog.Resources["ContentDialogButtonHeight"] = 44d;
         dialog.Resources["ContentDialogButtonMinHeight"] = 44d;
@@ -139,7 +145,14 @@ public sealed partial class MainWindow
         }
         Root.SizeChanged += RootSizeChanged;
         if (dialog.Content is FrameworkElement content) content.SizeChanged += ContentSizeChanged;
-        surface.Closing += (_, args) => args.Cancel = active;
+        surface.Closing += (_, args) =>
+        {
+            if (!active) return;
+            // Let ContentDialog complete with None and run the caller's cleanup
+            // before unloading its native host. Comments opt out of light dismiss.
+            args.Cancel = true;
+            if (lightDismiss && _dialogSurfaceReady) dialog.Hide();
+        };
         surface.Opened += Popup_Opened;
         try
         {
