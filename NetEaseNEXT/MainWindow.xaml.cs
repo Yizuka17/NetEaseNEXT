@@ -82,7 +82,7 @@ public sealed partial class MainWindow : Window
         SettingsPanel.SizeChanged += (_, _) => SettingsContent.Width = Math.Max(0, Math.Min(760, SettingsPanel.ActualWidth - 24));
         Nav.PaneOpened += (_, _) => UpdateCompactAccount(); Nav.PaneClosed += (_, _) => UpdateCompactAccount();
         TrayToggle.IsOn = _settings.CloseToTray; AnimationToggle.IsOn = _settings.Animations;
-        SelectTag(BackdropCombo, _settings.Backdrop); SelectTag(ThemeCombo, _settings.Theme);
+        SelectTag(ThemeCombo, _settings.Theme);
         CachePath.Text = _settings.CacheDirectory; DownloadPath.Text = _settings.DownloadDirectory;
         SelectTag(DownloadSourceCombo, _settings.DownloadSource); LocalOnlineInfoToggle.IsOn = _settings.LocalOnlineInfo;
         Diagnostics.StartupTrace.Mark("Initialize fonts"); InitializeFonts(); Diagnostics.StartupTrace.Mark("Apply appearance"); ApplyAppearance(); Diagnostics.StartupTrace.Mark("Appearance applied");
@@ -113,7 +113,8 @@ public sealed partial class MainWindow : Window
         _ready = true;
         Root.Loaded += async (_, _) =>
         {
-            ApplyFont();
+            Root.XamlRoot.Changed -= FloatingRootChanged; Root.XamlRoot.Changed += FloatingRootChanged;
+            ApplyFont(); ApplyFloatingMaterials();
             Diagnostics.StartupTrace.Mark("Root loaded");
             if (Environment.GetCommandLineArgs().Contains("--smoke-test")) await RunSmokeTestAsync();
             else await InitializeSessionAsync();
@@ -240,6 +241,7 @@ public sealed partial class MainWindow : Window
     private void ExitApp() { _exiting = true; Close(); }
     private void Cleanup()
     {
+        if (Root.XamlRoot != null) Root.XamlRoot.Changed -= FloatingRootChanged;
         _resourceShareLoad?.Cancel();
         if (_shareManager != null) _shareManager.DataRequested -= RequestedShare;
         CloseRowContextMenu();

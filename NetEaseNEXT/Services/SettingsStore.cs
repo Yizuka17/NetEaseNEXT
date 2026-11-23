@@ -14,7 +14,7 @@ public sealed class SettingsStore
     public bool CloseToTray { get; set; } = true;
     public bool RememberWindowBounds { get; set; } = true;
     public WindowPlacement? WindowPlacement { get; set; }
-    public string Backdrop { get; set; } = "Mica";
+    public string Backdrop { get; set; } = "Acrylic";
     public string Theme { get; set; } = "Default";
     public bool Animations { get; set; } = true;
     public string CommentSort { get; set; } = "Hot";
@@ -39,7 +39,17 @@ public sealed class SettingsStore
     public static SettingsStore Load() => LoadFrom(Path.Combine(DataDirectory, "settings.json"));
     internal static SettingsStore LoadFrom(string path)
     {
-        try { return JsonSerializer.Deserialize<SettingsStore>(File.ReadAllText(path)) ?? new(); }
+        try
+        {
+            var settings = JsonSerializer.Deserialize<SettingsStore>(File.ReadAllText(path)) ?? new();
+            if (settings.Backdrop != "Acrylic")
+            {
+                settings.AcrylicTransparency = settings.Backdrop == "Solid" ? 0 : settings.MicaTransparency;
+                settings.AcrylicSystemMaterial = settings.Backdrop == "Solid" ? false : settings.MicaSystemMaterial;
+                settings.Backdrop = "Acrylic";
+            }
+            return settings;
+        }
         catch { return new(); }
     }
     public void Save() => SaveTo(Path.Combine(DataDirectory, "settings.json"));

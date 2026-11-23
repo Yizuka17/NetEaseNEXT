@@ -43,6 +43,7 @@ public sealed partial class MainWindow
         style.Setters.Add(new Setter(Control.PaddingProperty, new Thickness(0)));
         style.Setters.Add(new Setter(Control.BorderThicknessProperty, new Thickness(0)));
         style.Setters.Add(new Setter(Control.BackgroundProperty, new SolidColorBrush(Microsoft.UI.Colors.Transparent)));
+        style.Setters.Add(new Setter(FrameworkElement.RequestedThemeProperty, Root.ActualTheme));
         style.Setters.Add(new Setter(FrameworkElement.MaxWidthProperty, maxWidth));
         style.Setters.Add(new Setter(FrameworkElement.MaxHeightProperty, maxHeight));
         return style;
@@ -70,7 +71,8 @@ public sealed partial class MainWindow
         QueuePane.Visibility = open ? Visibility.Visible : Visibility.Collapsed;
         if (open)
         {
-            QueueSurface.SystemBackdrop = FloatingBackdrop(QueueSurface.SystemBackdrop);
+            QueueSurface.SystemBackdrop = null;
+            ApplyFloatingMaterials();
             QueueSurface.FlyoutPresenterStyle = FloatingPresenterStyle(400, QueuePane.MaxHeight);
             _queueSurfaceOpen = true;
             QueueSurface.ShowAt(Root, new FlyoutShowOptions { Position = new(Root.ActualWidth - 16, Root.ActualHeight - PlayerFooter.ActualHeight - 16), Placement = FlyoutPlacementMode.TopEdgeAlignedRight });

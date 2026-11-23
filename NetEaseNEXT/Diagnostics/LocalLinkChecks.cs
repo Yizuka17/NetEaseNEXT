@@ -107,22 +107,19 @@ public sealed partial class MainWindow
             var close = Descendants<Button>(_dialog!).Single(button => AutomationProperties.GetName(button) == "关闭歌曲信息");
             check("Song information uses labeled name links without framed actions", Descendants<TextBlock>(_dialog!).Any(t => t.Inlines.OfType<Run>().Any(r => r.Text == "歌手：") && t.Inlines.OfType<Hyperlink>().Count() == 2) && Descendants<TextBlock>(_dialog!).Any(t => t.Inlines.OfType<Run>().Any(r => r.Text == "专辑：") && t.Inlines.OfType<Hyperlink>().Count() == 1), null);
             check("Song information closes with a bare top-right cross", close.Style == (Style)Application.Current.Resources["BareButtonStyle"] && !close.UseSystemFocusVisuals && close.ActualWidth >= 44 && _dialog!.CloseButtonText.Length == 0 && close.TransformToVisual(_dialog).TransformPoint(new()).X > 200, null);
-            _settings.Backdrop = "Mica"; ApplyAppearance(); await Task.Delay(300); ApplyFloatingMaterials();
-            await Wait(() => _dialogSurfaceReady && _dialogSurface?.SystemBackdrop is AdjustableBackdrop { NativeProfileReady: true });
-            var nativePopup = _dialogSurface!;
-            check("Dialog uses the same native Mica kind as its window with a denser overlay", nativePopup.SystemBackdrop is AdjustableBackdrop { Kind: "Mica", NativeProfileReady: true } && _dialog!.Background is SolidColorBrush { Color.A: > 0 and < 255 }, null);
-            foreach (var material in new[] { "MicaAlt", "Acrylic", "Solid" })
-            {
-                _settings.Backdrop = material; ApplyAppearance(); await Task.Delay(150); ApplyFloatingMaterials();
-                if (material != "Solid") await Wait(() => nativePopup.SystemBackdrop is AdjustableBackdrop { NativeProfileReady: true });
-                check("Open dialog follows material " + material, material == "Solid" ? nativePopup.SystemBackdrop is AdjustableBackdrop { Kind: "Solid", NativeProfileReady: false } && _dialog!.Background is SolidColorBrush { Color.A: 255 } : nativePopup.SystemBackdrop is AdjustableBackdrop selected && selected.Kind == material && selected.NativeProfileReady && _dialog!.Background is SolidColorBrush { Color.A: > 0 and < 255 }, null);
-            }
             _settings.Backdrop = "Mica"; ApplyAppearance(); await Task.Delay(150); ApplyFloatingMaterials();
+            await Wait(() => _dialogSurfaceReady);
+            check("Legacy material preference migrates to unified acrylic", _settings.Backdrop == "Acrylic" && SystemBackdrop is AdjustableBackdrop { Kind: "Acrylic" } && _dialog!.Background is AcrylicBrush, null);
+            var originalTransparency = _settings.AcrylicTransparency; var originalDefault = _settings.AcrylicSystemMaterial;
+            foreach (var value in new[] { 0d, 65d, 100d })
+            {
+                _settings.AcrylicTransparency = value; _settings.AcrylicSystemMaterial = false; ApplyMaterial(Root.ActualTheme);
+                check("Open dialog follows acrylic transparency " + value, _dialog!.Background is AcrylicBrush acrylic && acrylic.TintOpacity is >= 0 and <= 1 && acrylic.TintColor.A == 255, null);
+            }
+            _settings.AcrylicTransparency = originalTransparency; _settings.AcrylicSystemMaterial = originalDefault; ApplyMaterial(Root.ActualTheme);
             await SaveLibraryImageAsync(_dialog!, "song-information-name-links.png");
-            var closedBackdrop = (AdjustableBackdrop)nativePopup.SystemBackdrop;
             InvokeCredit(_dialog!, "歌手乙"); await info;
-            await Wait(() => !closedBackdrop.NativeProfileReady);
-            check("Closing the dialog disconnects and releases its native material controller", _dialogSurface == null && !closedBackdrop.NativeProfileReady, null);
+            check("Closing the native dialog releases its input handler and readiness", !_dialogSurfaceReady, null);
             check("An information-panel artist name opens that exact artist even with no detected internet profile", _view == "artist" && _artistId == 302 && _dialog == null, null); _connectionOverride = true;
             info = ShowSongDetailsAsync(a, _api); await Wait(() => _dialog is { IsLoaded: true } && CreditLinks(_dialog).Length == 3);
             InvokeCredit(_dialog!, "测试专辑"); await info;
@@ -151,7 +148,7 @@ public sealed partial class MainWindow
             _localLibrary = loadedLibrary;
             ShowQueue_Click(QueueButton, new()); Root.UpdateLayout();
             await Task.Delay(250);
-            check("Queue is a native popup with the same selected material", _queueSurfaceOpen && QueueSurface.SystemBackdrop is AdjustableBackdrop { Kind: "Mica", NativeProfileReady: true } && QueuePane.ActualWidth > 0, null);
+            check("Queue is a native popup with unified in-app acrylic", _queueSurfaceOpen && QueueSurface.SystemBackdrop == null && QueuePane.Background is AcrylicBrush && QueuePane.ActualWidth > 0, null);
             ShowQueue_Click(QueueButton, new()); await Wait(() => !_queueSurfaceOpen);
             var legacy = LocalLinkFixtures.Audio(Path.Combine(fixture, "legacy"), "旧下载", 138, "");
             _localLibrary.Tracks.Add(legacy); _localLibrary.Save();

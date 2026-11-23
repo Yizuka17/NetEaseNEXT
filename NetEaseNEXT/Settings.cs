@@ -116,7 +116,7 @@ public sealed partial class MainWindow
         if (!_ready) return;
         _settings.CloseToTray = TrayToggle.IsOn; _settings.Animations = AnimationToggle.IsOn;
         if (!_settings.Animations) StopInterfaceMotion();
-        _settings.Backdrop = Tag(BackdropCombo); _settings.Theme = Tag(ThemeCombo);
+        _settings.Backdrop = "Acrylic"; _settings.Theme = Tag(ThemeCombo);
         SaveSettings(); ApplyAppearance();
     }
     private void SaveSettings() { if (_runningSmokeTest) return; try { _settings.Save(); } catch (Exception ex) { ShowError(ex.Message); } }
@@ -190,15 +190,14 @@ public sealed partial class MainWindow
         else if (element is Control control)
         {
             control.FontFamily = family;
-            if (control is ComboBox combo) { combo.DropDownOpened -= Popup_Opened; combo.DropDownOpened += Popup_Opened; }
+            if (control is ComboBox combo) { ApplySelectorMaterial(combo); combo.DropDownOpened -= Popup_Opened; combo.DropDownOpened += Popup_Opened; }
         }
         for (var index = 0; index < VisualTreeHelper.GetChildrenCount(element); index++) ApplyTextFont(VisualTreeHelper.GetChild(element, index), family);
     }
     private void Transparency_Changed(object sender, RangeBaseValueChangedEventArgs args)
     {
         if (!_ready || _updating || !TransparencySlider.IsEnabled) return;
-        if (_settings.Backdrop == "Acrylic") { _settings.AcrylicTransparency = args.NewValue; _settings.AcrylicSystemMaterial = false; }
-        else { _settings.MicaTransparency = args.NewValue; _settings.MicaSystemMaterial = false; }
+        _settings.AcrylicTransparency = args.NewValue; _settings.AcrylicSystemMaterial = false;
         ApplyMaterial(Root.ActualTheme);
         _appearanceTimer.Stop(); _appearanceTimer.Start();
     }
@@ -209,6 +208,7 @@ public sealed partial class MainWindow
     }
     private void ApplyAppearance()
     {
+        _settings.Backdrop = "Acrylic";
         ConfigureInterfaceMotion();
         FontHost.RequestedTheme = PreferredAppTheme;
         Root.RequestedTheme = PreferredAppTheme;
@@ -222,8 +222,8 @@ public sealed partial class MainWindow
     }
     private void ApplyMaterial(ElementTheme theme)
     {
-        var supported = _settings.Backdrop == "Acrylic" ? DesktopAcrylicController.IsSupported() : _settings.Backdrop is "Mica" or "MicaAlt" && MicaController.IsSupported();
-        var transparency = AdjustableBackdrop.Normalize(_settings.Backdrop == "Acrylic" ? _settings.AcrylicTransparency : _settings.MicaTransparency);
+        var supported = DesktopAcrylicController.IsSupported();
+        var transparency = AdjustableBackdrop.Normalize(_settings.AcrylicTransparency);
         var systemDefaults = _settings.UsesSystemMaterial(_settings.Backdrop);
         try
         {
@@ -232,8 +232,7 @@ public sealed partial class MainWindow
             else SystemBackdrop = new AdjustableBackdrop(_settings.Backdrop, transparency, systemDefaults, theme);
         }
         catch (Exception ex) { Log.Write(ex); SystemBackdrop = null; supported = false; }
-        // Below the preset, blend the native material toward the solid page color.
-        // Increasing the controller tint directly can flatten Mica in a single step.
+        // Preserve the native acrylic palette while blending toward the page color.
         var solidBlend = (SystemBackdrop as AdjustableBackdrop)?.SolidBlend ?? 1;
         SolidLayer.Opacity = solidBlend;
         SolidLayer.Visibility = solidBlend > 0 ? Visibility.Visible : Visibility.Collapsed;
@@ -241,18 +240,18 @@ public sealed partial class MainWindow
         _updating = true;
         TransparencySlider.Value = atDefault ? AdjustableBackdrop.DefaultTransparency : transparency;
         _updating = false;
-        var label = _settings.Backdrop.StartsWith("Mica") ? "壁纸融合度" : "透明度";
+        var label = "透明度";
         MaterialCaption.Text = label; Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(TransparencySlider, label);
         TransparencySlider.IsEnabled = supported;
         ResetMaterialButton.IsEnabled = supported && !atDefault;
         TransparencyValue.Text = !supported ? "" : atDefault ? $"{AdjustableBackdrop.DefaultTransparency:0}%（系统默认）" : $"{transparency:0}%";
-        MaterialHint.Text = !supported && _settings.Backdrop != "Solid" ? "当前系统不支持此材质，已使用纯色背景" : _settings.Backdrop.StartsWith("Mica") ? "Mica 从桌面壁纸取色，不是实时透视。" : _settings.Backdrop == "Acrylic" ? "窗口未激活或系统关闭透明效果时，会使用纯色背景。" : "";
+        MaterialHint.Text = !supported ? "当前系统不支持亚克力，已使用纯色背景" : "";
         MaterialHint.Visibility = MaterialHint.Text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
         ApplyFloatingMaterials();
     }
     private void ResetMaterial_Click(object sender, RoutedEventArgs args)
     {
-        if (_settings.Backdrop == "Acrylic") _settings.AcrylicSystemMaterial = true; else _settings.MicaSystemMaterial = true;
+        _settings.AcrylicSystemMaterial = true;
         _appearanceTimer.Stop(); SaveSettings(); ApplyMaterial(Root.ActualTheme);
     }
     private async void ChooseFolder_Click(object sender, RoutedEventArgs args)

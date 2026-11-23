@@ -2,6 +2,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Input;
 using Windows.UI.ViewManagement;
 
 namespace NetEaseNEXT;
@@ -38,13 +39,18 @@ public sealed partial class MainWindow
         ApplyPopupMaterial(element);
         ApplyTextFont(element, new FontFamily(_settings.FontFamily));
     }
-    private Flyout? _dialogSurface;
     private bool _dialogSurfaceReady;
     private int _dialogPickerDepth;
+    private double _floatingRasterScale;
+    private void FloatingRootChanged(XamlRoot sender, XamlRootChangedEventArgs args)
+    {
+        if (_exiting || _hidden || _floatingRasterScale == sender.RasterizationScale) return;
+        _floatingRasterScale = sender.RasterizationScale;
+        ApplyFloatingMaterials(); PositionQueuePopup();
+    }
     private double FloatingRasterScale => Root.XamlRoot?.RasterizationScale ?? 1;
     private Thickness FloatingStroke => new(new AccessibilitySettings().HighContrast ? 2 : 1 / FloatingRasterScale);
     private double SnapFloatingPosition(double value) => Math.Round(value * FloatingRasterScale) / FloatingRasterScale;
-    private double SnapFloatingSize(double value) => Math.Ceiling(value * FloatingRasterScale) / FloatingRasterScale;
     private async Task<T> PreserveDialogForPickerAsync<T>(Func<Task<T>> pick)
     {
         _dialogPickerDepth++;
@@ -53,57 +59,64 @@ public sealed partial class MainWindow
     }
     private Brush FloatingBackground()
     {
-        var solid = (SolidColorBrush)SolidLayer.Background;
-        if (_settings.Backdrop == "Solid" || SystemBackdrop == null) return solid;
-        var color = solid.Color;
-        var blend = 1 - (1 - ((SystemBackdrop as Services.AdjustableBackdrop)?.SolidBlend ?? 0)) * .88;
-        color.A = (byte)Math.Clamp(Math.Round(blend * 255), 0, 255);
-        return new SolidColorBrush(color);
+        if (new AccessibilitySettings().HighContrast) return (Brush)Application.Current.Resources["SystemControlBackgroundChromeMediumLowBrush"];
+        var dark = Root.ActualTheme == ElementTheme.Dark;
+        var color = dark ? Windows.UI.Color.FromArgb(255, 44, 44, 44) : Windows.UI.Color.FromArgb(255, 252, 252, 252);
+        var value = _settings.UsesSystemMaterial("Acrylic") ? Services.AdjustableBackdrop.DefaultTransparency : Services.AdjustableBackdrop.Normalize(_settings.AcrylicTransparency);
+        // Keep floating surfaces slightly denser than the page, using the WinUI
+        // in-app acrylic palette rather than a semi-transparent solid fill.
+        var preset = Services.AdjustableBackdrop.DefaultTransparency;
+        var tint = dark ? .15 : .08;
+        var opacity = value <= preset ? tint + (1 - tint) * (1 - value / preset) : tint * (1 - .55 * (value - preset) / (100 - preset));
+        return new AcrylicBrush
+        {
+            TintColor = color,
+            FallbackColor = dark ? color : Windows.UI.Color.FromArgb(255, 249, 249, 249),
+            TintOpacity = opacity
+        };
     }
-    private SystemBackdrop? FloatingBackdrop(SystemBackdrop? current)
+    private void ApplySelectorMaterial(ComboBox combo, Brush? brush = null)
     {
-        var kind = _settings.Backdrop == "Solid" || SystemBackdrop == null ? "Solid" : _settings.Backdrop;
-        var value = _settings.Backdrop == "Acrylic" ? _settings.AcrylicTransparency : _settings.MicaTransparency;
-        var defaults = _settings.UsesSystemMaterial(_settings.Backdrop);
-        if (current is Services.AdjustableBackdrop backdrop)
-        { backdrop.UpdateMaterial(kind, value, defaults, Root.ActualTheme); return backdrop; }
-        return new Services.AdjustableBackdrop(kind, value, defaults, Root.ActualTheme);
+        combo.Resources["ComboBoxDropDownBackground"] = brush ?? FloatingBackground();
+        combo.Resources["ComboBoxDropdownBorderThickness"] = FloatingStroke;
     }
     private void ApplyPopupMaterial(DependencyObject element, Brush? brush = null)
     {
         brush ??= FloatingBackground();
         if (element is ContentDialog dialog) { dialog.Background = brush; dialog.BorderThickness = FloatingStroke; }
-        else if (element is MenuFlyoutPresenter menu) { menu.SystemBackdrop = FloatingBackdrop(menu.SystemBackdrop); menu.Background = brush; menu.BorderThickness = FloatingStroke; }
+        else if (element is MenuFlyoutPresenter menu) { menu.SystemBackdrop = null; menu.Background = brush; menu.BorderThickness = FloatingStroke; }
         else if (element is FlyoutPresenter flyout)
         {
-            var wrapper = ReferenceEquals(flyout.Content, _dialogSurface?.Content) || ReferenceEquals(flyout.Content, QueuePane);
+            var wrapper = ReferenceEquals(flyout.Content, QueuePane);
             flyout.Background = wrapper ? new SolidColorBrush(Microsoft.UI.Colors.Transparent) : brush;
-            // Hosted dialogs and the queue already paint their single outline.
             flyout.BorderThickness = wrapper ? new Thickness(0) : FloatingStroke;
         }
-
+        else if (element is ComboBox combo) ApplySelectorMaterial(combo, brush);
+        else if (element is Border { Name: "PopupBorder" } border) { border.Background = brush; border.BorderThickness = FloatingStroke; }
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++) ApplyPopupMaterial(VisualTreeHelper.GetChild(element, i), brush);
     }
     private void ApplyFloatingMaterials()
     {
-        QueuePane.Background = FloatingBackground();
+        var brush = FloatingBackground();
+        QueuePane.Background = brush;
         QueuePane.BorderThickness = FloatingStroke;
-        if (_queueSurfaceOpen) QueueSurface.SystemBackdrop = FloatingBackdrop(QueueSurface.SystemBackdrop);
-        if (_dialogSurfaceReady && _dialogSurface != null) _dialogSurface.SystemBackdrop = FloatingBackdrop(_dialogSurface.SystemBackdrop);
-        if (_dialog != null) ApplyPopupMaterial(_dialog);
+        ApplyPopupMaterial(FontHost, brush);
+        if (_dialog != null) ApplyPopupMaterial(_dialog, brush);
         if (Root.XamlRoot != null)
             foreach (var popup in VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot))
-            {
-
-                if (popup.Child != null) ApplyPopupMaterial(popup.Child);
-            }
+                if (popup.Child != null) ApplyPopupMaterial(popup.Child, brush);
+    }
+    private bool DismissDialogFromOutside(ContentDialog dialog, bool lightDismiss)
+    {
+        if (!lightDismiss || !_dialogSurfaceReady || _dialogPickerDepth != 0) return false;
+        dialog.Hide();
+        return true;
     }
     private async Task<ContentDialogResult> ShowThemedDialogAsync(ContentDialog dialog, bool lightDismiss = true)
     {
         dialog.Resources["ContentDialogButtonHeight"] = 44d;
         dialog.Resources["ContentDialogButtonMinHeight"] = 44d;
         dialog.Resources["ContentDialogTopOverlay"] = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
-        dialog.Resources["ContentDialogSmokeFill"] = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
         Style TouchStyle(Style? original)
         {
             var style = new Style(typeof(Button)) { BasedOn = original ?? (Style)Application.Current.Resources["DefaultButtonStyle"] };
@@ -114,85 +127,37 @@ public sealed partial class MainWindow
         dialog.SecondaryButtonStyle = TouchStyle(dialog.SecondaryButtonStyle);
         dialog.CloseButtonStyle = TouchStyle(dialog.CloseButtonStyle);
         ApplyPopupTheme(dialog);
-        var width = dialog.Resources.TryGetValue("ContentDialogMaxWidth", out var customWidth) && customWidth is double number ? number : 548;
-        var host = new Grid { MaxWidth = SnapFloatingSize(Math.Max(0, Math.Min(width, Root.ActualWidth - 32))), MaxHeight = SnapFloatingSize(Math.Max(0, Root.ActualHeight - 32)) };
-        host.Children.Add(dialog);
-        var surface = new Flyout { Content = host, SystemBackdrop = FloatingBackdrop(null), Placement = FlyoutPlacementMode.Full, ShouldConstrainToRootBounds = false, LightDismissOverlayMode = LightDismissOverlayMode.On, FlyoutPresenterStyle = FloatingPresenterStyle(host.MaxWidth, host.MaxHeight) };
-        _dialogSurface = surface; _dialogSurfaceReady = false; var active = true; var sizing = false;
-        var surfaceClosed = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-        var surfaceOpened = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-        surface.Opened += (_, _) => surfaceOpened.TrySetResult();
-        surface.Closed += (_, _) => surfaceClosed.TrySetResult();
-        var wasShown = false;
-        void FitSurface()
+        dialog.XamlRoot = Root.XamlRoot;
+        var inputSurfaces = new HashSet<UIElement>();
+        Border? background = null;
+        void PointerPressed(object sender, PointerRoutedEventArgs args)
         {
-            if (!active || sizing || !dialog.IsLoaded) return;
-            var border = FindDescendant<Border>(dialog, b => b.Name == "BackgroundElement");
-            if (border == null) return;
-            sizing = true;
-            try
-            {
-                host.Width = host.Height = double.NaN;
-                border.Measure(new Windows.Foundation.Size(host.MaxWidth, host.MaxHeight));
-                host.Width = Math.Min(host.MaxWidth, SnapFloatingSize(border.DesiredSize.Width));
-                host.Height = Math.Min(host.MaxHeight, SnapFloatingSize(border.DesiredSize.Height));
-                dialog.Width = host.Width; dialog.Height = host.Height;
-                surface.FlyoutPresenterStyle = FloatingPresenterStyle(host.Width, host.Height);
-                host.UpdateLayout();
-                var popup = VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).FirstOrDefault(p => p.Child is FlyoutPresenter presenter && ReferenceEquals(presenter.Content, host));
-                if (popup != null)
-                {
-                    popup.HorizontalOffset = SnapFloatingPosition(Math.Max(16, (Root.ActualWidth - host.Width) / 2));
-                    popup.VerticalOffset = SnapFloatingPosition(Math.Max(16, (Root.ActualHeight - host.Height) / 2));
-                }
-            }
-            finally { sizing = false; }
+            if (background == null) return;
+            var position = args.GetCurrentPoint(background).Position;
+            if ((position.X < 0 || position.Y < 0 || position.X >= background.ActualWidth || position.Y >= background.ActualHeight)
+                && DismissDialogFromOutside(dialog, lightDismiss)) args.Handled = true;
         }
-        void ContentSizeChanged(object sender, SizeChangedEventArgs args) { if (_dialogSurfaceReady) FitSurface(); }
-        void RootSizeChanged(object sender, SizeChangedEventArgs args)
+        PointerEventHandler pressed = PointerPressed;
+        void Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
         {
-            host.MaxWidth = SnapFloatingSize(Math.Max(0, Math.Min(width, Root.ActualWidth - 32))); host.MaxHeight = SnapFloatingSize(Math.Max(0, Root.ActualHeight - 32));
-            FitSurface();
+            background = FindDescendant<Border>(dialog, b => b.Name == "BackgroundElement");
+            if (FindDescendant<Grid>(dialog, g => g.Name == "LayoutRoot") is { } layout) inputSurfaces.Add(layout);
+            // ContentDialog reparents its smoke layer into a separate native
+            // popup. It does not bubble pointer events through LayoutRoot.
+            foreach (var popup in VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot))
+                if (popup.Child is FrameworkElement { Name: "SmokeLayerBackground" } smoke) inputSurfaces.Add(smoke);
+            foreach (var surface in inputSurfaces) surface.AddHandler(UIElement.PointerPressedEvent, pressed, true);
+            _dialogSurfaceReady = true;
+            ApplyPopupTheme(dialog);
         }
-        Root.SizeChanged += RootSizeChanged;
-        var xamlRoot = Root.XamlRoot;
-        void RootChanged(XamlRoot sender, XamlRootChangedEventArgs args) { ApplyFloatingMaterials(); FitSurface(); }
-        xamlRoot.Changed += RootChanged;
-        if (dialog.Content is FrameworkElement content) content.SizeChanged += ContentSizeChanged;
-        surface.Closing += (_, args) =>
-        {
-            if (!active) return;
-            // Let ContentDialog complete with None and run the caller's cleanup
-            // before unloading its native host. Comments opt out of light dismiss.
-            args.Cancel = true;
-            if (lightDismiss && _dialogSurfaceReady && _dialogPickerDepth == 0) dialog.Hide();
-        };
-        surface.Opened += Popup_Opened;
-        try
-        {
-            surface.ShowAt(Root); wasShown = true;
-            await surfaceOpened.Task.WaitAsync(TimeSpan.FromSeconds(3));
-            host.UpdateLayout();
-            dialog.XamlRoot = host.XamlRoot;
-            var showing = dialog.ShowAsync(ContentDialogPlacement.InPlace);
-            host.UpdateLayout(); FitSurface(); _dialogSurfaceReady = true; ApplyFloatingMaterials();
-            return await showing;
-        }
+        dialog.Opened += Opened;
+        _dialogSurfaceReady = false;
+        try { return await dialog.ShowAsync(); }
         finally
         {
-            active = false; surface.Opened -= Popup_Opened; surface.Hide();
-            // The next dialog must wait for the native flyout's exit transition.
-            // Removing its child early can unload the next surface as it opens.
-            if (wasShown)
-            {
-                try { await surfaceClosed.Task.WaitAsync(TimeSpan.FromSeconds(3)); }
-                catch (TimeoutException ex) { Services.Log.Write(ex); }
-            }
-            host.Children.Remove(dialog);
-            if (dialog.Content is FrameworkElement oldContent) oldContent.SizeChanged -= ContentSizeChanged;
-            Root.SizeChanged -= RootSizeChanged;
-            xamlRoot.Changed -= RootChanged;
-            if (ReferenceEquals(_dialogSurface, surface)) { _dialogSurface = null; _dialogSurfaceReady = false; }
+            _dialogSurfaceReady = false;
+            foreach (var surface in inputSurfaces) surface.RemoveHandler(UIElement.PointerPressedEvent, pressed);
+            dialog.Opened -= Opened;
             dialog.ClearValue(FrameworkElement.RequestedThemeProperty);
         }
     }
@@ -204,11 +169,24 @@ public sealed partial class MainWindow
     }
     private void ShowThemedFlyout(FlyoutBase flyout, FrameworkElement anchor)
     {
-        flyout.SystemBackdrop = FloatingBackdrop(flyout.SystemBackdrop);
+        PrepareFlyoutTheme(flyout);
+        flyout.SystemBackdrop = null;
         flyout.Opened += Popup_Opened;
         flyout.Closed += Closed;
         void Closed(object? sender, object args) { flyout.Opened -= Popup_Opened; flyout.Closed -= Closed; }
         flyout.ShowAt(anchor);
+    }
+    private void PrepareFlyoutTheme(FlyoutBase flyout)
+    {
+        if (flyout is MenuFlyout menu)
+        {
+            var style = new Style(typeof(MenuFlyoutPresenter)) { BasedOn = (Style)Application.Current.Resources["DefaultMenuFlyoutPresenterStyle"] };
+            style.Setters.Add(new Setter(FrameworkElement.RequestedThemeProperty, Root.ActualTheme));
+            style.Setters.Add(new Setter(Control.BackgroundProperty, FloatingBackground()));
+            style.Setters.Add(new Setter(Control.BorderThicknessProperty, FloatingStroke));
+            menu.MenuFlyoutPresenterStyle = style;
+        }
+        flyout.AreOpenCloseAnimationsEnabled = PlayerAnimationEnabled;
     }
     private void RefreshThemeSurfaces()
     {

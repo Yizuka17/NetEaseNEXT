@@ -121,7 +121,7 @@ public sealed partial class MainWindow
             var materialPath = Path.Combine(fixture, "material.json"); legacy.SaveTo(materialPath); var savedMaterial = SettingsStore.LoadFrom(materialPath);
             check("Native mode and the saved custom slider position survive a settings round trip", savedMaterial.UsesSystemMaterial("Acrylic") && savedMaterial.AcrylicTransparency == 80 && !savedMaterial.UsesSystemMaterial("Mica") && savedMaterial.MicaTransparency == 65, null);
             check("Out-of-range material values do not enter the renderer", AdjustableBackdrop.Normalize(-1) == 0 && AdjustableBackdrop.Normalize(101) == 100 && AdjustableBackdrop.Normalize(double.NaN) == 65, null);
-            _settings.Backdrop = "Mica"; ApplyAppearance(); check("Unsupported material is clearly reported with a solid fallback", MicaController.IsSupported() || SystemBackdrop == null && SolidLayer.Visibility == Visibility.Visible && MaterialHint.Text.Contains("纯色"), new { Mica = MicaController.IsSupported(), Acrylic = DesktopAcrylicController.IsSupported() });
+            _settings.Backdrop = "Mica"; ApplyAppearance(); check("Unsupported material is clearly reported with a solid fallback", DesktopAcrylicController.IsSupported() || SystemBackdrop == null && SolidLayer.Visibility == Visibility.Visible && MaterialHint.Text.Contains("纯色"), new { Mica = MicaController.IsSupported(), Acrylic = DesktopAcrylicController.IsSupported() });
         }
         finally
         {

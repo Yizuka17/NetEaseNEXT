@@ -468,7 +468,7 @@ public sealed partial class MainWindow
                 new { cover = ReferenceEquals(MiniCover.Source, retainedCover), background = ReferenceEquals(BlurredCover.Source, retainedBackground), avatar = ReferenceEquals(AccountAvatar.ProfilePicture, retainedAvatar), lyrics = ReferenceEquals(LyricsList.ItemsSource, retainedLyrics) });
             await NavigateAsync("settings");
             Root.UpdateLayout();
-            Check("Settings fit the scroll viewport", SettingsContent.ActualWidth > 0 && SettingsContent.ActualWidth <= SettingsPanel.ActualWidth && BackdropCombo.ActualWidth <= SettingsContent.ActualWidth);
+            Check("Settings fit the scroll viewport", SettingsContent.ActualWidth > 0 && SettingsContent.ActualWidth <= SettingsPanel.ActualWidth);
             var settingsLeft = SettingsContent.TransformToVisual(SettingsPanel).TransformPoint(new Windows.Foundation.Point(0, 0)).X;
             Check("Settings content is not clipped at either edge", settingsLeft >= 0 && settingsLeft + SettingsContent.ActualWidth <= SettingsPanel.ActualWidth);
             Check("Settings host audio output controls", OutputCombo.Items.Count > 0 && SettingsVolume.IsLoaded);
@@ -484,7 +484,7 @@ public sealed partial class MainWindow
             AppWindow.Resize(new Windows.Graphics.SizeInt32(1280, 900)); await Task.Delay(150); Root.UpdateLayout();
             if (Environment.GetCommandLineArgs().Contains("--inspect-layout")) await Task.Delay(TimeSpan.FromSeconds(25));
             _settings.Backdrop = "Solid"; _settings.Theme = "Dark"; ApplyAppearance();
-            Check("Solid backdrop", SystemBackdrop == null && SolidLayer.Visibility == Visibility.Visible);
+            Check("Legacy material is normalized to acrylic", _settings.Backdrop == "Acrylic" && (SystemBackdrop is AdjustableBackdrop { Kind: "Acrylic" } || SolidLayer.Visibility == Visibility.Visible));
             _settings.Backdrop = "Mica"; ApplyAppearance();
             Check("Mica supported or fallback", SystemBackdrop != null || MaterialHint.Text.Contains("不支持"));
             await NavigateAsync("queue");

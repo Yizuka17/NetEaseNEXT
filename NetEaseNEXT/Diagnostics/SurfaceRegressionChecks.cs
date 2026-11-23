@@ -38,17 +38,17 @@ public sealed partial class MainWindow
         }
         async Task CloseComment()
         {
-            _dialog!.Hide(); await Wait(() => _dialog == null && _dialogSurface == null && _commentsLoad == null);
+            _dialog!.Hide(); await Wait(() => _dialog == null && !_dialogSurfaceReady && _commentsLoad == null);
         }
         async Task RowComment(string label)
         {
             var track = await OpenRowComment();
             await Wait(() => _dialog is { IsLoaded: true } && _dialogSurfaceReady && Descendants<TextBlock>(_dialog).Any(t => t.Text == "评论 (0)"));
             check(label + " opens and loads the captured song after its context menu closes", _rowContextMenu == null && LocalLinkFixtures.Calls.Last(c => c.Method == "comment_new").Query.Text("id") == SourceSongId(track).ToString(), null);
-            check(label + " keeps its native material and a pixel-aligned system-shaped border", _dialogSurface?.SystemBackdrop is AdjustableBackdrop { NativeProfileReady: true } && Math.Abs(_dialog!.BorderThickness.Left * Root.XamlRoot.RasterizationScale - 1) < .001 && _dialog.CornerRadius == (CornerRadius)Application.Current.Resources["OverlayCornerRadius"], null);
+            check(label + " keeps acrylic and a pixel-aligned WinUI border", _dialog!.Background is AcrylicBrush && Math.Abs(_dialog!.BorderThickness.Left * Root.XamlRoot.RasterizationScale - 1) < .001 && _dialog.CornerRadius == (CornerRadius)Application.Current.Resources["OverlayCornerRadius"], null);
             await SaveLibraryImageAsync(Root, "context-comments-" + label + ".png");
-            var closing = _dialogSurface; await CloseComment();
-            check(label + " releases the dialog and its native material on close", closing!.SystemBackdrop is AdjustableBackdrop { NativeProfileReady: false }, null);
+            await CloseComment();
+            check(label + " releases the dialog and input handler on close", !_dialogSurfaceReady && _dialog == null, null);
         }
         async Task Marker(string label, bool queue = false)
         {
