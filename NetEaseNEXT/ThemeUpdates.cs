@@ -40,6 +40,17 @@ public sealed partial class MainWindow
     }
     private Flyout? _dialogSurface;
     private bool _dialogSurfaceReady;
+    private int _dialogPickerDepth;
+    private double FloatingRasterScale => Root.XamlRoot?.RasterizationScale ?? 1;
+    private Thickness FloatingStroke => new(new AccessibilitySettings().HighContrast ? 2 : 1 / FloatingRasterScale);
+    private double SnapFloatingPosition(double value) => Math.Round(value * FloatingRasterScale) / FloatingRasterScale;
+    private double SnapFloatingSize(double value) => Math.Ceiling(value * FloatingRasterScale) / FloatingRasterScale;
+    private async Task<T> PreserveDialogForPickerAsync<T>(Func<Task<T>> pick)
+    {
+        _dialogPickerDepth++;
+        try { return await pick(); }
+        finally { _dialogPickerDepth--; }
+    }
     private Brush FloatingBackground()
     {
         var solid = (SolidColorBrush)SolidLayer.Background;
@@ -61,14 +72,14 @@ public sealed partial class MainWindow
     private void ApplyPopupMaterial(DependencyObject element, Brush? brush = null)
     {
         brush ??= FloatingBackground();
-        if (element is ContentDialog dialog) { dialog.Background = brush; dialog.BorderThickness = new Thickness(new AccessibilitySettings().HighContrast ? 2 : .5); }
-        else if (element is MenuFlyoutPresenter menu) { menu.SystemBackdrop = FloatingBackdrop(menu.SystemBackdrop); menu.Background = brush; menu.BorderThickness = new Thickness(new AccessibilitySettings().HighContrast ? 2 : .5); }
+        if (element is ContentDialog dialog) { dialog.Background = brush; dialog.BorderThickness = FloatingStroke; }
+        else if (element is MenuFlyoutPresenter menu) { menu.SystemBackdrop = FloatingBackdrop(menu.SystemBackdrop); menu.Background = brush; menu.BorderThickness = FloatingStroke; }
         else if (element is FlyoutPresenter flyout)
         {
             var wrapper = ReferenceEquals(flyout.Content, _dialogSurface?.Content) || ReferenceEquals(flyout.Content, QueuePane);
             flyout.Background = wrapper ? new SolidColorBrush(Microsoft.UI.Colors.Transparent) : brush;
             // Hosted dialogs and the queue already paint their single outline.
-            flyout.BorderThickness = wrapper ? new Thickness(0) : new Thickness(new AccessibilitySettings().HighContrast ? 2 : .5);
+            flyout.BorderThickness = wrapper ? new Thickness(0) : FloatingStroke;
         }
 
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++) ApplyPopupMaterial(VisualTreeHelper.GetChild(element, i), brush);
@@ -76,7 +87,7 @@ public sealed partial class MainWindow
     private void ApplyFloatingMaterials()
     {
         QueuePane.Background = FloatingBackground();
-        QueuePane.BorderThickness = new Thickness(new AccessibilitySettings().HighContrast ? 2 : .5);
+        QueuePane.BorderThickness = FloatingStroke;
         if (_queueSurfaceOpen) QueueSurface.SystemBackdrop = FloatingBackdrop(QueueSurface.SystemBackdrop);
         if (_dialogSurfaceReady && _dialogSurface != null) _dialogSurface.SystemBackdrop = FloatingBackdrop(_dialogSurface.SystemBackdrop);
         if (_dialog != null) ApplyPopupMaterial(_dialog);
@@ -104,7 +115,7 @@ public sealed partial class MainWindow
         dialog.CloseButtonStyle = TouchStyle(dialog.CloseButtonStyle);
         ApplyPopupTheme(dialog);
         var width = dialog.Resources.TryGetValue("ContentDialogMaxWidth", out var customWidth) && customWidth is double number ? number : 548;
-        var host = new Grid { MaxWidth = Math.Min(width, Root.ActualWidth - 32), MaxHeight = Root.ActualHeight - 32 };
+        var host = new Grid { MaxWidth = SnapFloatingSize(Math.Max(0, Math.Min(width, Root.ActualWidth - 32))), MaxHeight = SnapFloatingSize(Math.Max(0, Root.ActualHeight - 32)) };
         host.Children.Add(dialog);
         var surface = new Flyout { Content = host, SystemBackdrop = FloatingBackdrop(null), Placement = FlyoutPlacementMode.Full, ShouldConstrainToRootBounds = false, LightDismissOverlayMode = LightDismissOverlayMode.On, FlyoutPresenterStyle = FloatingPresenterStyle(host.MaxWidth, host.MaxHeight) };
         _dialogSurface = surface; _dialogSurfaceReady = false; var active = true; var sizing = false;
@@ -123,16 +134,16 @@ public sealed partial class MainWindow
             {
                 host.Width = host.Height = double.NaN;
                 border.Measure(new Windows.Foundation.Size(host.MaxWidth, host.MaxHeight));
-                host.Width = Math.Min(host.MaxWidth, border.DesiredSize.Width);
-                host.Height = Math.Min(host.MaxHeight, border.DesiredSize.Height);
+                host.Width = Math.Min(host.MaxWidth, SnapFloatingSize(border.DesiredSize.Width));
+                host.Height = Math.Min(host.MaxHeight, SnapFloatingSize(border.DesiredSize.Height));
                 dialog.Width = host.Width; dialog.Height = host.Height;
                 surface.FlyoutPresenterStyle = FloatingPresenterStyle(host.Width, host.Height);
                 host.UpdateLayout();
                 var popup = VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).FirstOrDefault(p => p.Child is FlyoutPresenter presenter && ReferenceEquals(presenter.Content, host));
                 if (popup != null)
                 {
-                    popup.HorizontalOffset = Math.Max(16, (Root.ActualWidth - host.Width) / 2);
-                    popup.VerticalOffset = Math.Max(16, (Root.ActualHeight - host.Height) / 2);
+                    popup.HorizontalOffset = SnapFloatingPosition(Math.Max(16, (Root.ActualWidth - host.Width) / 2));
+                    popup.VerticalOffset = SnapFloatingPosition(Math.Max(16, (Root.ActualHeight - host.Height) / 2));
                 }
             }
             finally { sizing = false; }
@@ -140,10 +151,13 @@ public sealed partial class MainWindow
         void ContentSizeChanged(object sender, SizeChangedEventArgs args) { if (_dialogSurfaceReady) FitSurface(); }
         void RootSizeChanged(object sender, SizeChangedEventArgs args)
         {
-            host.MaxWidth = Math.Max(0, Math.Min(width, Root.ActualWidth - 32)); host.MaxHeight = Math.Max(0, Root.ActualHeight - 32);
+            host.MaxWidth = SnapFloatingSize(Math.Max(0, Math.Min(width, Root.ActualWidth - 32))); host.MaxHeight = SnapFloatingSize(Math.Max(0, Root.ActualHeight - 32));
             FitSurface();
         }
         Root.SizeChanged += RootSizeChanged;
+        var xamlRoot = Root.XamlRoot;
+        void RootChanged(XamlRoot sender, XamlRootChangedEventArgs args) { ApplyFloatingMaterials(); FitSurface(); }
+        xamlRoot.Changed += RootChanged;
         if (dialog.Content is FrameworkElement content) content.SizeChanged += ContentSizeChanged;
         surface.Closing += (_, args) =>
         {
@@ -151,7 +165,7 @@ public sealed partial class MainWindow
             // Let ContentDialog complete with None and run the caller's cleanup
             // before unloading its native host. Comments opt out of light dismiss.
             args.Cancel = true;
-            if (lightDismiss && _dialogSurfaceReady) dialog.Hide();
+            if (lightDismiss && _dialogSurfaceReady && _dialogPickerDepth == 0) dialog.Hide();
         };
         surface.Opened += Popup_Opened;
         try
@@ -177,6 +191,7 @@ public sealed partial class MainWindow
             host.Children.Remove(dialog);
             if (dialog.Content is FrameworkElement oldContent) oldContent.SizeChanged -= ContentSizeChanged;
             Root.SizeChanged -= RootSizeChanged;
+            xamlRoot.Changed -= RootChanged;
             if (ReferenceEquals(_dialogSurface, surface)) { _dialogSurface = null; _dialogSurfaceReady = false; }
             dialog.ClearValue(FrameworkElement.RequestedThemeProperty);
         }

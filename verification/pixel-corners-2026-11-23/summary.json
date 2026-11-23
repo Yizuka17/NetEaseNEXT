@@ -1,0 +1,81 @@
+{
+  "portableAssertions": 385.0,
+  "renderedMarkerCases": 13,
+  "version": "0.3.3.21",
+  "suites": [
+    {
+      "passed": true,
+      "report": "review-local-links-check.json",
+      "assertions": 42
+    },
+    {
+      "passed": true,
+      "report": "review-local-actions-check.json",
+      "assertions": 20
+    },
+    {
+      "passed": true,
+      "report": "review-track-locator-check.json",
+      "assertions": 14
+    },
+    {
+      "passed": true,
+      "report": "review-song-experience-check.json",
+      "assertions": 34
+    },
+    {
+      "passed": true,
+      "report": "review-download-indicator-check.json",
+      "assertions": 28
+    },
+    {
+      "passed": true,
+      "report": "review-artist-sharing-check.json",
+      "assertions": 36
+    },
+    {
+      "passed": true,
+      "report": "review-local-motion-check.json",
+      "assertions": 84
+    },
+    {
+      "passed": true,
+      "report": "review-theme-batch-check.json",
+      "assertions": 40
+    },
+    {
+      "passed": true,
+      "report": "review-library-check.json",
+      "assertions": 41
+    },
+    {
+      "passed": true,
+      "report": "review-surface-check.json",
+      "assertions": 27
+    },
+    {
+      "passed": true,
+      "report": "review-light-dismiss-check.json",
+      "assertions": 19
+    },
+    {
+      "passed": true,
+      "report": "installed-local-links.json",
+      "assertions": 42
+    },
+    {
+      "passed": true,
+      "report": "installed-surface-check.json",
+      "assertions": 27
+    },
+    {
+      "passed": true,
+      "report": "installed-light-dismiss-check.json",
+      "assertions": 19
+    }
+  ],
+  "installedAssertions": 88.0,
+  "apiAssertions": 83,
+  "maximumMarkerErrorPixels": 0.0,
+  "dllSha256": "4FF932421698A493C0BE3E6F98DDCCDF8DAA09E557F5B44FE9A564451A341E31"
+}

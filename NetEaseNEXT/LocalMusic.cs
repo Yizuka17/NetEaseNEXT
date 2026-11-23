@@ -272,7 +272,7 @@ public sealed partial class MainWindow
     {
         var picker = new FolderPicker(); picker.FileTypeFilter.Add("*");
         WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(this));
-        return (await picker.PickSingleFolderAsync())?.Path;
+        return (await PreserveDialogForPickerAsync(async () => await picker.PickSingleFolderAsync()))?.Path;
     }
     private async Task EditLocalPlaylistAsync(LocalPlaylist? existing)
     {
@@ -305,7 +305,7 @@ public sealed partial class MainWindow
             {
                 var picker = new FileOpenPicker(); foreach (var extension in new[] { ".png", ".jpg", ".jpeg", ".bmp", ".webp" }) picker.FileTypeFilter.Add(extension);
                 WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(this));
-                if (await picker.PickSingleFileAsync() is not { } file) return;
+                if (await PreserveDialogForPickerAsync(async () => await picker.PickSingleFileAsync()) is not { } file) return;
                 if (new FileInfo(file.Path).Length > 16 * 1024 * 1024) throw new InvalidDataException("封面不能超过 16 MB");
                 using var stream = await file.OpenReadAsync(); var decoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream);
                 if ((long)decoder.PixelWidth * decoder.PixelHeight > 64000000) throw new InvalidDataException("封面尺寸过大");

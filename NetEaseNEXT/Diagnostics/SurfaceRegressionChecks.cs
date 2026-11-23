@@ -45,7 +45,7 @@ public sealed partial class MainWindow
             var track = await OpenRowComment();
             await Wait(() => _dialog is { IsLoaded: true } && _dialogSurfaceReady && Descendants<TextBlock>(_dialog).Any(t => t.Text == "评论 (0)"));
             check(label + " opens and loads the captured song after its context menu closes", _rowContextMenu == null && LocalLinkFixtures.Calls.Last(c => c.Method == "comment_new").Query.Text("id") == SourceSongId(track).ToString(), null);
-            check(label + " keeps its native material and a subtle system-shaped border", _dialogSurface?.SystemBackdrop is AdjustableBackdrop { NativeProfileReady: true } && _dialog!.BorderThickness.Left == .5 && _dialog.CornerRadius == (CornerRadius)Application.Current.Resources["OverlayCornerRadius"], null);
+            check(label + " keeps its native material and a pixel-aligned system-shaped border", _dialogSurface?.SystemBackdrop is AdjustableBackdrop { NativeProfileReady: true } && Math.Abs(_dialog!.BorderThickness.Left * Root.XamlRoot.RasterizationScale - 1) < .001 && _dialog.CornerRadius == (CornerRadius)Application.Current.Resources["OverlayCornerRadius"], null);
             await SaveLibraryImageAsync(Root, "context-comments-" + label + ".png");
             var closing = _dialogSurface; await CloseComment();
             check(label + " releases the dialog and its native material on close", closing!.SystemBackdrop is AdjustableBackdrop { NativeProfileReady: false }, null);

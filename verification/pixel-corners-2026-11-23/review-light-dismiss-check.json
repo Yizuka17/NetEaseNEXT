@@ -1,0 +1,117 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light dialog template uses the configured single border",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light popup edges align to physical pixels and keep the system corner radius",
+    "passed": true,
+    "detail": {
+      "scale": 1,
+      "stroke": 1,
+      "HorizontalOffset": 210,
+      "VerticalOffset": 54,
+      "radius": 8
+    }
+  },
+  {
+    "name": "Light comments ignore native outside-dismiss requests",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light menu and comments share actual stroke width color and system corners",
+    "passed": true,
+    "detail": {
+      "Left": 1,
+      "color": "#0F000000",
+      "radius": 8
+    }
+  },
+  {
+    "name": "Light information outside-dismiss releases the dialog and material",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light outside dismiss cancels a form without invoking Save",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark dialog template uses the configured single border",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark popup edges align to physical pixels and keep the system corner radius",
+    "passed": true,
+    "detail": {
+      "scale": 1,
+      "stroke": 1,
+      "HorizontalOffset": 210,
+      "VerticalOffset": 54,
+      "radius": 8
+    }
+  },
+  {
+    "name": "Dark comments ignore native outside-dismiss requests",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark menu and comments share actual stroke width color and system corners",
+    "passed": true,
+    "detail": {
+      "Left": 1,
+      "color": "#33000000",
+      "radius": 8
+    }
+  },
+  {
+    "name": "Dark information outside-dismiss releases the dialog and material",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark outside dismiss cancels a form without invoking Save",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Outside-dismiss cancels unfinished information requests",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Outside dismiss never removes a song or deletes its checked audio file",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A native child picker keeps its parent form open",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Returning from a native child picker restores outside dismissal",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Opening a nested quality picker keeps its parent dialog open",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Outside dismiss cancels download options without enqueuing",
+    "passed": true,
+    "detail": null
+  }
+]

@@ -1,0 +1,324 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback and idle credit rendering never fetch song metadata",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Downloaded local playback resolves both artist names and its album",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Every inline credit disables native underline styling",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The footer artist links are outside the open-player button",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Local playlist actions all carry complete glyphs",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "First click resolves an uncached local singer directly without a chooser",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Opening an online playlist does not load or jump to an unloaded local source",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The online locator pages to the verified source ID of a local song",
+    "passed": true,
+    "detail": {
+      "localId": -2228919446902648235,
+      "sourceId": 137,
+      "selectedId": 137,
+      "_offset": 137
+    }
+  },
+  {
+    "name": "Source lookup never submits a negative local ID to song details",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A second folder\u0027s copy locates the same online song",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Local playlists retain exact-file identity across folders",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A folder playlist has a reachable folder action with an icon",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "IsEnabled": true,
+      "glyphs": 1,
+      "_localPlaylistId": "b"
+    }
+  },
+  {
+    "name": "Linked local rows expose artist album information and file navigation",
+    "passed": true,
+    "detail": {
+      "source": 137,
+      "target": {
+        "Id": -2716010818247286134,
+        "IsLocal": true,
+        "LocalPath": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-link-check-b837f2d8f73848c8bb8779531f6956f8\\B\\\u5408\u4F5C\u6B4C\u66F2.wav",
+        "file": "C:\\Users\\MaterialLab\\AppData\\Local\\Temp\\NetEaseNEXT-local-link-check-b837f2d8f73848c8bb8779531f6956f8\\B\\\u5408\u4F5C\u6B4C\u66F2.wav"
+      },
+      "anchor": "Track",
+      "items": [
+        {
+          "Text": "\u591A\u9009",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -2716010818247286134
+        },
+        {
+          "Text": "\u64AD\u653E",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -2716010818247286134
+        },
+        {
+          "Text": "\u6DFB\u52A0\u81F3\u4E0B\u4E00\u9996\u64AD\u653E",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -2716010818247286134
+        },
+        {
+          "Text": "\u6B4C\u624B",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -2716010818247286134
+        },
+        {
+          "Text": "\u4E13\u8F91",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -2716010818247286134
+        },
+        {
+          "Text": "\u8BC4\u8BBA",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -2716010818247286134
+        },
+        {
+          "Text": "\u6B4C\u66F2\u4FE1\u606F",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -2716010818247286134
+        },
+        {
+          "Text": "\u6253\u5F00\u6587\u4EF6\u4F4D\u7F6E",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -2716010818247286134
+        },
+        {
+          "Text": "\u5206\u4EAB",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -2716010818247286134
+        },
+        {
+          "Text": "\u6536\u85CF\u5230\u6B4C\u5355",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -2716010818247286134
+        },
+        {
+          "Text": "\u5347\u7EA7\u97F3\u8D28",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -2716010818247286134
+        },
+        {
+          "Text": "\u4ECE\u6B4C\u5355\u79FB\u9664",
+          "IsEnabled": true,
+          "visibility": "Collapsed",
+          "icon": true,
+          "context": -2716010818247286134
+        },
+        {
+          "Text": "\u4ECE\u672C\u5730\u5217\u8868\u79FB\u9664",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -2716010818247286134
+        }
+      ]
+    }
+  },
+  {
+    "name": "A linked local row resolves its album even before album IDs are cached",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song information uses labeled name links without framed actions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song information closes with a bare top-right cross",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dialog uses the same native Mica kind as its window with a denser overlay",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Open dialog follows material MicaAlt",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Open dialog follows material Acrylic",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Open dialog follows material Solid",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Closing the dialog disconnects and releases its native material controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "An information-panel artist name opens that exact artist even with no detected internet profile",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "An information-panel album name opens that exact album",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Clicking the playing second artist goes straight to its page",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Footer artist names also navigate directly without a chooser",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "An online song initially has no file when its saved binding is not loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Click-time sharing recovers an online song\u0027s saved local folder binding without requests",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A bound downloaded song in an online playlist offers file sharing",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Queue is a native popup with the same selected material",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Verified older downloads can share files without a known quality label",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Sharing a local song chooses its exact file rather than a higher-quality other copy",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "File sharing carries the original audio bytes as one copyable storage item",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The file payload does not turn a local path into a link or text share",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A downloaded source offers both link sharing and file sharing",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Offline unlinked local audio can share its file without a guessed online source",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Constructing share choices performs no remote publication",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Turning local online information off removes links without requesting metadata",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restoring local online information restores individual name links",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Changed audio cannot retain an obsolete online locator or artist link",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Leaving the page cancels a click-time credit request without navigation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Closing pending song information cancels its unused request",
+    "passed": true,
+    "detail": null
+  }
+]

@@ -1,0 +1,215 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Open comments follow external dark theme",
+    "passed": true,
+    "detail": {
+      "theme": "Dark",
+      "foreground": "#FFFFFFFF"
+    }
+  },
+  {
+    "name": "Theme changes preserve the same comments and input",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Caption buttons follow app theme",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Open comments follow external light theme",
+    "passed": true,
+    "detail": {
+      "theme": "Light",
+      "foreground": "#E4000000"
+    }
+  },
+  {
+    "name": "Theme changes preserve the same comments and input",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Caption buttons follow app theme",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Open comments follow external dark theme",
+    "passed": true,
+    "detail": {
+      "theme": "Dark",
+      "foreground": "#FFFFFFFF"
+    }
+  },
+  {
+    "name": "Theme changes preserve the same comments and input",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Caption buttons follow app theme",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playing cover tint refreshes with external light theme",
+    "passed": true,
+    "detail": {
+      "color": "#FFFAFAFA"
+    }
+  },
+  {
+    "name": "Playing cover tint refreshes with external dark theme",
+    "passed": true,
+    "detail": {
+      "color": "#FF141418"
+    }
+  },
+  {
+    "name": "Open flyout follows external light theme",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Open flyout follows external dark theme",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Explicit app theme survives external system changes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Open context menu follows Dark theme",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Open context menu follows Light theme",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Native right-click/holding menu exposes multiselect",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Menu enters checkbox selection without playing",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Select-all includes loaded songs",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Clear selection keeps multiselect active",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Double-tap in multiselect cannot start playback",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Batch tracks follow displayed order",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Batch next preserves order and existing queue",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Batch next is also applied to the original queue",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Stale playlist cannot be batch edited",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Rejected batch removal preserves all selected rows",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Batch removal updates IDs, count and offset once",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playlist batch removal preserves playback",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Other owners cannot batch remove",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Batch API deduplicates into a single request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Navigation exits playlist multiselect",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Queue page retains selection while shuffle reorders songs",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Queue holding menu enters native multiselect",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback notifications preserve queue multiselection",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Locate current song preserves multiselection",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Queue batch removal keeps the playing song",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Closing queue restores single-click playback",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Empty selection disables batch writes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Hiding clears multiselect without background UI work",
+    "passed": true,
+    "detail": null
+  }
+]

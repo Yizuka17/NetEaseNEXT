@@ -39,6 +39,9 @@ public sealed partial class MainWindow
                 var dialogColor = dialogBrush.Color; var dialogStroke = _dialog.BorderThickness;
                 var actualBorder = FindDescendant<Border>(_dialog, b => b.Name == "BackgroundElement")!;
                 check(theme + " dialog template uses the configured single border", actualBorder.BorderThickness == dialogStroke && ((SolidColorBrush)actualBorder.BorderBrush).Color == dialogColor, null);
+                var popup = VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Single(p => p.Child is FlyoutPresenter f && ReferenceEquals(f.Content, _dialogSurface!.Content));
+                var scale = Root.XamlRoot.RasterizationScale;
+                check(theme + " popup edges align to physical pixels and keep the system corner radius", Math.Abs(actualBorder.BorderThickness.Left * scale - 1) < .001 && Math.Abs(popup.HorizontalOffset * scale - Math.Round(popup.HorizontalOffset * scale)) < .001 && Math.Abs(popup.VerticalOffset * scale - Math.Round(popup.VerticalOffset * scale)) < .001 && actualBorder.CornerRadius == (CornerRadius)Application.Current.Resources["OverlayCornerRadius"] && ((FlyoutPresenter)popup.Child).BorderThickness.Left == 0, new { scale, stroke = actualBorder.BorderThickness.Left, popup.HorizontalOffset, popup.VerticalOffset, radius = actualBorder.CornerRadius.TopLeft });
                 _dialogSurface!.Hide(); await Task.Delay(200);
                 check(theme + " comments ignore native outside-dismiss requests", !comments.IsCompleted && _dialog is { IsLoaded: true } && _dialogSurfaceReady, null);
                 _dialog!.Hide(); await comments; Root.UpdateLayout();
@@ -46,7 +49,7 @@ public sealed partial class MainWindow
                 var row = (ListViewItem)TrackList.ContainerFromItem(Tracks[0]); ShowRowContextMenu(menu, row);
                 await Wait(() => menu.Items.OfType<MenuFlyoutItem>().Any(i => i.IsLoaded));
                 var presenter = VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Select(p => p.Child).OfType<MenuFlyoutPresenter>().Single();
-                check(theme + " menu and comments share actual stroke width and color", presenter.BorderThickness == dialogStroke && ((SolidColorBrush)presenter.BorderBrush).Color == dialogColor, new { dialogStroke.Left, color = dialogColor.ToString() });
+                check(theme + " menu and comments share actual stroke width color and system corners", presenter.BorderThickness == dialogStroke && ((SolidColorBrush)presenter.BorderBrush).Color == dialogColor && presenter.CornerRadius == actualBorder.CornerRadius, new { dialogStroke.Left, color = dialogColor.ToString(), radius = presenter.CornerRadius.TopLeft });
                 menu.Hide(); await _rowContextClosed;
 
                 var info = ShowSongDetailsAsync(Tracks[0], _api); await Ready();
@@ -78,6 +81,12 @@ public sealed partial class MainWindow
             _playlistId = 101; await NavigateAsync("playlist");
             var downloads = ConfirmDownloadsAsync([Tracks[0]]); await Ready();
             var count = DownloadJobs.Count;
+            var pickerGate = new TaskCompletionSource<bool>();
+            var choosing = PreserveDialogForPickerAsync(() => pickerGate.Task);
+            _dialogSurface!.Hide(); await Task.Delay(150);
+            check("A native child picker keeps its parent form open", !downloads.IsCompleted && _dialog is { IsLoaded: true }, null);
+            pickerGate.SetResult(true); await choosing;
+            check("Returning from a native child picker restores outside dismissal", _dialogPickerDepth == 0, null);
             var combo = Descendants<ComboBox>(_dialog!).Single(); combo.IsDropDownOpen = true; await Task.Delay(100);
             check("Opening a nested quality picker keeps its parent dialog open", _dialog is { IsLoaded: true } && _dialogSurfaceReady && !downloads.IsCompleted, null);
             combo.IsDropDownOpen = false; await Dismiss(downloads);

@@ -34,8 +34,8 @@ public sealed partial class MainWindow
         if (!_queueSurfaceOpen) return;
         var popup = VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).FirstOrDefault(p => p.Child is FlyoutPresenter presenter && ReferenceEquals(presenter.Content, QueuePane));
         if (popup == null) return;
-        popup.HorizontalOffset = Math.Max(8, Root.ActualWidth - QueuePane.ActualWidth - 16);
-        popup.VerticalOffset = Math.Max(TitleRow.ActualHeight + 8, Root.ActualHeight - PlayerFooter.ActualHeight - QueuePane.ActualHeight - 16);
+        popup.HorizontalOffset = SnapFloatingPosition(Math.Max(8, Root.ActualWidth - QueuePane.ActualWidth - 16));
+        popup.VerticalOffset = SnapFloatingPosition(Math.Max(TitleRow.ActualHeight + 8, Root.ActualHeight - PlayerFooter.ActualHeight - QueuePane.ActualHeight - 16));
     }
     private Style FloatingPresenterStyle(double maxWidth, double maxHeight)
     {
