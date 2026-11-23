@@ -16,9 +16,11 @@ public sealed class TrayIcon : IDisposable
     private nint _icon;
     private string _iconPath = "";
     private readonly DispatcherQueue _dispatcher;
-    private NativeTrayMenu? _menu;
+    private WinUITrayMenu? _menu;
+    private readonly SettingsStore _settings;
+    private readonly Action<FrameworkElement> _typography;
     private bool _disposed;
-    internal NativeTrayMenu? Menu => _menu;
+    internal WinUITrayMenu? Menu => _menu;
     internal string IconPath => _iconPath;
     internal int LastCommand { get; private set; }
     public void SetIcon(string path)
@@ -37,8 +39,9 @@ public sealed class TrayIcon : IDisposable
     public event Action? Exit;
     public event Action? ThemeChanged;
     public event Action? FontsChanged;
-    public TrayIcon(nint window)
+    public TrayIcon(nint window, SettingsStore settings, Action<FrameworkElement> typography)
     {
+        _settings = settings; _typography = typography;
         _window = window; _proc = WndProc; _dispatcher = DispatcherQueue.GetForCurrentThread();
         _iconPath = ShellAppearance.IconPath();
         _icon = LoadImage(0, _iconPath, 1, 32, 32, 0x10);
@@ -68,14 +71,15 @@ public sealed class TrayIcon : IDisposable
         }
         return DefSubclassProc(window, message, wParam, lParam);
     }
-    internal void ShowMenu(PointInt32 point, ElementTheme theme)
+    internal async void ShowMenu(PointInt32 point, ElementTheme theme)
     {
         if (_disposed) return;
         if (_menu != null) { _menu.Dismiss(); return; }
         LastCommand = 0;
-        using var menu = new NativeTrayMenu();
+        using var menu = new WinUITrayMenu(_settings, _typography);
         _menu = menu;
-        try { LastCommand = menu.Show(_window, point, theme); }
+        try { LastCommand = await menu.ShowAsync(_window, point, theme); }
+        catch (Exception ex) { Log.Write(ex); }
         finally { _menu = null; }
         if (!_disposed)
         {
@@ -85,7 +89,6 @@ public sealed class TrayIcon : IDisposable
     internal void UpdateMenuTheme()
     {
         _menu?.Dismiss();
-        NativeMenuTheme.Apply(ShellAppearance.Theme);
     }
     internal void DismissMenu() => _menu?.Dismiss();
     public void Dispose()

@@ -58,6 +58,28 @@ public sealed partial class MainWindow
         ApplyFloatingMaterials(); PositionQueuePopup();
     }
     private double FloatingRasterScale => Root.XamlRoot?.RasterizationScale ?? 1;
+    private CornerRadius? _defaultFloatingCorner, _defaultTooltipCorner;
+    private CornerRadius _floatingCorner, _tooltipCorner;
+    private bool _floatingCornersReady;
+    private bool _hasCustomFloatingCorner;
+    private readonly System.Runtime.CompilerServices.ConditionalWeakTable<ToolTip, object> _floatingTooltips = new();
+    private void PrepareFloatingToolTip(ToolTip tip)
+    {
+        if (_floatingTooltips.TryAdd(tip, new object())) tip.Opened += (_, _) => { RefreshFloatingCorners(); ApplyPopupTheme(tip); };
+    }
+    private void RefreshFloatingCorners()
+    {
+        _defaultFloatingCorner ??= (CornerRadius)Application.Current.Resources["OverlayCornerRadius"];
+        _defaultTooltipCorner ??= Application.Current.Resources.TryGetValue("ToolTipCornerRadius", out var tooltip) && tooltip is CornerRadius radius ? radius : new CornerRadius(4);
+        ApplyFloatingCorners(Services.FloatingCornerPolicy.Read(_defaultFloatingCorner.Value, _defaultTooltipCorner.Value));
+    }
+    private void ApplyFloatingCorners(Services.FloatingCornerPolicy.Corners selected)
+    {
+        _hasCustomFloatingCorner = selected.HasCustomOverlay;
+        if (!_floatingCornersReady || _floatingCorner != selected.Overlay) { _floatingCorner = selected.Overlay; Application.Current.Resources["OverlayCornerRadius"] = _floatingCorner; }
+        if (!_floatingCornersReady || _tooltipCorner != selected.ToolTip) { _tooltipCorner = selected.ToolTip; Application.Current.Resources["ToolTipCornerRadius"] = _tooltipCorner; }
+        _floatingCornersReady = true;
+    }
     private Thickness FloatingStroke => new(new AccessibilitySettings().HighContrast ? 2 : 1 / FloatingRasterScale);
     private double SnapFloatingPosition(double value) => Math.Round(value * FloatingRasterScale) / FloatingRasterScale;
     private async Task<T> PreserveDialogForPickerAsync<T>(Func<Task<T>> pick)
@@ -99,37 +121,73 @@ public sealed partial class MainWindow
         { backdrop.UpdateMaterial("Acrylic", _settings.AcrylicTransparency, _settings.UsesSystemMaterial("Acrylic"), Root.ActualTheme); return backdrop; }
         return new Services.AdjustableBackdrop("Acrylic", _settings.AcrylicTransparency, _settings.UsesSystemMaterial("Acrylic"), Root.ActualTheme, transient: true);
     }
+    private sealed class SelectorSurfaceState { public bool Applying; public Popup? Popup; }
+    private readonly System.Runtime.CompilerServices.ConditionalWeakTable<ComboBox, SelectorSurfaceState> _selectorSurfaces = new();
+    private readonly System.Runtime.CompilerServices.ConditionalWeakTable<Popup, object> _selectorPopupHooks = new();
+    private void Selector_Loaded(object sender, RoutedEventArgs args) => ApplySelectorMaterial((ComboBox)sender);
     private void ApplySelectorMaterial(ComboBox combo, Brush? brush = null)
     {
-        combo.Resources["ComboBoxDropDownBackground"] = brush ?? FloatingBackground();
-        combo.Resources["ComboBoxDropdownBorderThickness"] = FloatingStroke;
+        var state = _selectorSurfaces.GetValue(combo, c => { c.Loaded += Selector_Loaded; return new SelectorSurfaceState(); });
+        if (state.Applying) return;
+        state.Applying = true;
+        try
+        {
+            var tint = FloatingWindowTint();
+            if (combo.Resources.TryGetValue("ComboBoxDropDownBackground", out var current) && current is SolidColorBrush existing && tint is SolidColorBrush selected) existing.Color = selected.Color;
+            else combo.Resources["ComboBoxDropDownBackground"] = tint;
+            if (!combo.Resources.TryGetValue("ComboBoxDropdownBorderThickness", out var stroke) || stroke is not Thickness thickness || thickness != FloatingStroke) combo.Resources["ComboBoxDropdownBorderThickness"] = FloatingStroke;
+            if (!combo.IsLoaded) return;
+            if (VisualTreeHelper.GetChildrenCount(combo) == 0) combo.ApplyTemplate();
+            var popup = FindDescendant<Popup>(combo, p => p.Name == "Popup") ?? state.Popup;
+            if (popup == null) return;
+            state.Popup = popup;
+            if (!popup.IsOpen) popup.ShouldConstrainToRootBounds = false;
+            popup.SystemBackdrop = FloatingWindowBackdrop(popup.SystemBackdrop);
+            if (_selectorPopupHooks.TryAdd(popup, new object())) popup.Opened += SelectorPopupOpened;
+        }
+        finally { state.Applying = false; }
+    }
+    private Popup? SelectorPopup(ComboBox combo) => _selectorSurfaces.TryGetValue(combo, out var state) ? state.Popup : null;
+    private void SelectorPopupOpened(object? sender, object args)
+    {
+        if (sender is Popup { Child: FrameworkElement surface }) ApplyPopupTheme(surface);
+        Popup_Opened(sender, args);
+        if (sender is Popup { Child: { } child } && FindDescendant<ScrollViewer>(child) is { } scroll && _popupTypographyScrollers.TryAdd(scroll, new object()))
+            scroll.ViewChanged += PopupTypographyScrolled;
     }
     private void ApplyPopupMaterial(DependencyObject element, Brush? brush = null)
     {
         brush ??= FloatingBackground();
-        if (element is ContentDialog dialog) { dialog.Background = brush; dialog.BorderThickness = FloatingStroke; }
-        else if (element is MenuFlyoutPresenter menu) { menu.Background = FloatingWindowTint(); menu.BorderThickness = FloatingStroke; }
+        if (element is ContentDialog dialog) { dialog.Background = brush; dialog.BorderThickness = FloatingStroke; dialog.CornerRadius = _floatingCorner; }
+        else if (element is MenuFlyoutPresenter menu) { menu.Background = FloatingWindowTint(); menu.BorderThickness = FloatingStroke; menu.CornerRadius = _floatingCorner; }
         else if (element is FlyoutPresenter flyout)
         {
             var wrapper = ReferenceEquals(flyout.Content, QueuePane);
             flyout.Background = wrapper ? new SolidColorBrush(Microsoft.UI.Colors.Transparent) : FloatingWindowTint();
             flyout.BorderThickness = wrapper ? new Thickness(0) : FloatingStroke;
+            flyout.CornerRadius = _floatingCorner;
         }
         else if (element is CommandBar commands) { commands.Background = FloatingWindowTint(); commands.BorderThickness = FloatingStroke; }
         else if (element is ComboBox combo) ApplySelectorMaterial(combo, brush);
-        else if (element is Border { Name: "PopupBorder" } border) { border.Background = brush; border.BorderThickness = FloatingStroke; }
+        else if (element is Border { Name: "PopupBorder" } border) { border.Background = FloatingWindowTint(); border.BorderThickness = FloatingStroke; border.CornerRadius = _floatingCorner; }
+        else if (element is ToolTip tip) { tip.Background = brush; tip.BorderThickness = FloatingStroke; tip.CornerRadius = _tooltipCorner; }
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++) ApplyPopupMaterial(VisualTreeHelper.GetChild(element, i), brush);
     }
     private void ApplyFloatingMaterials()
     {
+        RefreshFloatingCorners();
         var brush = FloatingBackground();
+        Notice.Background = PlayerNotice.Background = FloatingBackground();
+        Notice.BorderThickness = PlayerNotice.BorderThickness = FloatingStroke;
+        foreach (var notice in new[] { Notice, PlayerNotice })
+            if (_hasCustomFloatingCorner) notice.CornerRadius = _floatingCorner; else notice.ClearValue(Control.CornerRadiusProperty);
         QueuePane.Background = FloatingWindowTint();
         if (_queueSurfaceOpen) QueueSurface.SystemBackdrop = FloatingWindowBackdrop(QueueSurface.SystemBackdrop);
         QueuePane.BorderThickness = FloatingStroke;
         ApplyPopupMaterial(FontHost, brush);
         if (_dialog != null) ApplyPopupMaterial(_dialog, brush);
-        if (Root.XamlRoot != null)
-            foreach (var popup in VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot))
+        foreach (var root in FloatingXamlRoots())
+            foreach (var popup in VisualTreeHelper.GetOpenPopupsForXamlRoot(root))
                 if (popup.Child != null) ApplyPopupMaterial(popup.Child, brush);
     }
     private bool DismissDialogFromOutside(ContentDialog dialog, bool lightDismiss)
@@ -140,6 +198,7 @@ public sealed partial class MainWindow
     }
     private async Task<ContentDialogResult> ShowThemedDialogAsync(ContentDialog dialog, bool lightDismiss = true)
     {
+        RefreshFloatingCorners();
         dialog.Resources["ContentDialogButtonHeight"] = 44d;
         dialog.Resources["ContentDialogButtonMinHeight"] = 44d;
         dialog.Resources["ContentDialogTopOverlay"] = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
@@ -189,10 +248,12 @@ public sealed partial class MainWindow
     }
     private void Popup_Opened(object? sender, object args)
     {
-        foreach (var popup in VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot))
+        foreach (var root in FloatingXamlRoots())
+        foreach (var popup in VisualTreeHelper.GetOpenPopupsForXamlRoot(root))
             if (popup.Child is FrameworkElement child) ApplyPopupTheme(child);
         ApplyFloatingMaterials();
     }
+    private IEnumerable<XamlRoot> FloatingXamlRoots() => new[] { Root.XamlRoot, _dialog?.XamlRoot, _tray?.Menu?.Presenter?.XamlRoot }.OfType<XamlRoot>().Distinct();
     private void ShowThemedFlyout(FlyoutBase flyout, FrameworkElement anchor)
     {
         _activeFlyout?.Hide(); _activeFlyout = flyout;
@@ -205,6 +266,7 @@ public sealed partial class MainWindow
     }
     private void PrepareFlyoutTheme(FlyoutBase flyout)
     {
+        RefreshFloatingCorners();
         flyout.ShouldConstrainToRootBounds = false;
         if (flyout is MenuFlyout menu)
         {

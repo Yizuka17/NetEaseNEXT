@@ -1,10 +1,12 @@
 param(
     [ValidateSet('Debug','Release')][string]$Configuration = 'Release',
     [ValidateSet('x64','ARM64')][string]$Architecture = 'x64',
+    [string]$ArtifactsDirectory,
     [switch]$Publish
 )
 $ErrorActionPreference = 'Stop'
 $taskRoot = Split-Path $PSScriptRoot -Parent
+$taskArtifacts = if ($ArtifactsDirectory) { [IO.Path]::GetFullPath($ArtifactsDirectory) } else { Join-Path $taskRoot 'artifacts' }
 Push-Location $taskRoot
 try {
     $taskProject = Join-Path $taskRoot 'NetEaseNEXT\NetEaseNEXT.csproj'
@@ -14,10 +16,10 @@ try {
         $taskRid = if ($Architecture -eq 'ARM64') { 'win-arm64' } else { 'win-x64' }
         # Each publish gets a clean directory so legacy API/runtime files cannot
         # leak into the new MSIX. Preserve previous outputs for recovery.
-        $taskOutput = Join-Path $taskRoot "artifacts\$taskRid"
+        $taskOutput = Join-Path $taskArtifacts $taskRid
         if (Test-Path -LiteralPath $taskOutput) {
             $taskResolved = [IO.Path]::GetFullPath($taskOutput)
-            $taskExpected = [IO.Path]::GetFullPath((Join-Path $taskRoot "artifacts\$taskRid"))
+            $taskExpected = [IO.Path]::GetFullPath((Join-Path $taskArtifacts $taskRid))
             if ($taskResolved -cne $taskExpected -or (Get-Item -LiteralPath $taskOutput).Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'Unexpected publish directory.' }
             Move-Item -LiteralPath $taskOutput -Destination ($taskOutput + '-previous-' + [guid]::NewGuid().ToString('N'))
         }

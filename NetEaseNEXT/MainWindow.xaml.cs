@@ -57,7 +57,7 @@ public sealed partial class MainWindow : Window
         _playback = new(_api, _settings, DispatcherQueue, WinRT.Interop.WindowNative.GetWindowHandle(this));
         _playback.Changed += Playback_Changed; _playback.Error += ShowError;
         Windows.Networking.Connectivity.NetworkInformation.NetworkStatusChanged += NetworkStatusChanged;
-        _tray = new(WinRT.Interop.WindowNative.GetWindowHandle(this));
+        _tray = new(WinRT.Interop.WindowNative.GetWindowHandle(this), _settings, menu => ApplyTextFont(menu, new FontFamily(_settings.FontFamily)));
         _tray.Restore += RestoreWindow; _tray.TogglePlayback += _playback.Toggle;
         _tray.Next += () => _ = _playback.NextAsync(); _tray.Exit += ExitApp;
         _tray.ThemeChanged += () => SystemColorsChanged(_themeSettings, EventArgs.Empty);
@@ -72,7 +72,7 @@ public sealed partial class MainWindow : Window
             if (!_exiting && _settings.CloseToTray && _tray.IsAvailable) { args.Cancel = true; _dialog?.Hide(); HideWindow(); }
         };
         AppWindow.Changed += (_, args) => { if (args.DidVisibilityChange || args.DidPresenterChange) UpdateVisibility(); if (args.DidPositionChange || args.DidSizeChange || args.DidPresenterChange) CaptureWindowPlacement(); };
-        Activated += (_, _) => { UpdateVisibility(); if (!_hidden) { UpdateDownloadIndicator(); UpdateSongActions(); } }; Closed += (_, _) => Cleanup();
+        Activated += (_, args) => { UpdateVisibility(); if (!_hidden) { if (Root.IsLoaded && args.WindowActivationState != WindowActivationState.Deactivated) ApplyFloatingMaterials(); UpdateDownloadIndicator(); UpdateSongActions(); } }; Closed += (_, _) => Cleanup();
         Root.SizeChanged += (_, _) => UpdateLayout();
         QueueButton.Flyout = null;
         QueueSurface.Opened += (_, _) => { Popup_Opened(null, EventArgs.Empty); PositionQueuePopup(); };
@@ -238,7 +238,7 @@ public sealed partial class MainWindow : Window
         Diagnostics.StartupTrace.Mark("Hide: update visibility"); UpdateVisibility();
     }
     internal void RestoreWindow() { ShowWindow(WinRT.Interop.WindowNative.GetWindowHandle(this), RestoreWindowCommand); Activate(); UpdateVisibility(); ApplyAppearance(); if (!_sessionReady && !_runningSmokeTest) _ = InitializeSessionAsync(); }
-    private void ExitApp() { _exiting = true; Close(); }
+    private void ExitApp() { _exiting = true; _dialog?.Hide(); Close(); Application.Current.Exit(); }
     private void Cleanup()
     {
         if (Root.XamlRoot != null) Root.XamlRoot.Changed -= FloatingRootChanged;

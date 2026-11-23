@@ -10,6 +10,14 @@ public sealed partial class MainWindow
     private async Task RunShellThemeChecksAsync(Action<string, bool, object?> check)
     {
         var handle = WinRT.Interop.WindowNative.GetWindowHandle(this);
+        if (Environment.GetCommandLineArgs().Contains("--shell-input-check"))
+        {
+            RestoreWindow();
+            await File.WriteAllTextAsync(Path.Combine(SettingsStore.DataDirectory, "secondary-stage.json"), System.Text.Json.JsonSerializer.Serialize(new { name = "shell-activate", pid = Environment.ProcessId }));
+            var deadline = Environment.TickCount64 + 30000;
+            while (GetForegroundWindow() != handle && Environment.TickCount64 < deadline) await Task.Delay(30);
+            check("Shell check begins with real foreground interaction", GetForegroundWindow() == handle, null);
+        }
         var expected = ShellAppearance.IconPath();
         Root.RequestedTheme = ShellAppearance.IsDark ? ElementTheme.Light : ElementTheme.Dark;
         await Task.Delay(100); UpdateAppIcon();
@@ -43,46 +51,52 @@ public sealed partial class MainWindow
         if (inspect) { AppWindow.Title = "NetEaseNEXT 原生菜单检查"; RestoreWindow(); await Task.Delay(100); }
         foreach (var theme in new[] { ElementTheme.Dark, ElementTheme.Light })
         {
-            NativeTrayMenu? opened = null;
-            nint menu = 0, owner = 0;
-            var seen = false; var native = false; var hidden = false; var foreground = false; var labels = false;
-            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
-            var observed = false;
-            timer.Tick += (_, _) =>
-            {
-                if (!observed)
-                {
-                    observed = true;
-                    opened = _tray.Menu; menu = opened?.Handle ?? 0; owner = opened?.Owner ?? 0;
-                    seen = opened?.IsTracking == true;
-                    native = IsMenu(menu);
-                    foreground = GetForegroundWindow() == owner;
-                    hidden = !IsWindowVisible(main) && _hidden && !_timer.IsEnabled;
-                    labels = opened?.ItemCount == 5 && opened.ItemText(0) == "打开 NetEaseNEXT" && opened.ItemText(4) == "退出";
-                    Diagnostics.StartupTrace.Mark($"Native tray menu {theme}: open={seen}, ownerForeground={foreground}");
-                    if (inspect) { timer.Interval = TimeSpan.FromSeconds(25); return; }
-                }
-                timer.Stop(); _tray.DismissMenu();
-            };
-            timer.Start();
             var point = inspect ? new PointInt32(AppWindow.Position.X + AppWindow.Size.Width / 2, AppWindow.Position.Y + AppWindow.Size.Height / 2) : new PointInt32(area.X + area.Width - 12, area.Y + area.Height - 12);
-            try { _tray.ShowMenu(point, theme); }
-            finally { timer.Stop(); }
-            check(theme + " tray uses a real USER32 popup", seen && native, null);
-            check(theme + " tray owner receives foreground for automatic dismissal", foreground, null);
-            check(theme + " tray keeps expected WinUI visibility", inspect ? !hidden && IsWindowVisible(main) : hidden, new { inspect, hidden });
-            check(theme + " native tray menu keeps all commands", labels, null);
-            check(theme + " native menu theme support is available", NativeMenuTheme.IsSupported, null);
-            check(theme + " native menu and owner are destroyed after dismissal", _tray.Menu == null && opened is { Handle: 0, Owner: 0, IsTracking: false } && !IsMenu(menu) && !IsWindow(owner), null);
-            check(theme + " dismissal does not execute a playback or exit command", _tray.LastCommand == 0, null);
+            _tray.ShowMenu(point, theme);
+            var deadline = Environment.TickCount64 + 12000;
+            while (_tray.Menu?.IsTracking != true && Environment.TickCount64 < deadline) await Task.Delay(30);
+            var opened = _tray.Menu;
+            var owner = opened?.Owner ?? 0;
+            check(theme + " tray uses WinUI menu controls with native acrylic", opened?.Presenter is { IsLoaded: true } && opened.Backdrop is { NativeProfileReady: true, Kind: "Acrylic" }, null);
+            deadline = Environment.TickCount64 + 1000;
+            while (GetForegroundWindow() != owner && _tray.Menu != null && Environment.TickCount64 < deadline) await Task.Delay(20);
+            check(theme + " tray surface receives foreground for automatic dismissal", GetForegroundWindow() == owner, new { owner = owner.ToInt64(), foreground = GetForegroundWindow().ToInt64(), visible = IsWindowVisible(owner) });
+            check(theme + " tray keeps expected main window visibility", inspect ? IsWindowVisible(main) : !IsWindowVisible(main) && _hidden && !_timer.IsEnabled, null);
+            check(theme + " tray keeps every command and touch target", opened?.Presenter?.Items.Count == 5 && opened.Presenter.Items.OfType<Microsoft.UI.Xaml.Controls.MenuFlyoutItem>().All(i => i.MinHeight >= 44), null);
+            var corner = -1; if (owner != 0) DwmGetWindowAttribute(owner, 33, out corner, sizeof(int));
+            check(theme + " tray outer corners are owned by DWM", corner == 2 && opened?.Presenter?.CornerRadius == new CornerRadius(0), new { corner });
+            if (inspect) await Task.Delay(TimeSpan.FromSeconds(25));
+            _tray.DismissMenu();
+            deadline = Environment.TickCount64 + 3000;
+            while (_tray.Menu != null && Environment.TickCount64 < deadline) await Task.Delay(20);
+            check(theme + " tray releases its window and controller on dismissal", _tray.Menu == null && opened?.Owner == 0 && !IsWindow(owner), null);
+            check(theme + " dismissal does not execute a command", _tray.LastCommand == 0, null);
             await Task.Delay(100);
         }
+        _playback.Restore(new());
+        foreach (var command in new[] { 2, 3 })
+        {
+            var invoked = 0;
+            Action observed = () => invoked++;
+            if (command == 2) _tray.TogglePlayback += observed; else _tray.Next += observed;
+            try
+            {
+                _tray.ShowMenu(new(area.X + area.Width - 12, area.Y + area.Height - 12), ElementTheme.Light);
+                var deadline = Environment.TickCount64 + 12000;
+                while (_tray.Menu?.IsTracking != true && Environment.TickCount64 < deadline) await Task.Delay(30);
+                var item = _tray.Menu!.Presenter!.Items.OfType<Microsoft.UI.Xaml.Controls.MenuFlyoutItem>().ElementAt(command - 1);
+                var peer = Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer.CreatePeerForElement(item);
+                ((Microsoft.UI.Xaml.Automation.Provider.IInvokeProvider)peer.GetPattern(Microsoft.UI.Xaml.Automation.Peers.PatternInterface.Invoke)).Invoke();
+                deadline = Environment.TickCount64 + 3000;
+                while (_tray.Menu != null && Environment.TickCount64 < deadline) await Task.Delay(20);
+                check("WinUI tray command " + command + " executes exactly once and closes", invoked == 1 && _tray.LastCommand == command && _tray.Menu == null, new { invoked, _tray.LastCommand });
+            }
+            finally { if (command == 2) _tray.TogglePlayback -= observed; else _tray.Next -= observed; _tray.DismissMenu(); }
+        }
         if (inspect) HideWindow();
-        NativeMenuTheme.Apply(ShellAppearance.Theme);
     }
     [DllImport("user32.dll")] private static extern nint SendMessage(nint window, uint message, nuint wParam, nint lParam);
     [DllImport("user32.dll")] private static extern bool IsWindowVisible(nint window);
-    [DllImport("user32.dll")] private static extern bool IsMenu(nint menu);
     [DllImport("user32.dll")] private static extern bool IsWindow(nint window);
     [DllImport("user32.dll")] private static extern nint GetForegroundWindow();
 }

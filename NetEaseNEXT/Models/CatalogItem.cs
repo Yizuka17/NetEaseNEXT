@@ -21,7 +21,13 @@ public sealed class SocialItem : System.ComponentModel.INotifyPropertyChanged
     public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
     public string Name { get; set; } = "";
     public string Avatar { get; set; } = "";
+    public string Title { get; set; } = "";
     public string Text { get; set; } = "";
+    public CatalogItem? SharedCatalog { get; set; }
+    public Microsoft.UI.Xaml.Visibility TitleVisibility => Title.Length > 0 ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
+    public Microsoft.UI.Xaml.Visibility TextVisibility => Text.Length > 0 ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
+    public Microsoft.UI.Xaml.Visibility SharedCatalogVisibility => SharedCatalog != null ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
+    public string DisplayTitle => Services.Emojis.Display(Title);
     public string Picture { get; set; } = "";
     public List<string> Pictures { get; set; } = [];
     public Track? SharedTrack { get; set; }

@@ -17,6 +17,25 @@ public sealed partial class MainWindow
         return pics.EnumerateArray().Select(p => p.ValueKind == JsonValueKind.String ? p.GetString() ?? "" : FirstText(p.Text("originUrl"), p.Text("originalUrl"), p.Text("pcSquareUrl"), p.Text("url")))
             .Where(url => Uri.TryCreate(url, UriKind.Absolute, out var uri) && uri.Scheme is "http" or "https").Distinct().Take(9).ToList();
     }
+    private static string EventBody(JsonElement payload)
+    {
+        if (payload.TryGetProperty("msg", out var message) && message.ValueKind == JsonValueKind.Object) return EventBody(message);
+        return FirstText(payload.Text("msg"), payload.Text("message"), payload.Text("content"));
+    }
+    private static CatalogItem? SharedEventCatalog(JsonElement payload)
+    {
+        var album = Object(payload, "album");
+        if (album.Number("id") > 0) return new(album.Number("id"), FirstText(album.Text("name"), album.Text("title")), FirstText(album.Text("picUrl"), album.Text("coverImgUrl")), "album", "专辑");
+        var playlist = Object(payload, "playlist");
+        if (playlist.Number("id") > 0) return new(playlist.Number("id"), FirstText(playlist.Text("name"), playlist.Text("title")), FirstText(playlist.Text("coverImgUrl"), playlist.Text("picUrl")), "playlist", "歌单");
+        return null;
+    }
+    private async void SocialCatalog_Click(object sender, RoutedEventArgs args)
+    {
+        if ((sender as FrameworkElement)?.DataContext is not SocialItem { SharedCatalog: { } resource }) return;
+        _playlistId = resource.Id; _playlistName = resource.Name;
+        await NavigateAsync(resource.Kind == "album" ? "album" : "playlist");
+    }
     private static Track? SharedEventTrack(JsonElement payload)
     {
         var song = Object(payload, "song");

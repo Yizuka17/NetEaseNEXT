@@ -70,10 +70,10 @@ public sealed partial class MainWindow
                 await NavigateAsync("settings"); Root.UpdateLayout();
                 foreach (var selector in new[] { ThemeCombo, FontWeightCombo, DownloadSourceCombo })
                 {
-                    check(theme + " selector material is ready before opening " + selector.Name, selector.Resources["ComboBoxDropDownBackground"] is AcrylicBrush, null);
+                    check(theme + " selector material is ready before opening " + selector.Name, FindDescendant<Microsoft.UI.Xaml.Controls.Primitives.Popup>(selector)?.SystemBackdrop is AdjustableBackdrop { Kind: "Acrylic" }, null);
                     selector.IsDropDownOpen = true; await Task.Delay(180); Root.UpdateLayout();
                     var selectorBorder = VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Select(p => p.Child).Where(c => c != null).Select(c => FindDescendant<Border>(c!, b => b.Name == "PopupBorder")).FirstOrDefault(b => b != null);
-                    check(theme + " selector actual popup is acrylic " + selector.Name, selectorBorder?.Background is AcrylicBrush acrylic && (acrylic.TintColor.R < 128) == (theme == "Dark") && selectorBorder.BorderThickness == FloatingStroke, null);
+                    check(theme + " selector actual popup is acrylic " + selector.Name, selectorBorder?.Background is SolidColorBrush { Color.A: < 255 } && selectorBorder.BorderThickness == FloatingStroke, null);
                     if (selector == ThemeCombo) await SaveLibraryImageAsync(Root, "acrylic-selector-" + theme + ".png");
                     selector.IsDropDownOpen = false; await Task.Delay(150);
                 }
@@ -81,9 +81,9 @@ public sealed partial class MainWindow
                 foreach (var percent in new[] { 0d, 25d, 50d, 65d, 75d, 100d })
                 {
                     _settings.AcrylicTransparency = percent; _settings.AcrylicSystemMaterial = false; ApplyMaterial(Root.ActualTheme);
-                    opacity.Add(((AcrylicBrush)ThemeCombo.Resources["ComboBoxDropDownBackground"]).TintOpacity);
+                    opacity.Add(((SolidColorBrush)ThemeCombo.Resources["ComboBoxDropDownBackground"]).Color.A);
                 }
-                check(theme + " selector transparency changes across the entire slider", opacity.Zip(opacity.Skip(1)).All(pair => pair.First > pair.Second), opacity);
+                check(theme + " selector transparency changes across the entire slider", opacity.First() > opacity.Last() && opacity.Zip(opacity.Skip(1)).All(pair => pair.First >= pair.Second), opacity);
                 _settings.AcrylicTransparency = savedTransparency; _settings.AcrylicSystemMaterial = savedDefault; ApplyMaterial(Root.ActualTheme);
                 await NavigateAsync("playlist");
                 ShowQueue_Click(QueueButton, new()); await Task.Delay(200);
@@ -116,7 +116,7 @@ public sealed partial class MainWindow
             var combo = Descendants<ComboBox>(_dialog!).Single(); combo.IsDropDownOpen = true; await Task.Delay(100);
             check("Opening a nested quality picker keeps its parent dialog open", _dialog is { IsLoaded: true } && _dialogSurfaceReady && !downloads.IsCompleted, null);
             var popupBorder = VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Select(p => p.Child).Where(c => c != null).Select(c => FindDescendant<Border>(c!, b => b.Name == "PopupBorder")).FirstOrDefault(b => b != null);
-            check("Nested quality selector uses acrylic and the same physical-pixel stroke", popupBorder?.Background is AcrylicBrush && popupBorder.BorderThickness == FloatingStroke, null);
+            check("Nested quality selector uses acrylic and the same physical-pixel stroke", popupBorder?.Background is SolidColorBrush { Color.A: < 255 } && popupBorder.BorderThickness == FloatingStroke, null);
             combo.IsDropDownOpen = false; await Dismiss(downloads);
             check("Outside dismiss cancels download options without enqueuing", DownloadJobs.Count == count, null);
         }

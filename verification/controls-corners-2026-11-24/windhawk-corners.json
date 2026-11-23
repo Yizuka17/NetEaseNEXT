@@ -1,0 +1,122 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Shared WinUI corners accept custom and square radii",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Per-corner settings preserve DWM corner order",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unset and malformed values preserve WinUI defaults",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Explicit tooltip radius is independent",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Application overlay resource follows the current corner policy",
+    "passed": true,
+    "detail": {
+      "Overlay": {
+        "TopLeft": 12,
+        "TopRight": 12,
+        "BottomRight": 12,
+        "BottomLeft": 12
+      },
+      "ToolTip": {
+        "TopLeft": 4,
+        "TopRight": 4,
+        "BottomRight": 4,
+        "BottomLeft": 4
+      },
+      "Source": "Windhawk",
+      "HasCustomOverlay": true
+    }
+  },
+  {
+    "name": "Installed enabled Windhawk corner configuration is detected",
+    "passed": true,
+    "detail": {
+      "Overlay": {
+        "TopLeft": 12,
+        "TopRight": 12,
+        "BottomRight": 12,
+        "BottomLeft": 12
+      },
+      "ToolTip": {
+        "TopLeft": 4,
+        "TopRight": 4,
+        "BottomRight": 4,
+        "BottomLeft": 4
+      },
+      "Source": "Windhawk",
+      "HasCustomOverlay": true
+    }
+  },
+  {
+    "name": "Information keeps its original ContentDialog and XAML root",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Information template receives the shared radius",
+    "passed": true,
+    "detail": {
+      "TopLeft": 12,
+      "TopRight": 12,
+      "BottomRight": 12,
+      "BottomLeft": 12
+    }
+  },
+  {
+    "name": "Comments preserve the original modal ContentDialog and shared radius",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Nested selector uses native acrylic and the same radius",
+    "passed": true,
+    "detail": {
+      "TopLeft": 12,
+      "TopRight": 12,
+      "BottomRight": 12,
+      "BottomLeft": 12
+    }
+  },
+  {
+    "name": "Comments still ignore outside dismissal",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Account menu uses the same radius and physical border width",
+    "passed": true,
+    "detail": {
+      "TopLeft": 12,
+      "TopRight": 12,
+      "BottomRight": 12,
+      "BottomLeft": 12
+    }
+  },
+  {
+    "name": "Notifications keep acrylic and use configured or default corners",
+    "passed": true,
+    "detail": {
+      "TopLeft": 12,
+      "TopRight": 12,
+      "BottomRight": 12,
+      "BottomLeft": 12
+    }
+  }
+]

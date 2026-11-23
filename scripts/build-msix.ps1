@@ -2,13 +2,15 @@ param(
     [ValidateSet('x64','ARM64')][string]$Architecture = 'x64',
     [string]$CertificateThumbprint,
     [string]$SdkTools,
+    [string]$ArtifactsDirectory,
     [switch]$Unsigned
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'msix-signature.ps1')
 $taskRoot = Split-Path $PSScriptRoot -Parent
+$taskArtifacts = if ($ArtifactsDirectory) { [IO.Path]::GetFullPath($ArtifactsDirectory) } else { Join-Path $taskRoot 'artifacts' }
 $taskRid = if ($Architecture -eq 'ARM64') { 'win-arm64' } else { 'win-x64' }
-$taskPublish = Join-Path $taskRoot "artifacts\$taskRid"
+$taskPublish = Join-Path $taskArtifacts $taskRid
 if (-not (Test-Path -LiteralPath (Join-Path $taskPublish 'NetEaseNEXT.pri'))) { throw 'Run scripts/build.ps1 -Publish first.' }
 $taskSdkRoot = Join-Path ${env:ProgramFiles(x86)} 'Windows Kits\10\bin'
 if ($SdkTools) { $taskTools = (Resolve-Path -LiteralPath $SdkTools).Path }
@@ -34,7 +36,7 @@ if (-not $Unsigned) {
     if (-not $taskCert.HasPrivateKey -or $taskCert.NotBefore -gt (Get-Date) -or $taskCert.NotAfter -le (Get-Date)) { throw 'Signing certificate has no private key or is outside its validity period.' }
     if ($taskCert.Subject -cne $taskManifest.Package.Identity.Publisher) { throw 'Certificate Subject must exactly match the manifest Publisher.' }
 }
-$taskOutput = Join-Path $taskRoot 'artifacts\msix'
+$taskOutput = Join-Path $taskArtifacts 'msix'
 $taskStage = Join-Path $taskOutput ('staging\' + [guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Path $taskStage -Force | Out-Null
 & robocopy $taskPublish $taskStage /E /XF '*.pdb' '*.log' /NFL /NDL /NJH /NJS /NP | Out-Null

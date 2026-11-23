@@ -54,9 +54,12 @@ public sealed partial class MainWindow
         if (view == "events" && thread.Length == 0 && item.Number("id") > 0 && user.Number("userId") > 0) thread = $"A_EV_2_{item.Number("id")}_{user.Number("userId")}";
         var resource = ResourceFromThread(thread);
         if (resource.Type == 6 && sourceEvent.ValueKind != JsonValueKind.Object) sourceEvent = sourceResource;
-        var text = view == "messages" ? FirstText(payload.Text("content"), payload.Text("msg"), comment.Text("content"), item.Text("content"), SharedDescription(payload)) : MessageText(payload);
+        var text = view == "events" ? EventBody(payload) : view == "messages" ? FirstText(payload.Text("content"), payload.Text("msg"), comment.Text("content"), item.Text("content"), SharedDescription(payload)) : MessageText(payload);
         var original = FirstText(item.Text("beRepliedContent"), reply.Text("content"), Object(payload, "originalComment").Text("content"), SharedDescription(payload), Payload(item, "resourceJson").Text("name"));
         if (original == text) original = "";
+        var sharedCatalog = SharedEventCatalog(payload);
+        var sharedTrack = SharedEventTrack(payload);
+        if (view == "events" && (sharedTrack != null || sharedCatalog != null)) original = "";
         var picture = PictureFromPayload(payload);
         if (view == "events" && item.TryGetProperty("pics", out var pics) && pics.ValueKind == JsonValueKind.Array && pics.GetArrayLength() > 0) picture = pics[0].Text("originUrl");
         var general = Object(payload, "generalNotice");
@@ -75,8 +78,8 @@ public sealed partial class MainWindow
         var commentId = comment.Number("commentId"); if (commentId == 0) commentId = item.Number("commentId");
         return new SocialItem
         {
-            Id = item.Number("id"), Name = user.Text("nickname"), Avatar = user.Text("avatarUrl"), Text = text.Length > 0 ? text : "[消息]", OriginalText = original,
-            Picture = picture, Pictures = EventPictures(item), SharedTrack = SharedEventTrack(payload), LinkedEvent = linkedEvent,
+            Id = item.Number("id"), Name = user.Text("nickname"), Avatar = user.Text("avatarUrl"), Title = view == "events" ? FirstText(payload.Text("title"), Object(payload, "article").Text("title"), item.Text("title")) : "", Text = view == "events" ? text : text.Length > 0 ? text : "[消息]", OriginalText = original,
+            Picture = picture, Pictures = EventPictures(item), SharedTrack = sharedTrack, SharedCatalog = sharedTrack == null ? sharedCatalog : null, LinkedEvent = linkedEvent,
             Time = DateText(view == "events" ? item.Number("eventTime") : item.Number(view == "private" ? "lastMsgTime" : "time")), Timestamp = view == "events" ? item.Number("eventTime") : item.Number(view == "private" ? "lastMsgTime" : "time"), PeerId = view == "private" ? user.Number("userId") : 0,
             Kind = view == "events" ? "event" : view == "messages" ? "notice" : "message", ThreadId = thread, ResourceId = resource.Id, ResourceKey = resource.Key, ResourceType = resource.Type,
             Unread = PayloadIsUnread(item), UnreadCount = Math.Max(item.Number("newMsgCount"), item.Number("unreadCount")), CommentId = commentId, Liked = Flag(info, "liked"), LikeCount = info.Number("likedCount"), CommentCount = info.Number("commentCount"), Action = action

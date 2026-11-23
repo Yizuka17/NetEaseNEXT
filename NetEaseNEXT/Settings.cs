@@ -174,9 +174,27 @@ public sealed partial class MainWindow
         if (!_ready || !int.TryParse(Tag(FontWeightCombo), out var weight)) return;
         _settings.TextFontWeight = weight; ApplyFont(); SaveSettings();
     }
+    private readonly System.Runtime.CompilerServices.ConditionalWeakTable<FrameworkElement, object> _typographyLoaded = new();
+    private readonly HashSet<DependencyObject> _typographyApplying = [];
+    private void TextWeightChanged(DependencyObject sender, DependencyProperty property)
+    {
+        if (_hidden) return;
+        var weight = new Windows.UI.Text.FontWeight { Weight = (ushort)_settings.TextFontWeight };
+        if (sender is TextBlock text && !text.Text.Any(c => c is >= '\uE000' and <= '\uF8FF') && text.FontWeight.Weight < weight.Weight) text.FontWeight = weight;
+        else if (sender is Control control && control.FontWeight.Weight < weight.Weight) control.FontWeight = weight;
+    }
     private void Typography_Loaded(object sender, RoutedEventArgs args) => ApplyTextFont((DependencyObject)sender, new FontFamily(_settings.FontFamily));
     private void ApplyTextFont(DependencyObject element, FontFamily family)
     {
+        if (element is FrameworkElement framework && element is not IconElement && _typographyLoaded.TryAdd(framework, new object()))
+        {
+            framework.Loaded += Typography_Loaded;
+            if (element is TextBlock) framework.RegisterPropertyChangedCallback(TextBlock.FontWeightProperty, TextWeightChanged);
+            else if (element is Control) framework.RegisterPropertyChangedCallback(Control.FontWeightProperty, TextWeightChanged);
+        }
+        if (!_typographyApplying.Add(element)) return;
+        try
+        {
         // Icon controls render private-use glyphs; their internal text must keep
         // the symbol font even when the user's content font changes.
         if (element is IconElement) return;
@@ -185,6 +203,7 @@ public sealed partial class MainWindow
         if (element is TextBlock symbol && symbol.Text.Any(c => c is >= '\uE000' and <= '\uF8FF'))
         {
             symbol.FontFamily = IconFonts.FrameworkSymbols;
+            symbol.FontWeight = Microsoft.UI.Text.FontWeights.Normal;
             return;
         }
         if (element is TextBlock text)
@@ -201,15 +220,36 @@ public sealed partial class MainWindow
         }
         else if (element is Control control)
         {
+            var metrics = _textMetrics.GetValue(control, _ => new TextMetrics(control.FontSize,
+                control.ReadLocalValue(Control.FontWeightProperty) is Windows.UI.Text.FontWeight localWeight ? localWeight.Weight : TextStyleValue(control.Style, Control.FontWeightProperty) is Windows.UI.Text.FontWeight styleWeight ? styleWeight.Weight : (ushort)400));
             control.FontFamily = family;
+            control.FontWeight = new Windows.UI.Text.FontWeight { Weight = (ushort)Math.Max(metrics.Weight, _settings.TextFontWeight) };
+            if (control is ListViewBase list) { list.ContainerContentChanging -= TypographyContainerContentChanging; list.ContainerContentChanging += TypographyContainerContentChanging; }
+            var tooltip = ToolTipService.GetToolTip(control);
+            if (tooltip is string label && label.Length > 0) { tooltip = new ToolTip { Content = label }; ToolTipService.SetToolTip(control, tooltip); }
+            if (tooltip is ToolTip tip && !ReferenceEquals(tip, control)) { PrepareFloatingToolTip(tip); ApplyTextFont(tip, family); }
             if (control.ContextFlyout is { } context)
             {
                 context.Opening -= NativeContextFlyoutOpening; context.Opening += NativeContextFlyoutOpening;
                 context.Opened -= Popup_Opened; context.Opened += Popup_Opened;
             }
-            if (control is ComboBox combo) { ApplySelectorMaterial(combo); combo.DropDownOpened -= Popup_Opened; combo.DropDownOpened += Popup_Opened; }
+            if (control is ComboBox combo) ApplySelectorMaterial(combo);
         }
         for (var index = 0; index < VisualTreeHelper.GetChildrenCount(element); index++) ApplyTextFont(VisualTreeHelper.GetChild(element, index), family);
+
+        }
+        finally { _typographyApplying.Remove(element); }
+    }
+    private readonly System.Runtime.CompilerServices.ConditionalWeakTable<ScrollViewer, object> _popupTypographyScrollers = new();
+    private void PopupTypographyScrolled(object? sender, ScrollViewerViewChangedEventArgs args)
+    {
+        if (!_hidden && sender is ScrollViewer { IsLoaded: true } scroll && !args.IsIntermediate) ApplyTextFont(scroll, new FontFamily(_settings.FontFamily));
+    }
+    private void TypographyContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+    {
+        if (_hidden || args.InRecycleQueue) return;
+        ApplyTextFont(args.ItemContainer, new FontFamily(_settings.FontFamily));
+        if (args.Phase == 0) args.RegisterUpdateCallback(1, TypographyContainerContentChanging);
     }
     private void Transparency_Changed(object sender, RangeBaseValueChangedEventArgs args)
     {

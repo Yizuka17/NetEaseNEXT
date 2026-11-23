@@ -36,6 +36,14 @@ public sealed partial class MainWindow
         try
         {
             Check("XAML root loaded", Root.IsLoaded);
+            if (Environment.GetCommandLineArgs().Contains("--floating-corners-check"))
+            {
+                await RunFloatingCornerChecksAsync(Check); return;
+            }
+            if (Environment.GetCommandLineArgs().Contains("--selector-typography-check"))
+            {
+                await RunSelectorTypographyChecksAsync(Check); return;
+            }
             if (Environment.GetCommandLineArgs().Contains("--secondary-surfaces-check"))
             {
                 await RunSecondarySurfacesChecksAsync(Check); return;

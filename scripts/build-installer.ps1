@@ -2,6 +2,7 @@ param(
     [ValidateSet('x64','ARM64')][string]$Architecture = 'x64',
     [string]$CertificateThumbprint,
     [string]$SdkTools,
+    [string]$ArtifactsDirectory,
     [switch]$Unsigned
 )
 # MSIX is the default installer. Portable publishing remains available separately.

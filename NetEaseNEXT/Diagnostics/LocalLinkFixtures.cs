@@ -35,6 +35,8 @@ internal static class LocalLinkFixtures
             {
                 "login_status" => new { code = 200, data = new { profile = new { userId = 42, nickname = "测试用户", avatarUrl = "" } } },
                 "personalized" => new { code = 200, result = new[] { playlist } },
+                "event" => new { code = 200, @event = Array.Empty<object>(), more = false, lasttime = 0 },
+                "user_event" => new { code = 200, events = Array.Empty<object>(), more = false, lasttime = 0 },
                 "user_playlist" => new { code = 200, playlist = new[] { playlist }, more = false },
                 "playlist_detail" => new { code = 200, playlist = new { id = 101, name = "在线歌单", coverImgUrl = cover, description = "本地下载来源定位", trackCount = 165, trackIds = Enumerable.Range(1, 165).Select(i => new { id = i }).ToArray() } },
                 "playlist_track_all" => new { code = 200, songs = Enumerable.Range(1, 165).Skip((int)p.Number("offset")).Take(100).Select(i => Song(i)).ToArray() },
