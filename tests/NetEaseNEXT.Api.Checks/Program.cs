@@ -24,6 +24,20 @@ foreach (var fixture in fixtures.RootElement.EnumerateArray())
 }
 try { ApiEndpoints.Create("api", JsonSerializer.SerializeToElement(new { uri = "/api/anything" })); Check("Unknown dispatcher rejected", false); }
 catch (ArgumentException) { Check("Unknown dispatcher rejected", true); }
+var history = ApiEndpoints.Create("song_play_record", JsonSerializer.SerializeToElement(new { id = 42, sourceid = 9 }));
+using (var payload = JsonDocument.Parse(history.Data["logs"]!.ToString()!))
+{
+    var entry = payload.RootElement[0]; var song = entry.GetProperty("json");
+    Check("Recent playback reports a start event without invented listening time", history.Crypto == "eapi" && entry.GetProperty("action").GetString() == "startplay" && song.GetProperty("id").GetInt64() == 42 && song.GetProperty("content").GetString() == "id=9" && !song.TryGetProperty("time", out _));
+}
+try { ApiEndpoints.Create("song_play_record", JsonSerializer.SerializeToElement(new { id = -1 })); Check("Invalid playback IDs rejected", false); }
+catch (ArgumentException) { Check("Invalid playback IDs rejected", true); }
+using (var historyHandler = new HistoryHandler())
+using (var historyApi = new NativeApi(historyHandler))
+{
+    await historyApi.CallAsync("song_play_record", new { id = 42 }, "MUSIC_U=history-fixture");
+    Check("Recent playback uses the official clientlog host and its OSX request header", historyHandler.Host == "clientlog.music.163.com" && historyHandler.Path == "/eapi/feedback/weblog" && historyHandler.Cookie.Contains("os=osx") && historyHandler.Cookie.Contains("MUSIC_U=history-fixture"));
+}
 using (var api = new NativeApi())
 {
     var qr = await api.CallAsync("login_qr_create", new { key = "native-local-check", qrimg = true });
@@ -105,6 +119,15 @@ sealed class LegacyHandler : HttpMessageHandler
     {
         Host = request.RequestUri!.Host; Cookie = request.Headers.GetValues("Cookie").Single();
         return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("{\"code\":200,\"data\":[{\"id\":42,\"url\":\"https://example.invalid/audio\",\"type\":\"flac\",\"br\":999000}]}") });
+    }
+}
+sealed class HistoryHandler : HttpMessageHandler
+{
+    internal string Host = "", Path = "", Cookie = "";
+    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
+    {
+        Host = request.RequestUri!.Host; Path = request.RequestUri.AbsolutePath; Cookie = request.Headers.GetValues("Cookie").Single();
+        return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("{\"code\":200}") });
     }
 }
 sealed class FixtureHandler : HttpMessageHandler

@@ -97,6 +97,7 @@ public sealed partial class PlaybackService : IDisposable
     public event Action<string>? Error;
     public PlaybackService(ApiClient api, SettingsStore settings, DispatcherQueue dispatcher, nint window)
     {
+        _historyApi = api; HistoryReportingEnabled = !api.IsFixture;
         _streamApi = new(api); _urls = new(_streamApi); _settings = settings; _dispatcher = dispatcher;
         _player.Volume = Math.Clamp(settings.Volume, 0, 1);
         if (settings.AudioDeviceId.Length > 0) _ = RestoreOutputAsync(settings.AudioDeviceId);
@@ -125,11 +126,12 @@ public sealed partial class PlaybackService : IDisposable
     private void OnState(MediaPlaybackSession sender, object args) => Dispatch(() =>
     {
         if (!ReferenceEquals(sender, _player.PlaybackSession)) return;
+        RecordHistoryStart();
         if (sender.PlaybackState == MediaPlaybackState.Playing && _networkRecovery is { Resume: true } recovery && recovery.Track.Id == Current?.Id && !_recoveryRunning)
         { CancelNetworkRecovery(); _mediaFailed = false; _restoredPosition = TimeSpan.Zero; }
         ObserveBuffering(); UpdateTimeline(); Changed?.Invoke();
     });
-    private void OnEnded(MediaPlayer sender, object args) => Dispatch(() => { if (!ReferenceEquals(sender, _player)) return; if (Mode == "One" && Current != null) _ = LoadAsync(Current); else _ = NextAsync(Mode is not ("Sequential" or "Reverse")); });
+    private void OnEnded(MediaPlayer sender, object args) => Dispatch(() => { if (!ReferenceEquals(sender, _player)) return; _historySongId = 0; if (Mode == "One" && Current != null) _ = LoadAsync(Current); else _ = NextAsync(Mode is not ("Sequential" or "Reverse")); });
     private void OnFailed(MediaPlayer sender, MediaPlayerFailedEventArgs args) => Dispatch(() =>
     {
         if (!ReferenceEquals(sender, _player)) return;
@@ -259,6 +261,7 @@ public sealed partial class PlaybackService : IDisposable
     internal void ReleaseLocalFiles(IReadOnlySet<string> paths)
     {
         if (!(Current?.IsLocal == true && paths.Contains(Current.LocalPath)) && !(CurrentDownloadedPath is { } file && paths.Contains(file))) return;
+        _historySongId = _historyTrackId = 0;
         CancelNetworkRecovery(); _mediaFailed = _activeStreamRemote = false;
         CurrentFileMetadata = null;
         _loadGeneration++;
@@ -269,6 +272,7 @@ public sealed partial class PlaybackService : IDisposable
     }
     internal void Restore(PlaybackSnapshot state)
     {
+        _historySongId = 0;
         CancelNetworkRecovery(); _mediaFailed = _activeStreamRemote = false;
         CurrentFileMetadata = null;
         _loadGeneration++;
@@ -473,7 +477,7 @@ public sealed partial class PlaybackService : IDisposable
             CancelNetworkRecovery(); _mediaFailed = _activeStreamRemote = false;
             Attach(_player); if (_desiredPlaying) _player.Play(); else _player.Pause(); _player.Volume = Math.Clamp(_settings.Volume, 0, 1);
             previousPlayer.Source = null; previousSource?.Dispose(); previousPlayer.Dispose(); DeleteLocal(previousPath);
-            PublishSystemTrack(); UpdateTimeline(); Changed?.Invoke(); return true;
+            RecordHistoryStart(); PublishSystemTrack(); UpdateTimeline(); Changed?.Invoke(); return true;
         }
         finally
         {
@@ -551,7 +555,7 @@ public sealed partial class PlaybackService : IDisposable
             oldPlayer.Source = null; oldSource?.Dispose(); oldPlayer.Dispose(); DeleteLocal(oldPath);
             _cacheRequest = (uri, cachePath, info.Number("size"), info.Text("md5"));
             if (!LastPlayUsedCache && !_background) _audioCache.Start(uri, cachePath, info.Number("size"), info.Text("md5"));
-            PublishSystemTrack(); UpdateTimeline(); Changed?.Invoke();
+            RecordHistoryStart(); PublishSystemTrack(); UpdateTimeline(); Changed?.Invoke();
             if (info.TryGetProperty("freeTrialInfo", out var trial) && trial.ValueKind == System.Text.Json.JsonValueKind.Object) Error?.Invoke("当前为试听片段，完整播放取决于账号权限。");
             return true;
         }
@@ -652,6 +656,7 @@ public sealed partial class PlaybackService : IDisposable
     }
     public void Dispose()
     {
+        _history?.Dispose();
         _loadGeneration++;
         CancelNetworkRecovery();
         if (_disposed) return; _disposed = true; _load?.Cancel(); _systemArtworkLoad?.Cancel(); _nextCacheLoad?.Cancel(); DisposeNextPrepared(); _urls.Dispose(); _nextAudioCache.Dispose(); _audioCache.Dispose(); _streamApi.Dispose();

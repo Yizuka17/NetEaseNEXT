@@ -18,6 +18,16 @@ public sealed class ApiClient : IDisposable
     private MetadataCache Cache => _sessionSource?.Cache ?? _cache;
     private int _requestCount;
     internal int RequestCount => Volatile.Read(ref _requestCount);
+    internal bool IsFixture => _fixture != null;
+    internal event Action? SessionChanged;
+    internal Task<JsonElement> RecordPlaybackAsync(long id, long sourceId, string cookie, CancellationToken token)
+    {
+        token.ThrowIfCancellationRequested();
+        if (cookie.Length == 0 || Cookie != cookie) throw new OperationCanceledException(token);
+        Interlocked.Increment(ref _requestCount);
+        var query = new { id, sourceid = sourceId };
+        return _fixture != null ? _fixture("song_play_record", JsonSerializer.SerializeToElement(query), token) : _native.CallAsync("song_play_record", query, cookie, token);
+    }
     private int _profileRequestCount;
     internal int ProfileRequestCount => Volatile.Read(ref _profileRequestCount);
     private bool _disposed;
@@ -26,7 +36,7 @@ public sealed class ApiClient : IDisposable
     public string Cookie => _sessionSource?.Cookie ?? _cookie;
     public bool HasSession => Cookie.Length > 0;
     internal bool IsWorkerRunning => false; // Native HTTP starts no child processes.
-    public void SetCookie(string cookie) { SettingsStore.SaveCookie(cookie); _cookie = cookie; Cache.Clear(CacheDirectory); }
+    public void SetCookie(string cookie) { if (_fixture == null) SettingsStore.SaveCookie(cookie); _cookie = cookie; Cache.Clear(CacheDirectory); SessionChanged?.Invoke(); }
     public async Task<JsonElement> CallCachedAsync(string method, object? parameters = null, CancellationToken cancellation = default)
     {
         cancellation.ThrowIfCancellationRequested();

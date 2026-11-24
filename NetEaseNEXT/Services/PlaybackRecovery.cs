@@ -76,6 +76,7 @@ public sealed partial class PlaybackService
     internal void NetworkAvailable()
     {
         if (_disposed) return;
+        _history?.NetworkAvailable();
         if (_networkRecovery != null && _desiredPlaying) { _networkAttempts = 0; ScheduleNetworkRecovery(true); }
         else
         {

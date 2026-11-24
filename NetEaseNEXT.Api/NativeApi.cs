@@ -100,10 +100,12 @@ public sealed class NativeApi : IDisposable
             ["resolution"] = "1920x1080", ["__csrf"] = C("__csrf"), ["channel"] = C("channel", "distribution"),
             ["requestId"] = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() + "_" + RandomNumberGenerator.GetInt32(1000).ToString("000")
         };
+        var playRecord = spec.Path == "/api/feedback/weblog";
+        if (playRecord) header["os"] = "osx";
         foreach (var name in new[] { "MUSIC_U", "MUSIC_A", "NMTID" }) if (cookies.TryGetValue(name, out var v)) header[name] = v;
         var data = new Dictionary<string, object?>(spec.Data) { ["e_r"] = false };
         var token = spec.CheckToken ? await GetTokenAsync(ct).ConfigureAwait(false) : "";
-        var domain = spec.Crypto == "weapi" ? "https://music.163.com" : spec.Crypto == "xeapi" ? "https://interface3.music.163.com" : "https://interfacepc.music.163.com";
+        var domain = playRecord ? "https://clientlog.music.163.com" : spec.Crypto == "weapi" ? "https://music.163.com" : spec.Crypto == "xeapi" ? "https://interface3.music.163.com" : "https://interfacepc.music.163.com";
         var path = "/" + spec.Crypto + "/" + spec.Path[5..];
         using var request = new HttpRequestMessage(HttpMethod.Post, domain + path);
         request.Headers.TryAddWithoutValidation("User-Agent", spec.Crypto == "weapi" ? "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36" : AndroidAgent);

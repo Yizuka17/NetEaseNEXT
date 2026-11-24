@@ -2434,10 +2434,25 @@
   },
   {
     "method": "dj_program_detail",
-    "query": { "id": 601 },
+    "query": {
+      "id": 601
+    },
     "path": "/api/dj/program/detail",
-    "data": { "id": 601 },
+    "data": {
+      "id": 601
+    },
     "crypto": "weapi",
     "checkToken": false
+  },
+  {
+    "method": "record_recent_song",
+    "query": {
+      "limit": 20
+    },
+    "path": "/api/play-record/song/list",
+    "crypto": "weapi",
+    "data": {
+      "limit": 20
+    }
   }
 ]

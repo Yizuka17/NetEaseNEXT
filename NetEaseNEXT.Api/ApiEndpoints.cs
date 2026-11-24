@@ -5,7 +5,7 @@ namespace NetEaseNEXT.Api;
 public sealed record ApiRequest(string Path, Dictionary<string, object?> Data, string Crypto = "eapi", bool CheckToken = false);
 public static class ApiEndpoints
 {
-    public static readonly HashSet<string> Writes = ["album_sub", "dj_sub", "like", "playlist_tracks", "song_order_update", "playlist_delete", "playlist_subscribe", "playlist_create", "resource_like", "comment", "comment_like", "send_text", "send_song", "send_album", "send_playlist", "msg_read_all", "share_resource"];
+    public static readonly HashSet<string> Writes = ["album_sub", "dj_sub", "like", "playlist_tracks", "song_order_update", "playlist_delete", "playlist_subscribe", "playlist_create", "resource_like", "comment", "comment_like", "send_text", "send_song", "send_album", "send_playlist", "msg_read_all", "share_resource", "song_play_record"];
     private static readonly string[] Prefixes = ["R_SO_4_", "R_MV_5_", "A_PL_0_", "R_AL_3_", "A_DJ_1_", "R_VI_62_", "A_EV_2_", "A_DR_14_"];
     public static ApiRequest Create(string method, JsonElement query)
     {
@@ -17,6 +17,11 @@ public static class ApiEndpoints
         object Page(int limit = 30) => new { limit = V("limit", limit), offset = V("offset", 0), total = true };
         switch (method)
         {
+            case "song_play_record":
+                if (!long.TryParse(S("id"), out var playedId) || playedId <= 0) throw new ArgumentException("无效的歌曲 ID");
+                var source = long.TryParse(S("sourceid"), out var sourceId) && sourceId > 0 ? sourceId : 0;
+                return R("/api/feedback/weblog", new { logs = ApiEncryption.Json(new[] { new { action = "startplay", json = new { id = playedId, type = "song", mainsite = "1", mainsiteWeb = "1", content = "id=" + source } } }) });
+            case "record_recent_song": return R("/api/play-record/song/list", new { limit = V("limit", 100) }, "weapi");
             case "cloudsearch": return R("/api/cloudsearch/pc", new { s = V("keywords"), type = N("type") == 0 ? 1 : N("type"), limit = V("limit", 30), offset = V("offset", 0), total = true });
             case "personalized": return R("/api/personalized/playlist", new { limit = V("limit", 30), total = true, n = 1000 }, "weapi");
             case "playlist_detail": return R("/api/v6/playlist/detail", new { id = V("id"), n = 100000, s = V("s", 8) });
