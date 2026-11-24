@@ -1,0 +1,1497 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-BackdropCombo-Light owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-BackdropCombo-Light applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "Mica",
+        "Weight": 700
+      },
+      {
+        "Text": "Mica Alt",
+        "Weight": 700
+      },
+      {
+        "Text": "Acrylic",
+        "Weight": 700
+      },
+      {
+        "Text": "\u7EAF\u8272",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "settings-BackdropCombo-Light releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-ThemeCombo-Light owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-ThemeCombo-Light applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u8DDF\u968F\u7CFB\u7EDF",
+        "Weight": 700
+      },
+      {
+        "Text": "\u6D45\u8272",
+        "Weight": 700
+      },
+      {
+        "Text": "\u6DF1\u8272",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "settings-ThemeCombo-Light releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-FontWeightCombo-Light owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-FontWeightCombo-Light applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u6807\u51C6",
+        "Weight": 700
+      },
+      {
+        "Text": "\u4E2D\u7B49",
+        "Weight": 700
+      },
+      {
+        "Text": "\u534A\u7C97",
+        "Weight": 700
+      },
+      {
+        "Text": "\u7C97\u4F53",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "settings-FontWeightCombo-Light releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-DownloadSourceCombo-Light owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-DownloadSourceCombo-Light applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u7F51\u6613\u4E0B\u8F7D\u63A5\u53E3",
+        "Weight": 700
+      },
+      {
+        "Text": "MusicUnlock \u540C\u6B3E\u7F51\u6613\u76F4\u8FDE",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "settings-DownloadSourceCombo-Light releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-OutputCombo-Light owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-OutputCombo-Light applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u7CFB\u7EDF\u9ED8\u8BA4",
+        "Weight": 700
+      },
+      {
+        "Text": "Speakers (2- High Definition Audio Device)",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "settings-OutputCombo-Light releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-FontCombo-Light owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-FontCombo-Light applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "Segoe UI",
+        "Weight": 700
+      },
+      {
+        "Text": "Arial",
+        "Weight": 700
+      },
+      {
+        "Text": "Bahnschrift",
+        "Weight": 700
+      },
+      {
+        "Text": "Calibri",
+        "Weight": 700
+      },
+      {
+        "Text": "Cambria",
+        "Weight": 700
+      },
+      {
+        "Text": "Cambria Math",
+        "Weight": 700
+      },
+      {
+        "Text": "Candara",
+        "Weight": 700
+      },
+      {
+        "Text": "Comic Sans MS",
+        "Weight": 700
+      },
+      {
+        "Text": "Consolas",
+        "Weight": 700
+      },
+      {
+        "Text": "Constantia",
+        "Weight": 700
+      },
+      {
+        "Text": "Corbel",
+        "Weight": 700
+      },
+      {
+        "Text": "Courier New",
+        "Weight": 700
+      },
+      {
+        "Text": "Ebrima",
+        "Weight": 700
+      },
+      {
+        "Text": "Franklin Gothic",
+        "Weight": 700
+      },
+      {
+        "Text": "Gabriola",
+        "Weight": 700
+      },
+      {
+        "Text": "Gadugi",
+        "Weight": 700
+      },
+      {
+        "Text": "Georgia",
+        "Weight": 700
+      },
+      {
+        "Text": "Impact",
+        "Weight": 700
+      },
+      {
+        "Text": "Ink Free",
+        "Weight": 700
+      },
+      {
+        "Text": "Javanese Text",
+        "Weight": 700
+      },
+      {
+        "Text": "Leelawadee UI",
+        "Weight": 700
+      },
+      {
+        "Text": "Lucida Console",
+        "Weight": 700
+      },
+      {
+        "Text": "Lucida Sans Unicode",
+        "Weight": 700
+      },
+      {
+        "Text": "Malgun Gothic",
+        "Weight": 700
+      },
+      {
+        "Text": "Marlett",
+        "Weight": 700
+      },
+      {
+        "Text": "Microsoft Himalaya",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "settings-FontCombo-Light newly realized dropdown rows retain the selected weight",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "Segoe UI",
+        "Weight": 700
+      },
+      {
+        "Text": "Arial",
+        "Weight": 700
+      },
+      {
+        "Text": "Sitka Heading",
+        "Weight": 700
+      },
+      {
+        "Text": "Sitka Small",
+        "Weight": 700
+      },
+      {
+        "Text": "Sitka Subheading",
+        "Weight": 700
+      },
+      {
+        "Text": "Sitka Text",
+        "Weight": 700
+      },
+      {
+        "Text": "Sylfaen",
+        "Weight": 700
+      },
+      {
+        "Text": "Symbol",
+        "Weight": 700
+      },
+      {
+        "Text": "Tahoma",
+        "Weight": 700
+      },
+      {
+        "Text": "Times New Roman",
+        "Weight": 700
+      },
+      {
+        "Text": "Trebuchet MS",
+        "Weight": 700
+      },
+      {
+        "Text": "Verdana",
+        "Weight": 700
+      },
+      {
+        "Text": "Webdings",
+        "Weight": 700
+      },
+      {
+        "Text": "Wingdings",
+        "Weight": 700
+      },
+      {
+        "Text": "Yu Gothic",
+        "Weight": 700
+      },
+      {
+        "Text": "Yu Gothic UI",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "settings-FontCombo-Light releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light buttons and inputs use the selected weight",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light online playlist actions realize with the selected weight",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u5728\u7EBF\u6B4C\u5355",
+        "Weight": 600
+      },
+      {
+        "Text": "",
+        "Weight": 400
+      }
+    ]
+  },
+  {
+    "name": "Light newly realized song rows and text use the selected weight",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "comment-sort-Light owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "comment-sort-Light applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u6700\u65B0",
+        "Weight": 700
+      },
+      {
+        "Text": "\u6700\u70ED",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "comment-sort-Light releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light comment input and dynamically loaded labels use the selected weight",
+    "passed": true,
+    "detail": {
+      "controls": [
+        {
+          "Name": "EditableText",
+          "Weight": 700
+        },
+        {
+          "Name": "",
+          "Weight": 700
+        }
+      ],
+      "text": [
+        {
+          "Name": "",
+          "Text": "\u8BC4\u8BBA (0)",
+          "Weight": 700
+        },
+        {
+          "Name": "",
+          "Text": "\u6B4C\u66F2 1",
+          "Weight": 700
+        },
+        {
+          "Name": "",
+          "Text": "\u6700\u70ED",
+          "Weight": 700
+        },
+        {
+          "Name": "PlaceholderTextContentPresenter",
+          "Text": "\u8BC4\u8BBA",
+          "Weight": 700
+        },
+        {
+          "Name": "",
+          "Text": "\u53D1\u9001",
+          "Weight": 700
+        }
+      ]
+    }
+  },
+  {
+    "name": "download-quality-Light owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "download-quality-Light applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u8D85\u6E05\u6BCD\u5E26",
+        "Weight": 700
+      },
+      {
+        "Text": "\u6C89\u6D78\u73AF\u7ED5\u58F0",
+        "Weight": 700
+      },
+      {
+        "Text": "\u9AD8\u6E05\u81FB\u97F3",
+        "Weight": 700
+      },
+      {
+        "Text": "Hi-Res",
+        "Weight": 700
+      },
+      {
+        "Text": "\u65E0\u635F",
+        "Weight": 700
+      },
+      {
+        "Text": "\u6781\u9AD8",
+        "Weight": 700
+      },
+      {
+        "Text": "\u8F83\u9AD8",
+        "Weight": 700
+      },
+      {
+        "Text": "\u6807\u51C6",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "download-quality-Light releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light late song information follows the selected weight",
+    "passed": true,
+    "detail": {
+      "controls": [],
+      "text": [
+        {
+          "Name": "",
+          "Text": "\u6B4C\u66F2\u4FE1\u606F",
+          "Weight": 700
+        },
+        {
+          "Name": "",
+          "Text": "\u6B4C\u66F2 1",
+          "Weight": 700
+        },
+        {
+          "Name": "",
+          "Text": "\u6B4C\u624B\uFF1A\u6B4C\u624B\u7532",
+          "Weight": 700
+        },
+        {
+          "Name": "",
+          "Text": "\u4E13\u8F91\uFF1A\u6D4B\u8BD5\u4E13\u8F91",
+          "Weight": 700
+        },
+        {
+          "Name": "",
+          "Text": "\u65F6\u957F  0:04\n\u97F3\u8D28  \u539F\u59CB\u97F3\u8D28",
+          "Weight": 700
+        }
+      ]
+    }
+  },
+  {
+    "name": "playlist-privacy-Light owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "playlist-privacy-Light applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u516C\u5F00",
+        "Weight": 700
+      },
+      {
+        "Text": "\u4EC5\u81EA\u5DF1",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "playlist-privacy-Light releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "private-share-type-Light owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "private-share-type-Light applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u6B4C\u66F2",
+        "Weight": 700
+      },
+      {
+        "Text": "\u4E13\u8F91",
+        "Weight": 700
+      },
+      {
+        "Text": "\u6B4C\u5355",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "private-share-type-Light releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light local playlist actions realize with the selected weight",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u672C\u5730\u6B4C\u5355 A",
+        "Weight": 600
+      },
+      {
+        "Text": "\u6DFB\u52A0\u6B4C\u66F2",
+        "Weight": 700
+      },
+      {
+        "Text": "\u5237\u65B0",
+        "Weight": 700
+      },
+      {
+        "Text": "\u7F16\u8F91\u6B4C\u5355",
+        "Weight": 700
+      },
+      {
+        "Text": "\u5220\u9664\u6B4C\u5355",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "Light batch action presenters use the selected weight",
+    "passed": true,
+    "detail": {
+      "Visibility": 0,
+      "children": [
+        {
+          "content": "NetEaseNEXT.Controls.WrapPanel",
+          "Weight": 700,
+          "IsLoaded": true,
+          "ActualWidth": 0
+        },
+        {
+          "content": "\u5168\u9009",
+          "Weight": 700,
+          "IsLoaded": true,
+          "ActualWidth": 0
+        },
+        {
+          "content": "\u6E05\u7A7A\u9009\u62E9",
+          "Weight": 700,
+          "IsLoaded": true,
+          "ActualWidth": 0
+        },
+        {
+          "content": "\u4E0B\u4E00\u9996\u64AD\u653E",
+          "Weight": 700,
+          "IsLoaded": true,
+          "ActualWidth": 0
+        },
+        {
+          "content": "\u6536\u85CF\u5230\u6B4C\u5355",
+          "Weight": 700,
+          "IsLoaded": true,
+          "ActualWidth": 0
+        },
+        {
+          "content": "\u4E0B\u8F7D",
+          "Weight": 700,
+          "IsLoaded": true,
+          "ActualWidth": 0
+        },
+        {
+          "content": "\u4ECE\u6B4C\u5355\u79FB\u9664",
+          "Weight": 700,
+          "IsLoaded": true,
+          "ActualWidth": 0
+        },
+        {
+          "content": "\u5B8C\u6210",
+          "Weight": 700,
+          "IsLoaded": true,
+          "ActualWidth": 0
+        }
+      ],
+      "labels": [
+        {
+          "Text": "\u5DF2\u9009 1 \u9996",
+          "Weight": 400
+        },
+        {
+          "Text": "\u5168\u9009",
+          "Weight": 400
+        },
+        {
+          "Text": "\u6E05\u7A7A\u9009\u62E9",
+          "Weight": 400
+        },
+        {
+          "Text": "\u4E0B\u4E00\u9996\u64AD\u653E",
+          "Weight": 400
+        },
+        {
+          "Text": "\u6536\u85CF\u5230\u6B4C\u5355",
+          "Weight": 400
+        },
+        {
+          "Text": "\u4E0B\u8F7D",
+          "Weight": 400
+        },
+        {
+          "Text": "\u4ECE\u6B4C\u5355\u79FB\u9664",
+          "Weight": 400
+        },
+        {
+          "Text": "\u5B8C\u6210",
+          "Weight": 400
+        }
+      ]
+    }
+  },
+  {
+    "name": "local-playlist-choice-Light owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "local-playlist-choice-Light applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u672C\u5730\u6B4C\u5355 A",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "local-playlist-choice-Light releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "artist-sort-Light owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "artist-sort-Light applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u70ED\u95E8",
+        "Weight": 700
+      },
+      {
+        "Text": "\u65F6\u95F4\u987A\u5E8F",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "artist-sort-Light releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "event-scope-Light owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "event-scope-Light applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u5173\u6CE8\u52A8\u6001",
+        "Weight": 700
+      },
+      {
+        "Text": "\u6211\u7684\u52A8\u6001",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "event-scope-Light releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-BackdropCombo-Dark owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-BackdropCombo-Dark applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "Mica",
+        "Weight": 700
+      },
+      {
+        "Text": "Mica Alt",
+        "Weight": 700
+      },
+      {
+        "Text": "Acrylic",
+        "Weight": 700
+      },
+      {
+        "Text": "\u7EAF\u8272",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "settings-BackdropCombo-Dark releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-ThemeCombo-Dark owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-ThemeCombo-Dark applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u8DDF\u968F\u7CFB\u7EDF",
+        "Weight": 700
+      },
+      {
+        "Text": "\u6D45\u8272",
+        "Weight": 700
+      },
+      {
+        "Text": "\u6DF1\u8272",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "settings-ThemeCombo-Dark releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-FontWeightCombo-Dark owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-FontWeightCombo-Dark applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u6807\u51C6",
+        "Weight": 700
+      },
+      {
+        "Text": "\u4E2D\u7B49",
+        "Weight": 700
+      },
+      {
+        "Text": "\u534A\u7C97",
+        "Weight": 700
+      },
+      {
+        "Text": "\u7C97\u4F53",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "settings-FontWeightCombo-Dark releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-DownloadSourceCombo-Dark owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-DownloadSourceCombo-Dark applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u7F51\u6613\u4E0B\u8F7D\u63A5\u53E3",
+        "Weight": 700
+      },
+      {
+        "Text": "MusicUnlock \u540C\u6B3E\u7F51\u6613\u76F4\u8FDE",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "settings-DownloadSourceCombo-Dark releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-OutputCombo-Dark owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-OutputCombo-Dark applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u7CFB\u7EDF\u9ED8\u8BA4",
+        "Weight": 700
+      },
+      {
+        "Text": "Speakers (2- High Definition Audio Device)",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "settings-OutputCombo-Dark releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-FontCombo-Dark owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings-FontCombo-Dark applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "Segoe UI",
+        "Weight": 700
+      },
+      {
+        "Text": "Arial",
+        "Weight": 700
+      },
+      {
+        "Text": "Bahnschrift",
+        "Weight": 700
+      },
+      {
+        "Text": "Calibri",
+        "Weight": 700
+      },
+      {
+        "Text": "Cambria",
+        "Weight": 700
+      },
+      {
+        "Text": "Cambria Math",
+        "Weight": 700
+      },
+      {
+        "Text": "Candara",
+        "Weight": 700
+      },
+      {
+        "Text": "Comic Sans MS",
+        "Weight": 700
+      },
+      {
+        "Text": "Consolas",
+        "Weight": 700
+      },
+      {
+        "Text": "Constantia",
+        "Weight": 700
+      },
+      {
+        "Text": "Corbel",
+        "Weight": 700
+      },
+      {
+        "Text": "Courier New",
+        "Weight": 700
+      },
+      {
+        "Text": "Ebrima",
+        "Weight": 700
+      },
+      {
+        "Text": "Franklin Gothic",
+        "Weight": 700
+      },
+      {
+        "Text": "Gabriola",
+        "Weight": 700
+      },
+      {
+        "Text": "Gadugi",
+        "Weight": 700
+      },
+      {
+        "Text": "Georgia",
+        "Weight": 700
+      },
+      {
+        "Text": "Impact",
+        "Weight": 700
+      },
+      {
+        "Text": "Ink Free",
+        "Weight": 700
+      },
+      {
+        "Text": "Javanese Text",
+        "Weight": 700
+      },
+      {
+        "Text": "Leelawadee UI",
+        "Weight": 700
+      },
+      {
+        "Text": "Lucida Console",
+        "Weight": 700
+      },
+      {
+        "Text": "Lucida Sans Unicode",
+        "Weight": 700
+      },
+      {
+        "Text": "Malgun Gothic",
+        "Weight": 700
+      },
+      {
+        "Text": "Marlett",
+        "Weight": 700
+      },
+      {
+        "Text": "Microsoft Himalaya",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "settings-FontCombo-Dark newly realized dropdown rows retain the selected weight",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "Segoe UI",
+        "Weight": 700
+      },
+      {
+        "Text": "Arial",
+        "Weight": 700
+      },
+      {
+        "Text": "Sitka Heading",
+        "Weight": 700
+      },
+      {
+        "Text": "Sitka Small",
+        "Weight": 700
+      },
+      {
+        "Text": "Sitka Subheading",
+        "Weight": 700
+      },
+      {
+        "Text": "Sitka Text",
+        "Weight": 700
+      },
+      {
+        "Text": "Sylfaen",
+        "Weight": 700
+      },
+      {
+        "Text": "Symbol",
+        "Weight": 700
+      },
+      {
+        "Text": "Tahoma",
+        "Weight": 700
+      },
+      {
+        "Text": "Times New Roman",
+        "Weight": 700
+      },
+      {
+        "Text": "Trebuchet MS",
+        "Weight": 700
+      },
+      {
+        "Text": "Verdana",
+        "Weight": 700
+      },
+      {
+        "Text": "Webdings",
+        "Weight": 700
+      },
+      {
+        "Text": "Wingdings",
+        "Weight": 700
+      },
+      {
+        "Text": "Yu Gothic",
+        "Weight": 700
+      },
+      {
+        "Text": "Yu Gothic UI",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "settings-FontCombo-Dark releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark buttons and inputs use the selected weight",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark online playlist actions realize with the selected weight",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u5728\u7EBF\u6B4C\u5355",
+        "Weight": 600
+      },
+      {
+        "Text": "",
+        "Weight": 400
+      }
+    ]
+  },
+  {
+    "name": "Dark newly realized song rows and text use the selected weight",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "comment-sort-Dark owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "comment-sort-Dark applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u6700\u65B0",
+        "Weight": 700
+      },
+      {
+        "Text": "\u6700\u70ED",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "comment-sort-Dark releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark comment input and dynamically loaded labels use the selected weight",
+    "passed": true,
+    "detail": {
+      "controls": [
+        {
+          "Name": "EditableText",
+          "Weight": 700
+        },
+        {
+          "Name": "",
+          "Weight": 700
+        }
+      ],
+      "text": [
+        {
+          "Name": "",
+          "Text": "\u8BC4\u8BBA (0)",
+          "Weight": 700
+        },
+        {
+          "Name": "",
+          "Text": "\u6B4C\u66F2 1",
+          "Weight": 700
+        },
+        {
+          "Name": "",
+          "Text": "\u6700\u70ED",
+          "Weight": 700
+        },
+        {
+          "Name": "PlaceholderTextContentPresenter",
+          "Text": "\u8BC4\u8BBA",
+          "Weight": 700
+        },
+        {
+          "Name": "",
+          "Text": "\u53D1\u9001",
+          "Weight": 700
+        }
+      ]
+    }
+  },
+  {
+    "name": "download-quality-Dark owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "download-quality-Dark applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u8D85\u6E05\u6BCD\u5E26",
+        "Weight": 700
+      },
+      {
+        "Text": "\u6C89\u6D78\u73AF\u7ED5\u58F0",
+        "Weight": 700
+      },
+      {
+        "Text": "\u9AD8\u6E05\u81FB\u97F3",
+        "Weight": 700
+      },
+      {
+        "Text": "Hi-Res",
+        "Weight": 700
+      },
+      {
+        "Text": "\u65E0\u635F",
+        "Weight": 700
+      },
+      {
+        "Text": "\u6781\u9AD8",
+        "Weight": 700
+      },
+      {
+        "Text": "\u8F83\u9AD8",
+        "Weight": 700
+      },
+      {
+        "Text": "\u6807\u51C6",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "download-quality-Dark releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark late song information follows the selected weight",
+    "passed": true,
+    "detail": {
+      "controls": [],
+      "text": [
+        {
+          "Name": "",
+          "Text": "\u6B4C\u66F2\u4FE1\u606F",
+          "Weight": 700
+        },
+        {
+          "Name": "",
+          "Text": "\u6B4C\u66F2 1",
+          "Weight": 700
+        },
+        {
+          "Name": "",
+          "Text": "\u6B4C\u624B\uFF1A\u6B4C\u624B\u7532",
+          "Weight": 700
+        },
+        {
+          "Name": "",
+          "Text": "\u4E13\u8F91\uFF1A\u6D4B\u8BD5\u4E13\u8F91",
+          "Weight": 700
+        },
+        {
+          "Name": "",
+          "Text": "\u65F6\u957F  0:04\n\u97F3\u8D28  \u539F\u59CB\u97F3\u8D28",
+          "Weight": 700
+        }
+      ]
+    }
+  },
+  {
+    "name": "playlist-privacy-Dark owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "playlist-privacy-Dark applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u516C\u5F00",
+        "Weight": 700
+      },
+      {
+        "Text": "\u4EC5\u81EA\u5DF1",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "playlist-privacy-Dark releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "private-share-type-Dark owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "private-share-type-Dark applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u6B4C\u66F2",
+        "Weight": 700
+      },
+      {
+        "Text": "\u4E13\u8F91",
+        "Weight": 700
+      },
+      {
+        "Text": "\u6B4C\u5355",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "private-share-type-Dark releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark local playlist actions realize with the selected weight",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u672C\u5730\u6B4C\u5355 A",
+        "Weight": 600
+      },
+      {
+        "Text": "\u6DFB\u52A0\u6B4C\u66F2",
+        "Weight": 700
+      },
+      {
+        "Text": "\u5237\u65B0",
+        "Weight": 700
+      },
+      {
+        "Text": "\u7F16\u8F91\u6B4C\u5355",
+        "Weight": 700
+      },
+      {
+        "Text": "\u5220\u9664\u6B4C\u5355",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "Dark batch action presenters use the selected weight",
+    "passed": true,
+    "detail": {
+      "Visibility": 0,
+      "children": [
+        {
+          "content": "NetEaseNEXT.Controls.WrapPanel",
+          "Weight": 700,
+          "IsLoaded": true,
+          "ActualWidth": 0
+        },
+        {
+          "content": "\u5168\u9009",
+          "Weight": 700,
+          "IsLoaded": true,
+          "ActualWidth": 0
+        },
+        {
+          "content": "\u6E05\u7A7A\u9009\u62E9",
+          "Weight": 700,
+          "IsLoaded": true,
+          "ActualWidth": 0
+        },
+        {
+          "content": "\u4E0B\u4E00\u9996\u64AD\u653E",
+          "Weight": 700,
+          "IsLoaded": true,
+          "ActualWidth": 0
+        },
+        {
+          "content": "\u6536\u85CF\u5230\u6B4C\u5355",
+          "Weight": 700,
+          "IsLoaded": true,
+          "ActualWidth": 0
+        },
+        {
+          "content": "\u4E0B\u8F7D",
+          "Weight": 700,
+          "IsLoaded": true,
+          "ActualWidth": 0
+        },
+        {
+          "content": "\u4ECE\u6B4C\u5355\u79FB\u9664",
+          "Weight": 700,
+          "IsLoaded": true,
+          "ActualWidth": 0
+        },
+        {
+          "content": "\u5B8C\u6210",
+          "Weight": 700,
+          "IsLoaded": true,
+          "ActualWidth": 0
+        }
+      ],
+      "labels": [
+        {
+          "Text": "\u5DF2\u9009 1 \u9996",
+          "Weight": 400
+        },
+        {
+          "Text": "\u5168\u9009",
+          "Weight": 400
+        },
+        {
+          "Text": "\u6E05\u7A7A\u9009\u62E9",
+          "Weight": 400
+        },
+        {
+          "Text": "\u4E0B\u4E00\u9996\u64AD\u653E",
+          "Weight": 400
+        },
+        {
+          "Text": "\u6536\u85CF\u5230\u6B4C\u5355",
+          "Weight": 400
+        },
+        {
+          "Text": "\u4E0B\u8F7D",
+          "Weight": 400
+        },
+        {
+          "Text": "\u4ECE\u6B4C\u5355\u79FB\u9664",
+          "Weight": 400
+        },
+        {
+          "Text": "\u5B8C\u6210",
+          "Weight": 400
+        }
+      ]
+    }
+  },
+  {
+    "name": "local-playlist-choice-Dark owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "local-playlist-choice-Dark applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u672C\u5730\u6B4C\u5355 A",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "local-playlist-choice-Dark releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "artist-sort-Dark owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "artist-sort-Dark applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u70ED\u95E8",
+        "Weight": 700
+      },
+      {
+        "Text": "\u65F6\u95F4\u987A\u5E8F",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "artist-sort-Dark releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "event-scope-Dark owns native acrylic on its actual dropdown popup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "event-scope-Dark applies selected weight to the control and dropdown text",
+    "passed": true,
+    "detail": [
+      {
+        "Text": "\u5173\u6CE8\u52A8\u6001",
+        "Weight": 700
+      },
+      {
+        "Text": "\u6211\u7684\u52A8\u6001",
+        "Weight": 700
+      }
+    ]
+  },
+  {
+    "name": "event-scope-Dark releases its dropdown controller",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Returning to regular restores normal control weight",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Changing text weight preserves symbol fonts",
+    "passed": true,
+    "detail": null
+  }
+]
