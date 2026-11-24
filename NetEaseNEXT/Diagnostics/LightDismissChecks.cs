@@ -38,6 +38,8 @@ public sealed partial class MainWindow
                 // the same input activation and theme rather than nesting surfaces.
                 var dialogColor = dialogBrush.Color; var dialogStroke = _dialog.BorderThickness;
                 var actualBorder = FindDescendant<Border>(_dialog, b => b.Name == "BackgroundElement")!;
+                check(theme + " comments do not dim the page but keep the outside input layer", VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Any(p => p.Child is Microsoft.UI.Xaml.Shapes.Shape { Name: "SmokeLayerBackground", Fill: SolidColorBrush { Color.A: 0 }, IsHitTestVisible: true }), null);
+                check(theme + " comment acrylic paints under its rounded border without sampling its own shadow", actualBorder.BackgroundSizing == BackgroundSizing.OuterBorderEdge && actualBorder.UseLayoutRounding && actualBorder.Shadow == null, null);
                 check(theme + " native outside input layer is present and hit-testable", VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Any(p => p.Child is FrameworkElement { Name: "SmokeLayerBackground", IsHitTestVisible: true, ActualWidth: > 0, ActualHeight: > 0 }), null);
                 check(theme + " dialog template uses the configured single border", actualBorder.BorderThickness == dialogStroke && ((SolidColorBrush)actualBorder.BorderBrush).Color == dialogColor, null);
                 var scale = Root.XamlRoot.RasterizationScale;
@@ -73,7 +75,7 @@ public sealed partial class MainWindow
                     check(theme + " selector material is ready before opening " + selector.Name, FindDescendant<Microsoft.UI.Xaml.Controls.Primitives.Popup>(selector)?.SystemBackdrop is AdjustableBackdrop { Kind: "Acrylic" }, null);
                     selector.IsDropDownOpen = true; await Task.Delay(180); Root.UpdateLayout();
                     var selectorBorder = VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Select(p => p.Child).Where(c => c != null).Select(c => FindDescendant<Border>(c!, b => b.Name == "PopupBorder")).FirstOrDefault(b => b != null);
-                    check(theme + " selector actual popup is acrylic " + selector.Name, selectorBorder?.Background is SolidColorBrush { Color.A: < 255 } && selectorBorder.BorderThickness == FloatingStroke, null);
+                    check(theme + " selector actual popup is acrylic " + selector.Name, selectorBorder?.Background is AcrylicBrush && selectorBorder.BorderThickness == FloatingStroke, null);
                     if (selector == ThemeCombo) await SaveLibraryImageAsync(Root, "acrylic-selector-" + theme + ".png");
                     selector.IsDropDownOpen = false; await Task.Delay(150);
                 }
@@ -81,7 +83,7 @@ public sealed partial class MainWindow
                 foreach (var percent in new[] { 0d, 25d, 50d, 65d, 75d, 100d })
                 {
                     _settings.AcrylicTransparency = percent; _settings.AcrylicSystemMaterial = false; ApplyMaterial(Root.ActualTheme);
-                    opacity.Add(((SolidColorBrush)ThemeCombo.Resources["ComboBoxDropDownBackground"]).Color.A);
+                    opacity.Add(((AcrylicBrush)ThemeCombo.Resources["ComboBoxDropDownBackground"]).TintOpacity);
                 }
                 check(theme + " selector transparency changes across the entire slider", opacity.First() > opacity.Last() && opacity.Zip(opacity.Skip(1)).All(pair => pair.First >= pair.Second), opacity);
                 _settings.AcrylicTransparency = savedTransparency; _settings.AcrylicSystemMaterial = savedDefault; ApplyMaterial(Root.ActualTheme);
@@ -116,9 +118,31 @@ public sealed partial class MainWindow
             var combo = Descendants<ComboBox>(_dialog!).Single(); combo.IsDropDownOpen = true; await Task.Delay(100);
             check("Opening a nested quality picker keeps its parent dialog open", _dialog is { IsLoaded: true } && _dialogSurfaceReady && !downloads.IsCompleted, null);
             var popupBorder = VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Select(p => p.Child).Where(c => c != null).Select(c => FindDescendant<Border>(c!, b => b.Name == "PopupBorder")).FirstOrDefault(b => b != null);
-            check("Nested quality selector uses acrylic and the same physical-pixel stroke", popupBorder?.Background is SolidColorBrush { Color.A: < 255 } && popupBorder.BorderThickness == FloatingStroke, null);
+            check("Nested quality selector uses acrylic and the same physical-pixel stroke", popupBorder?.Background is AcrylicBrush && popupBorder.BorderThickness == FloatingStroke, null);
             combo.IsDropDownOpen = false; await Dismiss(downloads);
             check("Outside dismiss cancels download options without enqueuing", DownloadJobs.Count == count, null);
+            _settings.Theme = "Light"; ApplyAppearance();
+            var edgeTrack = Tracks[0];
+            _restoringPlayback = true; _playback.Restore(new() { Queue = [edgeTrack], CurrentId = edgeTrack.Id }); _restoringPlayback = false;
+            foreach (var view in new[] { "local-playlist", "playing" })
+            {
+                _localPlaylistId = "preview-a"; await NavigateAsync(view);
+                foreach (var width in new[] { 920, 1280 })
+                {
+                    AppWindow.Resize(new Windows.Graphics.SizeInt32(width, 720)); await Task.Delay(180);
+                    var comments = ShowCommentsAsync(SongCommentsSource(edgeTrack)!); await Ready();
+                    var frame = FindDescendant<Border>(_dialog!, b => b.Name == "BackgroundElement")!;
+                    check(view + " comments avoid self-shadow sampling at width " + width, frame.Shadow == null && frame.Background is AcrylicBrush && frame.BackgroundSizing == BackgroundSizing.OuterBorderEdge, null);
+                    check(view + " comments keep a transparent modal input layer at width " + width, VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Any(p => p.Child is Microsoft.UI.Xaml.Shapes.Shape { Name: "SmokeLayerBackground", Fill: SolidColorBrush { Color.A: 0 }, IsHitTestVisible: true }), null);
+                    if (Environment.GetCommandLineArgs().Contains("--secondary-surfaces-capture"))
+                    {
+                        await Task.Delay(200);
+                        await File.WriteAllTextAsync(Path.Combine(SettingsStore.DataDirectory, "secondary-stage.json"), System.Text.Json.JsonSerializer.Serialize(new { name = "comment-edges-" + view + "-" + width, pid = Environment.ProcessId }));
+                        await Task.Delay(600);
+                    }
+                    _dialog!.Hide(); await comments;
+                }
+            }
         }
         finally { LocalLinkFixtures.Release(); _dialog?.Hide(); StopLocalMonitoring(); }
     }

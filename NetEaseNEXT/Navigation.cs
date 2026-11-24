@@ -124,6 +124,10 @@ public sealed partial class MainWindow
         else if (view == "local") CompleteLocalCoverReturn();
         await LoadPageAsync(false);
         if (!ReferenceEquals(route, _route)) return;
+        // Collapsed page templates are realized only after navigation. Apply the
+        // current typography to their action labels as well as existing rows.
+        Root.UpdateLayout();
+        ApplyTextFont(view == "playing" ? PlayingPanel : view == "artist" ? ArtistPanel : view is "playlist" or "album" or "programs" or "local-playlist" or "queue" or "song" ? TracksPanel : FontHost, new Microsoft.UI.Xaml.Media.FontFamily(_settings.FontFamily));
         if (_view == view && _navigationCoverKey == "OnlineCoverReturn") CompleteOnlineCoverReturn();
         if (_view == "settings" && view == "settings")
         {

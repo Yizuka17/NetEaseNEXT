@@ -152,11 +152,12 @@ public sealed partial class MainWindow
     {
         if (_dialog != null || urls.Count == 0) return;
         index = Math.Clamp(index, 0, urls.Count - 1);
-        var image = new Image { Stretch = Stretch.Uniform, Width = Math.Max(220, Math.Min(700, Root.ActualWidth - 120)), Height = Math.Max(180, Math.Min(500, Root.ActualHeight - 230)) };
+        var image = new Image { Stretch = Stretch.Uniform, Width = Math.Max(220, Math.Min(700, Root.ActualWidth - 120)), Height = Math.Max(180, Math.Min(500, Root.ActualHeight - 230)), HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
         Artwork.SetSize(image, 800);
         var surface = new Border { Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent), Child = image };
-        var scroll = new ScrollViewer { Content = surface, Width = image.Width, Height = image.Height, ZoomMode = ZoomMode.Enabled, MinZoomFactor = 1, MaxZoomFactor = 6, HorizontalScrollMode = ScrollMode.Enabled, VerticalScrollMode = ScrollMode.Enabled, HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, VerticalScrollBarVisibility = ScrollBarVisibility.Auto, IsHorizontalRailEnabled = false, IsVerticalRailEnabled = false, IsHorizontalScrollChainingEnabled = false, IsVerticalScrollChainingEnabled = false, IsZoomChainingEnabled = false };
+        var scroll = new ScrollViewer { Content = surface, Width = image.Width, Height = image.Height, HorizontalAlignment = HorizontalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, ZoomMode = ZoomMode.Enabled, MinZoomFactor = 1, MaxZoomFactor = 6, HorizontalScrollMode = ScrollMode.Enabled, VerticalScrollMode = ScrollMode.Enabled, HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, VerticalScrollBarVisibility = ScrollBarVisibility.Auto, IsHorizontalRailEnabled = false, IsVerticalRailEnabled = false, IsHorizontalScrollChainingEnabled = false, IsVerticalScrollChainingEnabled = false, IsZoomChainingEnabled = false };
         var dialog = new ContentDialog { XamlRoot = Root.XamlRoot, CloseButtonText = "关闭" };
+        dialog.Resources["ContentDialogMaxWidth"] = image.Width + 48;
         var panel = new StackPanel { Spacing = 12 }; panel.Children.Add(scroll);
         var controls = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, HorizontalAlignment = HorizontalAlignment.Center };
         var previous = new Button { Content = Services.IconFonts.Create("\uE72B"), MinWidth = 44, MinHeight = 44 };
@@ -199,6 +200,7 @@ public sealed partial class MainWindow
         {
             scroll.Width = image.Width = Math.Max(220, Math.Min(700, Root.ActualWidth - 120));
             scroll.Height = image.Height = Math.Max(180, Math.Min(500, Root.ActualHeight - 230));
+            dialog.Resources["ContentDialogMaxWidth"] = scroll.Width + 48;
         }
         Root.SizeChanged += ResizeViewer;
         try { await ShowThemedDialogAsync(dialog); }

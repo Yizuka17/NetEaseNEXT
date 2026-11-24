@@ -182,6 +182,7 @@ public sealed partial class MainWindow
         var weight = new Windows.UI.Text.FontWeight { Weight = (ushort)_settings.TextFontWeight };
         if (sender is TextBlock text && !text.Text.Any(c => c is >= '\uE000' and <= '\uF8FF') && text.FontWeight.Weight < weight.Weight) text.FontWeight = weight;
         else if (sender is Control control && control.FontWeight.Weight < weight.Weight) control.FontWeight = weight;
+        else if (sender is ContentPresenter presenter && presenter.FontWeight.Weight < weight.Weight) presenter.FontWeight = weight;
     }
     private void Typography_Loaded(object sender, RoutedEventArgs args) => ApplyTextFont((DependencyObject)sender, new FontFamily(_settings.FontFamily));
     private void ApplyTextFont(DependencyObject element, FontFamily family)
@@ -191,6 +192,7 @@ public sealed partial class MainWindow
             framework.Loaded += Typography_Loaded;
             if (element is TextBlock) framework.RegisterPropertyChangedCallback(TextBlock.FontWeightProperty, TextWeightChanged);
             else if (element is Control) framework.RegisterPropertyChangedCallback(Control.FontWeightProperty, TextWeightChanged);
+            else if (element is ContentPresenter) framework.RegisterPropertyChangedCallback(ContentPresenter.FontWeightProperty, TextWeightChanged);
         }
         if (!_typographyApplying.Add(element)) return;
         try
@@ -217,6 +219,13 @@ public sealed partial class MainWindow
             text.FontFamily = family;
             text.FontSize = metrics.AppliedSize = metrics.Size * _settings.TextFontSize / 14;
             text.FontWeight = new Windows.UI.Text.FontWeight { Weight = (ushort)Math.Max(metrics.Weight, _settings.TextFontWeight) };
+        }
+        else if (element is ContentPresenter presenter)
+        {
+            var metrics = _textMetrics.GetValue(presenter, _ => new TextMetrics(presenter.FontSize,
+                presenter.ReadLocalValue(ContentPresenter.FontWeightProperty) is Windows.UI.Text.FontWeight localWeight ? localWeight.Weight : (ushort)400));
+            presenter.FontFamily = family;
+            presenter.FontWeight = new Windows.UI.Text.FontWeight { Weight = (ushort)Math.Max(metrics.Weight, _settings.TextFontWeight) };
         }
         else if (element is Control control)
         {

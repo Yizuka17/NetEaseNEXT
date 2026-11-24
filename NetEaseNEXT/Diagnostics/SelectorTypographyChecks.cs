@@ -48,7 +48,7 @@ public sealed partial class MainWindow
                 throw;
             }
             var border = FindDescendant<Border>(popup.Child, b => b.Name == "PopupBorder")!;
-            check(name + " owns native acrylic on its actual dropdown popup", !popup.ShouldConstrainToRootBounds && backdrop.Kind == "Acrylic" && border.Background is SolidColorBrush { Color.A: < 255 }, null);
+            check(name + " owns native acrylic on its actual dropdown popup", !popup.ShouldConstrainToRootBounds && backdrop.Kind == "Acrylic" && border.Background is AcrylicBrush, null);
             check(name + " applies selected weight to the control and dropdown text", combo.FontWeight.Weight >= _settings.TextFontWeight && Labels(popup.Child).Length > 0 && Labels(popup.Child).All(t => t.FontWeight.Weight >= _settings.TextFontWeight), Labels(popup.Child).Select(t => new { t.Text, t.FontWeight.Weight }).ToArray());
             await Record(name);
             if (scroll && FindDescendant<ScrollViewer>(popup.Child) is { } scroller)
@@ -71,6 +71,7 @@ public sealed partial class MainWindow
                     await Selector(combo, "settings-" + combo.Name + "-" + theme, combo == FontCombo);
                 check(theme + " buttons and inputs use the selected weight", ResetMaterialButton.FontWeight.Weight == 700 && DownloadPath.FontWeight.Weight == 700 && FontSizeBox.FontWeight.Weight == 700 && LocalOnlineInfoToggle.FontWeight.Weight == 700, null);
                 _playlistId = 101; await NavigateAsync("playlist");
+                check(theme + " online playlist actions realize with the selected weight", Labels(PlaylistDetails).Length > 0 && Labels(PlaylistDetails).All(t => t.FontWeight.Weight >= 700), Labels(PlaylistDetails).Select(t => new { t.Text, t.FontWeight.Weight }));
                 TrackList.ScrollIntoView(Tracks[40]); await Task.Delay(300); Root.UpdateLayout();
                 var row = (ListViewItem)TrackList.ContainerFromItem(Tracks[40]);
                 check(theme + " newly realized song rows and text use the selected weight", row.FontWeight.Weight == 700 && Labels(row).Length > 0 && Labels(row).All(t => t.FontWeight.Weight >= 700), null);
@@ -96,6 +97,11 @@ public sealed partial class MainWindow
                 await Selector(Descendants<ComboBox>(_dialog!).Single(), "private-share-type-" + theme);
                 _dialog!.Hide(); await Wait(() => _dialog == null);
                 _localPlaylistId = "preview-a"; await NavigateAsync("local-playlist"); StopLocalMonitoring();
+                check(theme + " local playlist actions realize with the selected weight", Labels(LocalToolbar).Length > 0 && Labels(LocalToolbar).All(t => t.FontWeight.Weight >= 700), Labels(LocalToolbar).Select(t => new { t.Text, t.FontWeight.Weight }));
+                BeginTrackBatch(TrackList, Tracks[0]); Root.UpdateLayout();
+                await Task.Delay(180); Root.UpdateLayout();
+                check(theme + " batch action presenters use the selected weight", Descendants<ContentPresenter>(TrackBatchHost).Where(p => p.Content is string s && s.Length > 0).Any() && Descendants<ContentPresenter>(TrackBatchHost).Where(p => p.Content is string s && s.Length > 0).All(p => p.FontWeight.Weight >= 700), new { TrackBatchHost.Visibility, children = Descendants<ContentPresenter>(TrackBatchHost).Select(p => new { content = p.Content?.ToString(), p.FontWeight.Weight, p.IsLoaded, p.ActualWidth }), labels = Labels(TrackBatchHost).Select(t => new { t.Text, t.FontWeight.Weight }) });
+                EndTrackBatch();
                 var favorites = FavoriteLocalTracksAsync([Tracks[0]]);
                 await Wait(() => _dialogSurfaceReady && _dialog is { IsLoaded: true });
                 await Selector(Descendants<ComboBox>(_dialog!).Single(), "local-playlist-choice-" + theme);

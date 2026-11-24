@@ -63,7 +63,7 @@ public sealed partial class MainWindow
             throw;
         }
         var dropdown = FindDescendant<Border>(SelectorPopup(selector)!.Child, b => b.Name == "PopupBorder")!;
-        check("Nested selector uses native acrylic and the same radius", dropdown.CornerRadius == selected.Overlay && dropdown.Background is SolidColorBrush, dropdown.CornerRadius);
+        check("Nested selector uses native acrylic and the same radius", dropdown.CornerRadius == selected.Overlay && dropdown.Background is AcrylicBrush, dropdown.CornerRadius);
         await Record("shared-comments-selector"); selector.IsDropDownOpen = false;
         DismissDialogFromOutside(_dialog!, false); await Task.Delay(80);
         check("Comments still ignore outside dismissal", !comments.IsCompleted, null);

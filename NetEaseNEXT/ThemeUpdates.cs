@@ -132,9 +132,7 @@ public sealed partial class MainWindow
         state.Applying = true;
         try
         {
-            var tint = FloatingWindowTint();
-            if (combo.Resources.TryGetValue("ComboBoxDropDownBackground", out var current) && current is SolidColorBrush existing && tint is SolidColorBrush selected) existing.Color = selected.Color;
-            else combo.Resources["ComboBoxDropDownBackground"] = tint;
+            combo.Resources["ComboBoxDropDownBackground"] = brush ?? FloatingBackground();
             if (!combo.Resources.TryGetValue("ComboBoxDropdownBorderThickness", out var stroke) || stroke is not Thickness thickness || thickness != FloatingStroke) combo.Resources["ComboBoxDropdownBorderThickness"] = FloatingStroke;
             if (!combo.IsLoaded) return;
             if (VisualTreeHelper.GetChildrenCount(combo) == 0) combo.ApplyTemplate();
@@ -169,7 +167,20 @@ public sealed partial class MainWindow
         }
         else if (element is CommandBar commands) { commands.Background = FloatingWindowTint(); commands.BorderThickness = FloatingStroke; }
         else if (element is ComboBox combo) ApplySelectorMaterial(combo, brush);
-        else if (element is Border { Name: "PopupBorder" } border) { border.Background = FloatingWindowTint(); border.BorderThickness = FloatingStroke; border.CornerRadius = _floatingCorner; }
+        else if (element is Border { Name: "PopupBorder" } border)
+        {
+            border.Background = brush; border.BorderThickness = FloatingStroke; border.CornerRadius = _floatingCorner;
+            border.BackgroundSizing = BackgroundSizing.OuterBorderEdge; border.UseLayoutRounding = true;
+        }
+        else if (element is Border { Name: "BackgroundElement" } frame && _dialog != null)
+        {
+            // Paint acrylic underneath the translucent stroke. Insetting the
+            // fill exposes a fringe at fractional-DPI rounded edges.
+            frame.BackgroundSizing = BackgroundSizing.OuterBorderEdge; frame.UseLayoutRounding = true;
+            // The built-in high-elevation shadow is sampled by in-app acrylic
+            // in this popup, producing a wide black inner halo in small windows.
+            frame.Shadow = null;
+        }
         else if (element is ToolTip tip) { tip.Background = brush; tip.BorderThickness = FloatingStroke; tip.CornerRadius = _tooltipCorner; }
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++) ApplyPopupMaterial(VisualTreeHelper.GetChild(element, i), brush);
     }
@@ -202,6 +213,7 @@ public sealed partial class MainWindow
         dialog.Resources["ContentDialogButtonHeight"] = 44d;
         dialog.Resources["ContentDialogButtonMinHeight"] = 44d;
         dialog.Resources["ContentDialogTopOverlay"] = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+        dialog.Resources["ContentDialogSmokeFill"] = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
         Style TouchStyle(Style? original)
         {
             var style = new Style(typeof(Button)) { BasedOn = original ?? (Style)Application.Current.Resources["DefaultButtonStyle"] };
@@ -230,11 +242,17 @@ public sealed partial class MainWindow
             // ContentDialog reparents its smoke layer into a separate native
             // popup. It does not bubble pointer events through LayoutRoot.
             foreach (var popup in VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot))
-                if (popup.Child is FrameworkElement { Name: "SmokeLayerBackground" } smoke) inputSurfaces.Add(smoke);
+                if (popup.Child is FrameworkElement { Name: "SmokeLayerBackground" } smoke)
+                {
+                    if (smoke is Microsoft.UI.Xaml.Shapes.Shape shape) shape.Fill = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+                    inputSurfaces.Add(smoke);
+                }
             foreach (var surface in inputSurfaces) surface.AddHandler(UIElement.PointerPressedEvent, pressed, true);
             _dialogSurfaceReady = true;
             ApplyPopupTheme(dialog);
         }
+        void Loaded(object sender, RoutedEventArgs args) => ApplyPopupTheme(dialog);
+        dialog.Loaded += Loaded;
         dialog.Opened += Opened;
         _dialogSurfaceReady = false;
         try { return await dialog.ShowAsync(); }
@@ -243,6 +261,7 @@ public sealed partial class MainWindow
             _dialogSurfaceReady = false;
             foreach (var surface in inputSurfaces) surface.RemoveHandler(UIElement.PointerPressedEvent, pressed);
             dialog.Opened -= Opened;
+            dialog.Loaded -= Loaded;
             dialog.ClearValue(FrameworkElement.RequestedThemeProperty);
         }
     }

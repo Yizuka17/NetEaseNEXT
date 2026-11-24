@@ -77,12 +77,28 @@ public sealed partial class MainWindow
         var publishTask = ShowPublishEventAsync(); await Task.Delay(100);
         check("Publishing opens a native draft dialog without sending", _dialog is { Title: "发布动态", IsPrimaryButtonEnabled: false }, null);
         _dialog?.Hide(); await publishTask;
-        var photoTask = ShowEventPicturesAsync([new Uri(Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.png")).AbsoluteUri], 0);
+        var photoTask = ShowEventPicturesAsync(new[] { "AppIcon.png", "AppIconDark.png" }.Select(name => new Uri(Path.Combine(AppContext.BaseDirectory, "Assets", name)).AbsoluteUri).ToArray(), 0);
         await Task.Delay(300);
         var viewport = _dialog?.Content is DependencyObject content ? FindDescendant<ScrollViewer>(content) : null;
         check("Photo viewer supports bounded pinch zoom and touch panning", viewport is { ZoomMode: ZoomMode.Enabled, MinZoomFactor: 1, MaxZoomFactor: 6, HorizontalScrollMode: ScrollMode.Enabled, VerticalScrollMode: ScrollMode.Enabled } && viewport.ViewportWidth > 0 && viewport.ViewportHeight > 0, null);
+        void CheckPhotoLayout(string label)
+        {
+            var frame = FindDescendant<Microsoft.UI.Xaml.Controls.Border>(_dialog!, b => b.Name == "BackgroundElement")!;
+            var picture = FindDescendant<Image>(viewport!)!;
+            var bounds = viewport!.TransformToVisual(frame).TransformBounds(new(0, 0, viewport.ActualWidth, viewport.ActualHeight));
+            var imageBounds = picture.TransformToVisual(viewport).TransformBounds(new(0, 0, picture.ActualWidth, picture.ActualHeight));
+            check(label + " image viewport fits and centers inside its dialog", bounds.X >= 0 && bounds.Right <= frame.ActualWidth && Math.Abs(bounds.X + bounds.Width / 2 - frame.ActualWidth / 2) <= 1 && Math.Abs(imageBounds.X + imageBounds.Width / 2 - viewport.ViewportWidth / 2) <= 1 && Math.Abs(imageBounds.Y + imageBounds.Height / 2 - viewport.ViewportHeight / 2) <= 1, new { bounds, imageBounds, frame.ActualWidth, viewport.ViewportWidth, viewport.ViewportHeight });
+        }
+        CheckPhotoLayout("Initial");
         viewport!.ChangeView(0, 0, 2, true); await Task.Delay(100);
         check("Image can zoom and expose pannable content", Math.Abs(viewport.ZoomFactor - 2) < .01 && viewport.ScrollableWidth > 0 && viewport.ScrollableHeight > 0, null);
+        var nextPhoto = Descendants<Button>(_dialog!).Single(b => Microsoft.UI.Xaml.Automation.AutomationProperties.GetName(b) == "下一张");
+        ((Microsoft.UI.Xaml.Automation.Provider.IInvokeProvider)new Microsoft.UI.Xaml.Automation.Peers.ButtonAutomationPeer(nextPhoto).GetPattern(Microsoft.UI.Xaml.Automation.Peers.PatternInterface.Invoke)).Invoke();
+        await Task.Delay(200); Root.UpdateLayout();
+        check("Changing images restores the fitted zoom", Equals(_dialog!.Title, "图片 2/2") && Math.Abs(viewport.ZoomFactor - 1) < .01, null);
+        CheckPhotoLayout("After changing images");
+        AppWindow.Resize(new Windows.Graphics.SizeInt32(920, 720)); await Task.Delay(300); Root.UpdateLayout();
+        CheckPhotoLayout("After resizing");
         if (Environment.GetCommandLineArgs().Contains("--inspect-layout")) { AppWindow.Title = "NetEaseNEXT 动态图片检查"; await Task.Delay(45000); }
         _dialog?.Hide(); await photoTask;
         var gallery = new SocialItem { Kind = "event", Name = "fixture", Text = "fixture", ThreadId = "A_EV_2_12_7", ResourceType = 6, ResourceId = 12, ResourceKey = "12_7", Pictures = Enumerable.Repeat("https://example.invalid/photo.jpg", 9).ToList(), SharedTrack = item.SharedTrack };

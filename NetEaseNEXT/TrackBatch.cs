@@ -91,6 +91,8 @@ public sealed partial class MainWindow
                 if (button.Tag is "remove" && !ReferenceEquals(_batchList, QueueList) && _view == "playlist" && (Busy.IsActive || _pageLoad != null)) button.IsEnabled = false;
             }
         _batchList.IsEnabled = !_batchBusy;
+        host.UpdateLayout();
+        ApplyTextFont(host, new Microsoft.UI.Xaml.Media.FontFamily(_settings.FontFamily));
     }
     private async void BatchAction_Click(object sender, RoutedEventArgs args)
     {
