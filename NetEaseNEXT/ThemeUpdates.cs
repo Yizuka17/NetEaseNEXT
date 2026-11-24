@@ -189,6 +189,7 @@ public sealed partial class MainWindow
         RefreshFloatingCorners();
         var brush = FloatingBackground();
         Notice.Background = PlayerNotice.Background = FloatingBackground();
+        if (_eventPictureOverlay != null) _eventPictureOverlay.Background = FloatingBackground();
         Notice.BorderThickness = PlayerNotice.BorderThickness = FloatingStroke;
         foreach (var notice in new[] { Notice, PlayerNotice })
             if (_hasCustomFloatingCorner) notice.CornerRadius = _floatingCorner; else notice.ClearValue(Control.CornerRadiusProperty);

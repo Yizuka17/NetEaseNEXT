@@ -21,6 +21,7 @@ public sealed partial class MainWindow
     }
     private async Task NavigateAsync(string view, bool remember = true, bool backward = false, string cover = "")
     {
+        CloseEventPictures();
         CloseRowContextMenu();
         _songDetailLoad?.Cancel(); _songCreditsLoad?.Cancel(); _resourceShareLoad?.Cancel();
         StopDownloadCompletionMotion();
@@ -332,6 +333,7 @@ public sealed partial class MainWindow
     private async void EmptyAction_Click(object sender, RoutedEventArgs args) { if ((string)EmptyAction.Content == "登录") await ShowLoginAsync(); else await NavigateAsync((string)EmptyAction.Content == "发现" ? "discover" : _view, false); }
     private async Task GoBackAsync()
     {
+        if (_eventPictureOverlay != null) { CloseEventPictures(); return; }
         if (_fullScreen) { SetFullScreen(false); return; }
         if (!_history.TryPop(out var route)) return;
         if (_view == "local-playlist" && route.View == "local")

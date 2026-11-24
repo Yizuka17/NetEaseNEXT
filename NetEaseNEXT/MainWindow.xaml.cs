@@ -188,6 +188,7 @@ public sealed partial class MainWindow : Window
         _playback.SetBackgroundMode(hidden);
         if (hidden)
         {
+            CloseEventPictures();
             _activeFlyout?.Hide(); CloseRowContextMenu();
             _songCreditsLoad?.Cancel(); _songCreditsLoad = null; _pendingShare = null;
             _resourceShareLoad?.Cancel();
@@ -241,6 +242,7 @@ public sealed partial class MainWindow : Window
     private void ExitApp() { _exiting = true; _dialog?.Hide(); Close(); Application.Current.Exit(); }
     private void Cleanup()
     {
+        CloseEventPictures();
         if (Root.XamlRoot != null) Root.XamlRoot.Changed -= FloatingRootChanged;
         _resourceShareLoad?.Cancel();
         if (_shareManager != null) _shareManager.DataRequested -= RequestedShare;

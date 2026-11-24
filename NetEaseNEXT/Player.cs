@@ -201,6 +201,7 @@ public sealed partial class MainWindow
     private async void FullScreen_Key(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args) { args.Handled = true; if (_view != "playing") await NavigateAsync("playing"); SetFullScreen(!_fullScreen); }
     private async void Escape_Key(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
     {
+        if (_eventPictureOverlay != null) { CloseEventPictures(); args.Handled = true; return; }
         if (_dialog != null) return;
         if (_batchList != null) { EndTrackBatch(); args.Handled = true; return; }
         if (QueuePane.Visibility == Visibility.Visible) { QueueSurface.Hide(); _queueSurfaceOpen = false; QueuePane.Visibility = Visibility.Collapsed; QueueList.ItemsSource = null; }

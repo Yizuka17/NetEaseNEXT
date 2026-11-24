@@ -49,6 +49,30 @@ public sealed partial class MainWindow
             """);
         var privateSong = ParseSocialItem(privateJson.RootElement, "conversation", "", 7);
         check("Private shared songs expose the same playback card as events", privateSong.SharedTrack?.Id == item.SharedTrack?.Id && privateSong.SharedTrackVisibility == Visibility.Visible, null);
+        check("Private song cards hide duplicate body and quote", privateSong.TextVisibility == Visibility.Collapsed && privateSong.OriginalVisibility == Visibility.Collapsed, null);
+        foreach (var key in new[] { "djRadio", "djradio", "radio" })
+        {
+            var payload = JsonSerializer.Serialize(new Dictionary<string, object> { ["msg"] = "正文", [key] = new { id = 501, name = "测试播客", picUrl = "" } });
+            using var document = JsonDocument.Parse(JsonSerializer.Serialize(new { id = 22, user = new { userId = 7 }, json = payload }));
+            var podcast = ParseSocialItem(document.RootElement, "events", "", 7);
+            check("Event " + key + " has a podcast navigation card without duplicated quotes", podcast.SharedCatalog is { Id: 501, Kind: "radio", Subtitle: "播客" } && podcast.Text == "正文" && podcast.OriginalText == "", null);
+        }
+        foreach (var key in new[] { "album", "playlist", "djRadio", "program" })
+        {
+            object resource = key == "program" ? new { id = 601, name = "测试单集", mainSong = LocalLinkFixtures.Song(137), radio = new { id = 501, name = "测试播客", picUrl = "" }, dj = new { nickname = "测试主播" }, duration = 4000 } : new { id = 501, name = "测试资源", picUrl = "" };
+            var payload = new Dictionary<string, object> { [key] = resource, ["msg"] = "重复的分享说明", ["picUrl"] = "https://example.invalid/redundant-cover.jpg" };
+            using var document = JsonDocument.Parse(JsonSerializer.Serialize(new { fromUser = new { userId = 8, nickname = "sender" }, msg = JsonSerializer.Serialize(payload) }));
+            var shared = ParseSocialItem(document.RootElement, "conversation", "", 7);
+            check("Private " + key + " keeps only its resource card", (shared.SharedTrack != null || shared.SharedCatalog != null) && shared.TextVisibility == Visibility.Collapsed && shared.OriginalVisibility == Visibility.Collapsed && shared.PictureVisibility == Visibility.Collapsed, null);
+            if (key == "program") check("A shared podcast episode keeps its playback and navigation identity", shared.SharedTrack is { Id: 137, ProgramId: 601, PodcastId: 501, Title: "测试单集" }, null);
+        }
+        using (var plain = JsonDocument.Parse("""{"msg":"你好"}"""))
+            check("Plain private text is preserved", ParseSocialItem(plain.RootElement, "conversation", "", 7).Text == "你好", null);
+        var source = new SocialItem { SharedCatalog = new(501, "测试播客", "", "radio", "播客") };
+        SocialCatalog_Click(new Button { DataContext = source }, new());
+        var radioDeadline = Environment.TickCount64 + 5000;
+        while ((_view != "programs" || _pageLoad != null) && Environment.TickCount64 < radioDeadline) await Task.Delay(25);
+        check("Podcast cards navigate to their program list", _view == "programs" && _playlistId == 501 && Tracks.Any(t => t.PodcastId == 501 && t.ProgramId == 601) && LocalLinkFixtures.Calls.Any(c => c.Method == "dj_detail" && c.Query.Number("rid") == 501), null);
         _playback.Restore(new());
         var folder = Path.Combine(Path.GetTempPath(), "NetEaseNEXT-startup-fixture-" + Guid.NewGuid().ToString("N")); Directory.CreateDirectory(folder);
         try
@@ -79,28 +103,45 @@ public sealed partial class MainWindow
         _dialog?.Hide(); await publishTask;
         var photoTask = ShowEventPicturesAsync(new[] { "AppIcon.png", "AppIconDark.png" }.Select(name => new Uri(Path.Combine(AppContext.BaseDirectory, "Assets", name)).AbsoluteUri).ToArray(), 0);
         await Task.Delay(300);
-        var viewport = _dialog?.Content is DependencyObject content ? FindDescendant<ScrollViewer>(content) : null;
+        var viewport = _eventPictureOverlay != null ? FindDescendant<ScrollViewer>(_eventPictureOverlay) : null;
+        check("Image viewer is an inline overlay without a ContentDialog or popup host", _dialog == null && _eventPictureOverlay?.Parent == Root && Microsoft.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Count == 0, null);
         check("Photo viewer supports bounded pinch zoom and touch panning", viewport is { ZoomMode: ZoomMode.Enabled, MinZoomFactor: 1, MaxZoomFactor: 6, HorizontalScrollMode: ScrollMode.Enabled, VerticalScrollMode: ScrollMode.Enabled } && viewport.ViewportWidth > 0 && viewport.ViewportHeight > 0, null);
         void CheckPhotoLayout(string label)
         {
-            var frame = FindDescendant<Microsoft.UI.Xaml.Controls.Border>(_dialog!, b => b.Name == "BackgroundElement")!;
+            var frame = _eventPictureOverlay!;
             var picture = FindDescendant<Image>(viewport!)!;
             var bounds = viewport!.TransformToVisual(frame).TransformBounds(new(0, 0, viewport.ActualWidth, viewport.ActualHeight));
             var imageBounds = picture.TransformToVisual(viewport).TransformBounds(new(0, 0, picture.ActualWidth, picture.ActualHeight));
-            check(label + " image viewport fits and centers inside its dialog", bounds.X >= 0 && bounds.Right <= frame.ActualWidth && Math.Abs(bounds.X + bounds.Width / 2 - frame.ActualWidth / 2) <= 1 && Math.Abs(imageBounds.X + imageBounds.Width / 2 - viewport.ViewportWidth / 2) <= 1 && Math.Abs(imageBounds.Y + imageBounds.Height / 2 - viewport.ViewportHeight / 2) <= 1, new { bounds, imageBounds, frame.ActualWidth, viewport.ViewportWidth, viewport.ViewportHeight });
+            check(label + " image viewport fits and centers inside its overlay", bounds.X >= 0 && bounds.Right <= frame.ActualWidth && Math.Abs(bounds.X + bounds.Width / 2 - frame.ActualWidth / 2) <= 1 && Math.Abs(imageBounds.X + imageBounds.Width / 2 - viewport.ViewportWidth / 2) <= 1 && Math.Abs(imageBounds.Y + imageBounds.Height / 2 - viewport.ViewportHeight / 2) <= 1, new { bounds, imageBounds, frame.ActualWidth, viewport.ViewportWidth, viewport.ViewportHeight });
         }
         CheckPhotoLayout("Initial");
         viewport!.ChangeView(0, 0, 2, true); await Task.Delay(100);
         check("Image can zoom and expose pannable content", Math.Abs(viewport.ZoomFactor - 2) < .01 && viewport.ScrollableWidth > 0 && viewport.ScrollableHeight > 0, null);
-        var nextPhoto = Descendants<Button>(_dialog!).Single(b => Microsoft.UI.Xaml.Automation.AutomationProperties.GetName(b) == "下一张");
+        var nextPhoto = Descendants<Button>(_eventPictureOverlay!).Single(b => Microsoft.UI.Xaml.Automation.AutomationProperties.GetName(b) == "下一张");
         ((Microsoft.UI.Xaml.Automation.Provider.IInvokeProvider)new Microsoft.UI.Xaml.Automation.Peers.ButtonAutomationPeer(nextPhoto).GetPattern(Microsoft.UI.Xaml.Automation.Peers.PatternInterface.Invoke)).Invoke();
         await Task.Delay(200); Root.UpdateLayout();
-        check("Changing images restores the fitted zoom", Equals(_dialog!.Title, "图片 2/2") && Math.Abs(viewport.ZoomFactor - 1) < .01, null);
+        check("Changing images restores the fitted zoom", FindDescendant<TextBlock>(_eventPictureOverlay!, t => t.Name == "EventPictureCount")?.Text == "2 / 2" && Math.Abs(viewport.ZoomFactor - 1) < .01, null);
         CheckPhotoLayout("After changing images");
         AppWindow.Resize(new Windows.Graphics.SizeInt32(920, 720)); await Task.Delay(300); Root.UpdateLayout();
         CheckPhotoLayout("After resizing");
-        if (Environment.GetCommandLineArgs().Contains("--inspect-layout")) { AppWindow.Title = "NetEaseNEXT 动态图片检查"; await Task.Delay(45000); }
-        _dialog?.Hide(); await photoTask;
+        var viewedImage = FindDescendant<Image>(viewport)!;
+        if (Environment.GetCommandLineArgs().Contains("--image-outside-check"))
+        {
+            AppWindow.Title = "NetEaseNEXT 动态图片检查";
+            await Task.WhenAny(photoTask, Task.Delay(30000));
+            check("A real outside click closes the inline image viewer", photoTask.IsCompleted, null);
+        }
+        else
+        {
+            if (Environment.GetCommandLineArgs().Contains("--inspect-layout")) { AppWindow.Title = "NetEaseNEXT 动态图片检查"; await Task.Delay(45000); }
+            var closePhoto = Descendants<Button>(_eventPictureOverlay!).Single(b => Microsoft.UI.Xaml.Automation.AutomationProperties.GetName(b) == "关闭图片");
+            ((Microsoft.UI.Xaml.Automation.Provider.IInvokeProvider)new Microsoft.UI.Xaml.Automation.Peers.ButtonAutomationPeer(closePhoto).GetPattern(Microsoft.UI.Xaml.Automation.Peers.PatternInterface.Invoke)).Invoke();
+        }
+        await photoTask;
+        check("Closing the inline viewer releases its image and root", _eventPictureOverlay == null && viewedImage.Source == null, null);
+        photoTask = ShowEventPicturesAsync([new Uri(Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.png")).AbsoluteUri], 0); await Task.Delay(150);
+        var historyCount = _history.Count; await GoBackAsync(); await photoTask;
+        check("Back closes the image overlay without changing page history", _eventPictureOverlay == null && _history.Count == historyCount, null);
         var gallery = new SocialItem { Kind = "event", Name = "fixture", Text = "fixture", ThreadId = "A_EV_2_12_7", ResourceType = 6, ResourceId = 12, ResourceKey = "12_7", Pictures = Enumerable.Repeat("https://example.invalid/photo.jpg", 9).ToList(), SharedTrack = item.SharedTrack };
         _linkedResource = new SocialItem { LinkedEvent = gallery };
         await NavigateAsync("event-detail"); Root.UpdateLayout(); await Task.Delay(100);

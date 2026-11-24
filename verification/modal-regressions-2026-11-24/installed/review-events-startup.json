@@ -1,0 +1,246 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "lyric metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "song_detail metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "song_music_detail metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "album metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "playlist_track_all metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "playlist_detail metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "personalized metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "user_playlist metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "login_status metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "song_red_count metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "song_like_check metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback URLs and writes bypass metadata caching",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event like notices retain actor, content and original event",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song reply notice links to the source song",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event replies preserve their embedded source post for navigation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Events retain every safe image and shared song artwork",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song cards do not duplicate resource names in the event body or quote",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event title body and album resource are separate",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event title body and playlist resource are separate",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Inserting a shared song keeps following songs and avoids duplicate entries",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Private shared songs expose the same playback card as events",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Startup fetches playlist details and tracks without waiting for UI consumption",
+    "passed": true,
+    "detail": {
+      "RequestCount": 2,
+      "ticks": 5
+    }
+  },
+  {
+    "name": "Prepared startup results are reused when the window consumes them",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Publishing opens a native draft dialog without sending",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Photo viewer supports bounded pinch zoom and touch panning",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Initial image viewport fits and centers inside its dialog",
+    "passed": true,
+    "detail": {
+      "bounds": {
+        "X": 24,
+        "Y": 56,
+        "Width": 700,
+        "Height": 500,
+        "Left": 24,
+        "Top": 56,
+        "Right": 724,
+        "Bottom": 556,
+        "IsEmpty": false
+      },
+      "imageBounds": {
+        "X": 100,
+        "Y": 0,
+        "Width": 500,
+        "Height": 500,
+        "Left": 100,
+        "Top": 0,
+        "Right": 600,
+        "Bottom": 500,
+        "IsEmpty": false
+      },
+      "ActualWidth": 748,
+      "ViewportWidth": 700,
+      "ViewportHeight": 500
+    }
+  },
+  {
+    "name": "Image can zoom and expose pannable content",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Changing images restores the fitted zoom",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "After changing images image viewport fits and centers inside its dialog",
+    "passed": true,
+    "detail": {
+      "bounds": {
+        "X": 24,
+        "Y": 56,
+        "Width": 700,
+        "Height": 500,
+        "Left": 24,
+        "Top": 56,
+        "Right": 724,
+        "Bottom": 556,
+        "IsEmpty": false
+      },
+      "imageBounds": {
+        "X": 100,
+        "Y": 0,
+        "Width": 500,
+        "Height": 500,
+        "Left": 100,
+        "Top": 0,
+        "Right": 600,
+        "Bottom": 500,
+        "IsEmpty": false
+      },
+      "ActualWidth": 748,
+      "ViewportWidth": 700,
+      "ViewportHeight": 500
+    }
+  },
+  {
+    "name": "After resizing image viewport fits and centers inside its dialog",
+    "passed": true,
+    "detail": {
+      "bounds": {
+        "X": 24,
+        "Y": 56,
+        "Width": 700,
+        "Height": 481,
+        "Left": 24,
+        "Top": 56,
+        "Right": 724,
+        "Bottom": 537,
+        "IsEmpty": false
+      },
+      "imageBounds": {
+        "X": 110,
+        "Y": 0,
+        "Width": 481,
+        "Height": 481,
+        "Left": 110,
+        "Top": 0,
+        "Right": 591,
+        "Bottom": 481,
+        "IsEmpty": false
+      },
+      "ActualWidth": 748,
+      "ViewportWidth": 700,
+      "ViewportHeight": 481
+    }
+  },
+  {
+    "name": "All nine touch thumbnails wrap within the social row",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 344,
+      "ActualHeight": 344
+    }
+  }
+]

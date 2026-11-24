@@ -46,6 +46,8 @@ internal static class LocalLinkFixtures
                 "artist_album" => new { code = 200, more = false, hotAlbums = new[] { new { id = 401, name = "测试专辑", picUrl = cover } } },
                 "album" => new { code = 200, album = new { id = 401, name = "测试专辑", picUrl = cover, artists = new[] { new { id = 301, name = "歌手甲" }, new { id = 302, name = "歌手乙" } } }, songs = new[] { Song(137) } },
                 "album_detail_dynamic" => new { code = 200, isSub = false, commentCount = 3 },
+                "dj_detail" => new { code = 200, djRadio = new { id = p.Number("rid"), name = "测试播客", picUrl = cover, desc = "播客介绍", programCount = 1, commentCount = 2, subCount = 3, subed = false, dj = new { userId = 42, nickname = "测试主播" } } },
+                "dj_program" => new { code = 200, more = false, programs = new[] { new { id = 601, name = "测试单集", coverUrl = cover, duration = 4000, mainSong = Song(137), dj = new { nickname = "测试主播" } } } },
                 "song_red_count" => new { code = 200, data = new { count = 12 } },
                 "song_like_check" => new { code = 200, ids = Array.Empty<long>() },
                 "comment_new" => new { code = 200, data = new { totalCount = 0, hasMore = false, comments = Array.Empty<object>() } },

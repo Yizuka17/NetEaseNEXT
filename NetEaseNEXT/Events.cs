@@ -28,18 +28,30 @@ public sealed partial class MainWindow
         if (album.Number("id") > 0) return new(album.Number("id"), FirstText(album.Text("name"), album.Text("title")), FirstText(album.Text("picUrl"), album.Text("coverImgUrl")), "album", "专辑");
         var playlist = Object(payload, "playlist");
         if (playlist.Number("id") > 0) return new(playlist.Number("id"), FirstText(playlist.Text("name"), playlist.Text("title")), FirstText(playlist.Text("coverImgUrl"), playlist.Text("picUrl")), "playlist", "歌单");
-        return null;
+        var program = Object(payload, "program");
+        var radio = FirstObject(Object(payload, "djRadio"), FirstObject(Object(payload, "djradio"), FirstObject(Object(payload, "radio"), Object(program, "radio"))));
+        if (radio.Number("id") > 0) return new(radio.Number("id"), FirstText(radio.Text("name"), radio.Text("title")), FirstText(radio.Text("picUrl"), radio.Text("coverUrl")), "radio", "播客");
+        var nested = Object(payload, "msg");
+        return nested.ValueKind == JsonValueKind.Object ? SharedEventCatalog(nested) : null;
     }
     private async void SocialCatalog_Click(object sender, RoutedEventArgs args)
     {
         if ((sender as FrameworkElement)?.DataContext is not SocialItem { SharedCatalog: { } resource }) return;
         _playlistId = resource.Id; _playlistName = resource.Name;
-        await NavigateAsync(resource.Kind == "album" ? "album" : "playlist");
+        await NavigateAsync(resource.Kind == "album" ? "album" : resource.Kind == "radio" ? "programs" : "playlist");
     }
     private static Track? SharedEventTrack(JsonElement payload)
     {
         var song = Object(payload, "song");
-        if (song.Number("id") <= 0) return null;
+        if (song.Number("id") <= 0)
+        {
+            var program = Object(payload, "program"); var main = Object(program, "mainSong");
+            var radio = Object(program, "radio");
+            if (program.Number("id") > 0 && main.Number("id") > 0 && radio.Number("id") > 0)
+                return new(main.Number("id"), FirstText(program.Text("name"), main.Text("name")), Object(program, "dj").Text("nickname"), radio.Text("name"), FirstText(program.Text("coverUrl"), radio.Text("picUrl")), Math.Max(program.Number("duration"), main.Number("duration"))) { PodcastId = radio.Number("id"), ProgramId = program.Number("id") };
+            var nested = Object(payload, "msg");
+            return nested.ValueKind == JsonValueKind.Object ? SharedEventTrack(nested) : null;
+        }
         try { return Track.FromJson(song); }
         catch
         {
@@ -147,63 +159,5 @@ public sealed partial class MainWindow
         if (sender is not FrameworkElement { DataContext: string url } button) return;
         for (var parent = VisualTreeHelper.GetParent(button); parent != null; parent = VisualTreeHelper.GetParent(parent))
             if (parent is FrameworkElement { DataContext: SocialItem item }) { await ShowEventPicturesAsync(item.Pictures, item.Pictures.IndexOf(url)); return; }
-    }
-    private async Task ShowEventPicturesAsync(IReadOnlyList<string> urls, int index)
-    {
-        if (_dialog != null || urls.Count == 0) return;
-        index = Math.Clamp(index, 0, urls.Count - 1);
-        var image = new Image { Stretch = Stretch.Uniform, Width = Math.Max(220, Math.Min(700, Root.ActualWidth - 120)), Height = Math.Max(180, Math.Min(500, Root.ActualHeight - 230)), HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
-        Artwork.SetSize(image, 800);
-        var surface = new Border { Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent), Child = image };
-        var scroll = new ScrollViewer { Content = surface, Width = image.Width, Height = image.Height, HorizontalAlignment = HorizontalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, ZoomMode = ZoomMode.Enabled, MinZoomFactor = 1, MaxZoomFactor = 6, HorizontalScrollMode = ScrollMode.Enabled, VerticalScrollMode = ScrollMode.Enabled, HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, VerticalScrollBarVisibility = ScrollBarVisibility.Auto, IsHorizontalRailEnabled = false, IsVerticalRailEnabled = false, IsHorizontalScrollChainingEnabled = false, IsVerticalScrollChainingEnabled = false, IsZoomChainingEnabled = false };
-        var dialog = new ContentDialog { XamlRoot = Root.XamlRoot, CloseButtonText = "关闭" };
-        dialog.Resources["ContentDialogMaxWidth"] = image.Width + 48;
-        var panel = new StackPanel { Spacing = 12 }; panel.Children.Add(scroll);
-        var controls = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, HorizontalAlignment = HorizontalAlignment.Center };
-        var previous = new Button { Content = Services.IconFonts.Create("\uE72B"), MinWidth = 44, MinHeight = 44 };
-        var next = new Button { Content = Services.IconFonts.Create("\uE72A"), MinWidth = 44, MinHeight = 44 };
-        var smaller = new Button { Content = "−", MinWidth = 44, MinHeight = 44 };
-        var larger = new Button { Content = "+", MinWidth = 44, MinHeight = 44 };
-        var reset = new Button { Content = "还原", MinHeight = 44 };
-        void Zoom(float factor, Windows.Foundation.Point? anchor = null)
-        {
-            factor = Math.Clamp(factor, 1, 6);
-            var point = anchor ?? new Windows.Foundation.Point(scroll.ViewportWidth / 2, scroll.ViewportHeight / 2);
-            var ratio = factor / scroll.ZoomFactor;
-            scroll.ChangeView(Math.Max(0, (scroll.HorizontalOffset + point.X) * ratio - point.X), Math.Max(0, (scroll.VerticalOffset + point.Y) * ratio - point.Y), factor, true);
-        }
-        void Show()
-        {
-            dialog.Title = $"图片 {index + 1}/{urls.Count}"; previous.IsEnabled = index > 0; next.IsEnabled = index + 1 < urls.Count;
-            scroll.ChangeView(0, 0, 1, true); image.Source = null;
-            if (Uri.TryCreate(urls[index], UriKind.Absolute, out var uri) && uri.IsFile) image.Source = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(uri);
-            else Artwork.SetUri(image, urls[index]);
-        }
-        previous.Click += (_, _) => { if (index > 0) { index--; Show(); } };
-        next.Click += (_, _) => { if (index + 1 < urls.Count) { index++; Show(); } };
-        smaller.Click += (_, _) => Zoom(scroll.ZoomFactor / 1.5f); larger.Click += (_, _) => Zoom(scroll.ZoomFactor * 1.5f);
-        reset.Click += (_, _) => scroll.ChangeView(0, 0, 1);
-        surface.DoubleTapped += (_, args) => { Zoom(scroll.ZoomFactor > 1.05 ? 1 : 2, args.GetPosition(scroll)); args.Handled = true; };
-        surface.AddHandler(UIElement.PointerWheelChangedEvent, new Microsoft.UI.Xaml.Input.PointerEventHandler((_, args) =>
-        {
-            var point = args.GetCurrentPoint(scroll);
-            if (point.Properties.IsHorizontalMouseWheel) return;
-            Zoom(scroll.ZoomFactor * MathF.Pow(1.2f, point.Properties.MouseWheelDelta / 120f), point.Position); args.Handled = true;
-            if (_runningSmokeTest) Diagnostics.StartupTrace.Mark("Image viewer wheel delta: " + point.Properties.MouseWheelDelta);
-        }), true);
-        if (_runningSmokeTest) scroll.ViewChanged += (_, _) => Diagnostics.StartupTrace.Mark("Image viewer zoom: " + scroll.ZoomFactor);
-        foreach (var button in new[] { previous, smaller, reset, larger, next }) controls.Children.Add(button);
-        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(previous, "上一张"); Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(next, "下一张");
-        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(smaller, "缩小"); Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(larger, "放大");
-        panel.Children.Add(controls); dialog.Content = panel; Show(); _dialog = dialog;
-        void ResizeViewer(object sender, SizeChangedEventArgs args)
-        {
-            scroll.Width = image.Width = Math.Max(220, Math.Min(700, Root.ActualWidth - 120));
-            scroll.Height = image.Height = Math.Max(180, Math.Min(500, Root.ActualHeight - 230));
-            dialog.Resources["ContentDialogMaxWidth"] = scroll.Width + 48;
-        }
-        Root.SizeChanged += ResizeViewer;
-        try { await ShowThemedDialogAsync(dialog); }
-        finally { Root.SizeChanged -= ResizeViewer; Artwork.SetUri(image, ""); image.Source = null; _dialog = null; }
     }
 }

@@ -59,6 +59,7 @@ public sealed partial class MainWindow
         if (original == text) original = "";
         var sharedCatalog = SharedEventCatalog(payload);
         var sharedTrack = SharedEventTrack(payload);
+        var privateResource = view is "private" or "conversation" && (sharedTrack != null || sharedCatalog != null);
         if (view == "events" && (sharedTrack != null || sharedCatalog != null)) original = "";
         var picture = PictureFromPayload(payload);
         if (view == "events" && item.TryGetProperty("pics", out var pics) && pics.ValueKind == JsonValueKind.Array && pics.GetArrayLength() > 0) picture = pics[0].Text("originUrl");
@@ -75,10 +76,11 @@ public sealed partial class MainWindow
             if (text.Length == 0) { text = FirstText(original, "你的动态收到新的赞"); original = ""; }
         }
         if (view == "messages" && text.Length == 0) text = FirstText(general.Text("content"), action, "通知");
+        if (privateResource) { text = ""; original = ""; picture = ""; }
         var commentId = comment.Number("commentId"); if (commentId == 0) commentId = item.Number("commentId");
         return new SocialItem
         {
-            Id = item.Number("id"), Name = user.Text("nickname"), Avatar = user.Text("avatarUrl"), Title = view == "events" ? FirstText(payload.Text("title"), Object(payload, "article").Text("title"), item.Text("title")) : "", Text = view == "events" ? text : text.Length > 0 ? text : "[消息]", OriginalText = original,
+            Id = item.Number("id"), Name = user.Text("nickname"), Avatar = user.Text("avatarUrl"), Title = view == "events" ? FirstText(payload.Text("title"), Object(payload, "article").Text("title"), item.Text("title")) : "", Text = view == "events" || privateResource ? text : text.Length > 0 ? text : "[消息]", OriginalText = original,
             Picture = picture, Pictures = EventPictures(item), SharedTrack = sharedTrack, SharedCatalog = sharedTrack == null ? sharedCatalog : null, LinkedEvent = linkedEvent,
             Time = DateText(view == "events" ? item.Number("eventTime") : item.Number(view == "private" ? "lastMsgTime" : "time")), Timestamp = view == "events" ? item.Number("eventTime") : item.Number(view == "private" ? "lastMsgTime" : "time"), PeerId = view == "private" ? user.Number("userId") : 0,
             Kind = view == "events" ? "event" : view == "messages" ? "notice" : "message", ThreadId = thread, ResourceId = resource.Id, ResourceKey = resource.Key, ResourceType = resource.Type,
