@@ -95,7 +95,7 @@ public sealed partial class MainWindow
         SchedulePlaybackSave();
         if (_hidden) return;
         UpdateModeIcon();
-        PlayPauseIcon.Glyph = _playback.IsPlaying ? "\uE769" : "\uE768";
+        PlayPauseIcon.Glyph = _playback.IsPlaying || _playback.WaitingForNetwork ? "\uE769" : "\uE768";
         var trackChanged = _displayedTrack != _playback.Current;
         if (trackChanged)
         {
@@ -295,10 +295,11 @@ public sealed partial class MainWindow
         }
         catch (Exception ex) { ShowError(ex.Message); }
     }
-    private async Task LoadQualityAsync(Track track)
+    private async Task LoadQualityAsync(Track track, bool force = false)
     {
         if (track.IsLocal) { QualityButton.Content = AudioQuality.Rank(_playback.CurrentQuality) >= 0 ? AudioQuality.Name(_playback.CurrentQuality) : "本地"; QualityButton.IsEnabled = false; return; }
         QualityButton.IsEnabled = true;
+        if (track.HasDownloadedMetadata && !force) { _qualityLoad?.Cancel(); _qualityTrack = 0; _maxQuality = -1; return; }
         if (_hidden || _exiting) return;
         _qualityLoad?.Cancel(); using var load = new CancellationTokenSource(); _qualityLoad = load;
         _maxQuality = -1;
@@ -326,7 +327,7 @@ public sealed partial class MainWindow
     private async void Quality_Click(object sender, RoutedEventArgs args)
     {
         if (_playback.Current?.IsLocal == true) return;
-        if (_playback.Current is Track track && _qualityTrack != track.Id) await LoadQualityAsync(track);
+        if (_playback.Current is Track track && _qualityTrack != track.Id) await LoadQualityAsync(track, force: true);
         var menu = new MenuFlyout();
         for (var i = 0; i < Qualities.Length; i++)
         {

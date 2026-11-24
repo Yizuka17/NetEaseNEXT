@@ -15,7 +15,7 @@ public sealed partial class MainWindow
     {
         _metadataWarmLoad?.Cancel();
         using var load = new CancellationTokenSource(); _metadataWarmLoad = load;
-        try { await _api.WarmDetailsAsync(Tracks.ToArray(), load.Token); }
+        try { await _api.WarmDetailsAsync(Tracks.Where(t => !t.IsLocal && _downloadedLibrary.Find(t.Id) == null).ToArray(), load.Token); }
         finally { if (ReferenceEquals(_metadataWarmLoad, load)) _metadataWarmLoad = null; }
     }
     private async Task InitializeSessionAsync()

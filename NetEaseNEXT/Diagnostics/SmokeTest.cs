@@ -36,6 +36,14 @@ public sealed partial class MainWindow
         try
         {
             Check("XAML root loaded", Root.IsLoaded);
+            if (Environment.GetCommandLineArgs().Contains("--playback-network-check"))
+            {
+                await RunPlaybackNetworkChecksAsync(Check); return;
+            }
+            if (Environment.GetCommandLineArgs().Contains("--social-refresh-check"))
+            {
+                await RunSocialRefreshChecksAsync(Check); return;
+            }
             if (Environment.GetCommandLineArgs().Contains("--floating-corners-check"))
             {
                 await RunFloatingCornerChecksAsync(Check); return;

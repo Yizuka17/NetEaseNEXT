@@ -62,16 +62,18 @@ public sealed partial class MainWindow
             _localLibrary = new() { StoragePath = _localLibraryPathOverride, Tracks = [a, b, plain], Playlists = [one, two] }; _localLibrary.Save();
             _localPlaylistId = "a"; await NavigateAsync("local-playlist"); StopLocalMonitoring();
             var metadataReads = LocalLinkFixtures.Calls.Count(c => c.Method == "song_detail"); Current(a);
-            await Task.Delay(250); RefreshSongCredits();
-            check("Playback and idle credit rendering never fetch song metadata", LocalLinkFixtures.Calls.Count(c => c.Method == "song_detail") == metadataReads && _songCreditsLoad == null, null);
+            await Wait(() => _creditsPrefetch == null); RefreshSongCredits(); await Task.Delay(100);
+            check("Current-song missing credit IDs are prefetched once before clicking", LocalLinkFixtures.Calls.Count(c => c.Method == "song_detail") == metadataReads + 1 && _creditsDetail?.Artists.Any(artist => artist.Id == 302) == true, null);
             await Wait(() => _songCreditsLoad == null && MiniArtist.Inlines.OfType<Hyperlink>().Count() == 3);
             check("Downloaded local playback resolves both artist names and its album", MiniArtist.Inlines.OfType<Hyperlink>().Select(LinkName).SequenceEqual(new[] { "歌手甲", "歌手乙", "测试专辑" }), null);
             check("Every inline credit disables native underline styling", MiniArtist.Inlines.OfType<Hyperlink>().All(l => l.UnderlineStyle == UnderlineStyle.None), null);
             check("The footer artist links are outside the open-player button", !Descendants<TextBlock>(OpenPlayerButton).Contains(MiniArtist), null);
             check("Local playlist actions all carry complete glyphs", new[] { ImportLocalButton, EditLocalPlaylistButton, DeleteLocalPlaylistButton }.All(button => Descendants<FontIcon>(button).Any(icon => icon.ActualWidth > 0 && icon.ActualHeight >= 16)), null);
             await SaveLibraryImageAsync(Root, "local-linked-actions.png");
-            Click(MiniArtist, "歌手乙"); await Wait(() => _view == "artist" && _artistId == 302 && _pageLoad == null);
-            check("First click resolves an uncached local singer directly without a chooser", _dialog == null && LocalLinkFixtures.Calls.Count(c => c.Method == "song_detail") > metadataReads && LocalLinkFixtures.Calls.First(c => c.Method == "song_detail").Query.Text("ids") == "137", null);
+            LocalLinkFixtures.Hold("song_detail"); Click(MiniArtist, "歌手乙");
+            await Wait(() => _view == "artist" && _artistId == 302);
+            check("First click enters the prepared artist page before any further song lookup completes", _dialog == null && _creditsDetail?.Artists.Any(artist => artist.Id == 302) == true, null);
+            LocalLinkFixtures.Release(); await Wait(() => _pageLoad == null);
             _localPlaylistId = "a"; await NavigateAsync("local-playlist"); StopLocalMonitoring(); Current(a);
 
             await Page("playlist");
@@ -182,11 +184,12 @@ public sealed partial class MainWindow
             RefreshSongCredits(true); await Page("playlist"); UpdateTrackLocator();
             check("Changed audio cannot retain an obsolete online locator or artist link", SourceSongId(a) == 0 && CurrentTrackInView(a) == null && TrackLocateButton.Visibility == Visibility.Collapsed && !MiniArtist.Inlines.OfType<Hyperlink>().Any(), null);
             var unresolved = LocalLinkFixtures.Audio(Path.Combine(fixture, "C"), "合作歌曲", 998);
-            Current(unresolved); await Page("playing"); LocalLinkFixtures.Hold("song_detail");
+            _connectionOverride = false; Current(unresolved); await Page("playing"); LocalLinkFixtures.Hold("song_detail");
             var lazy = OpenTrackCreditAsync(unresolved, new SongArtist(0, "歌手乙"));
             await Wait(() => LocalLinkFixtures.GateMethod.Length == 0);
             await Page("queue"); await lazy;
             check("Leaving the page cancels a click-time credit request without navigation", _view == "queue" && _songCreditsLoad == null && LocalLinkFixtures.Canceled > 0, null); LocalLinkFixtures.Release();
+            _connectionOverride = true;
             Current(online); LocalLinkFixtures.Hold("song_detail");
             info = ShowSongDetailsAsync(new Track(999, "等待中的歌曲", "", "", "", 1000), _api);
             await Wait(() => _dialog is { IsLoaded: true } && LocalLinkFixtures.GateMethod.Length == 0);

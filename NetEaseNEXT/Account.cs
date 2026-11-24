@@ -115,7 +115,7 @@ public sealed partial class MainWindow
         foreach (var key in new[] { "song", "album", "playlist", "program" }) if (payload.ValueKind == JsonValueKind.Object && payload.TryGetProperty(key, out var shared)) return shared.Text("name");
         return "[消息]";
     }
-    private async Task LoadSocialAsync(CancellationToken ct)
+    private async Task LoadSocialAsync(CancellationToken ct, bool replace = false)
     {
         if (_view == "messages") { await LoadInboxAsync(ct); return; }
         if (_accountId == 0 && _view is "private" or "conversation") _accountId = (await GetProfileAsync(ct))?.Number("userId") ?? 0;
@@ -130,9 +130,12 @@ public sealed partial class MainWindow
         else if (_view == "private") { result = await _api.CallAsync("msg_private", new { limit = 30, offset = _offset }, ct); array = result.GetProperty("msgs"); }
         else { result = await _api.CallAsync("msg_private_history", new { uid = _peerId, limit = 30, before = _socialCursor < 0 ? 0 : _socialCursor }, ct); array = result.GetProperty("msgs"); }
         ct.ThrowIfCancellationRequested();
+        var page = array.EnumerateArray().Select(item => ParseSocialItem(item, _view, _messageCategory, _accountId)).ToArray();
+        if (replace) SocialItems.Clear();
+        var position = 0;
         foreach (var item in array.EnumerateArray())
         {
-            var social = ParseSocialItem(item, _view, _messageCategory, _accountId);
+            var social = page[position++];
             if (_view == "private") ApplyUnread(social, "private", false);
             SocialItems.Add(social);
             var time = item.Number(_view == "private" ? "lastMsgTime" : "time");

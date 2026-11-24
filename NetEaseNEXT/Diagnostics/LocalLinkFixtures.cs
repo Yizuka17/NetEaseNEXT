@@ -12,12 +12,15 @@ internal static class LocalLinkFixtures
     internal static TaskCompletionSource<bool>? Gate;
     internal static int Canceled;
     internal static int CommentFailures;
+    internal static int EventFailures;
+    internal static JsonElement? EventResponse, PrivateResponse;
     internal static void Hold(string method) { GateMethod = method; Gate = new(TaskCreationOptions.RunContinuationsAsynchronously); }
     internal static void Release() => Gate?.TrySetResult(true);
     internal static object Song(long id) => new { id, name = id == 137 ? "合作歌曲" : "歌曲 " + id, ar = id == 137 ? new[] { new { id = 301, name = "歌手甲" }, new { id = 302, name = "歌手乙" } } : new[] { new { id = 301, name = "歌手甲" } }, al = new { id = 401, name = "测试专辑", picUrl = "" }, dt = 4000 };
     internal static ApiClient Create(string directory)
     {
         Calls.Clear(); GateMethod = ""; Gate = null; Canceled = 0; CommentFailures = 0;
+        EventFailures = 0; EventResponse = PrivateResponse = null;
         var cover = new Uri(LocalMusicFiles.StoreCover(File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.png")))).AbsoluteUri;
         var playlist = new { id = 101, name = "在线歌单", picUrl = cover, coverImgUrl = cover, trackCount = 165 };
         return new ApiClient(async (method, p, ct) =>
@@ -29,25 +32,28 @@ internal static class LocalLinkFixtures
                 try { await Gate.Task.WaitAsync(ct); } catch (OperationCanceledException) { Interlocked.Increment(ref Canceled); throw; }
             }
             await Task.Delay(25, ct);
+            if (method is "event" or "user_event" && Interlocked.CompareExchange(ref EventFailures, 0, 1) == 1) throw new InvalidOperationException("测试刷新失败");
             if (method == "comment_new" && Interlocked.CompareExchange(ref CommentFailures, 0, 1) == 1)
                 throw new IOException("fixture comments unavailable");
             object body = method switch
             {
                 "login_status" => new { code = 200, data = new { profile = new { userId = 42, nickname = "测试用户", avatarUrl = "" } } },
                 "personalized" => new { code = 200, result = new[] { playlist } },
-                "event" => new { code = 200, @event = Array.Empty<object>(), more = false, lasttime = 0 },
-                "user_event" => new { code = 200, events = Array.Empty<object>(), more = false, lasttime = 0 },
+                "event" => EventResponse is { } eventPage ? eventPage : new { code = 200, @event = Array.Empty<object>(), more = false, lasttime = 0 },
+                "user_event" => EventResponse is { } ownPage ? ownPage : new { code = 200, events = Array.Empty<object>(), more = false, lasttime = 0 },
+                "msg_private_history" => PrivateResponse is { } privatePage ? privatePage : new { code = 200, msgs = Array.Empty<object>(), more = false },
                 "user_playlist" => new { code = 200, playlist = new[] { playlist }, more = false },
                 "playlist_detail" => new { code = 200, playlist = new { id = 101, name = "在线歌单", coverImgUrl = cover, description = "本地下载来源定位", trackCount = 165, trackIds = Enumerable.Range(1, 165).Select(i => new { id = i }).ToArray() } },
                 "playlist_track_all" => new { code = 200, songs = Enumerable.Range(1, 165).Skip((int)p.Number("offset")).Take(100).Select(i => Song(i)).ToArray() },
                 "song_detail" => new { code = 200, songs = p.Text("ids").Split(',', StringSplitOptions.RemoveEmptyEntries).Select(long.Parse).Select(Song).ToArray() },
-                "artists" => new { code = 200, artist = new { id = p.Number("id"), name = p.Number("id") == 302 ? "歌手乙" : "歌手甲", picUrl = cover, musicSize = 1, albumSize = 1 } },
+                "artists" => new { code = 200, artist = new { id = p.Number("id"), name = p.Number("id") == 302 ? "歌手乙" : "歌手甲", picUrl = cover, musicSize = 1, albumSize = 1 }, hotSongs = new[] { Song(137) } },
                 "artist_songs" => new { code = 200, total = 1, more = false, songs = new[] { Song(137) } },
                 "artist_album" => new { code = 200, more = false, hotAlbums = new[] { new { id = 401, name = "测试专辑", picUrl = cover } } },
                 "album" => new { code = 200, album = new { id = 401, name = "测试专辑", picUrl = cover, artists = new[] { new { id = 301, name = "歌手甲" }, new { id = 302, name = "歌手乙" } } }, songs = new[] { Song(137) } },
                 "album_detail_dynamic" => new { code = 200, isSub = false, commentCount = 3 },
                 "dj_detail" => new { code = 200, djRadio = new { id = p.Number("rid"), name = "测试播客", picUrl = cover, desc = "播客介绍", programCount = 1, commentCount = 2, subCount = 3, subed = false, dj = new { userId = 42, nickname = "测试主播" } } },
                 "dj_program" => new { code = 200, more = false, programs = new[] { new { id = 601, name = "测试单集", coverUrl = cover, duration = 4000, mainSong = Song(137), dj = new { nickname = "测试主播" } } } },
+                "dj_program_detail" => new { code = 200, program = new { id = p.Number("id"), radio = new { id = 501, name = "测试播客", picUrl = cover } } },
                 "song_red_count" => new { code = 200, data = new { count = 12 } },
                 "song_like_check" => new { code = 200, ids = Array.Empty<long>() },
                 "comment_new" => new { code = 200, data = new { totalCount = 0, hasMore = false, comments = Array.Empty<object>() } },

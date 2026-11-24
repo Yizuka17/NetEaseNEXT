@@ -10,6 +10,13 @@ public sealed partial class MainWindow
     private CancellationTokenSource? _songCreditsLoad;
     private Track? _creditsTrack, _creditsDetail;
     private long _creditsSourceId;
+    private CancellationTokenSource? _creditsPrefetch;
+    private Task<Track>? _creditsPrefetchTask;
+    private bool _creditsAttempted;
+    private void CancelCreditsPrefetch()
+    {
+        _creditsPrefetch?.Cancel(); _creditsPrefetch = null; _creditsPrefetchTask = null; _creditsAttempted = false;
+    }
     private long CreditSourceId(Track track) => !track.IsLocal ? track.Id : _settings.LocalOnlineInfo ? SourceSongId(track) : 0;
 
     private static SongArtist[] TrackArtists(Track track)
@@ -50,10 +57,32 @@ public sealed partial class MainWindow
         if (reload || !ReferenceEquals(_creditsTrack, track) || _creditsSourceId != id)
         {
             _songCreditsLoad?.Cancel(); _songCreditsLoad = null;
+            CancelCreditsPrefetch();
             _creditsTrack = track; _creditsDetail = track; _creditsSourceId = id;
         }
         RenderSongCredits(MiniArtist, track, _creditsDetail ?? track);
         RenderSongCredits(NowArtist, track, _creditsDetail ?? track);
+        var detail = _creditsDetail ?? track;
+        if (id > 0 && track.PodcastId <= 0 && InternetAvailable && !_creditsAttempted &&
+            (detail.AlbumId <= 0 || TrackArtists(detail).Any(a => a.Id <= 0) || TrackArtists(detail).Length == 0))
+        {
+            _creditsAttempted = true;
+            _creditsPrefetchTask = PrefetchSongCreditsAsync(track, id);
+        }
+    }
+    private async Task<Track> PrefetchSongCreditsAsync(Track track, long id)
+    {
+        using var load = new CancellationTokenSource(); _creditsPrefetch = load;
+        try
+        {
+            var detail = await ResolveSongDetailsAsync(track, SongInfoApiOverride ?? _api, load.Token);
+            if (!load.IsCancellationRequested && !_hidden && ReferenceEquals(_creditsTrack, track) && CreditSourceId(track) == id)
+            { _creditsDetail = detail; RefreshSongCredits(); }
+            return detail;
+        }
+        catch (OperationCanceledException) { return track; }
+        catch { return track; }
+        finally { if (ReferenceEquals(_creditsPrefetch, load)) _creditsPrefetch = null; }
     }
     private async Task OpenTrackCreditAsync(Track track, SongArtist? artist = null)
     {
@@ -63,7 +92,12 @@ public sealed partial class MainWindow
         {
             var detail = ReferenceEquals(_creditsTrack, track) ? _creditsDetail ?? track : track;
             if (artist == null ? detail.AlbumId <= 0 : artist.Id <= 0)
-                detail = await ResolveSongDetailsAsync(track, SongInfoApiOverride ?? _api, load.Token);
+            {
+                if (ReferenceEquals(_creditsTrack, track) && _creditsPrefetchTask is { IsCompleted: false } prefetch)
+                    detail = await prefetch.WaitAsync(load.Token);
+                if (artist == null ? detail.AlbumId <= 0 : !TrackArtists(detail).Any(a => a.Id > 0 && string.Equals(a.Name, artist.Name, StringComparison.OrdinalIgnoreCase)))
+                    detail = await ResolveSongDetailsAsync(track, SongInfoApiOverride ?? _api, load.Token);
+            }
             if (load.IsCancellationRequested || _hidden || !ReferenceEquals(route, _route) || CreditSourceId(track) != id) return;
             if (ReferenceEquals(_creditsTrack, track)) { _creditsDetail = detail; RefreshSongCredits(); }
             if (artist == null)

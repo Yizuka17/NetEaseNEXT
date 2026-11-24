@@ -12,7 +12,7 @@ public sealed class ApiClient : IDisposable
     private readonly CancellationTokenSource _lifetime = new();
     private readonly Func<string, JsonElement, CancellationToken, Task<JsonElement>>? _fixture;
     public ApiClient(SettingsStore? settings = null) { _cacheDirectory = (settings ?? SettingsStore.Load()).CacheDirectory; _cookie = SettingsStore.ReadCookie(); }
-    public ApiClient(ApiClient sessionSource) { _sessionSource = sessionSource; }
+    public ApiClient(ApiClient sessionSource) { _sessionSource = sessionSource; _fixture = sessionSource._fixture; }
     internal ApiClient(Func<string, JsonElement, CancellationToken, Task<JsonElement>> fixture, string cacheDirectory, string cookie = "") { _fixture = fixture; _cacheDirectory = cacheDirectory; _cookie = cookie; }
     private readonly MetadataCache _cache = new();
     private MetadataCache Cache => _sessionSource?.Cache ?? _cache;

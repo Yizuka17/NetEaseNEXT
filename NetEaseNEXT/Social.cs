@@ -59,6 +59,11 @@ public sealed partial class MainWindow
         if (original == text) original = "";
         var sharedCatalog = SharedEventCatalog(payload);
         var sharedTrack = SharedEventTrack(payload);
+        if (view is "private" or "conversation" && sharedCatalog == null && sharedTrack == null && GeneralPrivateResource(payload) is { } shared)
+        {
+            if (shared.Kind == "song") sharedTrack = new(shared.Id, shared.Name.Length > 0 ? shared.Name : "歌曲", "", "", shared.Cover, 0);
+            else sharedCatalog = PrivateCatalog(shared);
+        }
         var privateResource = view is "private" or "conversation" && (sharedTrack != null || sharedCatalog != null);
         if (view == "events" && (sharedTrack != null || sharedCatalog != null)) original = "";
         var picture = PictureFromPayload(payload);
@@ -76,7 +81,12 @@ public sealed partial class MainWindow
             if (text.Length == 0) { text = FirstText(original, "你的动态收到新的赞"); original = ""; }
         }
         if (view == "messages" && text.Length == 0) text = FirstText(general.Text("content"), action, "通知");
-        if (privateResource) { text = ""; original = ""; picture = ""; }
+        if (privateResource)
+        {
+            text = PrivateShareText(payload);
+            if (text.Trim() == (sharedTrack?.Title ?? sharedCatalog?.Name)) text = "";
+            original = ""; picture = "";
+        }
         var commentId = comment.Number("commentId"); if (commentId == 0) commentId = item.Number("commentId");
         return new SocialItem
         {

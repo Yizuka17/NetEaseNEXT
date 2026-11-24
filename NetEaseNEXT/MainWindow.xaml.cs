@@ -189,8 +189,9 @@ public sealed partial class MainWindow : Window
         if (hidden)
         {
             CloseEventPictures();
+            _socialResourceLoad?.Cancel();
             _activeFlyout?.Hide(); CloseRowContextMenu();
-            _songCreditsLoad?.Cancel(); _songCreditsLoad = null; _pendingShare = null;
+            _songCreditsLoad?.Cancel(); _songCreditsLoad = null; CancelCreditsPrefetch(); _pendingShare = null;
             _resourceShareLoad?.Cancel();
             SetBusy(false); ResetPageFooters();
             _lyricFollowTimer.Stop(); StopLocalMonitoring();
@@ -243,11 +244,12 @@ public sealed partial class MainWindow : Window
     private void Cleanup()
     {
         CloseEventPictures();
+        _socialResourceLoad?.Cancel();
         if (Root.XamlRoot != null) Root.XamlRoot.Changed -= FloatingRootChanged;
         _resourceShareLoad?.Cancel();
         if (_shareManager != null) _shareManager.DataRequested -= RequestedShare;
         _activeFlyout?.Hide(); CloseRowContextMenu();
-        _songCreditsLoad?.Cancel(); _pendingShare = null;
+        _songCreditsLoad?.Cancel(); CancelCreditsPrefetch(); _pendingShare = null;
         _windowPlacementTimer.Stop();
         StopLocalMonitoring();
         Windows.Networking.Connectivity.NetworkInformation.NetworkStatusChanged -= NetworkStatusChanged;

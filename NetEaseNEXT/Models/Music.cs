@@ -17,6 +17,7 @@ public sealed class Track(long id, string title, string artist, string album, st
     public string Album { get; } = album;
     public string Cover { get; } = cover;
     public long Duration { get; } = duration;
+    [JsonIgnore] internal bool HasDownloadedMetadata { get; init; }
     public long PodcastId { get; set; }
     public long ProgramId { get; set; }
     public string LocalPath { get; set; } = "";
@@ -41,6 +42,14 @@ public sealed class Track(long id, string title, string artist, string album, st
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException) { return false; }
     }
     internal Track OnlineSource(long id) => new(id, Title, Artist, Album, Cover, Duration) { ArtistId = ArtistId, AlbumId = AlbumId, Artists = Artists };
+    internal Track WithFileMetadata(Services.AudioFileInfo info, string cover) => new(Id,
+        info.Title.Length > 0 ? info.Title : Title, info.Artist.Length > 0 ? info.Artist : Artist,
+        info.Album.Length > 0 ? info.Album : Album, cover.Length > 0 ? cover : Cover, info.Duration > 0 ? info.Duration : Duration)
+    {
+        ArtistId = ArtistId > 0 ? ArtistId : info.ArtistId, AlbumId = AlbumId > 0 ? AlbumId : info.AlbumId,
+        Artists = Artists.Length > 0 ? Artists : info.ArtistId > 0 ? [new SongArtist(info.ArtistId, info.Artist)] : [],
+        PodcastId = PodcastId, ProgramId = ProgramId, HasDownloadedMetadata = true
+    };
     public override string ToString() => Title;
     public static Track FromJson(JsonElement song)
     {

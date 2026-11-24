@@ -25,20 +25,46 @@ public sealed partial class MainWindow
     private static CatalogItem? SharedEventCatalog(JsonElement payload)
     {
         var album = Object(payload, "album");
-        if (album.Number("id") > 0) return new(album.Number("id"), FirstText(album.Text("name"), album.Text("title")), FirstText(album.Text("picUrl"), album.Text("coverImgUrl")), "album", "专辑");
+        if (album.Number("id") > 0) return new(album.Number("id"), FirstText(album.Text("name"), album.Text("title")), FirstText(album.Text("picUrl"), album.Text("coverImgUrl"), album.Text("blurPicUrl")), "album", "专辑");
         var playlist = Object(payload, "playlist");
         if (playlist.Number("id") > 0) return new(playlist.Number("id"), FirstText(playlist.Text("name"), playlist.Text("title")), FirstText(playlist.Text("coverImgUrl"), playlist.Text("picUrl")), "playlist", "歌单");
         var program = Object(payload, "program");
+        if (program.Number("id") > 0) return new(program.Number("id"), FirstText(program.Text("name"), program.Text("title")), FirstText(program.Text("coverUrl"), program.Text("picUrl")), "program", "播客单集");
         var radio = FirstObject(Object(payload, "djRadio"), FirstObject(Object(payload, "djradio"), FirstObject(Object(payload, "radio"), Object(program, "radio"))));
         if (radio.Number("id") > 0) return new(radio.Number("id"), FirstText(radio.Text("name"), radio.Text("title")), FirstText(radio.Text("picUrl"), radio.Text("coverUrl")), "radio", "播客");
-        var nested = Object(payload, "msg");
+        var nested = Payload(payload, "msg");
         return nested.ValueKind == JsonValueKind.Object ? SharedEventCatalog(nested) : null;
     }
     private async void SocialCatalog_Click(object sender, RoutedEventArgs args)
     {
         if ((sender as FrameworkElement)?.DataContext is not SocialItem { SharedCatalog: { } resource }) return;
-        _playlistId = resource.Id; _playlistName = resource.Name;
-        await NavigateAsync(resource.Kind == "album" ? "album" : resource.Kind == "radio" ? "programs" : "playlist");
+        try { await OpenSocialCatalogAsync(resource); }
+        catch (OperationCanceledException) { }
+        catch (Exception ex) { ShowError(ex.Message); }
+    }
+    private CancellationTokenSource? _socialResourceLoad;
+    private async Task OpenSocialCatalogAsync(CatalogItem resource)
+    {
+        if (_hidden || _exiting) return;
+        _socialResourceLoad?.Cancel();
+        using var load = new CancellationTokenSource(); _socialResourceLoad = load;
+        var route = _route; var session = _api.Cookie;
+        try
+        {
+            var id = resource.Id; var name = resource.Name; var cover = resource.Cover;
+            if (resource.Kind == "program")
+            {
+                var result = await _api.CallCachedAsync("dj_program_detail", new { id }, load.Token);
+                load.Token.ThrowIfCancellationRequested();
+                if (_hidden || !ReferenceEquals(route, _route) || session != _api.Cookie) return;
+                var radio = Object(Object(result, "program"), "radio");
+                id = radio.Number("id"); name = radio.Text("name"); cover = radio.Text("picUrl");
+                if (id <= 0) throw new InvalidOperationException("播客暂不可用");
+            }
+            _playlistId = id; _playlistName = name;
+            await NavigateAsync(resource.Kind == "album" ? "album" : resource.Kind is "radio" or "program" ? "programs" : "playlist", cover: cover);
+        }
+        finally { if (ReferenceEquals(_socialResourceLoad, load)) _socialResourceLoad = null; }
     }
     private static Track? SharedEventTrack(JsonElement payload)
     {
@@ -49,7 +75,7 @@ public sealed partial class MainWindow
             var radio = Object(program, "radio");
             if (program.Number("id") > 0 && main.Number("id") > 0 && radio.Number("id") > 0)
                 return new(main.Number("id"), FirstText(program.Text("name"), main.Text("name")), Object(program, "dj").Text("nickname"), radio.Text("name"), FirstText(program.Text("coverUrl"), radio.Text("picUrl")), Math.Max(program.Number("duration"), main.Number("duration"))) { PodcastId = radio.Number("id"), ProgramId = program.Number("id") };
-            var nested = Object(payload, "msg");
+            var nested = Payload(payload, "msg");
             return nested.ValueKind == JsonValueKind.Object ? SharedEventTrack(nested) : null;
         }
         try { return Track.FromJson(song); }

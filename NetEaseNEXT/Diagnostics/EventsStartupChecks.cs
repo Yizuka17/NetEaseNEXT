@@ -60,10 +60,10 @@ public sealed partial class MainWindow
         foreach (var key in new[] { "album", "playlist", "djRadio", "program" })
         {
             object resource = key == "program" ? new { id = 601, name = "测试单集", mainSong = LocalLinkFixtures.Song(137), radio = new { id = 501, name = "测试播客", picUrl = "" }, dj = new { nickname = "测试主播" }, duration = 4000 } : new { id = 501, name = "测试资源", picUrl = "" };
-            var payload = new Dictionary<string, object> { [key] = resource, ["msg"] = "重复的分享说明", ["picUrl"] = "https://example.invalid/redundant-cover.jpg" };
+            var payload = new Dictionary<string, object> { [key] = resource, ["msg"] = "值得听听", ["picUrl"] = "https://example.invalid/redundant-cover.jpg" };
             using var document = JsonDocument.Parse(JsonSerializer.Serialize(new { fromUser = new { userId = 8, nickname = "sender" }, msg = JsonSerializer.Serialize(payload) }));
             var shared = ParseSocialItem(document.RootElement, "conversation", "", 7);
-            check("Private " + key + " keeps only its resource card", (shared.SharedTrack != null || shared.SharedCatalog != null) && shared.TextVisibility == Visibility.Collapsed && shared.OriginalVisibility == Visibility.Collapsed && shared.PictureVisibility == Visibility.Collapsed, null);
+            check("Private " + key + " preserves the attached message without duplicate quotes", (shared.SharedTrack != null || shared.SharedCatalog != null) && shared.Text == "值得听听" && shared.OriginalVisibility == Visibility.Collapsed && shared.PictureVisibility == Visibility.Collapsed, null);
             if (key == "program") check("A shared podcast episode keeps its playback and navigation identity", shared.SharedTrack is { Id: 137, ProgramId: 601, PodcastId: 501, Title: "测试单集" }, null);
         }
         using (var plain = JsonDocument.Parse("""{"msg":"你好"}"""))

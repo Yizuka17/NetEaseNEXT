@@ -2431,5 +2431,13 @@
     },
     "crypto": "eapi",
     "checkToken": false
+  },
+  {
+    "method": "dj_program_detail",
+    "query": { "id": 601 },
+    "path": "/api/dj/program/detail",
+    "data": { "id": 601 },
+    "crypto": "weapi",
+    "checkToken": false
   }
 ]

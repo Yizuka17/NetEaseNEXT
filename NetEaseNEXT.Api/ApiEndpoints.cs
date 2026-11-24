@@ -53,6 +53,7 @@ public static class ApiEndpoints
             case "pl_count": return R("/api/pl/count", null, "weapi");
             case "dj_recommend": return R("/api/djradio/recommend/v1", null, "weapi");
             case "dj_program": return R("/api/dj/program/byradio", new { radioId = V("rid"), limit = V("limit", 30), offset = V("offset", 0), asc = S("asc") is "true" or "1" }, "weapi");
+            case "dj_program_detail": return R("/api/dj/program/detail", new { id = V("id") }, "weapi");
             case "dj_sublist": return R("/api/djradio/get/subed", Page(), "weapi");
             case "dj_detail": return R("/api/djradio/v2/get", new { id = V("rid") }, "weapi");
             case "dj_sub": return R("/api/djradio/sub", new { id = V("rid"), sub = N("t") == 1 }, "weapi");

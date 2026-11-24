@@ -22,6 +22,7 @@ public sealed partial class MainWindow
     private async Task NavigateAsync(string view, bool remember = true, bool backward = false, string cover = "")
     {
         CloseEventPictures();
+        _socialResourceLoad?.Cancel();
         CloseRowContextMenu();
         _songDetailLoad?.Cancel(); _songCreditsLoad?.Cancel(); _resourceShareLoad?.Cancel();
         StopDownloadCompletionMotion();
@@ -50,6 +51,7 @@ public sealed partial class MainWindow
         var route = _route = new(view, _playlistId, _artistId, _peerId, _playlistName, _query, _linkedResource, _localPlaylistId, cover);
         BackButton.IsEnabled = _history.Count > 0 || _fullScreen;
         _view = view; _offset = 0; _socialCursor = -1;
+        ConfigureSocialRefresh();
         ResetPageFooters(); ClearAlbumDetails();
         ConfigureInterfaceMotion();
         if (view == "playlist") { _playlistTrackIds = []; _playlistTrackCount = 0; _resumePlaylistId = _playlistId; _resumePlaylistName = _playlistName; }

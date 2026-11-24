@@ -10,7 +10,7 @@ using System.Net.Http;
 
 namespace NetEaseNEXT.Services;
 
-public sealed class PlaybackService : IDisposable
+public sealed partial class PlaybackService : IDisposable
 {
     private readonly ApiClient _streamApi;
     private readonly SettingsStore _settings;
@@ -25,6 +25,7 @@ public sealed class PlaybackService : IDisposable
     private readonly TrackUrls _urls;
     internal DownloadedLibrary Downloads { get; set; } = DownloadedLibrary.Shared;
     internal string? CurrentDownloadedPath { get; private set; }
+    internal AudioFileInfo? CurrentFileMetadata { get; private set; }
     private CancellationTokenSource? _nextCacheLoad;
     private Prepared? _nextPrepared;
     private long _nextPreparedId;
@@ -55,6 +56,8 @@ public sealed class PlaybackService : IDisposable
         }
     }
     private CancellationTokenSource? _load;
+    private int _loadGeneration;
+    private long _loadingTrackId;
     private bool _disposed, _desiredPlaying;
     private int _index = -1;
     private static readonly HttpClient AudioClient = new() { Timeout = TimeSpan.FromMinutes(2) };
@@ -65,6 +68,7 @@ public sealed class PlaybackService : IDisposable
         set
         {
             if (value is not ("Sequential" or "Repeat" or "One" or "Shuffle" or "Reverse") || value == _mode) return;
+            CancelNetworkRecovery();
             var wasShuffle = _mode == "Shuffle"; _mode = value;
             if (value == "Shuffle") Queue = Shuffle(_orderedQueue);
             else if (wasShuffle) Queue = _orderedQueue.ToArray();
@@ -83,8 +87,8 @@ public sealed class PlaybackService : IDisposable
     public Track? Current { get; private set; }
     public string CurrentQuality { get; private set; } = "standard";
     public bool IsPlaying => _player.PlaybackSession.PlaybackState == MediaPlaybackState.Playing;
-    public TimeSpan Position => _source == null ? _restoredPosition : _player.PlaybackSession.Position;
-    public TimeSpan Duration => _source == null ? TimeSpan.FromMilliseconds(Current?.Duration ?? 0) : _player.PlaybackSession.NaturalDuration;
+    public TimeSpan Position => _source == null || _mediaFailed ? _restoredPosition : _player.PlaybackSession.Position;
+    public TimeSpan Duration => _source == null || _mediaFailed ? TimeSpan.FromMilliseconds(Current?.Duration ?? 0) : _player.PlaybackSession.NaturalDuration;
     internal MediaPlaybackStatus SystemPlaybackStatus => _smtc.PlaybackStatus;
     internal bool IsWorkerRunning => _streamApi.IsWorkerRunning;
     internal int StreamRequestCount => _streamApi.RequestCount;
@@ -118,13 +122,22 @@ public sealed class PlaybackService : IDisposable
         player.PlaybackSession.PlaybackStateChanged -= OnState; player.MediaEnded -= OnEnded; player.MediaFailed -= OnFailed;
     }
     private void Dispatch(Action action) { if (!_disposed) _dispatcher.TryEnqueue(() => { if (!_disposed) action(); }); }
-    private void OnState(MediaPlaybackSession sender, object args) => Dispatch(() => { if (!ReferenceEquals(sender, _player.PlaybackSession)) return; UpdateTimeline(); Changed?.Invoke(); });
+    private void OnState(MediaPlaybackSession sender, object args) => Dispatch(() =>
+    {
+        if (!ReferenceEquals(sender, _player.PlaybackSession)) return;
+        if (sender.PlaybackState == MediaPlaybackState.Playing && _networkRecovery is { Resume: true } recovery && recovery.Track.Id == Current?.Id && !_recoveryRunning)
+        { CancelNetworkRecovery(); _mediaFailed = false; _restoredPosition = TimeSpan.Zero; }
+        ObserveBuffering(); UpdateTimeline(); Changed?.Invoke();
+    });
     private void OnEnded(MediaPlayer sender, object args) => Dispatch(() => { if (!ReferenceEquals(sender, _player)) return; if (Mode == "One" && Current != null) _ = LoadAsync(Current); else _ = NextAsync(Mode is not ("Sequential" or "Reverse")); });
     private void OnFailed(MediaPlayer sender, MediaPlayerFailedEventArgs args) => Dispatch(() =>
     {
         if (!ReferenceEquals(sender, _player)) return;
+        _restoredPosition = Position; _mediaFailed = true;
         Log.Write(new InvalidOperationException($"Audio failure: {args.Error}, HRESULT 0x{args.ExtendedErrorCode.HResult:X8}, quality {CurrentQuality}"));
-        Error?.Invoke("音频加载失败，请重试或切换歌曲。"); UpdateTimeline(); Changed?.Invoke();
+        var retry = args.Error == MediaPlayerError.NetworkError && _activeStreamRemote && Current is { } track && QueueNetworkRecovery(track, true, CurrentQuality, null);
+        if (!retry) { _desiredPlaying = false; CancelNetworkRecovery(); }
+        Error?.Invoke(retry ? "网络暂不可用，正在重试" : "音频加载失败，请重试或切换歌曲。"); UpdateTimeline(); Changed?.Invoke();
     });
     private void OnButton(SystemMediaTransportControls sender, SystemMediaTransportControlsButtonPressedEventArgs args) => Dispatch(() =>
     {
@@ -137,14 +150,21 @@ public sealed class PlaybackService : IDisposable
         }
     });
     private void OnPosition(SystemMediaTransportControls sender, PlaybackPositionChangeRequestedEventArgs args) => Dispatch(() => Seek(args.RequestedPlaybackPosition));
-    public async Task PlayAsync(Track track, IEnumerable<Track>? context = null)
+    public Task PlayAsync(Track track, IEnumerable<Track>? context = null) => PlayCoreAsync(track, context, null);
+    private async Task PlayCoreAsync(Track track, IEnumerable<Track>? context, RecoveryRequest? recovery)
     {
+        if (recovery == null)
+        {
+            CancelNetworkRecovery();
+            if (_load != null && _loadingTrackId != track.Id) { _loadGeneration++; _load.Cancel(); }
+        }
+        _desiredPlaying = true;
         var requestedContext = context?.ToArray();
-        if (Current?.Id == track.Id && _source != null && Position < Duration - TimeSpan.FromSeconds(1)) SetPlaying(true);
+        if (recovery == null && !_mediaFailed && Current?.Id == track.Id && _source != null && Position < Duration - TimeSpan.FromSeconds(1)) SetPlaying(true);
         else
         {
             if (_pendingPlayTask == null || _pendingPlayId != track.Id)
-            { _pendingPlayId = track.Id; _pendingPlayTask = LoadAsync(track, resume: Current?.Id == track.Id && _restoredPosition > TimeSpan.Zero, hints: requestedContext); }
+            { _pendingPlayId = track.Id; _pendingPlayTask = LoadAsync(track, resume: recovery?.Resume ?? (Current?.Id == track.Id && _restoredPosition > TimeSpan.Zero), quality: recovery?.Quality, hints: requestedContext, recovering: recovery != null); }
             var pending = _pendingPlayTask;
             try { if (!await pending) return; }
             finally { if (ReferenceEquals(_pendingPlayTask, pending)) _pendingPlayTask = null; }
@@ -179,6 +199,7 @@ public sealed class PlaybackService : IDisposable
     public void AddNext(Track track) => InsertNext(track, prepare: true);
     public void AddNext(IEnumerable<Track> tracks)
     {
+        CancelNetworkRecovery();
         var added = tracks.Where(t => t.Id != Current?.Id).DistinctBy(t => t.Id).ToArray();
         if (added.Length == 0) return;
         var ids = added.Select(t => t.Id).ToHashSet();
@@ -194,6 +215,7 @@ public sealed class PlaybackService : IDisposable
     }
     private void InsertNext(Track track, bool prepare)
     {
+        CancelNetworkRecovery();
         if (Current?.Id == track.Id) return;
         var queue = Queue.ToList();
         var current = Current == null ? -1 : queue.FindIndex(t => t.Id == Current.Id);
@@ -217,6 +239,7 @@ public sealed class PlaybackService : IDisposable
     }
     public int Remove(IEnumerable<Track> tracks)
     {
+        CancelNetworkRecovery();
         var ids = tracks.Where(t => t.Id != Current?.Id).Select(t => t.Id).ToHashSet();
         var removed = Queue.Count(t => ids.Contains(t.Id)); if (removed == 0) return 0;
         Queue = Queue.Where(t => !ids.Contains(t.Id)).ToArray();
@@ -236,6 +259,9 @@ public sealed class PlaybackService : IDisposable
     internal void ReleaseLocalFiles(IReadOnlySet<string> paths)
     {
         if (!(Current?.IsLocal == true && paths.Contains(Current.LocalPath)) && !(CurrentDownloadedPath is { } file && paths.Contains(file))) return;
+        CancelNetworkRecovery(); _mediaFailed = _activeStreamRemote = false;
+        CurrentFileMetadata = null;
+        _loadGeneration++;
         _load?.Cancel(); _nextCacheLoad?.Cancel(); _audioCache.Stop(); _nextAudioCache.Stop(); DisposeNextPrepared();
         _player.Pause(); _player.Source = null; _source?.Dispose(); _source = null; DeleteLocal(_localPath); _localPath = null; _cacheRequest = null; _audioCache.ActivePath = null;
         Current = null; CurrentDownloadedPath = null; CurrentQuality = ""; _desiredPlaying = false; _restoredPosition = TimeSpan.Zero; _index = -1;
@@ -243,6 +269,9 @@ public sealed class PlaybackService : IDisposable
     }
     internal void Restore(PlaybackSnapshot state)
     {
+        CancelNetworkRecovery(); _mediaFailed = _activeStreamRemote = false;
+        CurrentFileMetadata = null;
+        _loadGeneration++;
         _load?.Cancel(); _audioCache.Stop(); _nextAudioCache.Stop();
         DisposeNextPrepared();
         _player.Pause(); _player.Source = null; _source?.Dispose(); _source = null; DeleteLocal(_localPath); _localPath = null; _cacheRequest = null;
@@ -344,7 +373,7 @@ public sealed class PlaybackService : IDisposable
         void Opened(MediaPlayer _, object args) => opened.TrySetResult();
         void Failed(MediaPlayer _, MediaPlayerFailedEventArgs args)
         {
-            var error = new InvalidOperationException($"音频准备失败 ({args.Error}, 0x{args.ExtendedErrorCode.HResult:X8})");
+            Exception error = args.Error == MediaPlayerError.NetworkError ? new NetworkAudioException("网络音频准备失败") : new InvalidOperationException($"音频准备失败 ({args.Error}, 0x{args.ExtendedErrorCode.HResult:X8})");
             failure.TrySetResult(error); opened.TrySetException(error);
         }
         player.MediaOpened += Opened; player.MediaFailed += Failed;
@@ -406,6 +435,20 @@ public sealed class PlaybackService : IDisposable
     {
         LastPlayUsedCache = LastPlayUsedPreparedDecoder = false;
         if (!File.Exists(path)) throw new FileNotFoundException("本地音频文件已移动或删除");
+        AudioFileInfo? embedded = null;
+        if (!track.IsLocal && downloaded)
+        {
+            var before = new FileInfo(path); var length = before.Length; var modified = before.LastWriteTimeUtc.Ticks;
+            var tags = await Task.Run(() => AudioTags.Read(path), ct); ct.ThrowIfCancellationRequested();
+            var after = new FileInfo(path);
+            if (after.Length != length || after.LastWriteTimeUtc.Ticks != modified) throw new IOException("下载文件正在更新，请重试");
+            if (tags.SongId > 0 && tags.SongId != track.Id) throw new InvalidDataException("下载文件与歌曲标识不匹配");
+            if (tags.SongId == track.Id)
+            {
+                var cover = tags.Cover is { Length: > 0 } bytes ? new Uri(LocalMusicFiles.StoreCover(bytes)).AbsoluteUri : "";
+                track = track.WithFileMetadata(tags, cover); embedded = tags with { Cover = null };
+            }
+        }
         Prepared? prepared = null;
         var file = new FileInfo(path);
         if (!resume && _nextPrepared != null && _nextPreparedId == track.Id &&
@@ -426,6 +469,8 @@ public sealed class PlaybackService : IDisposable
             _player = prepared.Player; _source = prepared.Source; _localPath = null;
             prepared = null;
             _cacheRequest = null; _audioCache.ActivePath = null; Current = track; CurrentQuality = level; CurrentDownloadedPath = downloaded ? path : null; _restoredPosition = TimeSpan.Zero;
+            CurrentFileMetadata = embedded;
+            CancelNetworkRecovery(); _mediaFailed = _activeStreamRemote = false;
             Attach(_player); if (_desiredPlaying) _player.Play(); else _player.Pause(); _player.Volume = Math.Clamp(_settings.Volume, 0, 1);
             previousPlayer.Source = null; previousSource?.Dispose(); previousPlayer.Dispose(); DeleteLocal(previousPath);
             PublishSystemTrack(); UpdateTimeline(); Changed?.Invoke(); return true;
@@ -435,9 +480,12 @@ public sealed class PlaybackService : IDisposable
             if (prepared != null) { prepared.Player.Source = null; prepared.Source.Dispose(); prepared.Player.Dispose(); }
         }
     }
-    private async Task<bool> LoadAsync(Track track, bool resume = false, bool autoplay = true, string? quality = null, IEnumerable<Track>? hints = null)
+    private async Task<bool> LoadAsync(Track track, bool resume = false, bool autoplay = true, string? quality = null, IEnumerable<Track>? hints = null, bool recovering = false)
     {
+        var generation = ++_loadGeneration;
+        if (!recovering) CancelNetworkRecovery();
         _load?.Cancel(); _audioCache.Stop(); _nextCacheLoad?.Cancel(); _nextAudioCache.Stop(); using var load = new CancellationTokenSource(TimeSpan.FromMinutes(2)); _load = load;
+        _loadingTrackId = track.Id;
         _desiredPlaying = autoplay; Prepared? prepared = null; string? localPath = null; LastSwitchUsedLocalStream = false;
         try
         {
@@ -496,6 +544,8 @@ public sealed class PlaybackService : IDisposable
             _player = prepared.Player; _source = prepared.Source; _localPath = LastPlayUsedCache ? null : prepared.LocalPath; prepared = null; localPath = null;
             _audioCache.ActivePath = LastPlayUsedCache ? cached ?? cachePath : null;
             Attach(_player); Current = track; CurrentQuality = actualQuality; CurrentDownloadedPath = null;
+            CurrentFileMetadata = null;
+            CancelNetworkRecovery(); _mediaFailed = false; _activeStreamRemote = !LastPlayUsedCache && _localPath == null;
             _restoredPosition = TimeSpan.Zero;
             if (!_desiredPlaying) _player.Pause(); _player.Volume = Math.Clamp(_settings.Volume, 0, 1);
             oldPlayer.Source = null; oldSource?.Dispose(); oldPlayer.Dispose(); DeleteLocal(oldPath);
@@ -505,12 +555,24 @@ public sealed class PlaybackService : IDisposable
             if (info.TryGetProperty("freeTrialInfo", out var trial) && trial.ValueKind == System.Text.Json.JsonValueKind.Object) Error?.Invoke("当前为试听片段，完整播放取决于账号权限。");
             return true;
         }
-        catch (OperationCanceledException) { return false; }
-        catch (Exception ex) { _urls.Invalidate(track.Id, quality ?? _settings.Quality); Error?.Invoke(ex.Message); Changed?.Invoke(); return false; }
+        catch (OperationCanceledException)
+        {
+            if (generation == _loadGeneration && ReferenceEquals(_load, load)) QueueNetworkRecovery(track, resume, quality, hints);
+            return false;
+        }
+        catch (Exception ex)
+        {
+            if (generation != _loadGeneration || !ReferenceEquals(_load, load)) return false;
+            _urls.Invalidate(track.Id, quality ?? _settings.Quality);
+            var retry = generation == _loadGeneration && ReferenceEquals(_load, load) && IsTransientPlaybackFailure(ex) && QueueNetworkRecovery(track, resume, quality, hints);
+            if (!retry && ReferenceEquals(_load, load)) { CancelNetworkRecovery(); _desiredPlaying = false; }
+            if (!recovering) Error?.Invoke(retry ? "网络暂不可用，正在重试" : ex.Message);
+            Changed?.Invoke(); return false;
+        }
         finally
         {
             if (prepared != null) { prepared.Player.Source = null; prepared.Source.Dispose(); prepared.Player.Dispose(); }
-            DeleteLocal(localPath); if (ReferenceEquals(_load, load)) _load = null;
+            DeleteLocal(localPath); if (ReferenceEquals(_load, load)) { _load = null; _loadingTrackId = 0; }
         }
     }
     private void PublishSystemTrack()
@@ -557,7 +619,7 @@ public sealed class PlaybackService : IDisposable
         var index = (_index + (Mode == "Reverse" ? 1 : -1) + Queue.Count) % Queue.Count;
         if (await LoadAsync(Queue[index])) { _index = index; WarmFollowing(); }
     }
-    private void SetPlaying(bool play) { _desiredPlaying = play; if (_source == null && play && Current is Track restored) { _ = LoadAsync(restored, resume: _restoredPosition > TimeSpan.Zero); return; } if (_source != null) { if (play) _player.Play(); else _player.Pause(); } UpdateTimeline(); Changed?.Invoke(); }
+    private void SetPlaying(bool play) { _desiredPlaying = play; if (!play) CancelNetworkRecovery(); if ((_source == null || _mediaFailed) && play && Current is Track restored) { _ = PlayCoreAsync(restored, null, null); return; } if (_source != null) { if (play) _player.Play(); else _player.Pause(); } UpdateTimeline(); Changed?.Invoke(); }
     public void Toggle() => SetPlaying(!_desiredPlaying);
     public Task ReloadQualityAsync() => Current is Track track ? LoadAsync(track, true, IsPlaying) : Task.CompletedTask;
     private long _pendingPlayId;
@@ -590,6 +652,8 @@ public sealed class PlaybackService : IDisposable
     }
     public void Dispose()
     {
+        _loadGeneration++;
+        CancelNetworkRecovery();
         if (_disposed) return; _disposed = true; _load?.Cancel(); _systemArtworkLoad?.Cancel(); _nextCacheLoad?.Cancel(); DisposeNextPrepared(); _urls.Dispose(); _nextAudioCache.Dispose(); _audioCache.Dispose(); _streamApi.Dispose();
         _smtc.ButtonPressed -= OnButton; _smtc.PlaybackPositionChangeRequested -= OnPosition; _smtc.IsEnabled = false;
         Detach(_player); _player.Source = null; _source?.Dispose(); _player.Dispose(); DeleteLocal(_localPath);

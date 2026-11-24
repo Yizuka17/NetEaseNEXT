@@ -50,7 +50,7 @@ public sealed partial class MainWindow
     private void NetworkStatusChanged(object sender)
     {
         if (_connectionOverride != null) return;
-        DispatcherQueue.TryEnqueue(RefreshLocalOnlineContext);
+        DispatcherQueue.TryEnqueue(() => { if (!_exiting && InternetAvailable) _playback.NetworkAvailable(); RefreshLocalOnlineContext(); });
     }
     private void RefreshLocalOnlineContext()
     {
