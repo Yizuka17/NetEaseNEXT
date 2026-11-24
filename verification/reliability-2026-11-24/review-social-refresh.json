@@ -1,0 +1,162 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "General message album restores its resource card",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "General message album preserves its attached text",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "General message playlist restores its resource card",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "General message playlist preserves its attached text",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "General message radio restores its resource card",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "General message radio preserves its attached text",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "General message program restores its resource card",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "General message program preserves its attached text",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "General message song restores its resource card",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "General message song preserves its attached text",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Legacy album cards and cover fallback remain available",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A repeated resource name is removed without hiding its card",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Nested JSON shares retain both card and message",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Slim program payloads still have a usable card",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Parsing incoming shares makes no detail requests",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unrelated links are not misidentified as music resources",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Repeated URL parameters do not break the private feed",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Episode details are requested only on click and open the parent podcast",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Native refresh wraps the actual feed list",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Requesting a feed refresh starts a native refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Refreshing keeps the existing feed visible",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A refresh in flight ignores repeated requests",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Refreshing replaces rather than appends the first page",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Refresh sends one request with a reset cursor",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Native progress stops when refresh completes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A failed refresh retains items and pagination state",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A failed refresh can be retried without leaving the page",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Leaving the feed cancels the pending refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Incoming private history renders album podcast and song cards",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Private share captions are actually realized",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Private history does not trigger the event refresh handler",
+    "passed": true,
+    "detail": null
+  }
+]

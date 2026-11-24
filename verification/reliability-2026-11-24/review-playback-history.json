@@ -1,0 +1,82 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Offline recent-play reports use three bounded attempts and deduplicate the pending song",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Failed recent-play reporting does not keep polling",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Connectivity recovery delivers the pending recent-play record",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Account changes cancel the old outbox before accepting new-account records",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Signed-out users do not submit listening records",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restoring a paused playlist never reports a song as played",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Real MediaPlayer playback starts one recent-play record",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Pause resume seeking and reselecting the active song do not duplicate history",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reloading the same song quality does not duplicate recent playback",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Changing songs reports their actual start order",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unlinked local audio is not sent with a guessed online ID",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Returning after another local song records a new listening session",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Verified linked local playback reports its embedded NetEase song ID",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Disabling local online information also suppresses local history reporting",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Failed audio loading never produces a playback-start record",
+    "passed": true,
+    "detail": null
+  }
+]

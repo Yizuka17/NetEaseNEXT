@@ -1,0 +1,32 @@
+{
+  "version": "0.3.3.28",
+  "sourceCommit": "7f97185439a9c843e91ed073b5bce6bfe68af064",
+  "installedPackage": {
+    "Version": "0.3.3.28",
+    "Status": "Ok",
+    "DllSha256": "993EE7C50DBD81986AD9BD3A91536A96CDC66B224F527DC1EFF9BDDF8A64E66C"
+  },
+  "guestChecks": {
+    "installed-local-links.json": 42,
+    "installed-surface-check.json": 27,
+    "review-selector-typography.json": 97,
+    "review-modal-edges.json": 52,
+    "review-shared-corners.json": 15,
+    "review-events-startup.json": 47,
+    "review-social-refresh.json": 32,
+    "review-playback-network.json": 17,
+    "review-artist-sharing-check.json": 36,
+    "review-playback-history.json": 16
+  },
+  "guestTotal": 381,
+  "hostRealHistoryChecks": 7,
+  "apiContracts": 88,
+  "sourceCI": {
+    "conclusion": "success",
+    "headSha": "7f97185439a9c843e91ed073b5bce6bfe68af064",
+    "status": "completed",
+    "url": "https://github.com/Yizuka17/NetEaseNEXT/actions/runs/45346636147"
+  },
+  "realHistory": "Actual muted playback followed by server recent-play readback and a new timestamp; no duration was reported.",
+  "hostUpgrade": "Deferred registration accepted while the existing 0.3.3.21 app remains running; tray exit and relaunch needed."
+}

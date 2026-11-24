@@ -1,0 +1,89 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A failed initial request retains its intended track",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Connectivity recovery restores the initial playlist context",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A natural song end retains the failed next-song target",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Network recovery advances the queue without another click",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Manual pause cancels pending network recovery",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Manual song selection cancels the stale recovery target",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reselecting the current song cancels a different in-flight load",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Disconnected playback uses a bounded retry burst",
+    "passed": true,
+    "detail": {
+      "attempts": 6
+    }
+  },
+  {
+    "name": "Permanent access failures are not network retries",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Timeout and transport failures remain recoverable",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The metadata fixture is encoded as a real FLAC file",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A streamed playlist plays the matching downloaded FLAC",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback metadata and cover come from embedded file tags",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "File metadata retains artist album and streaming identity",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Downloaded playback does not auto-fetch remote quality details",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Downloaded lyrics use the embedded original and translation",
+    "passed": true,
+    "detail": null
+  }
+]

@@ -1,0 +1,37 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A real signed-in session is available",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The user\u0027s saved current song has a verified NetEase identity",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Actual muted playback reached the audio engine",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The server accepted the real playback-start record",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The played song is present in the server\u0027s recent-play list",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Server history contains a new playback timestamp from this verification",
+    "passed": true,
+    "detail": null
+  }
+]

@@ -1,0 +1,321 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "lyric metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "song_detail metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "song_music_detail metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "album metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "playlist_track_all metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "playlist_detail metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "personalized metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "user_playlist metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "login_status metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "song_red_count metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "song_like_check metadata lasts five minutes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback URLs and writes bypass metadata caching",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event like notices retain actor, content and original event",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song reply notice links to the source song",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event replies preserve their embedded source post for navigation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Events retain every safe image and shared song artwork",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song cards do not duplicate resource names in the event body or quote",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event title body and album resource are separate",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event title body and playlist resource are separate",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Inserting a shared song keeps following songs and avoids duplicate entries",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Private shared songs expose the same playback card as events",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Private song cards hide duplicate body and quote",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event djRadio has a podcast navigation card without duplicated quotes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event djradio has a podcast navigation card without duplicated quotes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Event radio has a podcast navigation card without duplicated quotes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Private album preserves the attached message without duplicate quotes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Private playlist preserves the attached message without duplicate quotes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Private djRadio preserves the attached message without duplicate quotes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Private program preserves the attached message without duplicate quotes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A shared podcast episode keeps its playback and navigation identity",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Plain private text is preserved",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Podcast cards navigate to their program list",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Startup fetches playlist details and tracks without waiting for UI consumption",
+    "passed": true,
+    "detail": {
+      "RequestCount": 2,
+      "ticks": 8
+    }
+  },
+  {
+    "name": "Prepared startup results are reused when the window consumes them",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Publishing opens a native draft dialog without sending",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Image viewer is an inline overlay without a ContentDialog or popup host",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Photo viewer supports bounded pinch zoom and touch panning",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Initial image viewport fits and centers inside its overlay",
+    "passed": true,
+    "detail": {
+      "bounds": {
+        "X": 56,
+        "Y": 48,
+        "Width": 1152,
+        "Height": 799,
+        "Left": 56,
+        "Top": 48,
+        "Right": 1208,
+        "Bottom": 847,
+        "IsEmpty": false
+      },
+      "imageBounds": {
+        "X": 177,
+        "Y": 0,
+        "Width": 799,
+        "Height": 799,
+        "Left": 177,
+        "Top": 0,
+        "Right": 976,
+        "Bottom": 799,
+        "IsEmpty": false
+      },
+      "ActualWidth": 1264,
+      "ViewportWidth": 1152,
+      "ViewportHeight": 799
+    }
+  },
+  {
+    "name": "Image can zoom and expose pannable content",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Changing images restores the fitted zoom",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "After changing images image viewport fits and centers inside its overlay",
+    "passed": true,
+    "detail": {
+      "bounds": {
+        "X": 56,
+        "Y": 48,
+        "Width": 1152,
+        "Height": 799,
+        "Left": 56,
+        "Top": 48,
+        "Right": 1208,
+        "Bottom": 847,
+        "IsEmpty": false
+      },
+      "imageBounds": {
+        "X": 177,
+        "Y": 0,
+        "Width": 799,
+        "Height": 799,
+        "Left": 177,
+        "Top": 0,
+        "Right": 976,
+        "Bottom": 799,
+        "IsEmpty": false
+      },
+      "ActualWidth": 1264,
+      "ViewportWidth": 1152,
+      "ViewportHeight": 799
+    }
+  },
+  {
+    "name": "After resizing image viewport fits and centers inside its overlay",
+    "passed": true,
+    "detail": {
+      "bounds": {
+        "X": 56,
+        "Y": 48,
+        "Width": 792,
+        "Height": 539,
+        "Left": 56,
+        "Top": 48,
+        "Right": 848,
+        "Bottom": 587,
+        "IsEmpty": false
+      },
+      "imageBounds": {
+        "X": 127,
+        "Y": 0,
+        "Width": 539,
+        "Height": 539,
+        "Left": 127,
+        "Top": 0,
+        "Right": 666,
+        "Bottom": 539,
+        "IsEmpty": false
+      },
+      "ActualWidth": 904,
+      "ViewportWidth": 792,
+      "ViewportHeight": 539
+    }
+  },
+  {
+    "name": "A real outside click closes the inline image viewer",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Closing the inline viewer releases its image and root",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Back closes the image overlay without changing page history",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "All nine touch thumbnails wrap within the social row",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 344,
+      "ActualHeight": 344
+    }
+  }
+]
