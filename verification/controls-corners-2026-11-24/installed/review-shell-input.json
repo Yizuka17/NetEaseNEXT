@@ -1,0 +1,154 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Shell check begins with real foreground interaction",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Shell icon follows Windows even when app theme differs",
+    "passed": true,
+    "detail": {
+      "appTheme": "Dark",
+      "shellTheme": "Light",
+      "icon": "C:\\Program Files\\WindowsApps\\NetEaseNEXT_0.3.3.25_x64__1wr5cf65fxq72\\Assets\\AppIcon.ico"
+    }
+  },
+  {
+    "name": "Taskbar relaunch icon matches shell theme",
+    "passed": true,
+    "detail": "C:\\Program Files\\WindowsApps\\NetEaseNEXT_0.3.3.25_x64__1wr5cf65fxq72\\Assets\\AppIcon.ico"
+  },
+  {
+    "name": "SMTC identity survives icon update",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Both Windows icon sizes are installed",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Both transparent icon variants ship",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light shell icon updates window and tray with the appropriate identity",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark shell icon updates window and tray with the appropriate identity",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark tray uses WinUI menu controls with native acrylic",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark tray surface receives foreground for automatic dismissal",
+    "passed": true,
+    "detail": {
+      "owner": 2032044,
+      "foreground": 2032044,
+      "visible": true
+    }
+  },
+  {
+    "name": "Dark tray keeps expected main window visibility",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark tray keeps every command and touch target",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark tray outer corners are owned by DWM",
+    "passed": true,
+    "detail": {
+      "corner": 2
+    }
+  },
+  {
+    "name": "Dark tray releases its window and controller on dismissal",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark dismissal does not execute a command",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light tray uses WinUI menu controls with native acrylic",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light tray surface receives foreground for automatic dismissal",
+    "passed": true,
+    "detail": {
+      "owner": 2097580,
+      "foreground": 2097580,
+      "visible": true
+    }
+  },
+  {
+    "name": "Light tray keeps expected main window visibility",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light tray keeps every command and touch target",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light tray outer corners are owned by DWM",
+    "passed": true,
+    "detail": {
+      "corner": 2
+    }
+  },
+  {
+    "name": "Light tray releases its window and controller on dismissal",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light dismissal does not execute a command",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "WinUI tray command 2 executes exactly once and closes",
+    "passed": true,
+    "detail": {
+      "invoked": 1,
+      "LastCommand": 2
+    }
+  },
+  {
+    "name": "WinUI tray command 3 executes exactly once and closes",
+    "passed": true,
+    "detail": {
+      "invoked": 1,
+      "LastCommand": 3
+    }
+  },
+  {
+    "name": "Windows theme notification refreshes icons while hidden",
+    "passed": true,
+    "detail": null
+  }
+]
