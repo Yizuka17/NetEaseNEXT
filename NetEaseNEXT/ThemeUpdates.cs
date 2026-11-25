@@ -63,6 +63,7 @@ public sealed partial class MainWindow
     private bool _floatingCornersReady;
     private bool _hasCustomFloatingCorner;
     private readonly System.Runtime.CompilerServices.ConditionalWeakTable<ToolTip, object> _floatingTooltips = new();
+    private readonly System.Runtime.CompilerServices.ConditionalWeakTable<Border, object> _dialogShadows = new();
     private void PrepareFloatingToolTip(ToolTip tip)
     {
         if (_floatingTooltips.TryAdd(tip, new object())) tip.Opened += (_, _) => { RefreshFloatingCorners(); ApplyPopupTheme(tip); };
@@ -172,14 +173,23 @@ public sealed partial class MainWindow
             border.Background = brush; border.BorderThickness = FloatingStroke; border.CornerRadius = _floatingCorner;
             border.BackgroundSizing = BackgroundSizing.OuterBorderEdge; border.UseLayoutRounding = true;
         }
-        else if (element is Border { Name: "BackgroundElement" } frame && _dialog != null)
+        else if (element is Border { Name: "BackgroundElement" } frame && _dialog != null && ReferenceEquals(FindDescendant<Border>(_dialog, b => b.Name == "BackgroundElement"), frame))
         {
             // Paint acrylic underneath the translucent stroke. Insetting the
             // fill exposes a fringe at fractional-DPI rounded edges.
             frame.BackgroundSizing = BackgroundSizing.OuterBorderEdge; frame.UseLayoutRounding = true;
-            // The built-in high-elevation shadow is sampled by in-app acrylic
-            // in this popup, producing a wide black inner halo in small windows.
-            frame.Shadow = null;
+            // Keep the native shadow at flyout elevation. ContentDialog's
+            // default 128-DIP elevation creates a wide halo in in-app acrylic.
+            frame.Shadow ??= new ThemeShadow();
+            if (_dialogShadows.TryAdd(frame, new object()))
+                frame.SizeChanged += static (sender, _) =>
+                {
+                    // Native content remeasurement can restore its default
+                    // elevation after Opened (for example, a loaded ComboBox).
+                    var border = (Border)sender;
+                    if (border.Translation.Z != 32) border.Translation = new(border.Translation.X, border.Translation.Y, 32);
+                };
+            frame.Translation = new(frame.Translation.X, frame.Translation.Y, 32);
         }
         else if (element is ToolTip tip) { tip.Background = brush; tip.BorderThickness = FloatingStroke; tip.CornerRadius = _tooltipCorner; }
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++) ApplyPopupMaterial(VisualTreeHelper.GetChild(element, i), brush);
@@ -227,32 +237,58 @@ public sealed partial class MainWindow
         ApplyPopupTheme(dialog);
         dialog.XamlRoot = Root.XamlRoot;
         var inputSurfaces = new HashSet<UIElement>();
+        var outsideInput = new Microsoft.UI.Xaml.Shapes.Rectangle { Name = "DialogOutsideInput", Fill = new SolidColorBrush(Microsoft.UI.Colors.Transparent) };
         Border? background = null;
+        var opened = false;
         void PointerPressed(object sender, PointerRoutedEventArgs args)
         {
+            background = FindDescendant<Border>(dialog, b => b.Name == "BackgroundElement");
             if (background == null) return;
-            var position = args.GetCurrentPoint(background).Position;
-            if ((position.X < 0 || position.Y < 0 || position.X >= background.ActualWidth || position.Y >= background.ActualHeight)
-                && DismissDialogFromOutside(dialog, lightDismiss)) args.Handled = true;
+            // Popup coordinates can differ from the owner at fractional/high
+            // DPI. Use the hit-tested visual ancestry so content clicks always
+            // remain inside, including blank content and template children.
+            for (var source = args.OriginalSource as DependencyObject; source != null; source = VisualTreeHelper.GetParent(source))
+                if (ReferenceEquals(source, background)) return;
+            if (DismissDialogFromOutside(dialog, lightDismiss)) args.Handled = true;
         }
         PointerEventHandler pressed = PointerPressed;
-        void Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
+        void AttachInput(UIElement surface)
+        {
+            if (inputSurfaces.Add(surface)) surface.AddHandler(UIElement.PointerPressedEvent, pressed, true);
+        }
+        void PrepareSurface()
         {
             background = FindDescendant<Border>(dialog, b => b.Name == "BackgroundElement");
-            if (FindDescendant<Grid>(dialog, g => g.Name == "LayoutRoot") is { } layout) inputSurfaces.Add(layout);
+            AttachInput(dialog);
+            if (FindDescendant<Grid>(dialog, g => g.Name == "LayoutRoot") is { } layout)
+            {
+                // The native sizing state forces LayoutRoot.Background to null.
+                // An explicit input child keeps empty popup space hit-testable
+                // without replacing the native template or its visual states.
+                if (!ReferenceEquals(outsideInput.Parent, layout))
+                {
+                    if (outsideInput.Parent is Panel previous) previous.Children.Remove(outsideInput);
+                    layout.Children.Insert(0, outsideInput);
+                }
+                AttachInput(layout);
+            }
             // ContentDialog reparents its smoke layer into a separate native
             // popup. It does not bubble pointer events through LayoutRoot.
             foreach (var popup in VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot))
-                if (popup.Child is FrameworkElement { Name: "SmokeLayerBackground" } smoke)
+                if (popup.Child is { } child && FindDescendant<FrameworkElement>(child, e => e.Name == "SmokeLayerBackground") is { } smoke)
                 {
                     if (smoke is Microsoft.UI.Xaml.Shapes.Shape shape) shape.Fill = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
-                    inputSurfaces.Add(smoke);
+                    AttachInput(smoke);
                 }
-            foreach (var surface in inputSurfaces) surface.AddHandler(UIElement.PointerPressedEvent, pressed, true);
-            _dialogSurfaceReady = true;
             ApplyPopupTheme(dialog);
+            _dialogSurfaceReady = opened && background != null;
         }
-        void Loaded(object sender, RoutedEventArgs args) => ApplyPopupTheme(dialog);
+        void Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
+        {
+            opened = true;
+            PrepareSurface();
+        }
+        void Loaded(object sender, RoutedEventArgs args) => PrepareSurface();
         dialog.Loaded += Loaded;
         dialog.Opened += Opened;
         _dialogSurfaceReady = false;
@@ -261,6 +297,7 @@ public sealed partial class MainWindow
         {
             _dialogSurfaceReady = false;
             foreach (var surface in inputSurfaces) surface.RemoveHandler(UIElement.PointerPressedEvent, pressed);
+            if (outsideInput.Parent is Panel parent) parent.Children.Remove(outsideInput);
             dialog.Opened -= Opened;
             dialog.Loaded -= Loaded;
             dialog.ClearValue(FrameworkElement.RequestedThemeProperty);

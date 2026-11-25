@@ -36,6 +36,10 @@ public sealed partial class MainWindow
         try
         {
             Check("XAML root loaded", Root.IsLoaded);
+            if (Environment.GetCommandLineArgs().Contains("--dialog-surfaces-check"))
+            {
+                await RunDialogSurfaceChecksAsync(Check); return;
+            }
             if (Environment.GetCommandLineArgs().Contains("--playback-history-check"))
             {
                 await RunPlaybackHistoryChecksAsync(Check); return;

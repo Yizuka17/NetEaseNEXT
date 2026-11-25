@@ -22,7 +22,7 @@ internal static class LocalLinkFixtures
         Calls.Clear(); GateMethod = ""; Gate = null; Canceled = 0; CommentFailures = 0;
         EventFailures = 0; EventResponse = PrivateResponse = null;
         var cover = new Uri(LocalMusicFiles.StoreCover(File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.png")))).AbsoluteUri;
-        var playlist = new { id = 101, name = "在线歌单", picUrl = cover, coverImgUrl = cover, trackCount = 165 };
+        var playlist = new { id = 101, name = "在线歌单", picUrl = cover, coverImgUrl = cover, trackCount = 165, creator = new { userId = 42 } };
         return new ApiClient(async (method, p, ct) =>
         {
             Calls.Enqueue((method, p.Clone()));

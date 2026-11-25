@@ -1,0 +1,45 @@
+{
+  "version": "0.3.4.0",
+  "platform": "Windows 10 22H2, x64, 200% DPI",
+  "build": {
+    "configuration": "Release",
+    "warnings": 0,
+    "errors": 0
+  },
+  "passedSuites": [
+    {
+      "mode": "dialog-surfaces",
+      "checks": 145,
+      "failures": 0
+    },
+    {
+      "mode": "light-dismiss",
+      "checks": 52,
+      "failures": 0
+    },
+    {
+      "mode": "floating-corners",
+      "checks": 14,
+      "failures": 0
+    }
+  ],
+  "nativeChecks": null,
+  "apiChecks": 88,
+  "knownBaselineResults": [
+    {
+      "suite": "surface-regression",
+      "baseline": "0.3.3.28",
+      "result": "Same failure with identical pixel measurements in both releases",
+      "detail": "At 200% DPI, scrolling and then shrinking the window to 900px can offset the song indicator by 16.5 physical pixels",
+      "comparison": "baseline-comparison.json"
+    },
+    {
+      "suite": "local-links",
+      "baseline": "0.3.3.28",
+      "result": "Same Mica-controller assertion fails on Windows 10 in both releases",
+      "detail": "Windows 10 cannot validate the Windows 11 Mica controller; this suite did not complete on this host"
+    }
+  ],
+  "packageValidation": "package-validation.json",
+  "deployment": "Signed package verified without replacing the running installed app"
+}

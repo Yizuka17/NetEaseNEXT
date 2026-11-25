@@ -1,0 +1,96 @@
+{
+  "baselineVersion": "0.3.3.28",
+  "releaseVersion": "0.3.4.0",
+  "baselineFailure": {
+    "name": "scrolled-resize-900 rendered marker stays centered on its full song row",
+    "passed": false,
+    "detail": {
+      "top": 451,
+      "bottom": 463,
+      "center": 457.5,
+      "expected": 474,
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 874,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 874,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 128,
+        "Y": 398,
+        "Width": 714,
+        "Height": 66,
+        "Left": 128,
+        "Top": 398,
+        "Right": 842,
+        "Bottom": 464,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 64,
+        "Y": 199,
+        "Width": 357,
+        "Height": 76,
+        "Left": 64,
+        "Top": 199,
+        "Right": 421,
+        "Bottom": 275,
+        "IsEmpty": false
+      },
+      "Y": 1032.5,
+      "scroll": 929
+    }
+  },
+  "releaseFailure": {
+    "name": "scrolled-resize-900 rendered marker stays centered on its full song row",
+    "passed": false,
+    "detail": {
+      "top": 451,
+      "bottom": 463,
+      "center": 457.5,
+      "expected": 474,
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 874,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 874,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 128,
+        "Y": 398,
+        "Width": 714,
+        "Height": 66,
+        "Left": 128,
+        "Top": 398,
+        "Right": 842,
+        "Bottom": 464,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 64,
+        "Y": 199,
+        "Width": 357,
+        "Height": 76,
+        "Left": 64,
+        "Top": 199,
+        "Right": 421,
+        "Bottom": 275,
+        "IsEmpty": false
+      },
+      "Y": 1032.5,
+      "scroll": 929
+    }
+  },
+  "identicalMeasurement": true,
+  "scope": "Existing indicator offset at 200% DPI after scrolling and shrinking to 900px; not caused by the dialog changes; retained in release notes"
+}

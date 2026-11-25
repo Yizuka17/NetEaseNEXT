@@ -1,0 +1,32 @@
+[
+  {
+    "Logo": "PackageAssets\\StoreLogo.png",
+    "Uri": "ms-resource://NetEaseNEXT/Files/PackageAssets/StoreLogo.png",
+    "Passed": true,
+    "Candidates": 14
+  },
+  {
+    "Logo": "PackageAssets\\AppList.png",
+    "Uri": "ms-resource://NetEaseNEXT/Files/PackageAssets/AppList.png",
+    "Passed": true,
+    "Candidates": 59
+  },
+  {
+    "Logo": "PackageAssets\\Square150x150Logo.png",
+    "Uri": "ms-resource://NetEaseNEXT/Files/PackageAssets/Square150x150Logo.png",
+    "Passed": true,
+    "Candidates": 14
+  },
+  {
+    "Logo": "unplated",
+    "Uri": "PackageAssets\\AppList.png",
+    "Passed": true,
+    "Candidates": 15
+  },
+  {
+    "Logo": "lightunplated",
+    "Uri": "PackageAssets\\AppList.png",
+    "Passed": true,
+    "Candidates": 15
+  }
+]

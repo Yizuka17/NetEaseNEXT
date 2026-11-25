@@ -39,7 +39,7 @@ public sealed partial class MainWindow
                 var dialogColor = dialogBrush.Color; var dialogStroke = _dialog.BorderThickness;
                 var actualBorder = FindDescendant<Border>(_dialog, b => b.Name == "BackgroundElement")!;
                 check(theme + " comments do not dim the page but keep the outside input layer", VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Any(p => p.Child is Microsoft.UI.Xaml.Shapes.Shape { Name: "SmokeLayerBackground", Fill: SolidColorBrush { Color.A: 0 }, IsHitTestVisible: true }), null);
-                check(theme + " comment acrylic paints under its rounded border without sampling its own shadow", actualBorder.BackgroundSizing == BackgroundSizing.OuterBorderEdge && actualBorder.UseLayoutRounding && actualBorder.Shadow == null, null);
+                check(theme + " comment acrylic keeps a native flyout-elevation shadow and rounded border", actualBorder.BackgroundSizing == BackgroundSizing.OuterBorderEdge && actualBorder.UseLayoutRounding && actualBorder.Shadow is ThemeShadow && actualBorder.Translation.Z == 32, null);
                 check(theme + " native outside input layer is present and hit-testable", VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Any(p => p.Child is FrameworkElement { Name: "SmokeLayerBackground", IsHitTestVisible: true, ActualWidth: > 0, ActualHeight: > 0 }), null);
                 check(theme + " dialog template uses the configured single border", actualBorder.BorderThickness == dialogStroke && ((SolidColorBrush)actualBorder.BorderBrush).Color == dialogColor, null);
                 var scale = Root.XamlRoot.RasterizationScale;
@@ -132,7 +132,7 @@ public sealed partial class MainWindow
                     AppWindow.Resize(new Windows.Graphics.SizeInt32(width, 720)); await Task.Delay(180);
                     var comments = ShowCommentsAsync(SongCommentsSource(edgeTrack)!); await Ready();
                     var frame = FindDescendant<Border>(_dialog!, b => b.Name == "BackgroundElement")!;
-                    check(view + " comments avoid self-shadow sampling at width " + width, frame.Shadow == null && frame.Background is AcrylicBrush && frame.BackgroundSizing == BackgroundSizing.OuterBorderEdge, null);
+                    check(view + " comments retain their native shadow at width " + width, frame.Shadow is ThemeShadow && frame.Translation.Z == 32 && frame.Background is AcrylicBrush && frame.BackgroundSizing == BackgroundSizing.OuterBorderEdge, null);
                     check(view + " comments keep a transparent modal input layer at width " + width, VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Any(p => p.Child is Microsoft.UI.Xaml.Shapes.Shape { Name: "SmokeLayerBackground", Fill: SolidColorBrush { Color.A: 0 }, IsHitTestVisible: true }), null);
                     if (Environment.GetCommandLineArgs().Contains("--secondary-surfaces-capture"))
                     {

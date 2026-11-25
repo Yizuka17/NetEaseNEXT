@@ -1,0 +1,1067 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-information uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-information has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Light-information retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-information closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-favorite uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-favorite has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Light-favorite retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-favorite allows selecting a playlist",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-favorite closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-comments uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-comments has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 395
+    }
+  },
+  {
+    "name": "Light-comments retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-comments preserves the comment composer on outside clicks",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-comments closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-artists uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-artists has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Light-artists retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-artists closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-create-playlist uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-create-playlist has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Light-create-playlist retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-create-playlist closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-download uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-download has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Light-download retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-download closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-message uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-message has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Light-message retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-message closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-publish uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-publish has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Light-publish retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-publish closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-share uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-share has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Light-share retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-share closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-login uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-login has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Light-login retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-login closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-new-local-playlist uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-new-local-playlist has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Light-new-local-playlist retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-new-local-playlist closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-edit-local-playlist uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-edit-local-playlist has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Light-edit-local-playlist retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-edit-local-playlist closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-favorite-local uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-favorite-local has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Light-favorite-local retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-favorite-local closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-remove-local uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-remove-local has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Light-remove-local retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-remove-local closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light cancellation keeps the local audio file",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-edit-tracks uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-edit-tracks has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Light-edit-tracks retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-edit-tracks closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-delete-playlist uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-delete-playlist has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Light-delete-playlist retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-delete-playlist closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-private-share uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-private-share has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Light-private-share retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-private-share closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-information uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Dark-information has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Dark-information retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-information closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-favorite uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Dark-favorite has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Dark-favorite retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-favorite allows selecting a playlist",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-favorite closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-comments uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Dark-comments has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 395
+    }
+  },
+  {
+    "name": "Dark-comments retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-comments preserves the comment composer on outside clicks",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-comments closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-artists uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Dark-artists has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Dark-artists retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-artists closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-create-playlist uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Dark-create-playlist has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Dark-create-playlist retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-create-playlist closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-download uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Dark-download has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Dark-download retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-download closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-message uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Dark-message has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Dark-message retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-message closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-publish uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Dark-publish has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Dark-publish retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-publish closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-share uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Dark-share has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Dark-share retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-share closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-login uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Dark-login has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Dark-login retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-login closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-new-local-playlist uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Dark-new-local-playlist has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Dark-new-local-playlist retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-new-local-playlist closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-edit-local-playlist uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Dark-edit-local-playlist has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Dark-edit-local-playlist retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-edit-local-playlist closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-favorite-local uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Dark-favorite-local has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Dark-favorite-local retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-favorite-local closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-remove-local uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Dark-remove-local has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Dark-remove-local retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-remove-local closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark cancellation keeps the local audio file",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-edit-tracks uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Dark-edit-tracks has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Dark-edit-tracks retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-edit-tracks closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-delete-playlist uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Dark-delete-playlist has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Dark-delete-playlist retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-delete-playlist closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-private-share uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Dark-private-share has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Dark-private-share retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-private-share closes and releases the shared input surface",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Canceling every dialog sends no save, delete, favorite or share request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Canceling dialogs releases song, comment, login and editor requests",
+    "passed": true,
+    "detail": null
+  }
+]

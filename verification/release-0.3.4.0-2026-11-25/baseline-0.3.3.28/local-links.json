@@ -1,0 +1,209 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Current-song missing credit IDs are prefetched once before clicking",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Downloaded local playback resolves both artist names and its album",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Every inline credit disables native underline styling",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The footer artist links are outside the open-player button",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Local playlist actions all carry complete glyphs",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "First click enters the prepared artist page before any further song lookup completes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Opening an online playlist does not load or jump to an unloaded local source",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "The online locator pages to the verified source ID of a local song",
+    "passed": true,
+    "detail": {
+      "localId": -8217777238930046583,
+      "sourceId": 137,
+      "selectedId": 137,
+      "_offset": 137
+    }
+  },
+  {
+    "name": "Source lookup never submits a negative local ID to song details",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A second folder\u0027s copy locates the same online song",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Local playlists retain exact-file identity across folders",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A folder playlist has a reachable folder action with an icon",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "IsEnabled": true,
+      "glyphs": 1,
+      "_localPlaylistId": "b"
+    }
+  },
+  {
+    "name": "Linked local rows expose artist album information and file navigation",
+    "passed": true,
+    "detail": {
+      "source": 137,
+      "target": {
+        "Id": -4752157056452323626,
+        "IsLocal": true,
+        "LocalPath": "E:\\Codex\\BuildEnvironment\\Temp\\NetEaseNEXT-local-link-check-820249fea2664b31bdd6de7b3484e987\\B\\\u5408\u4F5C\u6B4C\u66F2.wav",
+        "file": "E:\\Codex\\BuildEnvironment\\Temp\\NetEaseNEXT-local-link-check-820249fea2664b31bdd6de7b3484e987\\B\\\u5408\u4F5C\u6B4C\u66F2.wav"
+      },
+      "anchor": "Track",
+      "items": [
+        {
+          "Text": "\u591A\u9009",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -4752157056452323626
+        },
+        {
+          "Text": "\u64AD\u653E",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -4752157056452323626
+        },
+        {
+          "Text": "\u6DFB\u52A0\u81F3\u4E0B\u4E00\u9996\u64AD\u653E",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -4752157056452323626
+        },
+        {
+          "Text": "\u6B4C\u624B",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -4752157056452323626
+        },
+        {
+          "Text": "\u4E13\u8F91",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -4752157056452323626
+        },
+        {
+          "Text": "\u8BC4\u8BBA",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -4752157056452323626
+        },
+        {
+          "Text": "\u6B4C\u66F2\u4FE1\u606F",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -4752157056452323626
+        },
+        {
+          "Text": "\u6253\u5F00\u6587\u4EF6\u4F4D\u7F6E",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -4752157056452323626
+        },
+        {
+          "Text": "\u5206\u4EAB",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -4752157056452323626
+        },
+        {
+          "Text": "\u6536\u85CF\u5230\u6B4C\u5355",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -4752157056452323626
+        },
+        {
+          "Text": "\u5347\u7EA7\u97F3\u8D28",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -4752157056452323626
+        },
+        {
+          "Text": "\u4ECE\u6B4C\u5355\u79FB\u9664",
+          "IsEnabled": true,
+          "visibility": "Collapsed",
+          "icon": true,
+          "context": -4752157056452323626
+        },
+        {
+          "Text": "\u4ECE\u672C\u5730\u5217\u8868\u79FB\u9664",
+          "IsEnabled": true,
+          "visibility": "Visible",
+          "icon": true,
+          "context": -4752157056452323626
+        }
+      ]
+    }
+  },
+  {
+    "name": "A linked local row resolves its album even before album IDs are cached",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song information uses labeled name links without framed actions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song information closes with a bare top-right cross",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Main Mica choice is preserved while dialogs stay acrylic",
+    "passed": false,
+    "detail": null
+  },
+  {
+    "name": "exception",
+    "passed": false,
+    "detail": "System.InvalidOperationException: Smoke test failed: Main Mica choice is preserved while dialogs stay acrylic\r\n   at NetEaseNEXT.MainWindow.\u003C\u003Ec__DisplayClass140_0.\u003CRunSmokeTestAsync\u003Eg__Check|0(String name, Boolean condition, Object detail) in E:\\NetEaseNEXT_Dev\\NetEaseNEXT\\Diagnostics\\SmokeTest.cs:line 34\r\n   at NetEaseNEXT.MainWindow.RunLocalLinkChecksAsync(Action\u00603 check)\r\n   at NetEaseNEXT.MainWindow.RunSmokeTestAsync() in E:\\NetEaseNEXT_Dev\\NetEaseNEXT\\Diagnostics\\SmokeTest.cs:line 77"
+  }
+]

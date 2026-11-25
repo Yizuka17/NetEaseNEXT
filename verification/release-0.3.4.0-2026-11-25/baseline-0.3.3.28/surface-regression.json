@@ -1,0 +1,477 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "online-first opens and loads the captured song after its context menu closes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "online-first keeps acrylic and a pixel-aligned WinUI border",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "online-first releases the dialog and input handler on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "online-repeat opens and loads the captured song after its context menu closes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "online-repeat keeps acrylic and a pixel-aligned WinUI border",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "online-repeat releases the dialog and input handler on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A comment request failure remains inside a usable dialog",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Failed context comments can retry without reopening",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Closing context comments cancels an unfinished request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "linked-local opens and loads the captured song after its context menu closes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "linked-local keeps acrylic and a pixel-aligned WinUI border",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "linked-local releases the dialog and input handler on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "font14-width1000 rendered marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "top": 365,
+      "bottom": 411,
+      "center": 388.5,
+      "expected": 388,
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 974,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 974,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 178,
+        "Y": 312,
+        "Width": 764,
+        "Height": 152,
+        "Left": 178,
+        "Top": 312,
+        "Right": 942,
+        "Bottom": 464,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 156,
+        "Width": 382,
+        "Height": 76,
+        "Left": 89,
+        "Top": 156,
+        "Right": 471,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "Y": 300.5,
+      "scroll": 240
+    }
+  },
+  {
+    "name": "font14-width1280 rendered marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "top": 365,
+      "bottom": 411,
+      "center": 388.5,
+      "expected": 388,
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1254,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 1254,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 178,
+        "Y": 312,
+        "Width": 1044,
+        "Height": 152,
+        "Left": 178,
+        "Top": 312,
+        "Right": 1222,
+        "Bottom": 464,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 156,
+        "Width": 522,
+        "Height": 76,
+        "Left": 89,
+        "Top": 156,
+        "Right": 611,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "Y": 282.5,
+      "scroll": 222
+    }
+  },
+  {
+    "name": "font14-width900 rendered marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "top": 365,
+      "bottom": 411,
+      "center": 388.5,
+      "expected": 388,
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 874,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 874,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 128,
+        "Y": 312,
+        "Width": 714,
+        "Height": 152,
+        "Left": 128,
+        "Top": 312,
+        "Right": 842,
+        "Bottom": 464,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 64,
+        "Y": 156,
+        "Width": 357,
+        "Height": 76,
+        "Left": 64,
+        "Top": 156,
+        "Right": 421,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "Y": 352.5,
+      "scroll": 292
+    }
+  },
+  {
+    "name": "font22-width1000 rendered marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "top": 365,
+      "bottom": 411,
+      "center": 388.5,
+      "expected": 388,
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 974,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 974,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 178,
+        "Y": 312,
+        "Width": 764,
+        "Height": 152,
+        "Left": 178,
+        "Top": 312,
+        "Right": 942,
+        "Bottom": 464,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 156,
+        "Width": 382,
+        "Height": 76,
+        "Left": 89,
+        "Top": 156,
+        "Right": 471,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "Y": 442,
+      "scroll": 400.5
+    }
+  },
+  {
+    "name": "font22-width1280 rendered marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "top": 365,
+      "bottom": 411,
+      "center": 388.5,
+      "expected": 388,
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1254,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 1254,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 178,
+        "Y": 312,
+        "Width": 1044,
+        "Height": 152,
+        "Left": 178,
+        "Top": 312,
+        "Right": 1222,
+        "Bottom": 464,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 156,
+        "Width": 522,
+        "Height": 76,
+        "Left": 89,
+        "Top": 156,
+        "Right": 611,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "Y": 390,
+      "scroll": 348.5
+    }
+  },
+  {
+    "name": "font22-width900 rendered marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "top": 365,
+      "bottom": 411,
+      "center": 388.5,
+      "expected": 388,
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 874,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 874,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 128,
+        "Y": 312,
+        "Width": 714,
+        "Height": 152,
+        "Left": 128,
+        "Top": 312,
+        "Right": 842,
+        "Bottom": 464,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 64,
+        "Y": 156,
+        "Width": 357,
+        "Height": 76,
+        "Left": 64,
+        "Top": 156,
+        "Right": 421,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "Y": 442,
+      "scroll": 400.5
+    }
+  },
+  {
+    "name": "scrolled-before rendered marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "top": 365,
+      "bottom": 411,
+      "center": 388.5,
+      "expected": 388,
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1074,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 1074,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 178,
+        "Y": 312,
+        "Width": 864,
+        "Height": 152,
+        "Left": 178,
+        "Top": 312,
+        "Right": 1042,
+        "Bottom": 464,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 156,
+        "Width": 432,
+        "Height": 76,
+        "Left": 89,
+        "Top": 156,
+        "Right": 521,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "Y": 962.5,
+      "scroll": 902
+    }
+  },
+  {
+    "name": "scrolled-after rendered marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "top": 311,
+      "bottom": 357,
+      "center": 334.5,
+      "expected": 334,
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1074,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 1074,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 178,
+        "Y": 258,
+        "Width": 864,
+        "Height": 152,
+        "Left": 178,
+        "Top": 258,
+        "Right": 1042,
+        "Bottom": 410,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 129,
+        "Width": 432,
+        "Height": 76,
+        "Left": 89,
+        "Top": 129,
+        "Right": 521,
+        "Bottom": 205,
+        "IsEmpty": false
+      },
+      "Y": 962.5,
+      "scroll": 929
+    }
+  },
+  {
+    "name": "scrolled-resize-900 rendered marker stays centered on its full song row",
+    "passed": false,
+    "detail": {
+      "top": 451,
+      "bottom": 463,
+      "center": 457.5,
+      "expected": 474,
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 874,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 874,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 128,
+        "Y": 398,
+        "Width": 714,
+        "Height": 66,
+        "Left": 128,
+        "Top": 398,
+        "Right": 842,
+        "Bottom": 464,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 64,
+        "Y": 199,
+        "Width": 357,
+        "Height": 76,
+        "Left": 64,
+        "Top": 199,
+        "Right": 421,
+        "Bottom": 275,
+        "IsEmpty": false
+      },
+      "Y": 1032.5,
+      "scroll": 929
+    }
+  },
+  {
+    "name": "exception",
+    "passed": false,
+    "detail": "System.InvalidOperationException: Smoke test failed: scrolled-resize-900 rendered marker stays centered on its full song row\r\n   at NetEaseNEXT.MainWindow.\u003C\u003Ec__DisplayClass140_0.\u003CRunSmokeTestAsync\u003Eg__Check|0(String name, Boolean condition, Object detail) in E:\\NetEaseNEXT_Dev\\NetEaseNEXT\\Diagnostics\\SmokeTest.cs:line 34\r\n   at NetEaseNEXT.MainWindow.\u003C\u003Ec__DisplayClass145_0.\u003C\u003CRunSurfaceRegressionChecksAsync\u003Eg__Marker|4\u003Ed.MoveNext() in E:\\NetEaseNEXT_Dev\\NetEaseNEXT\\Diagnostics\\SurfaceRegressionChecks.cs:line 80\r\n--- End of stack trace from previous location ---\r\n   at NetEaseNEXT.MainWindow.RunSurfaceRegressionChecksAsync(Action\u00603 check) in E:\\NetEaseNEXT_Dev\\NetEaseNEXT\\Diagnostics\\SurfaceRegressionChecks.cs:line 127\r\n   at NetEaseNEXT.MainWindow.RunSmokeTestAsync() in E:\\NetEaseNEXT_Dev\\NetEaseNEXT\\Diagnostics\\SmokeTest.cs:line 73"
+  }
+]

@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-25",
+  "platform": "Windows 10 22H2, x64, 200% DPI",
+  "build": {
+    "configuration": "Release",
+    "warnings": 0,
+    "errors": 0,
+    "assemblySHA256": "C3C1E9F1DC4A3F2065BD215AE10A2BF3A88CF6D0CE70A340DEB4E18942C67F26"
+  },
+  "dialogs": {
+    "types": 17,
+    "themes": [
+      "Light",
+      "Dark"
+    ],
+    "checks": 145,
+    "failures": 0
+  },
+  "existingLightDismissChecks": {
+    "checks": 52,
+    "failures": 0
+  },
+  "physicalInput": {
+    "backend": "TaskKit win10-bridge",
+    "informationInsideClick": "Stayed open on neutral header space",
+    "informationOutsideClick": "Closed",
+    "favoriteInsideClick": "Stayed open on list whitespace",
+    "favoriteOutsideClick": "Closed without playlist_tracks",
+    "shadows": "Native screenshots inspected in light and dark themes",
+    "comments": "Outside dismissal remains disabled",
+    "fixture": "Local API fixture, no live account writes"
+  },
+  "scope": "Source and local Release build; installed package not replaced"
+}

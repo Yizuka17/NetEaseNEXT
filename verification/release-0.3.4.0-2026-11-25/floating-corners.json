@@ -1,0 +1,107 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Shared WinUI corners accept custom and square radii",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Per-corner settings preserve DWM corner order",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unset and malformed values preserve WinUI defaults",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Explicit tooltip radius is independent",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "An initial zero radius replaces the framework resource",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Application overlay resource follows the current corner policy",
+    "passed": true,
+    "detail": {
+      "Overlay": {
+        "TopLeft": 8,
+        "TopRight": 8,
+        "BottomRight": 8,
+        "BottomLeft": 8
+      },
+      "ToolTip": {
+        "TopLeft": 4,
+        "TopRight": 4,
+        "BottomRight": 4,
+        "BottomLeft": 4
+      },
+      "Source": "WinUI",
+      "HasCustomOverlay": false
+    }
+  },
+  {
+    "name": "Information keeps its original ContentDialog and XAML root",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Information template receives the shared radius",
+    "passed": true,
+    "detail": {
+      "TopLeft": 8,
+      "TopRight": 8,
+      "BottomRight": 8,
+      "BottomLeft": 8
+    }
+  },
+  {
+    "name": "Comments preserve the original modal ContentDialog and shared radius",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Nested selector uses native acrylic and the same radius",
+    "passed": true,
+    "detail": {
+      "TopLeft": 8,
+      "TopRight": 8,
+      "BottomRight": 8,
+      "BottomLeft": 8
+    }
+  },
+  {
+    "name": "Comments still ignore outside dismissal",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Account menu uses the same radius and physical border width",
+    "passed": true,
+    "detail": {
+      "TopLeft": 8,
+      "TopRight": 8,
+      "BottomRight": 8,
+      "BottomLeft": 8
+    }
+  },
+  {
+    "name": "Notifications keep acrylic and use configured or default corners",
+    "passed": true,
+    "detail": {
+      "TopLeft": 4,
+      "TopRight": 4,
+      "BottomRight": 4,
+      "BottomLeft": 4
+    }
+  }
+]
