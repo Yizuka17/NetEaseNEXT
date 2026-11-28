@@ -26,10 +26,12 @@ public sealed partial class MainWindow
     }
     private readonly SelectionMotionState _trackSelectionMotion = new(), _queueSelectionMotion = new(), _sidebarSelectionMotion = new();
     private readonly HashSet<ScrollViewer> _selectionScrollers = [];
+    private readonly HashSet<ScrollViewer> _sidebarSelectionScrollers = [];
     private void InitializeSelectionMotion()
     {
         Nav.SelectionChanged += (_, _) => UpdateSidebarSelection(true);
         Nav.LayoutUpdated += (_, _) => UpdateSidebarSelection(false);
+        Nav.Unloaded += (_, _) => UpdateSidebarSelection(false);
         foreach (var list in new[] { TrackList, QueueList })
         {
             var clip = list == TrackList ? TrackSelectionClip : QueueSelectionClip;
@@ -62,6 +64,7 @@ public sealed partial class MainWindow
                 var state = list == TrackList ? _trackSelectionMotion : _queueSelectionMotion;
                 if (!state.DispatchQueued) UpdateSelectionIndicator(list, false);
             };
+            list.Unloaded += (_, _) => UpdateSelectionIndicator(list, false);
             list.Loaded += (_, _) =>
             {
                 if (FindDescendant<ScrollViewer>(list) is { } scroll && _selectionScrollers.Add(scroll))
@@ -102,12 +105,8 @@ public sealed partial class MainWindow
             var visual = ElementCompositionPreview.GetElementVisual(marker);
             visual.StopAnimation("Translation"); visual.StopAnimation("Scale"); visual.Scale = Vector3.One;
             var state = marker == TrackSelectionIndicator ? _trackSelectionMotion : marker == QueueSelectionIndicator ? _queueSelectionMotion : _sidebarSelectionMotion;
-            if (marker != SidebarSelectionIndicator)
-            {
-                var layer = marker == TrackSelectionIndicator ? TrackSelectionLayer : QueueSelectionLayer;
-                ElementCompositionPreview.SetIsTranslationEnabled(layer, true);
-                ElementCompositionPreview.GetElementVisual(layer).StopAnimation("Translation.Y"); state.ScrollBound = false;
-            }
+            var layer = marker == TrackSelectionIndicator ? TrackSelectionLayer : marker == QueueSelectionIndicator ? QueueSelectionLayer : SidebarSelectionLayer;
+            StopIndicatorScroll(layer, state);
             if (double.IsFinite(state.Y)) visual.Properties.InsertVector3("Translation", new((float)state.X, (float)state.Y, 0));
         }
     }
@@ -121,22 +120,49 @@ public sealed partial class MainWindow
     {
         var marker = SidebarSelectionIndicator; var state = _sidebarSelectionMotion;
         if (_hidden || Nav.Visibility != Visibility.Visible || !Nav.IsLoaded || Nav.DisplayMode == NavigationViewDisplayMode.Minimal && !Nav.IsPaneOpen || Nav.SelectedItem is not NavigationViewItem item || !item.IsLoaded)
-        { marker.Visibility = Visibility.Collapsed; state.Item = null; state.Y = double.NaN; return; }
-        var bounds = item.TransformToVisual(Nav).TransformBounds(new(0, 0, item.ActualWidth, item.ActualHeight));
+        { marker.Visibility = Visibility.Collapsed; state.Item = null; state.Y = double.NaN; StopIndicatorScroll(SidebarSelectionLayer, state); return; }
+        ScrollViewer? owner = null;
         for (DependencyObject? parent = VisualTreeHelper.GetParent(item); parent != null && parent != Nav; parent = VisualTreeHelper.GetParent(parent))
             if (parent is ScrollViewer scroll)
             {
-                var row = item.TransformToVisual(scroll).TransformBounds(new(0, 0, item.ActualWidth, item.ActualHeight));
-                if (row.Bottom <= 0 || row.Y >= scroll.ActualHeight) { marker.Visibility = Visibility.Collapsed; state.Item = null; return; }
-                break;
+                owner = scroll; break;
             }
+        var changedOwner = !ReferenceEquals(owner, state.Scroll);
+        var previous = state.Y;
+        if (changedOwner && double.IsFinite(previous))
+            previous += (owner?.VerticalOffset ?? 0) - (state.Scroll?.VerticalOffset ?? 0);
+        Windows.Foundation.Rect bounds;
+        if (owner?.Content is FrameworkElement content && FindDescendant<ScrollContentPresenter>(owner) is { } viewport)
+        {
+            BindIndicatorScroll(SidebarSelectionLayer, owner, state);
+            if (_sidebarSelectionScrollers.Add(owner)) owner.ViewChanged += (_, _) => UpdateSidebarSelection(false);
+            // Keep the anchor in unscrolled content space. The outer viewport
+            // stays fixed while the compositor moves both content and marker.
+            bounds = item.TransformToVisual(content).TransformBounds(new(0, 0, item.ActualWidth, item.ActualHeight));
+            var origin = viewport.TransformToVisual(SidebarSelectionClip).TransformPoint(new());
+            var slot = Microsoft.UI.Xaml.Controls.Primitives.LayoutInformation.GetLayoutSlot(content);
+            bounds.X += origin.X + slot.X; bounds.Y += origin.Y + slot.Y;
+            SetIndicatorClip(SidebarSelectionClip, viewport.TransformToVisual(SidebarSelectionClip).TransformBounds(new(0, 0, viewport.ActualWidth, viewport.ActualHeight)));
+        }
+        else
+        {
+            StopIndicatorScroll(SidebarSelectionLayer, state); state.Scroll = null;
+            bounds = item.TransformToVisual(Nav).TransformBounds(new(0, 0, item.ActualWidth, item.ActualHeight));
+            SetIndicatorClip(SidebarSelectionClip, new(0, 0, Nav.ActualWidth, Nav.ActualHeight));
+        }
         var x = bounds.X + 2; var y = bounds.Y + (bounds.Height - marker.Height) / 2;
-        if (bounds.Y < 0 || bounds.Bottom > Nav.ActualHeight) { marker.Visibility = Visibility.Collapsed; state.Item = null; return; }
-        if (ReferenceEquals(item, state.Item) && Math.Abs(x - state.X) < .1 && Math.Abs(y - state.Y) < .1) return;
+        if (ReferenceEquals(item, state.Item) && !changedOwner && Math.Abs(x - state.X) < .1 && Math.Abs(y - state.Y) < .1 && marker.Visibility == Visibility.Visible) return;
         ElementCompositionPreview.SetIsTranslationEnabled(marker, true);
         var visual = ElementCompositionPreview.GetElementVisual(marker);
         if (animate && state.Item != null && double.IsFinite(state.Y) && PlayerAnimationEnabled)
-            FluentMotion.MoveIndicator(marker, (float)state.Y, new((float)x, (float)y, 0), (float)marker.Height);
+        {
+            if (changedOwner)
+            {
+                visual.StopAnimation("Translation"); visual.StopAnimation("Scale"); visual.Scale = Vector3.One;
+                visual.Properties.InsertVector3("Translation", new((float)state.X, (float)previous, 0));
+            }
+            FluentMotion.MoveIndicator(marker, (float)previous, new((float)x, (float)y, 0), (float)marker.Height);
+        }
         else
         {
             visual.StopAnimation("Translation"); visual.StopAnimation("Scale"); visual.Scale = Vector3.One;
@@ -147,8 +173,25 @@ public sealed partial class MainWindow
     private void BindSelectionScroll(ListView list, SelectionMotionState state)
     {
         if (FindDescendant<ScrollViewer>(list) is not { } scroll) return;
-        if (state.ScrollBound && ReferenceEquals(state.Scroll, scroll)) return;
         var layer = list == TrackList ? TrackSelectionLayer : QueueSelectionLayer;
+        BindIndicatorScroll(layer, scroll, state);
+    }
+    private static void SetIndicatorClip(Grid element, Windows.Foundation.Rect rect)
+    {
+        if (element.Clip is RectangleGeometry geometry) { if (geometry.Rect != rect) geometry.Rect = rect; }
+        else element.Clip = new RectangleGeometry { Rect = rect };
+    }
+    private static void StopIndicatorScroll(Grid layer, SelectionMotionState state)
+    {
+        if (!state.ScrollBound) return;
+        ElementCompositionPreview.SetIsTranslationEnabled(layer, true);
+        var visual = ElementCompositionPreview.GetElementVisual(layer);
+        visual.StopAnimation("Translation.Y"); visual.Properties.InsertVector3("Translation", Vector3.Zero);
+        state.ScrollBound = false;
+    }
+    private static void BindIndicatorScroll(Grid layer, ScrollViewer scroll, SelectionMotionState state)
+    {
+        if (state.ScrollBound && ReferenceEquals(state.Scroll, scroll)) return;
         ElementCompositionPreview.SetIsTranslationEnabled(layer, true);
         var visual = ElementCompositionPreview.GetElementVisual(layer);
         var follow = visual.Compositor.CreateExpressionAnimation("scroll.Translation.Y");
@@ -196,9 +239,10 @@ public sealed partial class MainWindow
             }
             return;
         }
-        if (_hidden || !list.IsLoaded || list.ActualHeight <= 0 || ReferenceEquals(_batchList, list) || item == null)
+        if (_hidden || !list.IsLoaded || list.ActualHeight <= 0 || (list == TrackList ? TracksPanel.Visibility != Visibility.Visible : QueuePane.Visibility != Visibility.Visible) || ReferenceEquals(_batchList, list) || item == null)
         {
-            marker.Visibility = Visibility.Collapsed; state.Item = null; state.PendingItem = null; state.Y = double.NaN; return;
+            marker.Visibility = Visibility.Collapsed; state.Item = null; state.PendingItem = null; state.Y = double.NaN;
+            StopIndicatorScroll(list == TrackList ? TrackSelectionLayer : QueueSelectionLayer, state); return;
         }
         BindSelectionScroll(list, state);
         var index = list.Items.IndexOf(item);
@@ -220,16 +264,18 @@ public sealed partial class MainWindow
         var first = Math.Max(offset, rows.Top);
         var last = Math.Max(first, Math.Min(offset + list.ActualHeight, rows.Bottom) - marker.Height);
         var clip = list == TrackList ? TrackSelectionClip : QueueSelectionClip;
-        var clipTop = Math.Clamp(rows.Top - offset, 0, list.ActualHeight);
-        var clipRect = new Windows.Foundation.Rect(0, clipTop, clip.ActualWidth, Math.Max(0, Math.Min(list.ActualHeight, rows.Bottom - offset) - clipTop));
-        if (clip.Clip is RectangleGeometry geometry) { if (geometry.Rect != clipRect) geometry.Rect = clipRect; }
-        else clip.Clip = new RectangleGeometry { Rect = clipRect };
-        if (bounds.Bottom <= offset || bounds.Y >= offset + list.ActualHeight)
-        {
-            marker.Visibility = Visibility.Collapsed; state.Offscreen = true; return;
-        }
+        if (FindDescendant<ScrollContentPresenter>(state.Scroll!) is { } viewport)
+            SetIndicatorClip(clip, viewport.TransformToVisual(clip).TransformBounds(new(0, 0, viewport.ActualWidth, viewport.ActualHeight)));
+        var layer = list == TrackList ? TrackSelectionLayer : QueueSelectionLayer;
+        // The song section clip moves with the content too. Updating a fixed
+        // clip with VerticalOffset lags compositor-driven touch/inertia frames.
+        SetIndicatorClip(layer, new(0, rows.Top, layer.ActualWidth, Math.Max(0, rows.Bottom - rows.Top)));
+        var offscreen = bounds.Bottom <= offset || bounds.Y >= offset + list.ActualHeight;
         var changed = !ReferenceEquals(item, state.Item);
-        if (!changed && Math.Abs(y - state.Y) < .5 && marker.Visibility == Visibility.Visible) return;
+        if (!changed && Math.Abs(y - state.Y) < .5 && marker.Visibility == Visibility.Visible)
+        {
+            state.Offscreen = offscreen; return;
+        }
         ElementCompositionPreview.SetIsTranslationEnabled(marker, true);
         var visual = ElementCompositionPreview.GetElementVisual(marker);
         var previous = state.Y;
@@ -258,6 +304,6 @@ public sealed partial class MainWindow
         {
             visual.StopAnimation("Translation"); visual.StopAnimation("Scale"); visual.Scale = Vector3.One; visual.Properties.InsertVector3("Translation", new(0, (float)y, 0));
         }
-        marker.Visibility = Visibility.Visible; state.Item = item; state.PendingItem = null; state.Y = y; state.Index = index; state.Offscreen = false;
+        marker.Visibility = Visibility.Visible; state.Item = item; state.PendingItem = null; state.Y = y; state.Index = index; state.Offscreen = offscreen;
     }
 }

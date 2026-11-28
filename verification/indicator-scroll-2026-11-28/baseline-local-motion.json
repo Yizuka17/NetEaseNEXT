@@ -1,0 +1,30 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Local card starts a native connected cover animation",
+    "passed": true,
+    "detail": {
+      "enabled": true,
+      "starts": 1
+    }
+  },
+  {
+    "name": "The destination uses the clicked card\u0027s bitmap immediately",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Returning connects the same cover back to its realized card",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "exception",
+    "passed": false,
+    "detail": "System.TimeoutException: Local artwork motion did not settle.\r\n   at NetEaseNEXT.MainWindow.\u003CRunLocalMotionChecksAsync\u003Eg__Wait|111_0(Func\u00601 test) in E:\\NetEaseNEXT_Dev\\NetEaseNEXT\\Diagnostics\\LocalMotionChecks.cs:line 26\r\n   at NetEaseNEXT.MainWindow.RunLocalMotionChecksAsync(Action\u00603 check) in E:\\NetEaseNEXT_Dev\\NetEaseNEXT\\Diagnostics\\LocalMotionChecks.cs:line 73\r\n   at NetEaseNEXT.MainWindow.RunSmokeTestAsync() in E:\\NetEaseNEXT_Dev\\NetEaseNEXT\\Diagnostics\\SmokeTest.cs:line 101"
+  }
+]

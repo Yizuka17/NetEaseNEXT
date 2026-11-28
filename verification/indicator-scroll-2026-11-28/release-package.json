@@ -1,0 +1,10 @@
+{
+  "version": "0.3.4.2",
+  "signed": true,
+  "signer": "548494EE74C33B2A77C73CC4E25CE0EEDD5E8733",
+  "previousVersion": "0.3.4.1",
+  "upgradeVersionIncreased": true,
+  "publishedIndicatorChecks": 34,
+  "failures": 0,
+  "installedOnThisMachine": false
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "mode": "indicator-scroll",
+    "checks": 34,
+    "failures": 0,
+    "report": "after/indicator-scroll.json"
+  },
+  {
+    "mode": "surface-regression",
+    "checks": 54,
+    "failures": 0,
+    "report": "after/surface-regression.json"
+  },
+  {
+    "mode": "sidebar",
+    "checks": 24,
+    "failures": 0,
+    "report": "after/sidebar.json"
+  },
+  {
+    "mode": "song-experience",
+    "checks": 34,
+    "failures": 0,
+    "report": "after/song-experience.json"
+  }
+]

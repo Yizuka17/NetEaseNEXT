@@ -86,8 +86,8 @@ public sealed partial class MainWindow
             _trackSelectionMotion.Item = null; _trackSelectionMotion.Y = double.NaN;
             SelectPlayingTrack(TrackList, songs[0]); await Task.Delay(50); Root.UpdateLayout(); UpdateSelectionIndicators(true);
             var rows = SongRowBounds(TrackList, scroll.VerticalOffset);
-            check("The indicator viewport starts below cover and playlist controls", rows.Top > PlaylistCoverFrame.ActualHeight && TrackSelectionClip.Clip is RectangleGeometry geometry && Math.Abs(geometry.Rect.Top - rows.Top) < 1, new { rows.Top });
-            check("Cross-playlist entrance stays inside the song-row clip", TrackSelectionIndicator.Visibility == Visibility.Visible && TrackSelectionClip.Clip is RectangleGeometry { Rect.Top: > 100 }, null);
+            check("The moving indicator clip starts below cover and playlist controls", rows.Top > PlaylistCoverFrame.ActualHeight && TrackSelectionLayer.Clip is RectangleGeometry geometry && Math.Abs(geometry.Rect.Top - rows.Top) < 1, new { rows.Top });
+            check("Cross-playlist entrance stays inside the song-row clip", TrackSelectionIndicator.Visibility == Visibility.Visible && TrackSelectionLayer.Clip is RectangleGeometry { Rect.Top: > 100 } && TrackSelectionClip.Clip is RectangleGeometry, null);
             await SaveLibraryImageAsync(Root, "indicator-song-region.png");
             var route = _route; var offset = scroll.VerticalOffset; double furthest = offset;
             void Scrolled(object? sender, ScrollViewerViewChangedEventArgs args) => furthest = Math.Max(furthest, scroll.VerticalOffset);

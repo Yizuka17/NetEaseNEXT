@@ -1,0 +1,108 @@
+{
+  "date": "2026-11-28",
+  "scope": "0.3.4.2 release replacement; development checks plus published portable checks",
+  "changes": [
+    "Bind sidebar selection to its own native ScrollViewer compositor scroll, including separate footer ownership.",
+    "Clip sidebar marker to the native viewport so it cannot paint into occluded areas.",
+    "Use a fixed native viewport clip and a moving song-content clip for song list and playback queue.",
+    "Release all three scroll bindings when their surfaces unload or the window hides."
+  ],
+  "validation": {
+    "checks": 146.0,
+    "failures": 0.0,
+    "suites": [
+      {
+        "mode": "indicator-scroll",
+        "checks": 34,
+        "failures": 0,
+        "report": "after/indicator-scroll.json"
+      },
+      {
+        "mode": "surface-regression",
+        "checks": 54,
+        "failures": 0,
+        "report": "after/surface-regression.json"
+      },
+      {
+        "mode": "sidebar",
+        "checks": 24,
+        "failures": 0,
+        "report": "after/sidebar.json"
+      },
+      {
+        "mode": "song-experience",
+        "checks": 34,
+        "failures": 0,
+        "report": "after/song-experience.json"
+      }
+    ],
+    "renderedFollow": [
+      {
+        "name": "LeftCompact sidebar follows animated scrolling in both directions",
+        "maxErrorDip": 0.25
+      },
+      {
+        "name": "Left sidebar follows animated scrolling in both directions",
+        "maxErrorDip": 0.25
+      },
+      {
+        "name": "Song list follows animated scrolling in both directions",
+        "maxErrorDip": 0.25
+      },
+      {
+        "name": "Playback queue follows animated scrolling in both directions",
+        "maxErrorDip": 1
+      }
+    ],
+    "sidebarViewportChecks": [
+      {
+        "name": "LeftCompact partial selection paints no indicator outside the native sidebar viewport",
+        "outsidePixels": 0,
+        "visiblePixels": 39
+      },
+      {
+        "name": "LeftCompact hidden selection paints no indicator outside the native sidebar viewport",
+        "outsidePixels": 0,
+        "visiblePixels": 0
+      },
+      {
+        "name": "LeftCompact returned selection paints no indicator outside the native sidebar viewport",
+        "outsidePixels": 0,
+        "visiblePixels": 173
+      },
+      {
+        "name": "Left partial selection paints no indicator outside the native sidebar viewport",
+        "outsidePixels": 0,
+        "visiblePixels": 39
+      },
+      {
+        "name": "Left hidden selection paints no indicator outside the native sidebar viewport",
+        "outsidePixels": 0,
+        "visiblePixels": 0
+      },
+      {
+        "name": "Left returned selection paints no indicator outside the native sidebar viewport",
+        "outsidePixels": 0,
+        "visiblePixels": 173
+      }
+    ],
+    "nativeInspection": {
+      "report": "after/native-inspection.json",
+      "checks": 34,
+      "failures": 0,
+      "method": "Native screen capture during opt-in UI-thread pause while native animated scrolling continues. Diagnostic brushes are restored after checks; screenshots remain in ignored local artifacts."
+    },
+    "publishedPackage": {
+      "version": "0.3.4.2",
+      "checks": 34,
+      "failures": 0,
+      "report": "published-0.3.4.2.json"
+    }
+  },
+  "limitations": [
+    "Native animated/programmatic scrolling was checked; physical touch hardware was not tested.",
+    "RenderTargetBitmap can synchronize layout, so same-frame raster checks alone do not prove behavior under a blocked UI thread. Native screen inspection and compositor-binding checks supplement them.",
+    "The broader local-motion suite timed out waiting for the second card artwork at LocalMotionChecks.cs:73, before cover-region checks ran. Replacing only SelectionMotion.cs with the previous 5be7e47 revision reproduces the identical timeout; see baseline-local-motion.json and after/local-motion.json. This suite is not counted as passing.",
+    "Earlier sequential TransformToVisual samples were discarded because they can observe different compositor times and do not support a before/after numerical comparison."
+  ]
+}

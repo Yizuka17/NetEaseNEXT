@@ -29,7 +29,7 @@ public partial class App : Application
             if (!_instance.IsPrimary) { _instance.Dispose(); Exit(); return; }
         }
         StartupSession? startup = null;
-        if (Environment.GetCommandLineArgs().Contains("--local-links-check") ||
+        if (Environment.GetCommandLineArgs().Contains("--local-links-check") || Environment.GetCommandLineArgs().Contains("--local-links-fixture") ||
             Environment.GetCommandLineArgs().Contains("--events-startup-check") && !Environment.GetCommandLineArgs().Contains("--events-read-check"))
         {
             var directory = Path.Combine(Path.GetTempPath(), "NetEaseNEXT-local-links-api-" + Guid.NewGuid().ToString("N"));

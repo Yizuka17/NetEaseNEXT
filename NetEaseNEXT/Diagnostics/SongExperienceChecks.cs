@@ -3,6 +3,8 @@ using System.Text.Json;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Hosting;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media.Imaging;
 using NetEaseNEXT.Models;
 using NetEaseNEXT.Services;
 
@@ -121,7 +123,19 @@ public sealed partial class MainWindow
             var scroll = FindDescendant<ScrollViewer>(TrackList)!;
             check("Song indicator binds the live scroll property set", _trackSelectionMotion.ScrollBound && ReferenceEquals(_trackSelectionMotion.Scroll, scroll), null);
             scroll.ChangeView(null, 1500, null, true); await Task.Delay(150); Root.UpdateLayout(); UpdateSelectionIndicators(false);
-            check("Virtualized selected songs leave no stranded indicator", TrackSelectionIndicator.Visibility == Visibility.Collapsed, null);
+            var indicatorBrush = TrackSelectionIndicator.Background;
+            TrackSelectionIndicator.Background = new SolidColorBrush(Microsoft.UI.Colors.Magenta);
+            var offscreenMarkerPixels = 0;
+            try
+            {
+                var bitmap = new RenderTargetBitmap(); await bitmap.RenderAsync(Root);
+                var buffer = await bitmap.GetPixelsAsync(); var pixels = new byte[buffer.Length];
+                using (var reader = Windows.Storage.Streams.DataReader.FromBuffer(buffer)) reader.ReadBytes(pixels);
+                for (var i = 0; i < pixels.Length; i += 4)
+                    if (pixels[i] > 240 && pixels[i + 1] < 15 && pixels[i + 2] > 240) offscreenMarkerPixels++;
+            }
+            finally { TrackSelectionIndicator.Background = indicatorBrush; }
+            check("Offscreen selected songs leave no rendered indicator", offscreenMarkerPixels == 0, new { offscreenMarkerPixels });
             var visible = Tracks.First(t => TrackList.ContainerFromItem(t) is ListViewItem row && row.TransformToVisual(TrackList).TransformPoint(new()).Y >= 0);
             TrackList.SelectedItem = visible; await Task.Delay(50);
             check("A cross-viewport selection stretches in from the previous direction", TrackSelectionIndicator.Visibility == Visibility.Visible && ElementCompositionPreview.GetElementVisual(TrackSelectionIndicator).TryGetAnimationController("Scale") != null, null);

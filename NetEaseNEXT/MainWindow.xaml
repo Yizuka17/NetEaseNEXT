@@ -66,7 +66,7 @@
     </Grid>
    </Grid>
   </NavigationView>
-  <Border x:Name="SidebarSelectionIndicator" Grid.Row="1" Width="3" Height="16" CornerRadius="1.5" HorizontalAlignment="Left" VerticalAlignment="Top" Background="{ThemeResource AccentFillColorDefaultBrush}" IsHitTestVisible="False" Visibility="Collapsed" Canvas.ZIndex="2"/><Grid x:Name="PlayingPanel" Grid.Row="1" Visibility="Collapsed">
+  <Grid x:Name="SidebarSelectionClip" Grid.Row="1" IsHitTestVisible="False" Canvas.ZIndex="2"><Grid x:Name="SidebarSelectionLayer"><Border x:Name="SidebarSelectionIndicator" Width="3" Height="16" CornerRadius="1.5" HorizontalAlignment="Left" VerticalAlignment="Top" Background="{ThemeResource AccentFillColorDefaultBrush}" IsHitTestVisible="False" Visibility="Collapsed"/></Grid></Grid><Grid x:Name="PlayingPanel" Grid.Row="1" Visibility="Collapsed">
    <Image x:Name="BlurredCover" Stretch="UniformToFill" Opacity=".25" IsHitTestVisible="False"/>
    <Border x:Name="CoverTint" Opacity=".8" IsHitTestVisible="False"/>
    <Grid x:Name="PlayerLayout" ColumnSpacing="64" Padding="64,24,64,32">

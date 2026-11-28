@@ -1,0 +1,1526 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "online-first opens and loads the captured song after its context menu closes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "online-first keeps acrylic and a pixel-aligned WinUI border",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "online-first releases the dialog and input handler on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "online-repeat opens and loads the captured song after its context menu closes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "online-repeat keeps acrylic and a pixel-aligned WinUI border",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "online-repeat releases the dialog and input handler on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "A comment request failure remains inside a usable dialog",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Failed context comments can retry without reopening",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Closing context comments cancels an unfinished request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "linked-local opens and loads the captured song after its context menu closes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "linked-local keeps acrylic and a pixel-aligned WinUI border",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "linked-local releases the dialog and input handler on close",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "font14-width1000 visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 868,
+      "expected": 868,
+      "fullMarkerBounds": {
+        "X": 93,
+        "Y": 422,
+        "Width": 3,
+        "Height": 24,
+        "Left": 93,
+        "Top": 422,
+        "Right": 96,
+        "Bottom": 446,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 396,
+        "Width": 382,
+        "Height": 76,
+        "Left": 89,
+        "Top": 396,
+        "Right": 471,
+        "Bottom": 472,
+        "IsEmpty": false
+      },
+      "Y": 300.5,
+      "scroll": 0
+    }
+  },
+  {
+    "name": "font14-width1000 rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 886,
+      "bottom": -1,
+      "expectedTop": 844,
+      "expectedBottom": 464,
+      "viewportBounds": {
+        "X": 89,
+        "Y": 121.5,
+        "Width": 382,
+        "Height": 110.5,
+        "Left": 89,
+        "Top": 121.5,
+        "Right": 471,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 974,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 974,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 0,
+        "Height": 0,
+        "Left": 0,
+        "Top": 0,
+        "Right": 0,
+        "Bottom": 0,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "font14-width1280 visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 832,
+      "expected": 832,
+      "fullMarkerBounds": {
+        "X": 93,
+        "Y": 404,
+        "Width": 3,
+        "Height": 24,
+        "Left": 93,
+        "Top": 404,
+        "Right": 96,
+        "Bottom": 428,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 378,
+        "Width": 522,
+        "Height": 76,
+        "Left": 89,
+        "Top": 378,
+        "Right": 611,
+        "Bottom": 454,
+        "IsEmpty": false
+      },
+      "Y": 282.5,
+      "scroll": 0
+    }
+  },
+  {
+    "name": "font14-width1280 rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 886,
+      "bottom": -1,
+      "expectedTop": 808,
+      "expectedBottom": 464,
+      "viewportBounds": {
+        "X": 89,
+        "Y": 121.5,
+        "Width": 522,
+        "Height": 110.5,
+        "Left": 89,
+        "Top": 121.5,
+        "Right": 611,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1254,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 1254,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 0,
+        "Height": 0,
+        "Left": 0,
+        "Top": 0,
+        "Right": 0,
+        "Bottom": 0,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "font14-width900 visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 972,
+      "expected": 972,
+      "fullMarkerBounds": {
+        "X": 68,
+        "Y": 474,
+        "Width": 3,
+        "Height": 24,
+        "Left": 68,
+        "Top": 474,
+        "Right": 71,
+        "Bottom": 498,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 64,
+        "Y": 448,
+        "Width": 357,
+        "Height": 76,
+        "Left": 64,
+        "Top": 448,
+        "Right": 421,
+        "Bottom": 524,
+        "IsEmpty": false
+      },
+      "Y": 352.5,
+      "scroll": 0
+    }
+  },
+  {
+    "name": "font14-width900 rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 886,
+      "bottom": -1,
+      "expectedTop": 948,
+      "expectedBottom": 464,
+      "viewportBounds": {
+        "X": 64,
+        "Y": 121.5,
+        "Width": 357,
+        "Height": 110.5,
+        "Left": 64,
+        "Top": 121.5,
+        "Right": 421,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 874,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 874,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 0,
+        "Height": 0,
+        "Left": 0,
+        "Top": 0,
+        "Right": 0,
+        "Bottom": 0,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "font22-width1000 visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 1189,
+      "expected": 1189,
+      "fullMarkerBounds": {
+        "X": 93,
+        "Y": 582.5,
+        "Width": 3,
+        "Height": 24,
+        "Left": 93,
+        "Top": 582.5,
+        "Right": 96,
+        "Bottom": 606.5,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 556.5,
+        "Width": 382,
+        "Height": 76,
+        "Left": 89,
+        "Top": 556.5,
+        "Right": 471,
+        "Bottom": 632.5,
+        "IsEmpty": false
+      },
+      "Y": 442,
+      "scroll": 0
+    }
+  },
+  {
+    "name": "font22-width1000 rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 886,
+      "bottom": -1,
+      "expectedTop": 1165,
+      "expectedBottom": 464,
+      "viewportBounds": {
+        "X": 89,
+        "Y": 140.5,
+        "Width": 382,
+        "Height": 91.5,
+        "Left": 89,
+        "Top": 140.5,
+        "Right": 471,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 974,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 974,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 0,
+        "Height": 0,
+        "Left": 0,
+        "Top": 0,
+        "Right": 0,
+        "Bottom": 0,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "font22-width1280 visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 1085,
+      "expected": 1085,
+      "fullMarkerBounds": {
+        "X": 93,
+        "Y": 530.5,
+        "Width": 3,
+        "Height": 24,
+        "Left": 93,
+        "Top": 530.5,
+        "Right": 96,
+        "Bottom": 554.5,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 504.5,
+        "Width": 522,
+        "Height": 76,
+        "Left": 89,
+        "Top": 504.5,
+        "Right": 611,
+        "Bottom": 580.5,
+        "IsEmpty": false
+      },
+      "Y": 390,
+      "scroll": 0
+    }
+  },
+  {
+    "name": "font22-width1280 rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 886,
+      "bottom": -1,
+      "expectedTop": 1061,
+      "expectedBottom": 464,
+      "viewportBounds": {
+        "X": 89,
+        "Y": 140.5,
+        "Width": 522,
+        "Height": 91.5,
+        "Left": 89,
+        "Top": 140.5,
+        "Right": 611,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1254,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 1254,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 0,
+        "Height": 0,
+        "Left": 0,
+        "Top": 0,
+        "Right": 0,
+        "Bottom": 0,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "font22-width900 visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 1189,
+      "expected": 1189,
+      "fullMarkerBounds": {
+        "X": 68,
+        "Y": 582.5,
+        "Width": 3,
+        "Height": 24,
+        "Left": 68,
+        "Top": 582.5,
+        "Right": 71,
+        "Bottom": 606.5,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 64,
+        "Y": 556.5,
+        "Width": 357,
+        "Height": 76,
+        "Left": 64,
+        "Top": 556.5,
+        "Right": 421,
+        "Bottom": 632.5,
+        "IsEmpty": false
+      },
+      "Y": 442,
+      "scroll": 0
+    }
+  },
+  {
+    "name": "font22-width900 rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 886,
+      "bottom": -1,
+      "expectedTop": 1165,
+      "expectedBottom": 464,
+      "viewportBounds": {
+        "X": 64,
+        "Y": 140.5,
+        "Width": 357,
+        "Height": 91.5,
+        "Left": 64,
+        "Top": 140.5,
+        "Right": 421,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 874,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 874,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 0,
+        "Height": 0,
+        "Left": 0,
+        "Top": 0,
+        "Right": 0,
+        "Bottom": 0,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "scrolled-before visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 388,
+      "expected": 388,
+      "fullMarkerBounds": {
+        "X": 93,
+        "Y": 182,
+        "Width": 3,
+        "Height": 24,
+        "Left": 93,
+        "Top": 182,
+        "Right": 96,
+        "Bottom": 206,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 156,
+        "Width": 432,
+        "Height": 76,
+        "Left": 89,
+        "Top": 156,
+        "Right": 521,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "Y": 962.5,
+      "scroll": 902
+    }
+  },
+  {
+    "name": "scrolled-before rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 365,
+      "bottom": 411,
+      "expectedTop": 364,
+      "expectedBottom": 412,
+      "viewportBounds": {
+        "X": 89,
+        "Y": 121.5,
+        "Width": 432,
+        "Height": 110.5,
+        "Left": 89,
+        "Top": 121.5,
+        "Right": 521,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1074,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 1074,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 178,
+        "Y": 312,
+        "Width": 864,
+        "Height": 152,
+        "Left": 178,
+        "Top": 312,
+        "Right": 1042,
+        "Bottom": 464,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "scrolled-after visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 334,
+      "expected": 334,
+      "fullMarkerBounds": {
+        "X": 93,
+        "Y": 155,
+        "Width": 3,
+        "Height": 24,
+        "Left": 93,
+        "Top": 155,
+        "Right": 96,
+        "Bottom": 179,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 129,
+        "Width": 432,
+        "Height": 76,
+        "Left": 89,
+        "Top": 129,
+        "Right": 521,
+        "Bottom": 205,
+        "IsEmpty": false
+      },
+      "Y": 962.5,
+      "scroll": 929
+    }
+  },
+  {
+    "name": "scrolled-after rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 311,
+      "bottom": 357,
+      "expectedTop": 310,
+      "expectedBottom": 358,
+      "viewportBounds": {
+        "X": 89,
+        "Y": 121.5,
+        "Width": 432,
+        "Height": 110.5,
+        "Left": 89,
+        "Top": 121.5,
+        "Right": 521,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1074,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 1074,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 178,
+        "Y": 258,
+        "Width": 864,
+        "Height": 152,
+        "Left": 178,
+        "Top": 258,
+        "Right": 1042,
+        "Bottom": 410,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "scrolled-resize-900 visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 474,
+      "expected": 474,
+      "fullMarkerBounds": {
+        "X": 68,
+        "Y": 225,
+        "Width": 3,
+        "Height": 24,
+        "Left": 68,
+        "Top": 225,
+        "Right": 71,
+        "Bottom": 249,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 64,
+        "Y": 199,
+        "Width": 357,
+        "Height": 76,
+        "Left": 64,
+        "Top": 199,
+        "Right": 421,
+        "Bottom": 275,
+        "IsEmpty": false
+      },
+      "Y": 1032.5,
+      "scroll": 929
+    }
+  },
+  {
+    "name": "scrolled-resize-900 rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 451,
+      "bottom": 463,
+      "expectedTop": 450,
+      "expectedBottom": 464,
+      "viewportBounds": {
+        "X": 64,
+        "Y": 121.5,
+        "Width": 357,
+        "Height": 110.5,
+        "Left": 64,
+        "Top": 121.5,
+        "Right": 421,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 874,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 874,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 128,
+        "Y": 398,
+        "Width": 714,
+        "Height": 66,
+        "Left": 128,
+        "Top": 398,
+        "Right": 842,
+        "Bottom": 464,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "scrolled-resize-900-fully-visible visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 353.5,
+      "expected": 353.5,
+      "fullMarkerBounds": {
+        "X": 68,
+        "Y": 164.75,
+        "Width": 3,
+        "Height": 24,
+        "Left": 68,
+        "Top": 164.75,
+        "Right": 71,
+        "Bottom": 188.75,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 64,
+        "Y": 138.75,
+        "Width": 357,
+        "Height": 76,
+        "Left": 64,
+        "Top": 138.75,
+        "Right": 421,
+        "Bottom": 214.75,
+        "IsEmpty": false
+      },
+      "Y": 1032.5,
+      "scroll": 989.25
+    }
+  },
+  {
+    "name": "scrolled-resize-900-fully-visible rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 330,
+      "bottom": 376,
+      "expectedTop": 329.5,
+      "expectedBottom": 377.5,
+      "viewportBounds": {
+        "X": 64,
+        "Y": 121.5,
+        "Width": 357,
+        "Height": 110.5,
+        "Left": 64,
+        "Top": 121.5,
+        "Right": 421,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 874,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 874,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 128,
+        "Y": 277.5,
+        "Width": 714,
+        "Height": 152,
+        "Left": 128,
+        "Top": 277.5,
+        "Right": 842,
+        "Bottom": 429.5,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "scrolled-resize-900-fully-visible entire marker is visible after scrolling back into view",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "scrolled-resize-900-top-clipped visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 255,
+      "expected": 255,
+      "fullMarkerBounds": {
+        "X": 68,
+        "Y": 115.5,
+        "Width": 3,
+        "Height": 24,
+        "Left": 68,
+        "Top": 115.5,
+        "Right": 71,
+        "Bottom": 139.5,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 64,
+        "Y": 89.5,
+        "Width": 357,
+        "Height": 76,
+        "Left": 64,
+        "Top": 89.5,
+        "Right": 421,
+        "Bottom": 165.5,
+        "IsEmpty": false
+      },
+      "Y": 1032.5,
+      "scroll": 1038.5
+    }
+  },
+  {
+    "name": "scrolled-resize-900-top-clipped rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 243,
+      "bottom": 278,
+      "expectedTop": 243,
+      "expectedBottom": 279,
+      "viewportBounds": {
+        "X": 64,
+        "Y": 121.5,
+        "Width": 357,
+        "Height": 110.5,
+        "Left": 64,
+        "Top": 121.5,
+        "Right": 421,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 874,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 874,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 128,
+        "Y": 243,
+        "Width": 714,
+        "Height": 88,
+        "Left": 128,
+        "Top": 243,
+        "Right": 842,
+        "Bottom": 331,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "scrolled-resize-1280 visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 115,
+      "expected": 115,
+      "fullMarkerBounds": {
+        "X": 93,
+        "Y": 45.5,
+        "Width": 3,
+        "Height": 24,
+        "Left": 93,
+        "Top": 45.5,
+        "Right": 96,
+        "Bottom": 69.5,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 19.5,
+        "Width": 522,
+        "Height": 76,
+        "Left": 89,
+        "Top": 19.5,
+        "Right": 611,
+        "Bottom": 95.5,
+        "IsEmpty": false
+      },
+      "Y": 962.5,
+      "scroll": 1038.5
+    }
+  },
+  {
+    "name": "scrolled-resize-1280 rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 886,
+      "bottom": -1,
+      "expectedTop": 243,
+      "expectedBottom": 139,
+      "viewportBounds": {
+        "X": 89,
+        "Y": 121.5,
+        "Width": 522,
+        "Height": 110.5,
+        "Left": 89,
+        "Top": 121.5,
+        "Right": 611,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1254,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 1254,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 0,
+        "Height": 0,
+        "Left": 0,
+        "Top": 0,
+        "Right": 0,
+        "Bottom": 0,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "scrolled-resize-1280-fully-visible visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 353.5,
+      "expected": 353.5,
+      "fullMarkerBounds": {
+        "X": 93,
+        "Y": 164.75,
+        "Width": 3,
+        "Height": 24,
+        "Left": 93,
+        "Top": 164.75,
+        "Right": 96,
+        "Bottom": 188.75,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 138.75,
+        "Width": 522,
+        "Height": 76,
+        "Left": 89,
+        "Top": 138.75,
+        "Right": 611,
+        "Bottom": 214.75,
+        "IsEmpty": false
+      },
+      "Y": 962.5,
+      "scroll": 919.25
+    }
+  },
+  {
+    "name": "scrolled-resize-1280-fully-visible rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 330,
+      "bottom": 376,
+      "expectedTop": 329.5,
+      "expectedBottom": 377.5,
+      "viewportBounds": {
+        "X": 89,
+        "Y": 121.5,
+        "Width": 522,
+        "Height": 110.5,
+        "Left": 89,
+        "Top": 121.5,
+        "Right": 611,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1254,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 1254,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 178,
+        "Y": 277.5,
+        "Width": 1044,
+        "Height": 152,
+        "Left": 178,
+        "Top": 277.5,
+        "Right": 1222,
+        "Bottom": 429.5,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "scrolled-resize-1280-fully-visible entire marker is visible after scrolling back into view",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "scrolled-resize-1280-top-clipped visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 255,
+      "expected": 255,
+      "fullMarkerBounds": {
+        "X": 93,
+        "Y": 115.5,
+        "Width": 3,
+        "Height": 24,
+        "Left": 93,
+        "Top": 115.5,
+        "Right": 96,
+        "Bottom": 139.5,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 89.5,
+        "Width": 522,
+        "Height": 76,
+        "Left": 89,
+        "Top": 89.5,
+        "Right": 611,
+        "Bottom": 165.5,
+        "IsEmpty": false
+      },
+      "Y": 962.5,
+      "scroll": 968.5
+    }
+  },
+  {
+    "name": "scrolled-resize-1280-top-clipped rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 243,
+      "bottom": 278,
+      "expectedTop": 243,
+      "expectedBottom": 279,
+      "viewportBounds": {
+        "X": 89,
+        "Y": 121.5,
+        "Width": 522,
+        "Height": 110.5,
+        "Left": 89,
+        "Top": 121.5,
+        "Right": 611,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1254,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 1254,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 178,
+        "Y": 243,
+        "Width": 1044,
+        "Height": 88,
+        "Left": 178,
+        "Top": 243,
+        "Right": 1222,
+        "Bottom": 331,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "scrolled-resize-1000 visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 395,
+      "expected": 395,
+      "fullMarkerBounds": {
+        "X": 93,
+        "Y": 185.5,
+        "Width": 3,
+        "Height": 24,
+        "Left": 93,
+        "Top": 185.5,
+        "Right": 96,
+        "Bottom": 209.5,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 159.5,
+        "Width": 382,
+        "Height": 76,
+        "Left": 89,
+        "Top": 159.5,
+        "Right": 471,
+        "Bottom": 235.5,
+        "IsEmpty": false
+      },
+      "Y": 1032.5,
+      "scroll": 968.5
+    }
+  },
+  {
+    "name": "scrolled-resize-1000 rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 372,
+      "bottom": 418,
+      "expectedTop": 371,
+      "expectedBottom": 419,
+      "viewportBounds": {
+        "X": 89,
+        "Y": 121.5,
+        "Width": 382,
+        "Height": 110.5,
+        "Left": 89,
+        "Top": 121.5,
+        "Right": 471,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 974,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 974,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 178,
+        "Y": 319,
+        "Width": 764,
+        "Height": 145,
+        "Left": 178,
+        "Top": 319,
+        "Right": 942,
+        "Bottom": 464,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "scrolled-resize-1000-fully-visible visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 353.5,
+      "expected": 353.5,
+      "fullMarkerBounds": {
+        "X": 93,
+        "Y": 164.75,
+        "Width": 3,
+        "Height": 24,
+        "Left": 93,
+        "Top": 164.75,
+        "Right": 96,
+        "Bottom": 188.75,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 138.75,
+        "Width": 382,
+        "Height": 76,
+        "Left": 89,
+        "Top": 138.75,
+        "Right": 471,
+        "Bottom": 214.75,
+        "IsEmpty": false
+      },
+      "Y": 1032.5,
+      "scroll": 989.25
+    }
+  },
+  {
+    "name": "scrolled-resize-1000-fully-visible rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 330,
+      "bottom": 376,
+      "expectedTop": 329.5,
+      "expectedBottom": 377.5,
+      "viewportBounds": {
+        "X": 89,
+        "Y": 121.5,
+        "Width": 382,
+        "Height": 110.5,
+        "Left": 89,
+        "Top": 121.5,
+        "Right": 471,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 974,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 974,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 178,
+        "Y": 277.5,
+        "Width": 764,
+        "Height": 152,
+        "Left": 178,
+        "Top": 277.5,
+        "Right": 942,
+        "Bottom": 429.5,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "scrolled-resize-1000-fully-visible entire marker is visible after scrolling back into view",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "scrolled-resize-1000-top-clipped visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 255,
+      "expected": 255,
+      "fullMarkerBounds": {
+        "X": 93,
+        "Y": 115.5,
+        "Width": 3,
+        "Height": 24,
+        "Left": 93,
+        "Top": 115.5,
+        "Right": 96,
+        "Bottom": 139.5,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 89,
+        "Y": 89.5,
+        "Width": 382,
+        "Height": 76,
+        "Left": 89,
+        "Top": 89.5,
+        "Right": 471,
+        "Bottom": 165.5,
+        "IsEmpty": false
+      },
+      "Y": 1032.5,
+      "scroll": 1038.5
+    }
+  },
+  {
+    "name": "scrolled-resize-1000-top-clipped rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 243,
+      "bottom": 278,
+      "expectedTop": 243,
+      "expectedBottom": 279,
+      "viewportBounds": {
+        "X": 89,
+        "Y": 121.5,
+        "Width": 382,
+        "Height": 110.5,
+        "Left": 89,
+        "Top": 121.5,
+        "Right": 471,
+        "Bottom": 232,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 0,
+        "Y": 0,
+        "Width": 974,
+        "Height": 886,
+        "Left": 0,
+        "Top": 0,
+        "Right": 974,
+        "Bottom": 886,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 178,
+        "Y": 243,
+        "Width": 764,
+        "Height": 88,
+        "Left": 178,
+        "Top": 243,
+        "Right": 942,
+        "Bottom": 331,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "queue-before visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 247,
+      "expected": 247,
+      "fullMarkerBounds": {
+        "X": 20.5,
+        "Y": 111.5,
+        "Width": 3,
+        "Height": 24,
+        "Left": 20.5,
+        "Top": 111.5,
+        "Right": 23.5,
+        "Bottom": 135.5,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 16.5,
+        "Y": 95.5,
+        "Width": 367,
+        "Height": 56,
+        "Left": 16.5,
+        "Top": 95.5,
+        "Right": 383.5,
+        "Bottom": 151.5,
+        "IsEmpty": false
+      },
+      "Y": 464,
+      "scroll": 413
+    }
+  },
+  {
+    "name": "queue-before rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 224,
+      "bottom": 270,
+      "expectedTop": 223,
+      "expectedBottom": 271,
+      "viewportBounds": {
+        "X": 16.5,
+        "Y": 60.5,
+        "Width": 367,
+        "Height": 91,
+        "Left": 16.5,
+        "Top": 60.5,
+        "Right": 383.5,
+        "Bottom": 151.5,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 142,
+        "Y": 128,
+        "Width": 800,
+        "Height": 336,
+        "Left": 142,
+        "Top": 128,
+        "Right": 942,
+        "Bottom": 464,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 175,
+        "Y": 319,
+        "Width": 734,
+        "Height": 112,
+        "Left": 175,
+        "Top": 319,
+        "Right": 909,
+        "Bottom": 431,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "queue-after visible marker stays centered on its full song row",
+    "passed": true,
+    "detail": {
+      "visibility": "Visible",
+      "actual": 205,
+      "expected": 205,
+      "fullMarkerBounds": {
+        "X": 20.5,
+        "Y": 90.5,
+        "Width": 3,
+        "Height": 24,
+        "Left": 20.5,
+        "Top": 90.5,
+        "Right": 23.5,
+        "Bottom": 114.5,
+        "IsEmpty": false
+      },
+      "fullRowBounds": {
+        "X": 16.5,
+        "Y": 74.5,
+        "Width": 367,
+        "Height": 56,
+        "Left": 16.5,
+        "Top": 74.5,
+        "Right": 383.5,
+        "Bottom": 130.5,
+        "IsEmpty": false
+      },
+      "Y": 464,
+      "scroll": 434
+    }
+  },
+  {
+    "name": "queue-after rendered pixels match native viewport clipping",
+    "passed": true,
+    "detail": {
+      "top": 182,
+      "bottom": 228,
+      "expectedTop": 181,
+      "expectedBottom": 229,
+      "viewportBounds": {
+        "X": 16.5,
+        "Y": 60.5,
+        "Width": 367,
+        "Height": 91,
+        "Left": 16.5,
+        "Top": 60.5,
+        "Right": 383.5,
+        "Bottom": 151.5,
+        "IsEmpty": false
+      },
+      "rootBounds": {
+        "X": 142,
+        "Y": 128,
+        "Width": 800,
+        "Height": 336,
+        "Left": 142,
+        "Top": 128,
+        "Right": 942,
+        "Bottom": 464,
+        "IsEmpty": false
+      },
+      "rowBounds": {
+        "X": 175,
+        "Y": 277,
+        "Width": 734,
+        "Height": 112,
+        "Left": 175,
+        "Top": 277,
+        "Right": 909,
+        "Bottom": 389,
+        "IsEmpty": false
+      }
+    }
+  }
+]
