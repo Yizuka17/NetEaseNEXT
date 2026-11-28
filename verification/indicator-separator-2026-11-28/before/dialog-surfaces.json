@@ -1,0 +1,42 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-information uses native shadow, shared corners and one physical-pixel stroke",
+    "passed": true,
+    "detail": {
+      "shadow": "ThemeShadow",
+      "Z": 32,
+      "radius": 8,
+      "expectedRadius": 8,
+      "stroke": 0.5,
+      "expectedStroke": 0.5
+    }
+  },
+  {
+    "name": "Light-information has a full-window transparent input surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 627,
+      "ActualHeight": 443
+    }
+  },
+  {
+    "name": "Light-information retains its shadow after a material refresh",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-information only separates a visible command area",
+    "passed": false,
+    "detail": 1
+  },
+  {
+    "name": "exception",
+    "passed": false,
+    "detail": "System.InvalidOperationException: Smoke test failed: Light-information only separates a visible command area\r\n   at NetEaseNEXT.MainWindow.\u003C\u003Ec__DisplayClass141_0.\u003CRunSmokeTestAsync\u003Eg__Check|0(String name, Boolean condition, Object detail) in E:\\NetEaseNEXT_Dev\\NetEaseNEXT\\Diagnostics\\SmokeTest.cs:line 34\r\n   at NetEaseNEXT.MainWindow.\u003C\u003Ec__DisplayClass86_0.\u003C\u003CRunDialogSurfaceChecksAsync\u003Eg__Inspect|2\u003Ed.MoveNext() in E:\\NetEaseNEXT_Dev\\NetEaseNEXT\\Diagnostics\\DialogSurfaceChecks.cs:line 44\r\n--- End of stack trace from previous location ---\r\n   at NetEaseNEXT.MainWindow.RunDialogSurfaceChecksAsync(Action\u00603 check) in E:\\NetEaseNEXT_Dev\\NetEaseNEXT\\Diagnostics\\DialogSurfaceChecks.cs:line 70\r\n   at NetEaseNEXT.MainWindow.RunSmokeTestAsync() in E:\\NetEaseNEXT_Dev\\NetEaseNEXT\\Diagnostics\\SmokeTest.cs:line 41"
+  }
+]

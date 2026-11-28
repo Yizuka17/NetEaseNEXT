@@ -16,6 +16,7 @@ public sealed partial class MainWindow
         _accountLoad?.Cancel(); _inboxCheck?.Cancel(); _playback.SetVolume(0);
         RestoreWindow(); AppWindow.Resize(new(1280, 900));
         var physicalInput = Environment.GetCommandLineArgs().Contains("--dialog-surfaces-input");
+        var separatorInput = Environment.GetCommandLineArgs().Contains("--dialog-separator-input");
         async Task Wait(Func<bool> condition, int seconds = 12)
         {
             var clock = Stopwatch.StartNew();
@@ -39,12 +40,15 @@ public sealed partial class MainWindow
             // Reapplying theme/material must preserve elevation and input coverage.
             ApplyFloatingMaterials();
             check(name + " retains its shadow after a material refresh", frame.Shadow is ThemeShadow && frame.Translation.Z == 32, null);
+            var hasButtons = dialog.PrimaryButtonText.Length > 0 || dialog.SecondaryButtonText.Length > 0 || dialog.CloseButtonText.Length > 0;
+            var separator = (Grid)FindDescendant<ScrollViewer>(dialog, s => s.Name == "ContentScrollViewer")!.Content;
+            check(name + " only separates a visible command area", hasButtons ? separator.BorderThickness.Bottom > 0 : separator.BorderThickness == new Thickness(0), separator.BorderThickness.Bottom);
             if (name.EndsWith("favorite"))
             {
                 var list = Descendants<ListView>(dialog).Single(); list.SelectedIndex = 0;
                 check(name + " allows selecting a playlist", dialog.IsPrimaryButtonEnabled, null);
             }
-            if (physicalInput && (name == "Light-information" || name == "Light-favorite" || name == "Dark-information"))
+            if (physicalInput && (name == "Light-information" || name == "Light-favorite" || name == "Dark-information") || separatorInput && (name.EndsWith("-information") || name.EndsWith("-comments")))
             {
                 await File.WriteAllTextAsync(Path.Combine(SettingsStore.DataDirectory, "dialog-surface-stage.json"), JsonSerializer.Serialize(new { name, pid = Environment.ProcessId }));
                 await Wait(() => !_dialogSurfaceReady, 180);

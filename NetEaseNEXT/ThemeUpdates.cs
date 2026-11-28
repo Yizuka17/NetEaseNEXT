@@ -225,6 +225,10 @@ public sealed partial class MainWindow
         dialog.Resources["ContentDialogButtonMinHeight"] = 44d;
         dialog.Resources["ContentDialogTopOverlay"] = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
         dialog.Resources["ContentDialogSmokeFill"] = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+        // The stock template keeps its content/command separator even when
+        // CommandSpace is collapsed. Custom-heading dialogs have no button row.
+        if (dialog.PrimaryButtonText.Length == 0 && dialog.SecondaryButtonText.Length == 0 && dialog.CloseButtonText.Length == 0)
+            dialog.Resources["ContentDialogSeparatorThickness"] = new Thickness(0);
         Style TouchStyle(Style? original)
         {
             var style = new Style(typeof(Button)) { BasedOn = original ?? (Style)Application.Current.Resources["DefaultButtonStyle"] };

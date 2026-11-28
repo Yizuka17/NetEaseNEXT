@@ -50,7 +50,7 @@ public sealed partial class MainWindow
             await CloseComment();
             check(label + " releases the dialog and input handler on close", !_dialogSurfaceReady && _dialog == null, null);
         }
-        async Task Marker(string label, bool queue = false)
+        async Task Marker(string label, bool queue = false, bool fullyVisible = false)
         {
             Root.UpdateLayout(); UpdateSelectionIndicators(false); await Task.Delay(550);
             var state = queue ? _queueSelectionMotion : _trackSelectionMotion;
@@ -70,14 +70,25 @@ public sealed partial class MainWindow
                 }
             var rootBounds = new FrameworkElementAutomationPeer(capture).GetBoundingRectangle();
             var rowBounds = new ListViewItemAutomationPeer(row).GetBoundingRectangle();
-            // UIA clips accessible bounds at the viewport edge. Compare the
-            // rendered marker against the full row in capture coordinates,
-            // independently of the production content/scroll expression.
+            // Compare the full marker anchor to the full row, then compare
+            // pixels to the marker's visible intersection with the native
+            // viewport. A clipped fragment has a different center by design.
             var fullRowBounds = row.TransformToVisual(capture).TransformBounds(new(0, 0, row.ActualWidth, row.ActualHeight));
-            var expected = (fullRowBounds.Y + fullRowBounds.Height / 2) * bitmap.PixelHeight / capture.ActualHeight;
-            var center = (top + bottom + 1) / 2d;
+            var marker = queue ? QueueSelectionIndicator : TrackSelectionIndicator;
+            var fullMarkerBounds = marker.TransformToVisual(capture).TransformBounds(new(0, 0, marker.ActualWidth, marker.ActualHeight));
+            var viewport = FindDescendant<ScrollContentPresenter>(FindDescendant<ScrollViewer>(list)!)!;
+            var viewportBounds = viewport.TransformToVisual(capture).TransformBounds(new(0, 0, viewport.ActualWidth, viewport.ActualHeight));
+            var scale = bitmap.PixelHeight / capture.ActualHeight;
+            var expected = (fullRowBounds.Y + fullRowBounds.Height / 2) * scale;
+            var actual = (fullMarkerBounds.Y + fullMarkerBounds.Height / 2) * scale;
+            var expectedTop = Math.Max(expected - marker.Height * scale / 2, viewportBounds.Y * scale);
+            var expectedBottom = Math.Min(expected + marker.Height * scale / 2, viewportBounds.Bottom * scale);
             await SaveLibraryImageAsync(capture, "indicator-" + label + ".png");
-            check(label + " rendered marker stays centered on its full song row", bottom >= top && Math.Abs(center - expected) <= 2, new { top, bottom, center, expected, rootBounds, rowBounds, fullRowBounds, state.Y, scroll = state.Scroll?.VerticalOffset });
+            check(label + " visible marker stays centered on its full song row", marker.Visibility == Visibility.Visible ? Math.Abs(actual - expected) <= 2 : expectedBottom <= expectedTop,
+                new { visibility = marker.Visibility.ToString(), actual, expected, fullMarkerBounds, fullRowBounds, state.Y, scroll = state.Scroll?.VerticalOffset });
+            check(label + " rendered pixels match native viewport clipping", expectedBottom <= expectedTop ? bottom < top : bottom >= top && Math.Abs(top - expectedTop) <= 2 && Math.Abs(bottom + 1 - expectedBottom) <= 2,
+                new { top, bottom, expectedTop, expectedBottom, viewportBounds, rootBounds, rowBounds });
+            if (fullyVisible) check(label + " entire marker is visible after scrolling back into view", expectedTop <= expected - marker.Height * scale / 2 && expectedBottom >= expected + marker.Height * scale / 2, null);
         }
         try
         {
@@ -125,6 +136,12 @@ public sealed partial class MainWindow
             {
                 AppWindow.Resize(new(width, 900)); await Task.Delay(100); Root.UpdateLayout();
                 await Marker("scrolled-resize-" + width);
+                var row = (ListViewItem)TrackList.ContainerFromItem(Tracks[8]);
+                var anchor = row.TransformToVisual((FrameworkElement)scroller.Content).TransformBounds(new(0, 0, row.ActualWidth, row.ActualHeight));
+                scroller.ChangeView(null, anchor.Y + anchor.Height / 2 - scroller.ViewportHeight / 2, null, true); await Task.Delay(150);
+                await Marker("scrolled-resize-" + width + "-fully-visible", fullyVisible: true);
+                scroller.ChangeView(null, anchor.Y + anchor.Height / 2 - TrackSelectionIndicator.Height / 4, null, true); await Task.Delay(150);
+                await Marker("scrolled-resize-" + width + "-top-clipped");
             }
             var oldQueueBackground = QueueSelectionIndicator.Background;
             QueueSelectionIndicator.Background = TrackSelectionIndicator.Background;
@@ -138,7 +155,9 @@ public sealed partial class MainWindow
                 await Marker("queue-after", true);
             }
             finally { QueueSelectionIndicator.Background = oldQueueBackground; ShowQueue_Click(QueueButton, new()); }
-            check("The window leaves corner rounding to DWM", DwmGetWindowAttribute(WinRT.Interop.WindowNative.GetWindowHandle(this), 33, out var preference, sizeof(int)) == 0 && preference == 0, null);
+            // DWMWA_WINDOW_CORNER_PREFERENCE is only available on Windows 11.
+            if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000))
+                check("The window leaves corner rounding to DWM", DwmGetWindowAttribute(WinRT.Interop.WindowNative.GetWindowHandle(this), 33, out var preference, sizeof(int)) == 0 && preference == 0, null);
         }
         finally
         {

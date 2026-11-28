@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-28",
+  "platform": "Windows 10 22H2 x64, 200% DPI",
+  "indicator": {
+    "finding": "The prior 16.5px offset report was a test false positive: the visible fragment was compared with the center of the full row",
+    "fullMarkerCenterPx": 474,
+    "fullRowCenterPx": 474,
+    "visiblePixelTop": 451,
+    "visiblePixelBottom": 463,
+    "viewportBottomPx": 464,
+    "productionPositioningChanged": false,
+    "coverage": "Full anchors, native clipping at both edges, hidden markers, returning fully into view, font sizes 14/22, window widths 900/1000/1280, playback queue"
+  },
+  "dialogs": {
+    "finding": "The default ContentDialog template painted its 1-DIP content/command separator even with the command area collapsed",
+    "fix": "Set ContentDialogSeparatorThickness to zero only for dialogs without native bottom buttons",
+    "preserved": "ThemeShadow, native border/corners, outside dismissal, comment input and command separators for dialogs with buttons",
+    "screenshots": [
+      "information-light.png",
+      "information-dark.png",
+      "comments-light.png",
+      "comments-dark.png"
+    ]
+  },
+  "build": {
+    "configuration": "Release",
+    "warnings": 0,
+    "errors": 0,
+    "assemblySHA256": "1D4141753F91A567E3813D3B82848F2A2A2BA2D65A912BA0B85C6E436EE2059F"
+  },
+  "checks": [
+    {
+      "mode": "surface-regression",
+      "checks": 54,
+      "failures": 0,
+      "seconds": 26.02
+    },
+    {
+      "mode": "dialog-surfaces",
+      "checks": 179,
+      "failures": 0,
+      "seconds": 17.1
+    },
+    {
+      "mode": "light-dismiss",
+      "checks": 52,
+      "failures": 0,
+      "seconds": 12.09
+    }
+  ],
+  "totalChecks": 285.0,
+  "physicalInput": "TaskKit native screenshots in both themes; information dismissed outside; comments stayed open outside and closed with X",
+  "notTested": "Windows 11-only DWM corner preference is skipped on Windows 10",
+  "scope": "Local development build; published release and installed package not replaced"
+}
