@@ -1,0 +1,141 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-initial uses one themed native surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 563,
+      "ActualHeight": 582,
+      "Z": 32,
+      "background": "AcrylicBrush",
+      "commands": "Collapsed",
+      "commandHeight": 0,
+      "contentHeight": 581,
+      "theme": "Dark"
+    }
+  },
+  {
+    "name": "Dark-initial retains its native shadow and dark/light theme",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-shrunk uses one themed native surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 563,
+      "ActualHeight": 482,
+      "Z": 32,
+      "background": "AcrylicBrush",
+      "commands": "Collapsed",
+      "commandHeight": 0,
+      "contentHeight": 481,
+      "theme": "Dark"
+    }
+  },
+  {
+    "name": "Dark-shrunk retains its native shadow and dark/light theme",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark resizing preserves the comment draft and outside-click behavior",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark closing releases the dialog and request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Dark-reopened uses one themed native surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 563,
+      "ActualHeight": 582,
+      "Z": 32,
+      "background": "AcrylicBrush",
+      "commands": "Collapsed",
+      "commandHeight": 0,
+      "contentHeight": 581,
+      "theme": "Dark"
+    }
+  },
+  {
+    "name": "Dark-reopened retains its native shadow and dark/light theme",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-initial uses one themed native surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 563,
+      "ActualHeight": 582,
+      "Z": 32,
+      "background": "AcrylicBrush",
+      "commands": "Collapsed",
+      "commandHeight": 0,
+      "contentHeight": 581,
+      "theme": "Light"
+    }
+  },
+  {
+    "name": "Light-initial retains its native shadow and dark/light theme",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-shrunk uses one themed native surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 563,
+      "ActualHeight": 482,
+      "Z": 32,
+      "background": "AcrylicBrush",
+      "commands": "Collapsed",
+      "commandHeight": 0,
+      "contentHeight": 481,
+      "theme": "Light"
+    }
+  },
+  {
+    "name": "Light-shrunk retains its native shadow and dark/light theme",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light resizing preserves the comment draft and outside-click behavior",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light closing releases the dialog and request",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-reopened uses one themed native surface",
+    "passed": true,
+    "detail": {
+      "ActualWidth": 563,
+      "ActualHeight": 582,
+      "Z": 32,
+      "background": "AcrylicBrush",
+      "commands": "Collapsed",
+      "commandHeight": 0,
+      "contentHeight": 581,
+      "theme": "Light"
+    }
+  },
+  {
+    "name": "Light-reopened retains its native shadow and dark/light theme",
+    "passed": true,
+    "detail": null
+  }
+]

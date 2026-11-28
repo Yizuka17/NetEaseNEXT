@@ -1,0 +1,58 @@
+{
+  "date": "2026-11-28",
+  "version": "0.3.4.4",
+  "reproduction": "On Windows 10 at 200% DPI, the dark comments dialog initially showed a broad pale area above the player footer. Shrinking the main window from 1400px to 1200px high removed it.",
+  "observedIsolation": [
+    "Removing ThemeShadow did not remove the pale area.",
+    "Recreating the dialog acrylic brush did not remove it.",
+    "Replacing the footer background with an opaque dark brush removed it without resizing.",
+    "Using the native translucent LayerFillColorDefaultBrush also removed it on the first open."
+  ],
+  "fix": "Use LayerFillColorDefaultBrush for the full-width player footer instead of the low-alpha white CardBackgroundFillColorDefaultBrush. Keep the existing dialog acrylic, shadow, separator policy and dismissal behavior.",
+  "palette": {
+    "oldDarkFooter": "#0DFFFFFF",
+    "newDarkFooter": "#4C3A3A3A",
+    "source": "Microsoft.WindowsAppSDK.WinUI 1.8.260803003 native generic.xaml",
+    "transparencyPreserved": true
+  },
+  "validation": {
+    "checks": 248.0,
+    "failures": 0.0,
+    "suites": [
+      {
+        "mode": "comment-surface",
+        "checks": 17,
+        "failures": 0,
+        "report": "published-comment-surface.json"
+      },
+      {
+        "mode": "dialog-surfaces",
+        "checks": 179,
+        "failures": 0,
+        "report": "published-dialog-surfaces.json"
+      },
+      {
+        "mode": "light-dismiss",
+        "checks": 52,
+        "failures": 0,
+        "report": "published-light-dismiss.json"
+      }
+    ],
+    "nativeScreenshots": [
+      "dark-initial.png",
+      "dark-shrunk.png",
+      "light-initial.png",
+      "light-shrunk.png"
+    ],
+    "pixelMeasurements": "native-pixels.json",
+    "buildWarnings": 0,
+    "buildErrors": 0,
+    "signatureVerified": true,
+    "originalSigningCertificate": true
+  },
+  "limitations": [
+    "Native screenshots show the development candidate with the same footer resource change; the final 0.3.4.4 published files were checked separately.",
+    "Pixel samples describe this synthetic scene on this machine, not an arbitrary-background brightness requirement.",
+    "No installed user package was replaced locally and no remote comments were sent."
+  ]
+}

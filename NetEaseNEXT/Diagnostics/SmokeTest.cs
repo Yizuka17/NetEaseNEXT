@@ -36,6 +36,10 @@ public sealed partial class MainWindow
         try
         {
             Check("XAML root loaded", Root.IsLoaded);
+            if (Environment.GetCommandLineArgs().Contains("--comment-surface-check"))
+            {
+                await RunCommentSurfaceChecksAsync(Check); return;
+            }
             if (Environment.GetCommandLineArgs().Contains("--sidebar-transition-check"))
             {
                 await RunSidebarTransitionChecksAsync(Check); return;
