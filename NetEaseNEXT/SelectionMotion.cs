@@ -121,6 +121,22 @@ public sealed partial class MainWindow
         var marker = SidebarSelectionIndicator; var state = _sidebarSelectionMotion;
         if (_hidden || Nav.Visibility != Visibility.Visible || !Nav.IsLoaded || Nav.DisplayMode == NavigationViewDisplayMode.Minimal && !Nav.IsPaneOpen || Nav.SelectedItem is not NavigationViewItem item || !item.IsLoaded)
         { marker.Visibility = Visibility.Collapsed; state.Item = null; state.Y = double.NaN; StopIndicatorScroll(SidebarSelectionLayer, state); return; }
+        // Locally loaded pages can complete navigation and force layout inside
+        // the earlier SelectionChanged handler, before ours starts the motion.
+        // Preserve the old anchor until the animated selection pass consumes it.
+        if (!animate && state.Item != null && !ReferenceEquals(item, state.Item))
+        {
+            if (!state.DispatchQueued)
+            {
+                state.DispatchQueued = true;
+                Nav.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
+                {
+                    state.DispatchQueued = false;
+                    UpdateSidebarSelection(true);
+                });
+            }
+            return;
+        }
         ScrollViewer? owner = null;
         for (DependencyObject? parent = VisualTreeHelper.GetParent(item); parent != null && parent != Nav; parent = VisualTreeHelper.GetParent(parent))
             if (parent is ScrollViewer scroll)

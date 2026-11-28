@@ -1,0 +1,58 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "LeftCompact 1600px downloads and queue retain their selection transition",
+    "passed": false,
+    "detail": [
+      {
+        "index": 6,
+        "_view": "downloads",
+        "previous": 256,
+        "target": 296,
+        "scale": false,
+        "move": false,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 7,
+        "_view": "queue",
+        "previous": 296,
+        "target": 336,
+        "scale": false,
+        "move": false,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 6,
+        "_view": "downloads",
+        "previous": 336,
+        "target": 296,
+        "scale": false,
+        "move": false,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 5,
+        "_view": "local",
+        "previous": 296,
+        "target": 256,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      }
+    ]
+  },
+  {
+    "name": "exception",
+    "passed": false,
+    "detail": "System.InvalidOperationException: Smoke test failed: LeftCompact 1600px downloads and queue retain their selection transition\r\n   at NetEaseNEXT.MainWindow.\u003C\u003Ec__DisplayClass143_0.\u003CRunSmokeTestAsync\u003Eg__Check|0(String name, Boolean condition, Object detail) in E:\\NetEaseNEXT_Dev\\NetEaseNEXT\\Diagnostics\\SmokeTest.cs:line 34\r\n   at NetEaseNEXT.MainWindow.RunSidebarTransitionChecksAsync(Action\u00603 check) in E:\\NetEaseNEXT_Dev\\NetEaseNEXT\\Diagnostics\\SidebarTransitionChecks.cs:line 41\r\n   at NetEaseNEXT.MainWindow.RunSmokeTestAsync() in E:\\NetEaseNEXT_Dev\\NetEaseNEXT\\Diagnostics\\SmokeTest.cs:line 41"
+  }
+]

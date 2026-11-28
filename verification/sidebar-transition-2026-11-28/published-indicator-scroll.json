@@ -1,0 +1,1072 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "LeftCompact sidebar uses a scrollable menu in a short window",
+    "passed": true,
+    "detail": {
+      "height": 300,
+      "ScrollableHeight": 188
+    }
+  },
+  {
+    "name": "LeftCompact sidebar has enough viewport movement to test scrolling",
+    "passed": true,
+    "detail": {
+      "start": 34,
+      "target": 60.4,
+      "ScrollableHeight": 188,
+      "ViewportHeight": 132
+    }
+  },
+  {
+    "name": "LeftCompact sidebar follows animated scrolling in both directions",
+    "passed": true,
+    "detail": {
+      "maxError": 0.25,
+      "samples": [
+        {
+          "expected": 140.25,
+          "actual": 140.25,
+          "error": 0,
+          "offset": 51.84125900268555
+        },
+        {
+          "expected": 131.75,
+          "actual": 131.75,
+          "error": 0,
+          "offset": 60.39911651611328
+        },
+        {
+          "expected": 132,
+          "actual": 131.75,
+          "error": 0.25,
+          "offset": 60.400001525878906
+        },
+        {
+          "expected": 132,
+          "actual": 131.75,
+          "error": 0.25,
+          "offset": 60.400001525878906
+        },
+        {
+          "expected": 132,
+          "actual": 131.75,
+          "error": 0.25,
+          "offset": 60.400001525878906
+        },
+        {
+          "expected": 132,
+          "actual": 131.75,
+          "error": 0.25,
+          "offset": 60.400001525878906
+        },
+        {
+          "expected": 132,
+          "actual": 131.75,
+          "error": 0.25,
+          "offset": 60.400001525878906
+        },
+        {
+          "expected": 132,
+          "actual": 131.75,
+          "error": 0.25,
+          "offset": 60.400001525878906
+        },
+        {
+          "expected": 149.25,
+          "actual": 149.25,
+          "error": 0,
+          "offset": 42.55874252319336
+        },
+        {
+          "expected": 157.75,
+          "actual": 158,
+          "error": 0.25,
+          "offset": 34.045066833496094
+        },
+        {
+          "expected": 158,
+          "actual": 158.25,
+          "error": 0.25,
+          "offset": 34
+        },
+        {
+          "expected": 158,
+          "actual": 158.25,
+          "error": 0.25,
+          "offset": 34
+        },
+        {
+          "expected": 158,
+          "actual": 158.25,
+          "error": 0.25,
+          "offset": 34
+        },
+        {
+          "expected": 158,
+          "actual": 158.25,
+          "error": 0.25,
+          "offset": 34
+        },
+        {
+          "expected": 158,
+          "actual": 158.25,
+          "error": 0.25,
+          "offset": 34
+        },
+        {
+          "expected": 158,
+          "actual": 158.25,
+          "error": 0.25,
+          "offset": 34
+        },
+        {
+          "expected": 140.25,
+          "actual": 140.25,
+          "error": 0,
+          "offset": 51.632442474365234
+        },
+        {
+          "expected": 132,
+          "actual": 131.75,
+          "error": 0.25,
+          "offset": 60.400001525878906
+        },
+        {
+          "expected": 132,
+          "actual": 131.75,
+          "error": 0.25,
+          "offset": 60.400001525878906
+        },
+        {
+          "expected": 132,
+          "actual": 131.75,
+          "error": 0.25,
+          "offset": 60.400001525878906
+        },
+        {
+          "expected": 132,
+          "actual": 131.75,
+          "error": 0.25,
+          "offset": 60.400001525878906
+        },
+        {
+          "expected": 132,
+          "actual": 131.75,
+          "error": 0.25,
+          "offset": 60.400001525878906
+        },
+        {
+          "expected": 132,
+          "actual": 131.75,
+          "error": 0.25,
+          "offset": 60.400001525878906
+        },
+        {
+          "expected": 132,
+          "actual": 131.75,
+          "error": 0.25,
+          "offset": 60.400001525878906
+        },
+        {
+          "expected": 153.75,
+          "actual": 153.75,
+          "error": 0,
+          "offset": 38.70985412597656
+        },
+        {
+          "expected": 158,
+          "actual": 158.25,
+          "error": 0.25,
+          "offset": 34
+        },
+        {
+          "expected": 158,
+          "actual": 158.25,
+          "error": 0.25,
+          "offset": 34
+        },
+        {
+          "expected": 158,
+          "actual": 158.25,
+          "error": 0.25,
+          "offset": 34
+        },
+        {
+          "expected": 158,
+          "actual": 158.25,
+          "error": 0.25,
+          "offset": 34
+        },
+        {
+          "expected": 158,
+          "actual": 158.25,
+          "error": 0.25,
+          "offset": 34
+        },
+        {
+          "expected": 158,
+          "actual": 158.25,
+          "error": 0.25,
+          "offset": 34
+        },
+        {
+          "expected": 158,
+          "actual": 158.25,
+          "error": 0.25,
+          "offset": 34
+        }
+      ]
+    }
+  },
+  {
+    "name": "LeftCompact sidebar is bound to the selected region\u0027s live compositor scroll",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "LeftCompact partial selection paints no indicator outside the native sidebar viewport",
+    "passed": true,
+    "detail": {
+      "count": 39,
+      "outside": 0,
+      "bounds": {
+        "X": 0,
+        "Y": 92,
+        "Width": 72,
+        "Height": 132,
+        "Left": 0,
+        "Top": 92,
+        "Right": 72,
+        "Bottom": 224,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "LeftCompact partially clipped selection stays within the scroll region",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "LeftCompact hidden selection paints no indicator outside the native sidebar viewport",
+    "passed": true,
+    "detail": {
+      "count": 0,
+      "outside": 0,
+      "bounds": {
+        "X": 0,
+        "Y": 92,
+        "Width": 72,
+        "Height": 132,
+        "Left": 0,
+        "Top": 92,
+        "Right": 72,
+        "Bottom": 224,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "LeftCompact scrolled-out selection is clipped without clearing selection",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "LeftCompact returned selection paints no indicator outside the native sidebar viewport",
+    "passed": true,
+    "detail": {
+      "count": 173,
+      "outside": 0,
+      "bounds": {
+        "X": 0,
+        "Y": 92,
+        "Width": 72,
+        "Height": 132,
+        "Left": 0,
+        "Top": 92,
+        "Right": 72,
+        "Bottom": 224,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "LeftCompact returning selection reappears without selecting it again",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "LeftCompact footer selection stays fixed when the main menu scrolls",
+    "passed": true,
+    "detail": {
+      "before": 316,
+      "after": 316
+    }
+  },
+  {
+    "name": "Left sidebar uses a scrollable menu in a short window",
+    "passed": true,
+    "detail": {
+      "height": 300,
+      "ScrollableHeight": 192
+    }
+  },
+  {
+    "name": "Left sidebar has enough viewport movement to test scrolling",
+    "passed": true,
+    "detail": {
+      "start": 36,
+      "target": 61.6,
+      "ScrollableHeight": 192,
+      "ViewportHeight": 128
+    }
+  },
+  {
+    "name": "Left sidebar follows animated scrolling in both directions",
+    "passed": true,
+    "detail": {
+      "maxError": 0.25,
+      "samples": [
+        {
+          "expected": 136.25,
+          "actual": 136.25,
+          "error": 0,
+          "offset": 55.79365539550781
+        },
+        {
+          "expected": 130.25,
+          "actual": 130.25,
+          "error": 0,
+          "offset": 61.600006103515625
+        },
+        {
+          "expected": 130.25,
+          "actual": 130.25,
+          "error": 0,
+          "offset": 61.600006103515625
+        },
+        {
+          "expected": 130.25,
+          "actual": 130.25,
+          "error": 0,
+          "offset": 61.600006103515625
+        },
+        {
+          "expected": 130.25,
+          "actual": 130.25,
+          "error": 0,
+          "offset": 61.600006103515625
+        },
+        {
+          "expected": 130.25,
+          "actual": 130.25,
+          "error": 0,
+          "offset": 61.600006103515625
+        },
+        {
+          "expected": 130,
+          "actual": 130.25,
+          "error": 0.25,
+          "offset": 61.600006103515625
+        },
+        {
+          "expected": 130,
+          "actual": 130.25,
+          "error": 0.25,
+          "offset": 61.600006103515625
+        },
+        {
+          "expected": 151.25,
+          "actual": 151.25,
+          "error": 0,
+          "offset": 40.910980224609375
+        },
+        {
+          "expected": 156,
+          "actual": 156.25,
+          "error": 0.25,
+          "offset": 36
+        },
+        {
+          "expected": 156,
+          "actual": 156.25,
+          "error": 0.25,
+          "offset": 36
+        },
+        {
+          "expected": 156,
+          "actual": 156.25,
+          "error": 0.25,
+          "offset": 36
+        },
+        {
+          "expected": 156,
+          "actual": 156.25,
+          "error": 0.25,
+          "offset": 36
+        },
+        {
+          "expected": 156,
+          "actual": 156.25,
+          "error": 0.25,
+          "offset": 36
+        },
+        {
+          "expected": 156,
+          "actual": 156.25,
+          "error": 0.25,
+          "offset": 36
+        },
+        {
+          "expected": 156,
+          "actual": 156.25,
+          "error": 0.25,
+          "offset": 36
+        },
+        {
+          "expected": 140.75,
+          "actual": 140.75,
+          "error": 0,
+          "offset": 51.25367736816406
+        },
+        {
+          "expected": 130.5,
+          "actual": 130.75,
+          "error": 0.25,
+          "offset": 61.38812255859375
+        },
+        {
+          "expected": 130,
+          "actual": 130.25,
+          "error": 0.25,
+          "offset": 61.600006103515625
+        },
+        {
+          "expected": 130,
+          "actual": 130.25,
+          "error": 0.25,
+          "offset": 61.600006103515625
+        },
+        {
+          "expected": 130,
+          "actual": 130.25,
+          "error": 0.25,
+          "offset": 61.600006103515625
+        },
+        {
+          "expected": 130,
+          "actual": 130.25,
+          "error": 0.25,
+          "offset": 61.600006103515625
+        },
+        {
+          "expected": 130,
+          "actual": 130.25,
+          "error": 0.25,
+          "offset": 61.600006103515625
+        },
+        {
+          "expected": 130,
+          "actual": 130.25,
+          "error": 0.25,
+          "offset": 61.600006103515625
+        },
+        {
+          "expected": 151.75,
+          "actual": 152,
+          "error": 0.25,
+          "offset": 40.040435791015625
+        },
+        {
+          "expected": 156,
+          "actual": 156.25,
+          "error": 0.25,
+          "offset": 36
+        },
+        {
+          "expected": 156,
+          "actual": 156.25,
+          "error": 0.25,
+          "offset": 36
+        },
+        {
+          "expected": 156,
+          "actual": 156.25,
+          "error": 0.25,
+          "offset": 36
+        },
+        {
+          "expected": 156,
+          "actual": 156.25,
+          "error": 0.25,
+          "offset": 36
+        },
+        {
+          "expected": 156,
+          "actual": 156.25,
+          "error": 0.25,
+          "offset": 36
+        },
+        {
+          "expected": 156,
+          "actual": 156.25,
+          "error": 0.25,
+          "offset": 36
+        },
+        {
+          "expected": 156,
+          "actual": 156.25,
+          "error": 0.25,
+          "offset": 36
+        }
+      ]
+    }
+  },
+  {
+    "name": "Left sidebar is bound to the selected region\u0027s live compositor scroll",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Left partial selection paints no indicator outside the native sidebar viewport",
+    "passed": true,
+    "detail": {
+      "count": 39,
+      "outside": 0,
+      "bounds": {
+        "X": 0,
+        "Y": 92,
+        "Width": 208,
+        "Height": 128,
+        "Left": 0,
+        "Top": 92,
+        "Right": 208,
+        "Bottom": 220,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "Left partially clipped selection stays within the scroll region",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Left hidden selection paints no indicator outside the native sidebar viewport",
+    "passed": true,
+    "detail": {
+      "count": 0,
+      "outside": 0,
+      "bounds": {
+        "X": 0,
+        "Y": 92,
+        "Width": 208,
+        "Height": 128,
+        "Left": 0,
+        "Top": 92,
+        "Right": 208,
+        "Bottom": 220,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "Left scrolled-out selection is clipped without clearing selection",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Left returned selection paints no indicator outside the native sidebar viewport",
+    "passed": true,
+    "detail": {
+      "count": 173,
+      "outside": 0,
+      "bounds": {
+        "X": 0,
+        "Y": 92,
+        "Width": 208,
+        "Height": 128,
+        "Left": 0,
+        "Top": 92,
+        "Right": 208,
+        "Bottom": 220,
+        "IsEmpty": false
+      }
+    }
+  },
+  {
+    "name": "Left returning selection reappears without selecting it again",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Left footer selection stays fixed when the main menu scrolls",
+    "passed": true,
+    "detail": {
+      "before": 316,
+      "after": 316
+    }
+  },
+  {
+    "name": "Closed minimal sidebar stops its indicator and scroll binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Opening the minimal sidebar rebinds the visible selection",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Song list has enough viewport movement to test scrolling",
+    "passed": true,
+    "detail": {
+      "start": 687.75,
+      "target": 723.75,
+      "ScrollableHeight": 7461.5,
+      "ViewportHeight": 360.5
+    }
+  },
+  {
+    "name": "Song list follows animated scrolling in both directions",
+    "passed": true,
+    "detail": {
+      "maxError": 0.25,
+      "samples": [
+        {
+          "expected": 270.75,
+          "actual": 270.75,
+          "error": 0,
+          "offset": 717.9261474609375
+        },
+        {
+          "expected": 266,
+          "actual": 265.75,
+          "error": 0.25,
+          "offset": 723.75
+        },
+        {
+          "expected": 266,
+          "actual": 265.75,
+          "error": 0.25,
+          "offset": 723.75
+        },
+        {
+          "expected": 266,
+          "actual": 265.75,
+          "error": 0.25,
+          "offset": 723.75
+        },
+        {
+          "expected": 266,
+          "actual": 265.75,
+          "error": 0.25,
+          "offset": 723.75
+        },
+        {
+          "expected": 266,
+          "actual": 265.75,
+          "error": 0.25,
+          "offset": 723.75
+        },
+        {
+          "expected": 266,
+          "actual": 265.75,
+          "error": 0.25,
+          "offset": 723.75
+        },
+        {
+          "expected": 266,
+          "actual": 265.75,
+          "error": 0.25,
+          "offset": 723.75
+        },
+        {
+          "expected": 290.25,
+          "actual": 290.25,
+          "error": 0,
+          "offset": 701.2550048828125
+        },
+        {
+          "expected": 302,
+          "actual": 301.75,
+          "error": 0.25,
+          "offset": 687.75
+        },
+        {
+          "expected": 302,
+          "actual": 301.75,
+          "error": 0.25,
+          "offset": 687.75
+        },
+        {
+          "expected": 302,
+          "actual": 301.75,
+          "error": 0.25,
+          "offset": 687.75
+        },
+        {
+          "expected": 302,
+          "actual": 301.75,
+          "error": 0.25,
+          "offset": 687.75
+        },
+        {
+          "expected": 302,
+          "actual": 301.75,
+          "error": 0.25,
+          "offset": 687.75
+        },
+        {
+          "expected": 302,
+          "actual": 301.75,
+          "error": 0.25,
+          "offset": 687.75
+        },
+        {
+          "expected": 302,
+          "actual": 301.75,
+          "error": 0.25,
+          "offset": 687.75
+        },
+        {
+          "expected": 276.25,
+          "actual": 276.25,
+          "error": 0,
+          "offset": 711.2007446289062
+        },
+        {
+          "expected": 266,
+          "actual": 265.75,
+          "error": 0.25,
+          "offset": 723.75
+        },
+        {
+          "expected": 266,
+          "actual": 265.75,
+          "error": 0.25,
+          "offset": 723.75
+        },
+        {
+          "expected": 266,
+          "actual": 265.75,
+          "error": 0.25,
+          "offset": 723.75
+        },
+        {
+          "expected": 266,
+          "actual": 265.75,
+          "error": 0.25,
+          "offset": 723.75
+        },
+        {
+          "expected": 266,
+          "actual": 265.75,
+          "error": 0.25,
+          "offset": 723.75
+        },
+        {
+          "expected": 266,
+          "actual": 265.75,
+          "error": 0.25,
+          "offset": 723.75
+        },
+        {
+          "expected": 266,
+          "actual": 265.75,
+          "error": 0.25,
+          "offset": 723.75
+        },
+        {
+          "expected": 288.75,
+          "actual": 288.75,
+          "error": 0,
+          "offset": 700.6087036132812
+        },
+        {
+          "expected": 302,
+          "actual": 301.75,
+          "error": 0.25,
+          "offset": 687.75
+        },
+        {
+          "expected": 302,
+          "actual": 301.75,
+          "error": 0.25,
+          "offset": 687.75
+        },
+        {
+          "expected": 302,
+          "actual": 301.75,
+          "error": 0.25,
+          "offset": 687.75
+        },
+        {
+          "expected": 302,
+          "actual": 301.75,
+          "error": 0.25,
+          "offset": 687.75
+        },
+        {
+          "expected": 302,
+          "actual": 301.75,
+          "error": 0.25,
+          "offset": 687.75
+        },
+        {
+          "expected": 302,
+          "actual": 301.75,
+          "error": 0.25,
+          "offset": 687.75
+        },
+        {
+          "expected": 302,
+          "actual": 301.75,
+          "error": 0.25,
+          "offset": 687.75
+        }
+      ]
+    }
+  },
+  {
+    "name": "Song list is bound to the selected region\u0027s live compositor scroll",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Playback queue has enough viewport movement to test scrolling",
+    "passed": true,
+    "detail": {
+      "start": 305.5,
+      "target": 341.5,
+      "ScrollableHeight": 5259,
+      "ViewportHeight": 341
+    }
+  },
+  {
+    "name": "Playback queue follows animated scrolling in both directions",
+    "passed": true,
+    "detail": {
+      "maxError": 1,
+      "samples": [
+        {
+          "expected": 207.25,
+          "actual": 206.25,
+          "error": 1,
+          "offset": 330.1061706542969
+        },
+        {
+          "expected": 196.5,
+          "actual": 196.25,
+          "error": 0.25,
+          "offset": 340.00567626953125
+        },
+        {
+          "expected": 196.25,
+          "actual": 195.25,
+          "error": 1,
+          "offset": 341.5
+        },
+        {
+          "expected": 196,
+          "actual": 195.25,
+          "error": 0.75,
+          "offset": 341.5
+        },
+        {
+          "expected": 196,
+          "actual": 195.25,
+          "error": 0.75,
+          "offset": 341.5
+        },
+        {
+          "expected": 196,
+          "actual": 195.25,
+          "error": 0.75,
+          "offset": 341.5
+        },
+        {
+          "expected": 196,
+          "actual": 195.25,
+          "error": 0.75,
+          "offset": 341.5
+        },
+        {
+          "expected": 196,
+          "actual": 195.25,
+          "error": 0.75,
+          "offset": 341.5
+        },
+        {
+          "expected": 218.25,
+          "actual": 218.25,
+          "error": 0,
+          "offset": 318.04925537109375
+        },
+        {
+          "expected": 229.25,
+          "actual": 229.25,
+          "error": 0,
+          "offset": 307.21990966796875
+        },
+        {
+          "expected": 232,
+          "actual": 231.25,
+          "error": 0.75,
+          "offset": 305.5
+        },
+        {
+          "expected": 232,
+          "actual": 231.25,
+          "error": 0.75,
+          "offset": 305.5
+        },
+        {
+          "expected": 232,
+          "actual": 231.25,
+          "error": 0.75,
+          "offset": 305.5
+        },
+        {
+          "expected": 232,
+          "actual": 231.25,
+          "error": 0.75,
+          "offset": 305.5
+        },
+        {
+          "expected": 232,
+          "actual": 231.25,
+          "error": 0.75,
+          "offset": 305.5
+        },
+        {
+          "expected": 232,
+          "actual": 231.25,
+          "error": 0.75,
+          "offset": 305.5
+        },
+        {
+          "expected": 207.25,
+          "actual": 207.25,
+          "error": 0,
+          "offset": 327.3092956542969
+        },
+        {
+          "expected": 196.75,
+          "actual": 196.75,
+          "error": 0,
+          "offset": 339.8384094238281
+        },
+        {
+          "expected": 196,
+          "actual": 195.25,
+          "error": 0.75,
+          "offset": 341.5
+        },
+        {
+          "expected": 196,
+          "actual": 195.25,
+          "error": 0.75,
+          "offset": 341.5
+        },
+        {
+          "expected": 196,
+          "actual": 195.25,
+          "error": 0.75,
+          "offset": 341.5
+        },
+        {
+          "expected": 196,
+          "actual": 195.25,
+          "error": 0.75,
+          "offset": 341.5
+        },
+        {
+          "expected": 196,
+          "actual": 195.25,
+          "error": 0.75,
+          "offset": 341.5
+        },
+        {
+          "expected": 196,
+          "actual": 195.25,
+          "error": 0.75,
+          "offset": 341.5
+        },
+        {
+          "expected": 224.25,
+          "actual": 224.25,
+          "error": 0,
+          "offset": 312.40606689453125
+        },
+        {
+          "expected": 230.25,
+          "actual": 230.25,
+          "error": 0,
+          "offset": 306.1101989746094
+        },
+        {
+          "expected": 232,
+          "actual": 231.25,
+          "error": 0.75,
+          "offset": 305.5
+        },
+        {
+          "expected": 232,
+          "actual": 231.25,
+          "error": 0.75,
+          "offset": 305.5
+        },
+        {
+          "expected": 232,
+          "actual": 231.25,
+          "error": 0.75,
+          "offset": 305.5
+        },
+        {
+          "expected": 232,
+          "actual": 231.25,
+          "error": 0.75,
+          "offset": 305.5
+        },
+        {
+          "expected": 232,
+          "actual": 231.25,
+          "error": 0.75,
+          "offset": 305.5
+        },
+        {
+          "expected": 232,
+          "actual": 231.25,
+          "error": 0.75,
+          "offset": 305.5
+        }
+      ]
+    }
+  },
+  {
+    "name": "Playback queue is bound to the selected region\u0027s live compositor scroll",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Closing the queue releases its compositor scroll binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Leaving the song page releases its compositor scroll binding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Hiding the window releases every indicator scroll binding",
+    "passed": true,
+    "detail": null
+  }
+]

@@ -1,0 +1,351 @@
+[
+  {
+    "name": "XAML root loaded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "LeftCompact 1600px downloads and queue retain their selection transition",
+    "passed": true,
+    "detail": [
+      {
+        "index": 6,
+        "_view": "downloads",
+        "previous": 256,
+        "target": 296,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 7,
+        "_view": "queue",
+        "previous": 296,
+        "target": 336,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 6,
+        "_view": "downloads",
+        "previous": 336,
+        "target": 296,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 0,
+        "_view": "discover",
+        "previous": 296,
+        "target": 56,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 6,
+        "_view": "downloads",
+        "previous": 56,
+        "target": 296,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 1,
+        "_view": "library",
+        "previous": 296,
+        "target": 96,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 7,
+        "_view": "queue",
+        "previous": 96,
+        "target": 336,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 5,
+        "_view": "local",
+        "previous": 336,
+        "target": 256,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      }
+    ]
+  },
+  {
+    "name": "Left 1600px downloads and queue retain their selection transition",
+    "passed": true,
+    "detail": [
+      {
+        "index": 6,
+        "_view": "downloads",
+        "previous": 256,
+        "target": 296,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 7,
+        "_view": "queue",
+        "previous": 296,
+        "target": 336,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 6,
+        "_view": "downloads",
+        "previous": 336,
+        "target": 296,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 0,
+        "_view": "discover",
+        "previous": 296,
+        "target": 56,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 6,
+        "_view": "downloads",
+        "previous": 56,
+        "target": 296,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 1,
+        "_view": "library",
+        "previous": 296,
+        "target": 96,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 7,
+        "_view": "queue",
+        "previous": 96,
+        "target": 336,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 5,
+        "_view": "local",
+        "previous": 336,
+        "target": 256,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      }
+    ]
+  },
+  {
+    "name": "LeftCompact 1100px downloads and queue retain their selection transition",
+    "passed": true,
+    "detail": [
+      {
+        "index": 6,
+        "_view": "downloads",
+        "previous": 256,
+        "target": 296,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 7,
+        "_view": "queue",
+        "previous": 296,
+        "target": 336,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 6,
+        "_view": "downloads",
+        "previous": 336,
+        "target": 296,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 0,
+        "_view": "discover",
+        "previous": 296,
+        "target": 56,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 6,
+        "_view": "downloads",
+        "previous": 56,
+        "target": 296,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 1,
+        "_view": "library",
+        "previous": 296,
+        "target": 96,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 7,
+        "_view": "queue",
+        "previous": 96,
+        "target": 336,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 5,
+        "_view": "local",
+        "previous": 336,
+        "target": 256,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      }
+    ]
+  },
+  {
+    "name": "Left 1100px downloads and queue retain their selection transition",
+    "passed": true,
+    "detail": [
+      {
+        "index": 6,
+        "_view": "downloads",
+        "previous": 256,
+        "target": 296,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 7,
+        "_view": "queue",
+        "previous": 296,
+        "target": 336,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 6,
+        "_view": "downloads",
+        "previous": 336,
+        "target": 296,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 0,
+        "_view": "discover",
+        "previous": 296,
+        "target": 56,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 6,
+        "_view": "downloads",
+        "previous": 56,
+        "target": 296,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 1,
+        "_view": "library",
+        "previous": 296,
+        "target": 96,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 7,
+        "_view": "queue",
+        "previous": 96,
+        "target": 336,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      },
+      {
+        "index": 5,
+        "_view": "local",
+        "previous": 336,
+        "target": 256,
+        "scale": true,
+        "move": true,
+        "ScrollBound": true,
+        "visible": "Visible"
+      }
+    ]
+  }
+]

@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-28",
+  "version": "0.3.4.3",
+  "problem": "Navigation into downloads and queue completes synchronously. The earlier XAML SelectionChanged navigation handler forces layout before the registered indicator handler runs; the nonanimated LayoutUpdated pass consumes the new anchor, leaving no transition.",
+  "fix": "Preserve the previous sidebar anchor during a nonanimated refresh when the selected item has changed. Defer the animated commit through the dispatcher if the selection event has not consumed it yet. Viewport clipping and compositor scroll binding stay active.",
+  "baseline": {
+    "revision": "6ce7e4b",
+    "report": "before.json",
+    "result": "Downloads and queue had no Scale/Translation controllers at 80ms; switching back to local music did."
+  },
+  "validation": {
+    "developmentReport": "after.json",
+    "publishedTransitionReport": "published-sidebar-transition.json",
+    "publishedScrollReport": "published-indicator-scroll.json",
+    "checks": 39,
+    "failures": 0,
+    "selectionTransitions": 32,
+    "sidebarModes": [
+      "LeftCompact",
+      "Left"
+    ],
+    "windowHeightsPx": [
+      1600,
+      1100
+    ],
+    "buildWarnings": 0,
+    "buildErrors": 0,
+    "signed": true,
+    "signingCertificateUnchanged": true
+  },
+  "limitations": [
+    "Selection is driven through the real NavigationView event and page navigation path; this is not a physical touch hardware test.",
+    "This package was not installed over the running user copy on this machine."
+  ]
+}
